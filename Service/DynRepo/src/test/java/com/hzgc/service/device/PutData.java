@@ -1,4 +1,4 @@
-package com.hzgc.device;
+package com.hzgc.service.device;
 
 import com.hzgc.dubbo.device.WarnRule;
 

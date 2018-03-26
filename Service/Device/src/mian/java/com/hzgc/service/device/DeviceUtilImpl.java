@@ -1,4 +1,4 @@
-package com.hzgc.device;
+package com.hzgc.service.device;
 
 import com.hzgc.service.util.HBaseHelper;
 import com.hzgc.service.util.HBaseUtil;
