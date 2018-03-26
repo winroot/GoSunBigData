@@ -5,9 +5,8 @@ import com.hzgc.collect.expand.processer.FaceObject;
 import com.hzgc.collect.expand.processer.FtpPathMessage;
 import com.hzgc.collect.expand.util.FtpUtils;
 import com.hzgc.collect.expand.util.JSONHelper;
-import com.hzgc.dubbo.dynamicrepo.SearchType;
-import com.hzgc.dubbo.feature.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
+import com.hzgc.service.bigbataApi.dynamicrepo.SearchType;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

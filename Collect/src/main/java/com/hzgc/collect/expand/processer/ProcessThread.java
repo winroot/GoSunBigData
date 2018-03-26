@@ -5,9 +5,9 @@ import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.DataProcessLogWriter;
 import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.collect.expand.util.*;
-import com.hzgc.dubbo.dynamicrepo.SearchType;
-import com.hzgc.dubbo.feature.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
+import com.hzgc.service.bigbataApi.dynamicrepo.SearchType;
+import com.hzgc.service.bigbataApi.feature.FaceAttribute;
 
 import java.util.concurrent.BlockingQueue;
 
