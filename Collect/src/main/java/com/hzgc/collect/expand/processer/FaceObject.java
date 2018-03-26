@@ -1,7 +1,7 @@
 package com.hzgc.collect.expand.processer;
 
-import com.hzgc.dubbo.dynamicrepo.SearchType;
-import com.hzgc.dubbo.feature.FaceAttribute;
+import com.hzgc.service.bigbataApi.dynamicrepo.SearchType;
+import com.hzgc.service.bigbataApi.feature.FaceAttribute;
 
 import java.io.Serializable;
 

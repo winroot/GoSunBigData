@@ -12,7 +12,6 @@
         <module>Cluster</module>
         <module>Service</module>
         <module>Collect</module>
-        <module>Util</module>
     </modules>
 
     <properties>

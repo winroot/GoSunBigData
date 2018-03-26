@@ -1,6 +1,5 @@
 package com.hzgc.collect.expand.util;
 
-import com.hzgc.util.common.FileUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;

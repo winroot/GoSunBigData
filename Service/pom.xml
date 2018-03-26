@@ -9,7 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.hzgc</groupId>
     <artifactId>service</artifactId>
     <packaging>pom</packaging>
     <modules>
@@ -19,7 +18,28 @@
         <module>DynRepo</module>
         <module>StaRepo</module>
         <module>BigDataApi</module>
+        <module>Util</module>
     </modules>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.hzgc</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

@@ -78,12 +78,6 @@
             <version>${zkclient.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.hzgc</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.29</version>

@@ -3,7 +3,7 @@ package com.hzgc.collect.expand.processer;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.MetricRegistry;
 import com.hzgc.collect.expand.util.RocketMQProperHelper;
-import com.hzgc.util.common.StringUtil;
+import com.hzgc.collect.expand.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.MessageQueueSelector;

@@ -12,5 +12,37 @@
     <groupId>com.hzgc.service</groupId>
     <artifactId>dynrepo</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.hzgc</groupId>
+            <artifactId>util</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc</groupId>
+            <artifactId>collect</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc.service</groupId>
+            <artifactId>bigdata-api</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc.cluster</groupId>
+            <artifactId>hbase</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc.cluster</groupId>
+            <artifactId>es</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
 </project>
