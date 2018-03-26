@@ -22,7 +22,7 @@
         <module>Hadoop</module>
         <module>HAProxy</module>
         <module>Zookeeper</module>
-        <module>Library</module>
+        <module>Environment</module>
         <module>RocketMQ</module>
     </modules>
 
