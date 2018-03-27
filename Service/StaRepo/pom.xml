@@ -12,5 +12,26 @@
     <groupId>com.hzgc.service</groupId>
     <artifactId>StaRepo</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.hzgc.service</groupId>
+            <artifactId>bigdata-api</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc.service</groupId>
+            <artifactId>util</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--Phoenix JDBC -->
+        <dependency>
+            <groupId>org.apache.phoenix</groupId>
+            <artifactId>phoenix-core</artifactId>
+            <version>4.13.1-HBase-1.2</version>
+        </dependency>
+
+    </dependencies>
 
 </project>

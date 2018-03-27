@@ -1,6 +1,6 @@
 package com.hzgc.service.bigbataApi.staticrepo;
 
-import com.hzgc.dubbo.feature.FaceAttribute;
+import com.hzgc.service.bigbataApi.feature.FaceAttribute;
 
 import java.io.Serializable;
 import java.util.List;
