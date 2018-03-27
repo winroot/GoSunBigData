@@ -3,7 +3,6 @@ package com.hzgc.collect.expand.processer;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.MetricRegistry;
 import com.hzgc.collect.expand.util.RocketMQProperHelper;
-import com.hzgc.collect.expand.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.MessageQueueSelector;
@@ -32,7 +31,9 @@ public class RocketMQProducer implements Serializable {
             String namesrvAddr = RocketMQProperHelper.getAddress();
             topic = RocketMQProperHelper.getTopic();
             String producerGroup = RocketMQProperHelper.getGroup();
-            if (StringUtil.strIsRight(namesrvAddr) && StringUtil.strIsRight(topic) && StringUtil.strIsRight(producerGroup)) {
+            if (null != namesrvAddr && namesrvAddr.length() > 0 &&
+                    null != topic && topic.length() > 0 &&
+                    null != producerGroup && producerGroup.length() > 0) {
                 producer = new DefaultMQProducer(producerGroup);
                 producer.setRetryTimesWhenSendFailed(4);
                 producer.setRetryAnotherBrokerWhenNotStoreOK(true);

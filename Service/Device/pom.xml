@@ -20,12 +20,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.hzgc.cluster</groupId>
-            <artifactId>hbase</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.hzgc.service</groupId>
             <artifactId>util</artifactId>
             <version>${project.parent.version}</version>

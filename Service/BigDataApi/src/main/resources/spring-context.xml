@@ -7,18 +7,25 @@
 	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
     <!--ftp 模块接口以及实现-->
-    <bean id="FtpSubscription" class="com.hzgc.service.address.FtpSubscriptionImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.address.FtpSubscription" ref="FtpSubscription" />
+    <bean id="FtpAddresService" class="com.hzgc.service.collect.FtpAddressServiceImpl"/>
+    <dubbo:service interface="com.hzgc.service.bigbataApi.address.FtpAddressService" ref="FtpAddresService" />
 
-    <bean id="FtpShow" class="com.hzgc.service.address.FtpShowImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.address.FtpShow" ref="FtpShow" />
+    <bean id="FtpSubscription" class="com.hzgc.service.collect.FtpSubscriptionImpl"/>
+    <dubbo:service interface="com.hzgc.service.bigbataApi.address.FtpSubscription" ref="FtpSubscription" />
+
+    <bean id="FtpShow" class="com.hzgc.service.collect.FtpShowImpl"/>
+    <dubbo:service interface="com.hzgc.service.bigbataApi.address.FtpShow" ref="FtpShow" />
+
+    <!--clustering 模块接口以及实现-->
+    <bean id="ClusteringSearchService" class="com.hzgc.service.clustering.ClusteringSearchServiceImpl"/>
+    <dubbo:service interface="com.hzgc.service.bigbataApi.clustering.ClusteringSearchService" ref="ClusteringSearchService" />
 
     <!--device 模块的接口和实现-->
-    <bean id="DeviceService" class="com.hzgc.service.device.DeviceServiceImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.device.DeviceService" ref="DeviceService" />
+    <bean id="DeviceService" class="com.hzgc.service.dynamicrepo.DeviceServiceImpl"/>
+    <dubbo:service interface="com.hzgc.service.bigbataApi.device.DeviceService" ref="DeviceService" />
 
-    <bean id="WarnRuleService" class="com.hzgc.service.device.WarnRuleServiceImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.device.WarnRuleService" ref="WarnRuleService"/>
+    <bean id="WarnRuleService" class="com.hzgc.service.dynamicrepo.WarnRuleServiceImpl"/>
+    <dubbo:service interface="com.hzgc.service.bigbataApi.device.WarnRuleService" ref="WarnRuleService"/>
 
     <!--dynamicrepo 模块接口以及实现-->
     <bean id="CapturePictureSearchService" class="com.hzgc.service.dynamicrepo.CapturePictureSearchServiceImpl"/>
@@ -30,12 +37,10 @@
     <dubbo:service interface="com.hzgc.dubbo.staticrepo.ObjectInfoHandler" ref="ObjectInfoHandler"/>
 
     <bean id="HBaseHelper" class="com.hzgc.service.util.HBaseHelper"/>
-    <bean id="DeviceTable" class="com.hzgc.service.device.DeviceTable"/>
+    <bean id="DeviceTable" class="com.hzgc.service.dynamicrepo.DeviceTable"/>
     <bean id="ElasticSearchHelper" class="com.hzgc.service.staticrepo.ElasticSearchHelper"/>
 
     <bean id="CaptureNumberService" class="com.hzgc.service.dynamicrepo.CaptureNumberImpl"/>
     <dubbo:service interface="com.hzgc.dubbo.dynamicrepo.CaptureNumberService" ref="CaptureNumberService"/>
 
-    <bean id="ClusteringSearchService" class="com.hzgc.service.clustering.ClusteringSearchServiceImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.clustering.ClusteringSearchService" ref="ClusteringSearchService"/>
 </beans>

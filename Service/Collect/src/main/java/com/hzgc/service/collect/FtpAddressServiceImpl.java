@@ -1,7 +1,7 @@
-package com.hzgc.collect.ftp.address;
+package com.hzgc.service.collect;
 
 import com.hzgc.collect.expand.util.FTPAddressProperHelper;
-import com.hzgc.dubbo.address.FtpAddressService;
+import com.hzgc.service.bigbataApi.address.FtpAddressService;
 
 import java.io.Serializable;
 import java.util.Properties;

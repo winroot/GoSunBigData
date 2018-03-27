@@ -1,9 +1,10 @@
-package com.hzgc.dynamicrepo;
+package com.hzgc.service.dynamicrepo;
 
 import com.hzgc.service.bigbataApi.dynamicrepo.*;
+import com.hzgc.service.util.HBaseHelper;
+import com.hzgc.service.util.HBaseUtil;
 import com.hzgc.service.util.ListUtils;
-import com.hzgc.util.common.ObjectUtil;
-import com.hzgc.util.sort.ListUtils;
+import com.hzgc.service.util.ObjectUtil;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.hzgc.util.common.ObjectUtil.objectToByte;
+import static com.hzgc.service.util.ObjectUtil.objectToByte;
 
 /**
  * 动态库实现类

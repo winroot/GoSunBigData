@@ -1,10 +1,10 @@
-package com.hzgc.dynamicrepo;
+package com.hzgc.service.dynamicrepo;
 
-import com.hzgc.cluster.es.ElasticSearchHelper;
-import com.hzgc.cluster.hbase.HBaseHelper;
 import com.hzgc.service.bigbataApi.attribute.*;
 import com.hzgc.service.bigbataApi.dynamicrepo.*;
-import com.hzgc.util.common.UuidUtil;
+import com.hzgc.service.util.ElasticSearchHelper;
+import com.hzgc.service.util.HBaseHelper;
+import com.hzgc.service.util.UuidUtil;
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;

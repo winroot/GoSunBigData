@@ -5,6 +5,7 @@ import com.hzgc.collect.expand.merge.RecoverNotProData;
 import com.hzgc.collect.expand.merge.ScheRecoErrData;
 import com.hzgc.collect.expand.subscribe.*;
 import com.hzgc.collect.expand.util.ClusterOverFtpProperHelper;
+import com.hzgc.collect.expand.util.FileUtil;
 import com.hzgc.collect.expand.util.HelperFactory;
 import com.hzgc.collect.ftp.ClusterOverFtp;
 import com.hzgc.collect.ftp.ConnectionConfigFactory;
@@ -17,7 +18,6 @@ import com.hzgc.collect.ftp.listener.ListenerFactory;
 import com.hzgc.collect.ftp.usermanager.PropertiesUserManagerFactory;
 import com.hzgc.collect.ftp.util.LoggerConfig;
 import com.hzgc.jni.NativeFunction;
-import com.hzgc.util.common.FileUtil;
 import org.apache.log4j.Logger;
 
 import java.lang.management.ManagementFactory;

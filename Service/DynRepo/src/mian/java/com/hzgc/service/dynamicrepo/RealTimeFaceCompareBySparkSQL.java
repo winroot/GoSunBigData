@@ -1,10 +1,7 @@
-package com.hzgc.dynamicrepo;
+package com.hzgc.service.dynamicrepo;
 
-import com.hzgc.service.bigbataApi.dynamicrepo.SearchOption;
-import com.hzgc.service.bigbataApi.dynamicrepo.SearchResult;
-import com.hzgc.service.bigbataApi.dynamicrepo.SearchType;
+import com.hzgc.service.bigbataApi.dynamicrepo.*;
 import com.hzgc.collect.expand.util.FtpUtils;
-import com.hzgc.dubbo.dynamicrepo.SearchType;
 import com.hzgc.service.util.JDBCUtil;
 import org.apache.log4j.Logger;
 

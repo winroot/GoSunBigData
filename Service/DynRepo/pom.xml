@@ -15,12 +15,6 @@
     <dependencies>
         <dependency>
             <groupId>com.hzgc</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.hzgc</groupId>
             <artifactId>collect</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
@@ -32,14 +26,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.hzgc.cluster</groupId>
-            <artifactId>hbase</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.hzgc.cluster</groupId>
-            <artifactId>es</artifactId>
+            <groupId>com.hzgc.service</groupId>
+            <artifactId>util</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>

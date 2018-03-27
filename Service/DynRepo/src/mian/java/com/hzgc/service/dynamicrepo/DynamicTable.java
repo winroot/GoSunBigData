@@ -1,4 +1,4 @@
-package com.hzgc.dynamicrepo;
+package com.hzgc.service.dynamicrepo;
 
 import org.apache.hadoop.hbase.util.Bytes;
 

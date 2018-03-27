@@ -1,8 +1,8 @@
-package com.hzgc.dynamicrepo;
+package com.hzgc.service.dynamicrepo;
 
 import com.hzgc.service.bigbataApi.dynamicrepo.CaptureNumberService;
 import com.hzgc.service.bigbataApi.staticrepo.ObjectInfoTable;
-import com.hzgc.cluster.es.ElasticSearchHelper;
+import com.hzgc.service.util.ElasticSearchHelper;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;

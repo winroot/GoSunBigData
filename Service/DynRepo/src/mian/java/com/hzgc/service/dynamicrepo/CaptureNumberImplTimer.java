@@ -1,7 +1,7 @@
-package com.hzgc.dynamicrepo;
+package com.hzgc.service.dynamicrepo;
 
-import com.hzgc.cluster.es.ElasticSearchHelper;
-import com.hzgc.cluster.hbase.HBaseHelper;
+import com.hzgc.service.util.ElasticSearchHelper;
+import com.hzgc.service.util.HBaseHelper;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
