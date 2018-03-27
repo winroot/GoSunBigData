@@ -1,4 +1,4 @@
-package com.hzgc.service.dynamicrepo;
+package com.hzgc.service.device;
 
 import com.hzgc.service.bigbataApi.device.WarnRule;
 import com.hzgc.service.bigbataApi.device.WarnRuleService;
