@@ -7,18 +7,21 @@
 	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
     <!--ftp 模块接口以及实现-->
-    <bean id="FtpSubscription" class="com.hzgc.service.address.FtpSubscriptionImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.address.FtpSubscription" ref="FtpSubscription" />
+    <bean id="FtpAddresService" class="com.hzgc.service.collect.FtpAddressServiceImpl"/>
+    <dubbo:service interface="com.hzgc.service.bigbataApi.address.FtpAddressService" ref="FtpAddresService" />
 
-    <bean id="FtpShow" class="com.hzgc.service.address.FtpShowImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.address.FtpShow" ref="FtpShow" />
+    <bean id="FtpSubscription" class="com.hzgc.service.collect.FtpSubscriptionImpl"/>
+    <dubbo:service interface="com.hzgc.service.bigbataApi.address.FtpSubscription" ref="FtpSubscription" />
+
+    <bean id="FtpShow" class="com.hzgc.service.collect.FtpShowImpl"/>
+    <dubbo:service interface="com.hzgc.service.bigbataApi.address.FtpShow" ref="FtpShow" />
 
     <!--device 模块的接口和实现-->
     <bean id="DeviceService" class="com.hzgc.service.device.DeviceServiceImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.device.DeviceService" ref="DeviceService" />
+    <dubbo:service interface="com.hzgc.service.bigbataApi.device.DeviceService" ref="DeviceService" />
 
     <bean id="WarnRuleService" class="com.hzgc.service.device.WarnRuleServiceImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.device.WarnRuleService" ref="WarnRuleService"/>
+    <dubbo:service interface="com.hzgc.service.bigbataApi.device.WarnRuleService" ref="WarnRuleService"/>
 
     <!--dynamicrepo 模块接口以及实现-->
     <bean id="CapturePictureSearchService" class="com.hzgc.service.dynamicrepo.CapturePictureSearchServiceImpl"/>

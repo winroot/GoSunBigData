@@ -9,7 +9,7 @@ public class FileUtil {
     private static Logger LOG = Logger.getLogger(FileUtil.class);
 
     public static File loadResourceFile(String resourceName) {
-        if (StringUtil.strIsRight(resourceName)) {
+        if (null != resourceName && resourceName.length() > 0) {
             URL url = ClassLoader.getSystemResource(resourceName);
             if (url != null) {
                 File file = new File(url.getPath());

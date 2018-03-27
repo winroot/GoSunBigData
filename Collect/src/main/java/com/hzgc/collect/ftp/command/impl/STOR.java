@@ -6,10 +6,10 @@ import com.hzgc.collect.expand.processer.RocketMQProducer;
 import com.hzgc.collect.expand.subscribe.FtpSwitch;
 import com.hzgc.collect.expand.subscribe.ReceiveIpcIds;
 import com.hzgc.collect.expand.util.FtpUtils;
+import com.hzgc.collect.expand.util.IOUtil;
 import com.hzgc.collect.ftp.command.AbstractCommand;
 import com.hzgc.collect.ftp.ftplet.*;
 import com.hzgc.collect.ftp.impl.*;
-import com.hzgc.util.common.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
