@@ -1,4 +1,4 @@
-package com.hzgc.service.collect;
+package com.hzgc.service.clustering;
 
 import com.hzgc.service.bigbataApi.clustering.AlarmInfo;
 import com.hzgc.service.bigbataApi.clustering.ClusteringAttribute;

@@ -16,6 +16,10 @@
     <bean id="FtpShow" class="com.hzgc.service.collect.FtpShowImpl"/>
     <dubbo:service interface="com.hzgc.service.bigbataApi.address.FtpShow" ref="FtpShow" />
 
+    <!--clustering 模块接口以及实现-->
+    <bean id="ClusteringSearchService" class="com.hzgc.service.clustering.ClusteringSearchServiceImpl"/>
+    <dubbo:service interface="com.hzgc.service.bigbataApi.clustering.ClusteringSearchService" ref="ClusteringSearchService" />
+
     <!--device 模块的接口和实现-->
     <bean id="DeviceService" class="com.hzgc.service.dynamicrepo.DeviceServiceImpl"/>
     <dubbo:service interface="com.hzgc.service.bigbataApi.device.DeviceService" ref="DeviceService" />
@@ -39,6 +43,4 @@
     <bean id="CaptureNumberService" class="com.hzgc.service.dynamicrepo.CaptureNumberImpl"/>
     <dubbo:service interface="com.hzgc.dubbo.dynamicrepo.CaptureNumberService" ref="CaptureNumberService"/>
 
-    <bean id="ClusteringSearchService" class="com.hzgc.service.collect.ClusteringSearchServiceImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.clustering.ClusteringSearchService" ref="ClusteringSearchService"/>
 </beans>

@@ -1,4 +1,4 @@
-package com.hzgc.service.collect;
+package com.hzgc.service.clustering;
 
 import java.io.Serializable;
 import java.util.Arrays;
