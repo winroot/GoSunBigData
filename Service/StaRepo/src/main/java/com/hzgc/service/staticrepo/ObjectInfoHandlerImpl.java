@@ -2,6 +2,7 @@ package com.hzgc.service.staticrepo;
 
 import com.hzgc.service.bigbataApi.feature.FaceAttribute;
 import com.hzgc.service.bigbataApi.staticrepo.*;
+import com.hzgc.service.util.Constants;
 import com.hzgc.service.util.ObjectUtil;
 import org.apache.log4j.Logger;
 
@@ -43,12 +44,12 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-            return 1;
+            return Constants.CHANGE_INFO_FAILURE;
         }
         LOG.info("添加一条数据到静态库花费时间： " + (System.currentTimeMillis() - start));
         //数据变动，更新objectinfo table 中的一条数据,表示静态库中的数据有变动
         new ObjectInfoHandlerTool().updateTotalNumOfHbase();
-        return 0;
+        return Constants.CHANGE_INFO_SUCCESS;
     }
 
     @Override
@@ -70,12 +71,12 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-            return 1;
+            return Constants.CHANGE_INFO_FAILURE;
         }
         LOG.info("删除静态信息库的" + rowkeys.size() + "条数据花费时间： " + (System.currentTimeMillis() - start));
         //数据变动，更新objectinfo table 中的一条数据,表示静态库中的数据有变动
         new ObjectInfoHandlerTool().updateTotalNumOfHbase();
-        return 0;
+        return Constants.CHANGE_INFO_SUCCESS;
     }
 
     /**
@@ -89,7 +90,7 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
         String thePassId = (String) personObject.get(ObjectInfoTable.ROWKEY);
         if (thePassId == null) {
             LOG.info("the pass Id can not be null....");
-            return 1;
+            return Constants.CHANGE_INFO_FAILURE;
         }
         PreparedStatement pstm = null;
         try {
@@ -108,12 +109,12 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-            return 1;
+            return Constants.CHANGE_INFO_FAILURE;
         }
         LOG.info("更新rowkey为: " + thePassId +  "数据花费的时间是: " + (System.currentTimeMillis() - start));
         //数据变动，更新objectinfo table 中的一条数据,表示静态库中的数据有变动
         new ObjectInfoHandlerTool().updateTotalNumOfHbase();
-        return 0;
+        return Constants.CHANGE_INFO_SUCCESS;
     }
 
     @Override
@@ -369,10 +370,10 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
                                 groupByPkey.setPersons(tmp);
                                 if (staticSortParams != null) {
                                     if (staticSortParams.contains(StaticSortParam.RELATEDASC)) {
-                                        tmp.sort((p1, p2) -> (int)((p1.getSim() - p2.getSim()) * 100));
+                                        tmp.sort((p1, p2) -> (int)((p1.getSim() - p2.getSim()) * Constants.NUM_ONE_HUNDRED));
                                     }
                                     if (staticSortParams.contains(StaticSortParam.RELATEDDESC)) {
-                                        tmp.sort((p1, p2) -> (int)((p2.getSim() - p1.getSim()) * 100));
+                                        tmp.sort((p1, p2) -> (int)((p2.getSim() - p1.getSim()) * Constants.NUM_ONE_HUNDRED));
                                     }
                                     if (staticSortParams.contains(StaticSortParam.IMPORTANTASC)) {
                                         tmp.sort((p1, p2) -> p1.getImportant() - p2.getImportant());

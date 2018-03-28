@@ -5,6 +5,7 @@ import com.hzgc.dubbo.attribute.Logistic;
 import com.hzgc.dubbo.dynamicrepo.SearchOption;
 import com.hzgc.jni.FaceFunction;
 import com.hzgc.service.bigbataApi.dynamicrepo.SearchOption;
+import com.hzgc.service.util.Constants;
 import org.apache.log4j.Logger;
 
 import java.sql.Date;
@@ -254,9 +255,9 @@ class ParseByOption {
         finalSql.append(" and (");
         for (int i = 0; option.getIntervals().size() > i; i++) {
             int start_sj = option.getIntervals().get(i).getStart();
-            int start_st = (start_sj / 60) * 100 + start_sj % 60;
+            int start_st = (start_sj / Constants.NUM_SIXTY) * Constants.NUM_ONE_HUNDRED + start_sj % Constants.NUM_SIXTY;
             int end_sj = option.getIntervals().get(i).getEnd();
-            int end_st = (end_sj / 60) * 100 + end_sj % 60;
+            int end_st = (end_sj / Constants.NUM_SIXTY) * Constants.NUM_ONE_HUNDRED + end_sj % Constants.NUM_SIXTY;
             if (option.getIntervals().size() - 1 > i) {
                 finalSql
                         .append(DynamicTable.TIMESLOT)

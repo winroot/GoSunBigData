@@ -1,5 +1,6 @@
 package com.hzgc.service.staticrepo;
 
+import com.hzgc.service.util.Constants;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.phoenix.expression.Expression;
 import org.apache.phoenix.expression.LiteralExpression;
@@ -111,11 +112,11 @@ public class FaceCompFunc extends ScalarFunction {
         }
 
         double tempSim = similarityDegree / Math.sqrt(currentFeatureMultiple) / Math.sqrt(historyFeatureMultiple);
-        double actualValue = new BigDecimal((0.5 + (tempSim / 2)) * 100).
+        double actualValue = new BigDecimal((0.5 + (tempSim / Constants.NUM_TWO)) * Constants.NUM_ONE_HUNDRED).
                 setScale(2, BigDecimal.ROUND_HALF_UP).
                 doubleValue();
         if (actualValue >= 100) {
-            return 100;
+            return (float)Constants.NUM_ONE_HUNDRED;
         }
         return (float) actualValue;
     }

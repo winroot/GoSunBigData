@@ -1,5 +1,6 @@
 package com.hzgc.service.dynamicrepo;
 
+import com.hzgc.service.util.Constants;
 import com.hzgc.service.util.ElasticSearchHelper;
 import com.hzgc.service.util.HBaseHelper;
 import org.apache.hadoop.hbase.client.Result;
@@ -22,6 +23,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+
 public class CaptureNumberImplTimer {
     public static void main(String[] args) {
         indexTable();
@@ -34,7 +36,7 @@ public class CaptureNumberImplTimer {
         Runnable runnable = () -> {
             List<String> lists = findIpcId();
             long nowTime = System.currentTimeMillis();
-            long lessOneHour = nowTime - 1000 * 60 * 60;
+            long lessOneHour = nowTime - Constants.ONE_HOUR;
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String nowTimeStr = format.format(nowTime);
             String lessOneHourStr = format.format(lessOneHour);
@@ -69,7 +71,7 @@ public class CaptureNumberImplTimer {
             }
         };
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-        service.scheduleAtFixedRate(runnable,0, 60 * 60, TimeUnit.SECONDS);
+        service.scheduleAtFixedRate(runnable,Constants.NUM_ZERO, Constants.NUM_SIXTY * Constants.NUM_SIXTY, TimeUnit.SECONDS);
     }
 
     /**
@@ -100,7 +102,7 @@ public class CaptureNumberImplTimer {
     private static long judgementTime() {
         long nowTime = System.currentTimeMillis();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long addOneHourTime = nowTime + 1000 * 60 * 60;
+        long addOneHourTime = nowTime + Constants.ONE_HOUR;
         String addTime = simpleDateFormat.format(addOneHourTime);
         String startTime = addTime.split(":")[0] + ":02:00";
         Date changeTime = null;
@@ -113,7 +115,7 @@ public class CaptureNumberImplTimer {
         if (changeTime != null) {
             changeLongTime = changeTime.getTime();
         }
-        long disTime = (changeLongTime - nowTime) / 1000;
+        long disTime = (changeLongTime - nowTime) / Constants.NUM_ONE_THOUSAND;
         System.out.println(disTime);
         return disTime;
     }
