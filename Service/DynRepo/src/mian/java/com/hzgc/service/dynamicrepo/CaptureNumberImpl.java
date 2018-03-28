@@ -2,6 +2,7 @@ package com.hzgc.service.dynamicrepo;
 
 import com.hzgc.service.bigbataApi.dynamicrepo.CaptureNumberService;
 import com.hzgc.service.bigbataApi.staticrepo.ObjectInfoTable;
+import com.hzgc.service.util.Constants;
 import com.hzgc.service.util.ElasticSearchHelper;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -163,7 +164,7 @@ public class CaptureNumberImpl implements CaptureNumberService {
             Calendar end = Calendar.getInstance();
             end.setTime(df.parse(endTime));
             Long endTimeL = end.getTimeInMillis();
-            Long onehour = 1000 * 60 * 60L;
+            Long onehour = Constants.ONE_HOUR;
             Long time = startTimeL;
             while (time <= endTimeL) {
                 Date everyTime = new Date(time);
