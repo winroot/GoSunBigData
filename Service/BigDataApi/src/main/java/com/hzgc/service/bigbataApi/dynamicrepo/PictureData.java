@@ -1,6 +1,6 @@
 package com.hzgc.service.bigbataApi.dynamicrepo;
 
-import com.hzgc.dubbo.feature.FaceAttribute;
+import com.hzgc.service.bigbataApi.feature.FaceAttribute;
 
 import java.io.Serializable;
 
