@@ -29,18 +29,18 @@
 
     <!--dynamicrepo 模块接口以及实现-->
     <bean id="CapturePictureSearchService" class="com.hzgc.service.dynamicrepo.CapturePictureSearchServiceImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.dynamicrepo.CapturePictureSearchService" ref="CapturePictureSearchService" />
+    <dubbo:service interface="com.hzgc.service.bigbataApi.dynamicrepo.CapturePictureSearchService" ref="CapturePictureSearchService" />
 
     <!--静态信息库的接口，以及相应的实现类-->
     <!--对象信息的处理-->
     <bean id="ObjectInfoHandler" class="com.hzgc.service.staticrepo.ObjectInfoHandlerImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.staticrepo.ObjectInfoHandler" ref="ObjectInfoHandler"/>
+    <dubbo:service interface="com.hzgc.service.bigbataApi.staticrepo.ObjectInfoHandler" ref="ObjectInfoHandler"/>
 
     <bean id="HBaseHelper" class="com.hzgc.service.util.HBaseHelper"/>
-    <bean id="DeviceTable" class="com.hzgc.service.dynamicrepo.DeviceTable"/>
-    <bean id="ElasticSearchHelper" class="com.hzgc.service.staticrepo.ElasticSearchHelper"/>
+    <bean id="DeviceTable" class="com.hzgc.service.device.DeviceTable"/>
+    <bean id="ElasticSearchHelper" class="com.hzgc.service.util.ElasticSearchHelper"/>
 
     <bean id="CaptureNumberService" class="com.hzgc.service.dynamicrepo.CaptureNumberImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.dynamicrepo.CaptureNumberService" ref="CaptureNumberService"/>
+    <dubbo:service interface="com.hzgc.service.bigbataApi.dynamicrepo.CaptureNumberService" ref="CaptureNumberService"/>
 
 </beans>
