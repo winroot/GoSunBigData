@@ -1,9 +1,8 @@
 package com.hzgc.service.dynamicrepo;
 
-import com.hzgc.dubbo.attribute.Attribute;
-import com.hzgc.dubbo.attribute.Logistic;
-import com.hzgc.dubbo.dynamicrepo.SearchOption;
 import com.hzgc.jni.FaceFunction;
+import com.hzgc.service.bigbataApi.attribute.Attribute;
+import com.hzgc.service.bigbataApi.attribute.Logistic;
 import com.hzgc.service.bigbataApi.dynamicrepo.SearchOption;
 import com.hzgc.service.util.Constants;
 import org.apache.log4j.Logger;
