@@ -4,6 +4,7 @@ import com.hzgc.service.bigbataApi.attribute.Attribute;
 import com.hzgc.service.bigbataApi.attribute.AttributeValue;
 import com.hzgc.collect.expand.util.FtpUtils;
 import com.hzgc.service.bigbataApi.dynamicrepo.*;
+import com.hzgc.service.util.Constants;
 import com.hzgc.service.util.ElasticSearchHelper;
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -110,9 +111,9 @@ class CaptureHistory {
                 for (TimeInterval timeInterval1 : timeIntervals) {
                     timeInterval = timeInterval1;
                     int start_sj = timeInterval.getStart();
-                    String start_ts = String.valueOf(start_sj * 100 / 60 + start_sj % 60);
+                    String start_ts = String.valueOf(start_sj * Constants.NUM_ONE_HUNDRED / Constants.NUM_SIXTY + start_sj % Constants.NUM_SIXTY);
                     int end_sj = timeInterval.getEnd();
-                    String end_ts = String.valueOf(end_sj * 100 / 60 + end_sj % 60);
+                    String end_ts = String.valueOf(end_sj * Constants.NUM_ONE_HUNDRED / Constants.NUM_SIXTY + end_sj % Constants.NUM_SIXTY);
                     timeInQB.should(QueryBuilders.rangeQuery(DynamicTable.TIMESLOT).gte(start_ts).lte(end_ts));
                     totalBQ.must(timeInQB);
                 }
@@ -169,9 +170,9 @@ class CaptureHistory {
                     for (TimeInterval timeInterval1 : timeIntervals) {
                         timeInterval = timeInterval1;
                         int start_sj = timeInterval.getStart();
-                        String start_ts = String.valueOf(start_sj * 100 / 60 + start_sj % 60);
+                        String start_ts = String.valueOf(start_sj * Constants.NUM_ONE_HUNDRED / Constants.NUM_SIXTY + start_sj % Constants.NUM_SIXTY);
                         int end_sj = timeInterval.getEnd();
-                        String end_ts = String.valueOf(end_sj * 100 / 60 + end_sj % 60);
+                        String end_ts = String.valueOf(end_sj * Constants.NUM_ONE_HUNDRED / Constants.NUM_SIXTY + end_sj % Constants.NUM_SIXTY);
                         timeInQB.should(QueryBuilders.rangeQuery(DynamicTable.TIMESLOT).gte(start_ts).lte(end_ts));
                         totalBQ.must(timeInQB);
                     }
