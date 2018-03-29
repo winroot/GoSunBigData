@@ -1,4 +1,4 @@
-package com.hzgc.service.util;
+package com.hzgc.util.service;
 
 import com.google.gson.Gson;
 

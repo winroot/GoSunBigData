@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>com.hzgc</groupId>
-            <artifactId>jni</artifactId>
+            <artifactId>util</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>

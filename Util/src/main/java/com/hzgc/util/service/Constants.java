@@ -1,4 +1,4 @@
-package com.hzgc.service.util;
+package com.hzgc.util.service;
 
 /**
  * service 模块常量定义
