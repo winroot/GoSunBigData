@@ -18,8 +18,8 @@
         <module>DynRepo</module>
         <module>StaRepo</module>
         <module>BigDataApi</module>
-        <module>Util</module>
         <module>Collect</module>
+        <module>Feature</module>
     </modules>
 
     <dependencies>
@@ -42,6 +42,11 @@
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-client</artifactId>
             <version>${hbase.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc</groupId>
+            <artifactId>util</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 
