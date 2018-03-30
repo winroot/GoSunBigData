@@ -1,7 +1,7 @@
 package com.hzgc.collect.expand.log;
 
 import com.hzgc.collect.expand.conf.CommonConf;
-import com.hzgc.collect.expand.util.JSONHelper;
+import com.hzgc.common.json.JSONUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -203,7 +203,7 @@ abstract class AbstractLogWrite implements LogWriter {
                 if (defaultFile.exists()) {
                     String countLine = getLastLine(defaultFile.getName());
                     if (countLine.length() > 0) {
-                        LogEvent event = JSONHelper.toObject(countLine, LogEvent.class);
+                        LogEvent event = JSONUtil.toObject(countLine, LogEvent.class);
                         return event.getCount() + 1;
                     } else if (dirList.size() == 1) {
                         LOG.info("Get count from " + this.currentFile
@@ -218,7 +218,7 @@ abstract class AbstractLogWrite implements LogWriter {
                         LOG.info("Sort result is " + Arrays.toString(dirList.toArray()));
                         String countFile = dirList.get(dirList.size() - 1);
                         countLine = getLastLine(countFile);
-                        LogEvent event = JSONHelper.toObject(countLine, LogEvent.class);
+                        LogEvent event = JSONUtil.toObject(countLine, LogEvent.class);
                         LOG.info("Get count from " + countFile
                                 + ", queue is " + this.queueID
                                 + ", count is " + event.getCount());
@@ -232,7 +232,7 @@ abstract class AbstractLogWrite implements LogWriter {
                     LOG.info("Sort result is " + Arrays.toString(dirList.toArray()));
                     String countFile = dirList.get(dirList.size() - 1);
                     String countLine = getLastLine(countFile);
-                    LogEvent event = JSONHelper.toObject(countLine, LogEvent.class);
+                    LogEvent event = JSONUtil.toObject(countLine, LogEvent.class);
                     LOG.info("Get count from " + countFile
                             + ", queue is is " + this.queueID
                             + ", count is " + event.getCount());
@@ -260,7 +260,7 @@ abstract class AbstractLogWrite implements LogWriter {
         try {
             fw = new FileWriter(this.currentFile, true);
             event.setCount(this.count++);
-            fw.write(JSONHelper.toJson(event));
+            fw.write(JSONUtil.toJson(event));
             fw.write(newLine);
             fw.flush();
 

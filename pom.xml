@@ -12,7 +12,9 @@
         <module>Cluster</module>
         <module>Service</module>
         <module>Collect</module>
-        <module>Util</module>
+        <module>Common</module>
+        <module>JNI</module>
+        <module>BigDataApi</module>
     </modules>
 
     <properties>
@@ -28,7 +30,6 @@
         <ftplet.version>1.1.1</ftplet.version>
         <spark.version>2.2.0</spark.version>
         <spark_kafka.verson>2.2.0</spark_kafka.verson>
-        <!--<spring.version>4.1.1.RELEASE</spring.version>-->
         <zookeeper.version>3.4.10</zookeeper.version>
         <dubbo.version>2.6.0</dubbo.version>
         <rocketmq.version>4.2.0</rocketmq.version>
@@ -44,11 +45,6 @@
                 <version>1.6</version>
             </dependency>
             <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${log4j.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
@@ -58,17 +54,17 @@
                 <artifactId>slf4j-log4j12</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.12</version>
-                <scope>test</scope>
-            </dependency>
             <!--显示定义，用来解决jar包冲突-->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-api</artifactId>
                 <version>2.8.2</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

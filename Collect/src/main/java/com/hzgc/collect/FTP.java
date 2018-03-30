@@ -5,7 +5,6 @@ import com.hzgc.collect.expand.merge.RecoverNotProData;
 import com.hzgc.collect.expand.merge.ScheRecoErrData;
 import com.hzgc.collect.expand.subscribe.*;
 import com.hzgc.collect.expand.util.ClusterOverFtpProperHelper;
-import com.hzgc.collect.expand.util.FileUtil;
 import com.hzgc.collect.expand.util.HelperFactory;
 import com.hzgc.collect.ftp.ClusterOverFtp;
 import com.hzgc.collect.ftp.ConnectionConfigFactory;
@@ -17,6 +16,7 @@ import com.hzgc.collect.ftp.ftplet.FtpException;
 import com.hzgc.collect.ftp.listener.ListenerFactory;
 import com.hzgc.collect.ftp.usermanager.PropertiesUserManagerFactory;
 import com.hzgc.collect.ftp.util.LoggerConfig;
+import com.hzgc.common.file.ResourceFileUtil;
 import com.hzgc.jni.NativeFunction;
 import org.apache.log4j.Logger;
 
@@ -62,7 +62,7 @@ public class FTP extends ClusterOverFtp {
         // set customer user manager
         PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
         try {
-            userManagerFactory.setFile(FileUtil.loadResourceFile("users.properties"));
+            userManagerFactory.setFile(ResourceFileUtil.loadResourceFile("users.properties"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,8 +84,6 @@ public class FTP extends ClusterOverFtp {
         FtpServer server = serverFactory.createServer();
         try {
             server.start();
-            Integer ftpPID = Integer.valueOf(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
-            pidMap.put(ftpPID, listenerPort);
         } catch (FtpException e) {
             e.printStackTrace();
         }

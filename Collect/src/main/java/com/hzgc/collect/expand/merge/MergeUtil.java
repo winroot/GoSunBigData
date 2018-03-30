@@ -1,7 +1,7 @@
 package com.hzgc.collect.expand.merge;
 
 import com.hzgc.collect.expand.log.LogEvent;
-import com.hzgc.collect.expand.util.JSONHelper;
+import com.hzgc.common.json.JSONUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -326,7 +326,7 @@ public class MergeUtil {
                 }
                 //用File对象构造FileWriter，如果第二个参数为true，表示以追加的方式写数据，从文件尾部开始写起
                 fw = new FileWriter(mergeFilePath, true);
-                fw.write(JSONHelper.toJson(event));
+                fw.write(JSONUtil.toJson(event));
                 fw.write(newLine);
                 fw.flush();
             } catch (IOException e) {

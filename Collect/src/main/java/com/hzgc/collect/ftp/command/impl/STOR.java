@@ -1,15 +1,15 @@
 package com.hzgc.collect.ftp.command.impl;
 
 import com.hzgc.collect.expand.log.LogEvent;
-import com.hzgc.collect.expand.processer.FtpPathMessage;
+import com.hzgc.common.ftp.FtpPathMessage;
 import com.hzgc.collect.expand.processer.RocketMQProducer;
 import com.hzgc.collect.expand.subscribe.FtpSwitch;
 import com.hzgc.collect.expand.subscribe.ReceiveIpcIds;
-import com.hzgc.collect.expand.util.FtpUtils;
-import com.hzgc.collect.expand.util.IOUtil;
+import com.hzgc.common.ftp.FtpUtils;
 import com.hzgc.collect.ftp.command.AbstractCommand;
 import com.hzgc.collect.ftp.ftplet.*;
 import com.hzgc.collect.ftp.impl.*;
+import com.hzgc.common.io.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

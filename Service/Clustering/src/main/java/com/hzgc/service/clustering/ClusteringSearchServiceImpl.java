@@ -1,13 +1,13 @@
 package com.hzgc.service.clustering;
 
-import com.hzgc.service.bigbataApi.clustering.AlarmInfo;
-import com.hzgc.service.bigbataApi.clustering.ClusteringAttribute;
-import com.hzgc.service.bigbataApi.clustering.ClusteringInfo;
-import com.hzgc.service.bigbataApi.clustering.ClusteringSearchService;
-import com.hzgc.service.dynamicrepo.DynamicTable;
+import com.hzgc.common.object.ObjectUtil;
+import com.hzgc.dubbo.clustering.AlarmInfo;
+import com.hzgc.dubbo.clustering.ClusteringAttribute;
+import com.hzgc.dubbo.clustering.ClusteringInfo;
+import com.hzgc.dubbo.clustering.ClusteringSearchService;
+import com.hzgc.service.dynrepo.DynamicTable;
 import com.hzgc.service.util.ElasticSearchHelper;
 import com.hzgc.service.util.HBaseHelper;
-import com.hzgc.service.util.ObjectUtil;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;

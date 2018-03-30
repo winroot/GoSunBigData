@@ -2,11 +2,12 @@ package com.hzgc.collect.expand.merge;
 
 import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.collect.expand.processer.FaceObject;
-import com.hzgc.collect.expand.processer.FtpPathMessage;
-import com.hzgc.collect.expand.util.FtpUtils;
-import com.hzgc.collect.expand.util.JSONHelper;
+import com.hzgc.common.ftp.FtpPathMessage;
+import com.hzgc.common.ftp.FtpUtils;
+import com.hzgc.common.json.JSONUtil;
+import com.hzgc.dubbo.dynamicrepo.SearchType;
+import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
-import com.hzgc.service.bigbataApi.dynamicrepo.SearchType;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,7 +18,7 @@ class GetFaceObject {
     static FaceObject getFaceObject(String row) {
         FaceObject faceObject = null;
         if (row != null && row.length() != 0) {
-            LogEvent event = JSONHelper.toObject(row, LogEvent.class);
+            LogEvent event = JSONUtil.toObject(row, LogEvent.class);
             // 路径中不包含/opt/ftpdata
             String portPath =event.getFtpPath();
             String path = portPath.split("://")[1].substring(portPath.split("://")[1].indexOf("/"));

@@ -1,9 +1,9 @@
 package com.hzgc.service.device;
 
-import com.hzgc.service.bigbataApi.device.DeviceService;
+import com.hzgc.common.string.StringUtil;
+import com.hzgc.dubbo.device.DeviceService;
 import com.hzgc.service.util.HBaseHelper;
 import com.hzgc.service.util.HBaseUtil;
-import com.hzgc.service.util.StringUtil;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Table;

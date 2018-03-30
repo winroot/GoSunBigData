@@ -1,5 +1,6 @@
 package com.hzgc.collect.expand.util;
 
+import com.hzgc.common.file.ResourceFileUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -22,7 +23,7 @@ public class RocketMQProperHelper extends ProperHelper{
         String properName = "rocketmq.properties";
         FileInputStream in = null;
         try {
-            File file = FileUtil.loadResourceFile(properName);
+            File file = ResourceFileUtil.loadResourceFile(properName);
             if (file != null) {
                 in = new FileInputStream(file);
                 props.load(in);

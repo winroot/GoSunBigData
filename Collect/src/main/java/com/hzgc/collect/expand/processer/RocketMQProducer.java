@@ -1,7 +1,5 @@
 package com.hzgc.collect.expand.processer;
 
-import com.codahale.metrics.Counter;
-import com.codahale.metrics.MetricRegistry;
 import com.hzgc.collect.expand.util.RocketMQProperHelper;
 import org.apache.log4j.Logger;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
@@ -10,23 +8,16 @@ import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageQueue;
 
-import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Properties;
 
 public class RocketMQProducer implements Serializable {
     private static Logger LOG = Logger.getLogger(RocketMQProducer.class);
     private static String topic;
-    private static Properties properties = new Properties();
     private static RocketMQProducer instance = null;
     private DefaultMQProducer producer;
 
-    private static MetricRegistry metric = new MetricRegistry();
-    private final static Counter counter = metric.counter("sendRocketMQCount");
-
     private RocketMQProducer() {
-        FileInputStream fis = null;
         try {
             String namesrvAddr = RocketMQProperHelper.getAddress();
             topic = RocketMQProperHelper.getTopic();
@@ -95,8 +86,6 @@ public class RocketMQProducer implements Serializable {
             }
             LOG.info("Send RocketMQ successfully! message:[topic:" + msg.getTopic() + ", tag:" + msg.getTags() +
                     ", key:" + msg.getKeys() + ", data:" + new String(data) + "], " + sendResult);
-            counter.inc();
-            LOG.info("Send RocketMQ total:" + counter.getCount());
         } catch (Exception e) {
             e.printStackTrace();
             LOG.error("Send message error...");

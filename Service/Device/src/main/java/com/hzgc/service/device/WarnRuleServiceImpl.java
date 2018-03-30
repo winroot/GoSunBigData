@@ -1,11 +1,11 @@
 package com.hzgc.service.device;
 
-import com.hzgc.service.bigbataApi.device.WarnRule;
-import com.hzgc.service.bigbataApi.device.WarnRuleService;
+import com.hzgc.common.object.ObjectUtil;
+import com.hzgc.common.string.StringUtil;
+import com.hzgc.dubbo.device.WarnRule;
+import com.hzgc.dubbo.device.WarnRuleService;
 import com.hzgc.service.util.HBaseHelper;
 import com.hzgc.service.util.HBaseUtil;
-import com.hzgc.service.util.ObjectUtil;
-import com.hzgc.service.util.StringUtil;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
@@ -160,7 +160,7 @@ public class WarnRuleServiceImpl implements WarnRuleService {
                             //把规则中的告警类型code和对象类型type放到warnRule中，用于返回
                             warnRule.setObjectType(type);
                             //对于告警类型中是离线告警的
-                            if (code == DeviceTable.OFFLINE) {
+                            if (Objects.equals(code, DeviceTable.OFFLINE)) {
                                 //获取离线告警天数阈值
                                 warnRule.setDayThreshold(tempMap.get(type));
                             } else {

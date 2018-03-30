@@ -1,6 +1,6 @@
 package com.hzgc.collect.expand.processer;
 
-import com.hzgc.collect.expand.util.ObjectUtil;
+import com.hzgc.common.object.ObjectUtil;
 
 import java.util.Map;
 

@@ -1,7 +1,7 @@
 package com.hzgc.collect.expand.log;
 
 import com.hzgc.collect.expand.conf.CommonConf;
-import com.hzgc.collect.expand.util.JSONHelper;
+import com.hzgc.common.json.JSONUtil;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -70,7 +70,7 @@ public class DataProcessLogWriter extends AbstractLogWrite {
                     }
                 }
             }
-            byte[] bytes = JSONHelper.toJson(event).getBytes("utf-8");
+            byte[] bytes = JSONUtil.toJson(event).getBytes("utf-8");
             long length = randomAccessFile.length();
             long position = length - 1;
             if (length != 0L) {

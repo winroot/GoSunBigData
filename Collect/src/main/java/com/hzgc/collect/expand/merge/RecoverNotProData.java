@@ -3,9 +3,9 @@ package com.hzgc.collect.expand.merge;
 import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.collect.expand.processer.FaceObject;
-import com.hzgc.collect.expand.util.JSONHelper;
 import com.hzgc.collect.expand.util.ProducerKafka;
 import com.hzgc.collect.expand.util.ProducerOverFtpProperHelper;
+import com.hzgc.common.json.JSONUtil;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -64,7 +64,7 @@ public class RecoverNotProData {
                     ProducerKafka producerKafka = ProducerKafka.getInstance();
                     for (String row : notProRows) {
                         //获取未处理数据的ftpUrl
-                        LogEvent event = JSONHelper.toObject(row, LogEvent.class);
+                        LogEvent event = JSONUtil.toObject(row, LogEvent.class);
                         String ftpUrl = event.getFtpPath();
                         FaceObject faceObject = GetFaceObject.getFaceObject(row);
                         if (faceObject != null) {

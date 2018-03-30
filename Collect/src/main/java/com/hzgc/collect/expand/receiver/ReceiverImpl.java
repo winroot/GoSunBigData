@@ -4,7 +4,7 @@ import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.DataReceiveLogWriter;
 import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.collect.expand.log.LogWriter;
-import com.hzgc.collect.expand.util.JSONHelper;
+import com.hzgc.common.json.JSONUtil;
 import org.apache.log4j.Logger;
 
 import java.util.concurrent.ArrayBlockingQueue;
@@ -34,7 +34,7 @@ public class ReceiverImpl implements Receiver {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            LOG.info("reveiveWriter write log:" + JSONHelper.toJson(event));
+            LOG.info("reveiveWriter write log:" + JSONUtil.toJson(event));
             receiveWriter.countCheckAndWrite(event);
         }
     }

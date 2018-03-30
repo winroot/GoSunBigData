@@ -1,6 +1,6 @@
 package com.hzgc.collect.expand.subscribe;
 
-import com.hzgc.collect.expand.util.ZookeeperClient;
+import com.hzgc.common.zookeeper.ZookeeperClient;
 import org.apache.log4j.Logger;
 
 import java.util.List;

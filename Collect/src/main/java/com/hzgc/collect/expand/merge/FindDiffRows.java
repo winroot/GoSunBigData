@@ -1,7 +1,7 @@
 package com.hzgc.collect.expand.merge;
 
 import com.hzgc.collect.expand.log.LogEvent;
-import com.hzgc.collect.expand.util.JSONHelper;
+import com.hzgc.common.json.JSONUtil;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ class FindDiffRows {
             LOG.warn("The unionAllRows size is None");
         } else if (allRows.size() == 1) {
             LOG.info("The unionAllRows size is OnlyOne");
-            LogEvent eventState = JSONHelper.toObject(allRows.get(0), LogEvent.class);
+            LogEvent eventState = JSONUtil.toObject(allRows.get(0), LogEvent.class);
             String processState = eventState.getStatus();
             if (processState.equals("0")) {
                 notProList.add(allRows.get(0));
@@ -39,9 +39,9 @@ class FindDiffRows {
         } else {
             Collections.sort(allRows);
             for (int i = 1; i <= allRows.size() - 2; i++) {
-                LogEvent rowEvent = JSONHelper.toObject(allRows.get(i), LogEvent.class);
-                LogEvent upRowEvent = JSONHelper.toObject(allRows.get(i - 1), LogEvent.class);
-                LogEvent downRowEvent = JSONHelper.toObject(allRows.get(i + 1), LogEvent.class);
+                LogEvent rowEvent = JSONUtil.toObject(allRows.get(i), LogEvent.class);
+                LogEvent upRowEvent = JSONUtil.toObject(allRows.get(i - 1), LogEvent.class);
+                LogEvent downRowEvent = JSONUtil.toObject(allRows.get(i + 1), LogEvent.class);
                 long rowCount = rowEvent.getCount();
                 long upRowCount = upRowEvent.getCount();
                 long downRowCount = downRowEvent.getCount();
@@ -52,14 +52,14 @@ class FindDiffRows {
                 }
             }
             //判断第一行数据是否已经处理
-            LogEvent firstEventCount = JSONHelper.toObject(allRows.get(0), LogEvent.class);
-            LogEvent secondEventCount = JSONHelper.toObject(allRows.get(1), LogEvent.class);
+            LogEvent firstEventCount = JSONUtil.toObject(allRows.get(0), LogEvent.class);
+            LogEvent secondEventCount = JSONUtil.toObject(allRows.get(1), LogEvent.class);
             if (firstEventCount.getCount() != secondEventCount.getCount()) {
                 notProList.add(allRows.get(0));
             }
             //判断最后一行数据是否已经处理
-            LogEvent lastEventCount = JSONHelper.toObject(allRows.get(allRows.size() - 1), LogEvent.class);
-            LogEvent eventCount = JSONHelper.toObject(allRows.get(allRows.size() - 2), LogEvent.class);
+            LogEvent lastEventCount = JSONUtil.toObject(allRows.get(allRows.size() - 1), LogEvent.class);
+            LogEvent eventCount = JSONUtil.toObject(allRows.get(allRows.size() - 2), LogEvent.class);
             if (lastEventCount.getCount() != eventCount.getCount()) {
                 notProList.add(allRows.get(allRows.size() - 1));
             }
@@ -106,8 +106,8 @@ class FindDiffRows {
     private class ListComparator implements Comparator<String> {
         @Override
         public int compare(String row1, String row2) {
-            LogEvent event1 = JSONHelper.toObject(row1, LogEvent.class);
-            LogEvent event2 = JSONHelper.toObject(row2, LogEvent.class);
+            LogEvent event1 = JSONUtil.toObject(row1, LogEvent.class);
+            LogEvent event2 = JSONUtil.toObject(row2, LogEvent.class);
             return Long.compare(event1.getCount(), event2.getCount());
         }
     }

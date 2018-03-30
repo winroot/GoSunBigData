@@ -17,9 +17,9 @@
         <module>Alarm</module>
         <module>DynRepo</module>
         <module>StaRepo</module>
-        <module>BigDataApi</module>
-        <module>Collect</module>
-        <module>Feature</module>
+        <module>Face</module>
+        <module>Address</module>
+        <module>Util</module>
     </modules>
 
     <dependencies>
@@ -45,8 +45,31 @@
         </dependency>
         <dependency>
             <groupId>com.hzgc</groupId>
-            <artifactId>util</artifactId>
+            <artifactId>common</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc</groupId>
+            <artifactId>jni</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc</groupId>
+            <artifactId>collect</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc</groupId>
+            <artifactId>bigdata-api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
         </dependency>
     </dependencies>
 

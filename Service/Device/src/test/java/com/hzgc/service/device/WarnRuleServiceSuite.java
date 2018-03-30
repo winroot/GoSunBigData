@@ -1,7 +1,7 @@
 package com.hzgc.service.device;
 
 import com.hzgc.dubbo.device.WarnRule;
-import com.hzgc.cluster.hbase.HBaseHelper;
+import com.hzgc.service.util.HBaseHelper;
 import org.apache.hadoop.hbase.client.Table;
 import org.junit.Test;
 

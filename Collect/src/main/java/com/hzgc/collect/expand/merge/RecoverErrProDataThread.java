@@ -3,9 +3,9 @@ package com.hzgc.collect.expand.merge;
 import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.collect.expand.processer.FaceObject;
-import com.hzgc.collect.expand.util.JSONHelper;
 import com.hzgc.collect.expand.util.ProducerKafka;
 import com.hzgc.collect.expand.util.ProducerOverFtpProperHelper;
+import com.hzgc.common.json.JSONUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -78,7 +78,7 @@ public class RecoverErrProDataThread implements Runnable {
                 if (errorRows != null && errorRows.size() != 0) { // V-2 if start
                     for (String row : errorRows) {
                         //用JSONHelper将某行数据转化为LogEvent格式
-                        LogEvent event = JSONHelper.toObject(row, LogEvent.class);
+                        LogEvent event = JSONUtil.toObject(row, LogEvent.class);
                         String ftpUrl = event.getFtpPath();
                         //根据路径取得对应的图片，并提取特征，封装成FaceObject，发送Kafka
                         FaceObject faceObject = GetFaceObject.getFaceObject(row);
