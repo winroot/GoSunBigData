@@ -27,7 +27,7 @@ public class ObjectUtil {
         return buffer;
     }
 
-    public static Object byteToObject(byte[] bc) {
+    public static java.lang.Object byteToObject(byte[] bc) {
         Object obj = null;
         ByteArrayInputStream bis = null;
         ObjectInputStream ois = null;
