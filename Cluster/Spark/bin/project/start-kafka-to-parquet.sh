@@ -52,22 +52,23 @@ SERVICE_VERSION=`ls ${COMMON_LIB_DIR}| grep ^service-[0-9].[0-9].[0-9].jar$`
 UTIL_VERSION=`ls ${COMMON_LIB_DIR}| grep ^util-[0-9].[0-9].[0-9].jar$`
 
 ## quote version(引用)
-GSON_VERSION=gson-2.8.0.jar
-JACKSON_CORE_VERSION=jackson-core-2.8.6.jar
-SPARK_STREAMING_KAFKA_VERSION=spark-streaming-kafka-0-8_2.11-2.2.0.jar
-HBASE_SERVER_VERSION=hbase-server-1.2.6.jar
-HBASE_CLIENT_VERSION=hbase-client-1.2.6.jar
-HBASE_COMMON_VERSION=hbase-common-1.2.6.jar
-HBASE_PROTOCOL_VERSION=hbase-protocol-1.2.6.jar
-KAFKA_VERSION=kafka_2.11-0.8.2.1.jar
-ELASTICSEARCH_VERSION=elasticsearch-1.0.jar
+GSON_VERSION=`ls ${FTP_LIB_DIR}| grep ^gson-[0-9].[0-9].[0-9].jar`
+JACKSON_CORE_VERSION=`ls ${FTP_LIB_DIR}| grep ^jackson-core-[0-9].[0-9].[0-9].jar`
+SPARK_STREAMING_KAFKA_VERSION=`ls ${CLUSTER_LIB_DIR}| grep ^spark-streaming-kafka-[0-9]-[0-9]_[0-9].[0-9][0-9]-[0-9].[0-9].[0-9].jar`
+HBASE_SERVER_VERSION=`ls ${CLUSTER_LIB_DIR}| grep ^hbase-server-[0-9].[0-9].[0-9].jar`
+HBASE_CLIENT_VERSION=`ls ${CLUSTER_LIB_DIR}| grep ^hbase-client-[0-9].[0-9].[0-9].jar`
+HBASE_COMMON_VERSION=`ls ${CLUSTER_LIB_DIR}| grep ^hbase-common-[0-9].[0-9].[0-9].jar`
+HBASE_PROTOCOL_VERSION=`ls ${CLUSTER_LIB_DIR}| grep ^hbase-protocol-[0-9].[0-9].[0-9].jar`
+KAFKA_VERSION=`ls ${CLUSTER_LIB_DIR}| grep ^kafka_[0-9].[0-9][0-9]-[0-9].[0-9].[0-9].[0-9].jar`
+ELASTICSEARCH_VERSION=`ls ${CLUSTER_LIB_DIR}| grep ^elasticsearch-[0-9].[0-9].jar`
 ROCKETMQ_CLIENT_VERSION=`ls ${FTP_LIB_DIR}| grep ^rocketmq-client-[0-9].[0-9].[0-9].jar$`
 ROCKETMQ_COMMON_VERSION=`ls ${FTP_LIB_DIR}| grep ^rocketmq-common-[0-9].[0-9].[0-9].jar$`
 ROCKETMQ_REMOTING_VERSION=`ls ${FTP_LIB_DIR}| grep ^rocketmq-remoting-[0-9].[0-9].[0-9].jar$`
-FASTJSON_VERSION=fastjson-1.2.29.jar
-KAFKA_CLIENTS_VERSION=kafka-clients-1.0.0.jar
-METRICS_CORE_VERSION=metrics-core-2.2.0.jar
+FASTJSON_VERSION=`ls ${SERVICE_LIB_DIR}| grep ^fastjson-[0-9].[0-9].[0-9][0-9].jar`
+KAFKA_CLIENTS_VERSION=`ls ${CLUSTER_LIB_DIR}| grep ^kafka-clients-[0-9].[0-9].[0-9].jar`
+METRICS_CORE_VERSION=metrics-core-3.1.2.jar
 ZKCLIENT_VERSION=zkclient-0.3.jar
+ZKCLIENT_VERSION=`ls ${CLUSTER_LIB_DIR}| grep ^zkclient-[0-9].[0-9].jar`
 
 
 ############ 创建log目录 ###############
