@@ -1,5 +1,6 @@
 package com.hzgc.cluster.consumer;
 
+import com.hzgc.collect.expand.processer.FaceObject;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.service.dynrepo.DynamicTable;
 import com.hzgc.service.util.ElasticSearchHelper;
