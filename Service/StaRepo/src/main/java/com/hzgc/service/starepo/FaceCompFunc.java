@@ -115,7 +115,7 @@ public class FaceCompFunc extends ScalarFunction {
                 setScale(2, BigDecimal.ROUND_HALF_UP).
                 doubleValue();
         if (actualValue >= 100) {
-            return (float)100;
+            return 100;
         }
         return (float) actualValue;
     }

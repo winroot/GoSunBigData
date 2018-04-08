@@ -67,7 +67,7 @@ public class DeviceUtilImpl implements DeviceUtil, Serializable {
             if (result.containsColumn(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL)) {
                 byte[] map = result.getValue(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL);
                 if (map != null) {
-                    return (Map<String, Map<String, Integer>>) ObjectUtil.byteToObject(map);
+                    return (Map<String, Map<String, Integer>>)ObjectUtil.byteToObject(map);
                 }
             }
         } catch (IOException e) {

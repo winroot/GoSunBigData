@@ -47,7 +47,11 @@ class ParseByOption {
      */
     private static String getOnePersonSQL(SearchOption option, boolean printSql) {
         StringBuilder finalSql = new StringBuilder();
-        finalSql.append("select * from (select ").append(MID_FIELD).append(", greatest(");
+        finalSql.append("select * from (select ")
+                .append(MID_FIELD)
+                .append(", ")
+                .append(getAttributes(option))
+                .append("greatest(");
         String[] simFieldConatiner = new String[option.getImages().size()];
         for (int i = 0; i < option.getImages().size(); i++) {
             String simField = DynamicTable.SIMILARITY + i;
@@ -253,9 +257,9 @@ class ParseByOption {
         finalSql.append(" and (");
         for (int i = 0; option.getIntervals().size() > i; i++) {
             int start_sj = option.getIntervals().get(i).getStart();
-            int start_st = (start_sj / Constants.NUM_SIXTY) * Constants.NUM_ONE_HUNDRED + start_sj % Constants.NUM_SIXTY;
+            int start_st = (start_sj / 60) * 100 + start_sj % 60;
             int end_sj = option.getIntervals().get(i).getEnd();
-            int end_st = (end_sj / Constants.NUM_SIXTY) * Constants.NUM_ONE_HUNDRED + end_sj % Constants.NUM_SIXTY;
+            int end_st = (end_sj / 60) * 100 + end_sj % 60;
             if (option.getIntervals().size() - 1 > i) {
                 finalSql
                         .append(DynamicTable.TIMESLOT)

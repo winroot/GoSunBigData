@@ -24,7 +24,7 @@ public class CreateStaticRepoTable {
         Properties tableProper = new Properties();
         InputStream inputStream = null;
         try {
-            File file = ResourceFileUtil.loadResourceFile("static-table.properties");
+            File file = FileUtil.loadResourceFile("static-table.properties");
             if (file == null){
                 return;
             }

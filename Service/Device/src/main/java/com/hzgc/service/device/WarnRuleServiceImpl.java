@@ -92,7 +92,7 @@ public class WarnRuleServiceImpl implements WarnRuleService {
                 //若device表中的值不为空
                 if (!result.isEmpty()) {
                     Map<Integer, Map<String, Integer>> tempMap =
-                        //告警类型      对象类型,阈值
+                            //告警类型      对象类型,阈值
                             deSerializDevice(result.getValue(DeviceTable.CF_DEVICE, DeviceTable.WARN));
                     //对于每一种告警类型：
                     for (Integer code : commonRule.keySet()) {
@@ -147,7 +147,7 @@ public class WarnRuleServiceImpl implements WarnRuleService {
                     /*
                      * 设备布控预案数据类型Map<Integer, Map<String, Integer>>    （即deviceMap）
                      *                                     告警类型,      对象类型,阈值
-                    */
+                     */
                     //对于deviceMap中的每个告警类型
                     for (Integer code : deviceMap.keySet()) {
                         //获取tempMap：<String, Integer>
@@ -160,7 +160,7 @@ public class WarnRuleServiceImpl implements WarnRuleService {
                             //把规则中的告警类型code和对象类型type放到warnRule中，用于返回
                             warnRule.setObjectType(type);
                             //对于告警类型中是离线告警的
-                            if (Objects.equals(code, DeviceTable.OFFLINE)) {
+                            if (code == DeviceTable.OFFLINE) {
                                 //获取离线告警天数阈值
                                 warnRule.setDayThreshold(tempMap.get(type));
                             } else {
@@ -217,7 +217,7 @@ public class WarnRuleServiceImpl implements WarnRuleService {
                     /*
                      * offlineMap：Map<String, Map<String, Integer>>
                      *                      对象类型      设备ID,离线天数
-                    */
+                     */
                     //对于离线告警数据中的每个对象类型
                     for (String type : offlineMap.keySet()) {
                         //对于每个设备ID
