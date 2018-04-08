@@ -4,7 +4,7 @@ import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.collect.expand.processer.FaceObject;
 import com.hzgc.collect.expand.util.ProducerKafka;
-import com.hzgc.collect.expand.util.ProducerOverFtpProperHelper;
+import com.hzgc.collect.expand.util.KafkaProperHelper;
 import com.hzgc.common.json.JSONUtil;
 import org.apache.log4j.Logger;
 
@@ -38,7 +38,7 @@ public class RecoverErrProDataThread implements Runnable, Serializable {
     private Logger LOG = Logger.getLogger(RecoverErrProDataThread.class);
     private static final String SUFFIX = ".log";
     private static CommonConf commonConf;
-    private String feature = ProducerOverFtpProperHelper.getTopicFeature();
+    private String feature = KafkaProperHelper.getTopicFeature();
 
     //构造函数
     RecoverErrProDataThread(CommonConf commonConf) {

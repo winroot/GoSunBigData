@@ -43,7 +43,7 @@ public class ProcessThread implements Runnable, Serializable {
                     ProcessCallBack callBack = new ProcessCallBack(event.getFtpPath(),
                             System.currentTimeMillis(), this.writer, event);
                     ProducerKafka.getInstance().sendKafkaMessage(
-                            ProducerOverFtpProperHelper.getTopicFeature(),
+                            KafkaProperHelper.getTopicFeature(),
                             event.getFtpPath(),
                             faceObject,
                             callBack);

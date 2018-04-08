@@ -4,7 +4,7 @@ import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.collect.expand.processer.FaceObject;
 import com.hzgc.collect.expand.util.ProducerKafka;
-import com.hzgc.collect.expand.util.ProducerOverFtpProperHelper;
+import com.hzgc.collect.expand.util.KafkaProperHelper;
 import com.hzgc.common.json.JSONUtil;
 import org.apache.log4j.Logger;
 
@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class RecoverNotProData implements Serializable {
     private Logger LOG = Logger.getLogger(RecoverNotProData.class);
-    private String feature = ProducerOverFtpProperHelper.getTopicFeature();
+    private String feature = KafkaProperHelper.getTopicFeature();
 
     public boolean recoverNotProData(CommonConf commonConf) {
         MergeUtil mergeUtil = new MergeUtil();

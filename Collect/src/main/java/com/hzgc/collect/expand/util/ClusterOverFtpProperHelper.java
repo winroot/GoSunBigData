@@ -39,29 +39,22 @@ public class ClusterOverFtpProperHelper extends ProperHelper implements Serializ
         FileInputStream in = null;
         try {
             File file = ResourceFileUtil.loadResourceFile(properName);
-            if (file != null) {
-                in = new FileInputStream(file);
-                props.load(in);
-                LOG.info("Load configuration for ftp server from ./conf/cluster-over-ftp.properties");
-
-                setLogSize();
-                setReceiveQueueCapacity();
-                setReceiveLogDir();
-                setProcessLogDir();
-                setSuccessLogDir();
-                setMergeLogDir();
-                setReceiveNumber();
-                setMergeScanTime();
-                setFaceDetectorNumber();
-                setPort();
-                setDataPorts();
-                setImplicitSsl();
-                setZookeeperAddress();
-                setFtpSwitch();
-            } else {
-                LOG.error("The property file " + properName + "doesn't exist!");
-                System.exit(1);
-            }
+            in = new FileInputStream(file);
+            props.load(in);
+            setLogSize();
+            setReceiveQueueCapacity();
+            setReceiveLogDir();
+            setProcessLogDir();
+            setSuccessLogDir();
+            setMergeLogDir();
+            setReceiveNumber();
+            setMergeScanTime();
+            setFaceDetectorNumber();
+            setPort();
+            setDataPorts();
+            setImplicitSsl();
+            setZookeeperAddress();
+            setFtpSwitch();
         } catch (IOException e) {
             e.printStackTrace();
             LOG.error("Catch an unknown error, can't load the configuration file" + properName);

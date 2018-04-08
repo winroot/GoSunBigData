@@ -30,21 +30,14 @@ public class FTPAddressProperHelper extends ProperHelper implements Serializable
         FileInputStream in = null;
         try {
             File file = ResourceFileUtil.loadResourceFile(properName);
-            if (file != null) {
-                in = new FileInputStream(file);
-                props.load(in);
-                LOG.info("Load configuration for ftp Server from ./conf/ftpAddress.properties");
-
-                setIp();
-                setPort();
-                setUser();
-                setPassword();
-                setPathRule();
-                setHostname();
-            } else {
-                LOG.error("The property file " + properName + "doesn't exist!");
-                System.exit(1);
-            }
+            in = new FileInputStream(file);
+            props.load(in);
+            setIp();
+            setPort();
+            setUser();
+            setPassword();
+            setPathRule();
+            setHostname();
         } catch (IOException e) {
             e.printStackTrace();
             LOG.error("Catch an unknown error, can't load the configuration file" + properName);

@@ -13,8 +13,8 @@ import java.util.Properties;
  * 从配置文件producer-over-ftp.properties中：
  * 验证其中的配置；读取所需的配置。（马燊偲）
  */
-public class ProducerOverFtpProperHelper extends ProperHelper implements Serializable {
-    private static Logger LOG = Logger.getLogger(ProducerOverFtpProperHelper.class);
+public class KafkaProperHelper extends ProperHelper implements Serializable {
+    private static Logger LOG = Logger.getLogger(KafkaProperHelper.class);
     private static Properties props = new Properties();
 
     private static String bootstrapServers;
@@ -26,26 +26,18 @@ public class ProducerOverFtpProperHelper extends ProperHelper implements Seriali
     private static String topicFeature;
 
     static {
-        String properName = "producer-over-ftp.properties";
+        String properName = "kafka.properties";
         FileInputStream in = null;
         try {
             File file = ResourceFileUtil.loadResourceFile(properName);
-            if (file != null) {
-                in = new FileInputStream(file);
-                props.load(in);
-                LOG.info("Load configuration for ftp server from ./conf/producer-over-ftp.properties");
-
-                setBootstrapServers();
-                //setClientId();
-                setRequestRequiredAcks();
-                setRetries();
-                setKeySerializer();
-                setValueSerializer();
-                setTopicFeature();
-            } else {
-                LOG.error("The property file " + properName + "doesn't exist!");
-                System.exit(1);
-            }
+            in = new FileInputStream(file);
+            props.load(in);
+            setBootstrapServers();
+            setRequestRequiredAcks();
+            setRetries();
+            setKeySerializer();
+            setValueSerializer();
+            setTopicFeature();
         } catch (IOException e) {
             e.printStackTrace();
             LOG.error("Catch an unknown error, can't load the configuration file" + properName);
@@ -66,11 +58,6 @@ public class ProducerOverFtpProperHelper extends ProperHelper implements Seriali
     private static void setBootstrapServers() {
         bootstrapServers = verifyIpPlusPortList("bootstrap.servers", props, LOG);
     }
-
-
-    //private static void setClientId(){
-    //clientId = verifyCommonValue("client.id", "p1", props, LOG);
-    //}
 
     private static void setRequestRequiredAcks() {
         requestRequiredAcks = verifyIntegerValue("request.required.acks", "1", props, LOG);
@@ -99,9 +86,6 @@ public class ProducerOverFtpProperHelper extends ProperHelper implements Seriali
         return bootstrapServers;
     }
 
-    //public static String getClientId() {
-    //return clientId;
-    //}
     public static Integer getRequestRequiredAcks() {
         return Integer.valueOf(requestRequiredAcks);
     }
