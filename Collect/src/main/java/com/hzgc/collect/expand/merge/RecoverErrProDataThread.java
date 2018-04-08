@@ -9,6 +9,7 @@ import com.hzgc.common.json.JSONUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ import java.util.List;
  * 2，删除原有已处理过的错误日志errorN.log。
  * 3，结束
  */
-public class RecoverErrProDataThread implements Runnable {
+public class RecoverErrProDataThread implements Runnable, Serializable {
 
     private Logger LOG = Logger.getLogger(RecoverErrProDataThread.class);
     private static final String SUFFIX = ".log";

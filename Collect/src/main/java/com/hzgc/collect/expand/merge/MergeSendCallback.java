@@ -5,7 +5,9 @@ import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.log4j.Logger;
 
-public class MergeSendCallback implements Callback {
+import java.io.Serializable;
+
+public class MergeSendCallback implements Callback, Serializable {
     private Logger LOG = Logger.getLogger(MergeSendCallback.class);
     private final long startTime = System.currentTimeMillis();
     private static MergeUtil mergeUtil = new MergeUtil();

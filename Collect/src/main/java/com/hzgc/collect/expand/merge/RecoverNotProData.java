@@ -8,6 +8,7 @@ import com.hzgc.collect.expand.util.ProducerOverFtpProperHelper;
 import com.hzgc.common.json.JSONUtil;
 import org.apache.log4j.Logger;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ import java.util.List;
  * 结束循环；
  * 3，结束
  */
-public class RecoverNotProData {
+public class RecoverNotProData implements Serializable {
     private Logger LOG = Logger.getLogger(RecoverNotProData.class);
     private String feature = ProducerOverFtpProperHelper.getTopicFeature();
 

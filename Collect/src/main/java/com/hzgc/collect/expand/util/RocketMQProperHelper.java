@@ -6,13 +6,14 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Properties;
 
 /**
  * 从配置文件rocketmq.properties中：
  * 验证其中的配置；读取所需的配置。（马燊偲）
  */
-public class RocketMQProperHelper extends ProperHelper{
+public class RocketMQProperHelper extends ProperHelper implements Serializable {
     private static Logger LOG = Logger.getLogger(RocketMQProperHelper.class);
     private static Properties props = new Properties();
     private static String address;

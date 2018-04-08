@@ -20,11 +20,12 @@ import com.hzgc.common.file.ResourceFileUtil;
 import com.hzgc.jni.NativeFunction;
 import org.apache.log4j.Logger;
 
+import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FTP extends ClusterOverFtp {
+public class FTP extends ClusterOverFtp implements Serializable {
     private static Logger LOG = Logger.getLogger(FTP.class);
 
     private static Map<Integer, Integer> pidMap = new HashMap<>();

@@ -6,13 +6,14 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Properties;
 
 /**
  * 从配置文件cluster-over-ftp.properties中：
  * 验证其中的配置；读取所需的配置。（马燊偲）
  */
-public class ClusterOverFtpProperHelper extends ProperHelper {
+public class ClusterOverFtpProperHelper extends ProperHelper implements Serializable {
     private static Logger LOG
             = Logger.getLogger(ClusterOverFtpProperHelper.class);
     private static Properties props = new Properties();
@@ -65,10 +66,10 @@ public class ClusterOverFtpProperHelper extends ProperHelper {
             e.printStackTrace();
             LOG.error("Catch an unknown error, can't load the configuration file" + properName);
         } finally {
-            if (in != null){
+            if (in != null) {
                 try {
                     in.close();
-                } catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -92,6 +93,7 @@ public class ClusterOverFtpProperHelper extends ProperHelper {
         }
 
     }
+
     private static void setPort() {
         port = verifyPort("listener-port", "2121", props, LOG);
     }
@@ -117,7 +119,7 @@ public class ClusterOverFtpProperHelper extends ProperHelper {
     }
 
     private static void setSuccessLogDir() {
-        successLogDir = verifyCommonValue("success.log.dir","/opt/RealTimeFaceCompare/ftp/success", props, LOG);
+        successLogDir = verifyCommonValue("success.log.dir", "/opt/RealTimeFaceCompare/ftp/success", props, LOG);
     }
 
     private static void setMergeLogDir() {
@@ -137,7 +139,7 @@ public class ClusterOverFtpProperHelper extends ProperHelper {
     }
 
     private static void setFaceDetectorNumber() {
-        faceDetectorNumber = verifyPositiveIntegerValue("face.detector.number","", props, LOG);
+        faceDetectorNumber = verifyPositiveIntegerValue("face.detector.number", "", props, LOG);
     }
 
     private static void setZookeeperAddress() {
@@ -215,7 +217,7 @@ public class ClusterOverFtpProperHelper extends ProperHelper {
     /**
      * 获取Properties属性的资源文件变量
      */
-    public static Properties getProps(){
+    public static Properties getProps() {
         return props;
     }
 }
