@@ -2,6 +2,7 @@ package com.hzgc.service.util;
 
 import com.hzgc.common.file.ResourceFileUtil;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
@@ -32,7 +33,7 @@ public class HBaseHelper implements Serializable {
     private static void initHBaseConfiguration() {
         try {
             innerHBaseConf = HBaseConfiguration.create();
-            File hbaseFile = ResourceFileUtil.loadResourceFile("hbase-site.xml");
+            File hbaseFile = FileUtil.loadResourceFile("hbase-site.xml");
             innerHBaseConf.addResource(hbaseFile.getPath());
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,7 +55,7 @@ public class HBaseHelper implements Serializable {
      *
      * @return 返回HBaseConfiguration对象
      */
-    private static Configuration getHBaseConfiguration() {
+    public static Configuration getHBaseConfiguration() {
         if (null == innerHBaseConf) {
             initHBaseConfiguration();
         }
@@ -83,6 +84,58 @@ public class HBaseHelper implements Serializable {
             initHBaseConnection();
         }
         return innerHBaseConnection;
+    }
+
+    public Table crateTableWithCoprocessor(String tableName,
+                                           String observerName,
+                                           String path,
+                                           Map<String, String> mapOfOberserverArgs,
+                                           int maxVersion, String... colfams) {
+        HTableDescriptor tableDescriptor = null;
+        Admin admin = null;
+        Table table = null;
+        // 创建表格
+        try {
+            admin = HBaseHelper.getHBaseConnection().getAdmin();
+            if (admin.tableExists(TableName.valueOf(tableName))) {
+                LOG.info("Table: " + tableName + " have already exit, quit with status 0.");
+                return getTable(tableName);
+            }
+            tableDescriptor = new HTableDescriptor(TableName.valueOf(tableName));
+            for (String columnFamily : colfams) {
+                HColumnDescriptor columnDescriptor = new HColumnDescriptor(columnFamily);
+                columnDescriptor.setMaxVersions(maxVersion);
+                tableDescriptor.addFamily(columnDescriptor);
+            }
+            admin.createTable(tableDescriptor);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 添加Coprocessor。
+        try {
+            table = getTable(tableName);
+            if (admin != null) {
+                admin.disableTable(TableName.valueOf(tableName));
+                if (tableDescriptor != null) {
+                    tableDescriptor.addCoprocessor(observerName, new Path(path), Coprocessor.PRIORITY_USER, mapOfOberserverArgs);
+                }
+                admin.modifyTable(TableName.valueOf(tableName), tableDescriptor);
+                admin.enableTable(TableName.valueOf(tableName));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // 关闭admin 对象。
+        try {
+            if (admin != null) {
+                admin.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return table;
     }
 
     /**
@@ -175,20 +228,20 @@ public class HBaseHelper implements Serializable {
         }
     }
 
-    public static void createTable(String tableName, int maxVersion, String... colfams) {
-        createTable(tableName, maxVersion, Integer.MAX_VALUE, colfams);
+    public static Table createTable(String tableName, int maxVersion, String... colfams) {
+        return createTable(tableName, maxVersion, Integer.MAX_VALUE, colfams);
     }
 
-    public static void createTable(String tableName, int maxVersion, int timeToLive, String... colfams) {
+    public static Table createTable(String tableName, int maxVersion, int timeToLive, String... colfams) {
         HTableDescriptor tableDescriptor = null;
         Admin admin = null;
+        Table table = null;
         // 创建表格
         try {
             admin = HBaseHelper.getHBaseConnection().getAdmin();
             if (admin.tableExists(TableName.valueOf(tableName))) {
                 LOG.info("Table: " + tableName + " have already exit, quit with status 0.");
-                getTable(tableName);
-                return;
+                return getTable(tableName);
             }
             tableDescriptor = new HTableDescriptor(TableName.valueOf(tableName));
             for (String columnFamily : colfams) {
@@ -211,6 +264,7 @@ public class HBaseHelper implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return table;
     }
 
 }

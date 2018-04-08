@@ -66,7 +66,7 @@ public class GetDataFromHBase {
                 map2.put("_type", "person");
                 map2.put("_id", rowkey);
                 map1.put("create", map2);
-                String newJson1 = JSONUtil.toJson(map1);
+                String newJson1 = MapToJson.mapToJson(map1);
                 fos1.write(newJson1.getBytes());
                 fos1.write("\n".getBytes());
                 map3.put("platformid", platformid);
@@ -78,7 +78,7 @@ public class GetDataFromHBase {
                 map3.put("sex", sex);
                 map3.put("creator", creator);
                 map3.put("cphone", cphone);
-                String newJson2 = JSONUtil.toJson(map3);
+                String newJson2 = MapToJson.mapToJson(map3);
                 fos1.write(newJson2.getBytes());
                 fos1.write("\n".getBytes());
             }

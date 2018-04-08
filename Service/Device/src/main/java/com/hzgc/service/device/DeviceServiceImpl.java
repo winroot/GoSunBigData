@@ -44,7 +44,7 @@ public class DeviceServiceImpl implements DeviceService {
             String ipcIDTrim = ipcID.trim();
             try {
                 Delete delete = new Delete(Bytes.toBytes(ipcIDTrim));
-	            //根据设备ID（rowkey），删除该行的平台ID列，而非删除这整行数据。
+                //根据设备ID（rowkey），删除该行的平台ID列，而非删除这整行数据。
                 delete.addColumns(DeviceTable.CF_DEVICE,DeviceTable.PLAT_ID);
                 table.delete(delete);
                 LOG.info("Unbind device:" + ipcIDTrim + " and " + platformId + " successful");
