@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <assembly>
-    <id>Spark</id>
+    <id>Cluster</id>
     <includeBaseDirectory>false</includeBaseDirectory>
     <formats>
         <format>dir</format>
     </formats>
-
     <fileSets>
         <!--项目bin目录-->
         <fileSet>
@@ -13,8 +12,15 @@
             <fileMode>0755</fileMode>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
+        <!--项目resources目录-->
+        <fileSet>
+            <directory>${project.basedir}/src/main/resources</directory>
+            <includes>
+               <include>**</include>
+           </includes>
+            <outputDirectory>conf</outputDirectory>
+        </fileSet>
     </fileSets>
-
     <dependencySets>
         <dependencySet>
             <useProjectArtifact>false</useProjectArtifact>

@@ -23,7 +23,7 @@ public class PhoenixJDBCHelper {
 
 
     private static void initConnection() {
-        File file = ResourceFileUtil.loadResourceFile("jdbc.properties");
+        File file = FileUtil.loadResourceFile("jdbc.properties");
         Properties jdbcProp = new Properties();
         try {
             jdbcProp.load(new FileInputStream(file));
@@ -42,7 +42,7 @@ public class PhoenixJDBCHelper {
     }
 
     public static void closeConnection(Connection conn, Statement pstm) {
-       closeConnection(conn, pstm, null);
+        closeConnection(conn, pstm, null);
     }
 
     public static void closeConnection(Connection conn, Statement pstm, ResultSet resultSet) {

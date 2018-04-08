@@ -7,10 +7,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-public class FileUtil {
-    private static Logger LOG = Logger.getLogger(FileUtil.class);
+public class ImageToByte {
+    private static Logger LOG = Logger.getLogger(ImageToByte.class);
     //图片到byte数组
-    public static byte[] file2byte(String path) throws IOException {
+    public static byte[] image2byte(String path) throws IOException {
         File file = new File(path);
         if (!file.exists()){
             LOG.info("File does not exist!");

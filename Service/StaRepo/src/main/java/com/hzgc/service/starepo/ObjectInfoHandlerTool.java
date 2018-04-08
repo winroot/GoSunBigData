@@ -53,7 +53,7 @@ class ObjectInfoHandlerTool {
     }
 
 
-    public PersonObject getPersonObjectFromResultSet(ResultSet resultSet) {
+    public  PersonObject getPersonObjectFromResultSet(ResultSet resultSet) {
         PersonObject personObject = new PersonObject();
         try {
             while (resultSet.next()) {
@@ -124,7 +124,7 @@ class ObjectInfoHandlerTool {
      * @param searchByPics
      * @return personSingelResult
      */
-     PersonSingleResult getPersonSingleResult(PersonSingleResult personSingleResult, ResultSet resultSet, boolean searchByPics) {
+    PersonSingleResult getPersonSingleResult(PersonSingleResult personSingleResult, ResultSet resultSet, boolean searchByPics) {
         List<PersonObject> personObjects = new ArrayList<>();
         try {
             while (resultSet.next()) {

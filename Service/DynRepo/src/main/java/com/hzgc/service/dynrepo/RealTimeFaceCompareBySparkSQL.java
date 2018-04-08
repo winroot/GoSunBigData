@@ -63,7 +63,7 @@ class RealTimeFaceCompareBySparkSQL {
         try {
             //开始通过spark执行查询
             long start = System.currentTimeMillis();
-            conn = JDBCFactory.getConnection();
+            conn = JDBCUtil.getConnection();
             LOG.info("Get jdbc connection time is:" + (System.currentTimeMillis() - start));
             statement = conn.createStatement();
             resultSet = statement.executeQuery(selectBySparkSQL);

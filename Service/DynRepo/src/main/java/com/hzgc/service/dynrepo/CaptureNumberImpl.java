@@ -163,7 +163,7 @@ public class CaptureNumberImpl implements CaptureNumberService {
             Calendar end = Calendar.getInstance();
             end.setTime(df.parse(endTime));
             Long endTimeL = end.getTimeInMillis();
-            Long onehour = Constants.ONE_HOUR;
+            Long onehour = 1000 * 60 * 60L;
             Long time = startTimeL;
             while (time <= endTimeL) {
                 Date everyTime = new Date(time);
