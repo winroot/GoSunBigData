@@ -127,10 +127,10 @@ public class FTPDownloadUtils {
             String ftpFileName = path.substring(path.lastIndexOf("/") + 1);
 
             //通过ftpAddress.properties配置文件，ftpUserName、ftpPassword
-//            String ftpUserName = FTPAddressProperHelper.getUser();
-//            String ftpPassword = FTPAddressProperHelper.getPassword();
+            String ftpUserName = FTPAddressProperHelper.getUser();
+            String ftpPassword = FTPAddressProperHelper.getPassword();
 
-//            downloadFtpFile(ftpAddress, ftpUserName, ftpPassword, ftpPort, ftpFilePath, ftpFileName, localPath, localFileName);
+            downloadFtpFile(ftpAddress, ftpUserName, ftpPassword, ftpPort, ftpFilePath, ftpFileName, localPath, localFileName);
         }
     }
 
@@ -151,15 +151,15 @@ public class FTPDownloadUtils {
             String ftpFileName = path.substring(path.lastIndexOf("/") + 1);
 
             //通过ftpAddress.properties配置文件，ftpUserName、ftpPassword
-//            String ftpUserName = FTPAddressProperHelper.getUser();
-//            String ftpPassword = FTPAddressProperHelper.getPassword();
+            String ftpUserName = FTPAddressProperHelper.getUser();
+            String ftpPassword = FTPAddressProperHelper.getPassword();
 
             FTPClient ftpClient;
             InputStream in;
 
             try {
                 //连接FTPClient并转移到FTP服务器目录
-                ftpClient = getFTPClient(ftpAddress, "", "", ftpPort);
+                ftpClient = getFTPClient(ftpAddress, ftpUserName, ftpPassword, ftpPort);
                 ftpClient.setControlEncoding("UTF-8"); // 中文支持
                 ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
                 ftpClient.enterLocalPassiveMode();
@@ -329,11 +329,11 @@ public class FTPDownloadUtils {
             e.printStackTrace();
         }
         boolean flag = uploadFile(hostname, port, username, password, basepath, filepath, filename, in);
-            if (flag) {
-                LOG.info("upload file successfule");
-            } else {
-                LOG.error("upload file successfule");
-            }
+        if (flag) {
+            LOG.info("upload file successfule");
+        } else {
+            LOG.error("upload file successfule");
+        }
 
     }
 }
