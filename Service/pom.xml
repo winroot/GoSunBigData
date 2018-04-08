@@ -55,6 +55,11 @@
         </dependency>
         <dependency>
             <groupId>com.hzgc</groupId>
+            <artifactId>collect</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc</groupId>
             <artifactId>bigdata-api</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
