@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <assembly>
-    <id>FtpServer</id>
+    <id>Collect</id>
     <includeBaseDirectory>false</includeBaseDirectory>
     <formats>
         <format>dir</format>
@@ -17,10 +17,7 @@
             <directory>${project.basedir}/src/main/resources</directory>
             <includes>
                <include>*.properties</include>
-           </includes>
-            <excludes>
-                <exclude>spring-context.xml</exclude>
-            </excludes>
+            </includes>
             <outputDirectory>conf</outputDirectory>
         </fileSet>
     </fileSets>
