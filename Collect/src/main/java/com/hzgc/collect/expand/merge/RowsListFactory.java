@@ -1,5 +1,6 @@
 package com.hzgc.collect.expand.merge;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,16 +11,16 @@ import java.util.List;
  * notProRows：未处理的数据（receiveFile中有，processFile中没有的数据）
  * errProRows：处理失败的数据（receiveFile中状态为0，processFile中状态为1的数据）
  */
-public class RowsListFactory {
+public class RowsListFactory implements Serializable {
 
     //初始化要用到的两个工具类
     private MergeUtil mergeUtil = new MergeUtil();
-    private  FindDiffRows findDiffRows = new FindDiffRows();
+    private FindDiffRows findDiffRows = new FindDiffRows();
 
-    private  List<String> notProRows;
+    private List<String> notProRows;
 
     //有参构造函数，传入需要处理的某个process文件路径，及其对应的receiveFileDir文件路径
-    public RowsListFactory(String processFileDir, String receiveFileDir){
+    public RowsListFactory(String processFileDir, String receiveFileDir) {
         setNotProRows(processFileDir, receiveFileDir);
     }
 

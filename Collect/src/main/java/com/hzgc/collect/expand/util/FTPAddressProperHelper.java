@@ -6,13 +6,14 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Properties;
 
 /**
  * 从配置文件ftpAddress.properties中：
  * 验证其中的配置；读取所需的配置。（马燊偲）
  */
-public class FTPAddressProperHelper extends ProperHelper{
+public class FTPAddressProperHelper extends ProperHelper implements Serializable {
 
     private static Logger LOG = Logger.getLogger(FTPAddressProperHelper.class);
     private static Properties props = new Properties();
@@ -29,29 +30,22 @@ public class FTPAddressProperHelper extends ProperHelper{
         FileInputStream in = null;
         try {
             File file = ResourceFileUtil.loadResourceFile(properName);
-            if (file != null) {
-                in = new FileInputStream(file);
-                props.load(in);
-                LOG.info("Load configuration for ftp Server from ./conf/ftpAddress.properties");
-
-                setIp();
-                setPort();
-                setUser();
-                setPassword();
-                setPathRule();
-                setHostname();
-            } else {
-                LOG.error("The property file " + properName + "doesn't exist!");
-                System.exit(1);
-            }
+            in = new FileInputStream(file);
+            props.load(in);
+            setIp();
+            setPort();
+            setUser();
+            setPassword();
+            setPathRule();
+            setHostname();
         } catch (IOException e) {
             e.printStackTrace();
             LOG.error("Catch an unknown error, can't load the configuration file" + properName);
         } finally {
-            if (in != null){
+            if (in != null) {
                 try {
                     in.close();
-                } catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -78,7 +72,7 @@ public class FTPAddressProperHelper extends ProperHelper{
     }
 
     private static void setUser() {
-        user = verifyCommonValue("user","admin", props, LOG);
+        user = verifyCommonValue("user", "admin", props, LOG);
     }
 
     private static void setPassword() {
@@ -86,7 +80,7 @@ public class FTPAddressProperHelper extends ProperHelper{
     }
 
     private static void setPathRule() {
-        pathRule = verifyCommonValue("pathRule","%f/%Y/%m/%d/%H", props, LOG);
+        pathRule = verifyCommonValue("pathRule", "%f/%Y/%m/%d/%H", props, LOG);
     }
 
     private static void setHostname() {
@@ -116,14 +110,15 @@ public class FTPAddressProperHelper extends ProperHelper{
     public static String getPathRule() {
         return pathRule;
     }
-    public static String getHostname(){
+
+    public static String getHostname() {
         return hostname;
     }
 
     /**
      * 获取Properties属性的资源文件变量
      */
-    public static Properties getProps(){
+    public static Properties getProps() {
         return props;
     }
 

@@ -7,13 +7,14 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ReceiverScheduler {
+public class ReceiverScheduler implements Serializable {
     private Logger LOG = Logger.getLogger(ReceiverScheduler.class);
     private final List<ReceiverImpl> container = new ArrayList<>();
     //公共配置类

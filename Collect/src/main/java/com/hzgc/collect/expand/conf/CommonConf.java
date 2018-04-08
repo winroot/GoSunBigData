@@ -2,7 +2,9 @@ package com.hzgc.collect.expand.conf;
 
 import com.hzgc.collect.expand.util.ClusterOverFtpProperHelper;
 
-public class CommonConf {
+import java.io.Serializable;
+
+public class CommonConf implements Serializable {
 
     /**
      * 队列日志名称
@@ -67,7 +69,6 @@ public class CommonConf {
     }
 
     /**
-     *
      * @param properName 指定类路径下资源文件名称
      */
     public CommonConf(String properName) {

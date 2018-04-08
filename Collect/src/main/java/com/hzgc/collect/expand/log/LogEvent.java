@@ -1,6 +1,8 @@
 package com.hzgc.collect.expand.log;
 
-public class LogEvent {
+import java.io.Serializable;
+
+public class LogEvent implements Serializable {
 
     /**
      * 当前LogEvent对应的序号,

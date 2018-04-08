@@ -5,6 +5,7 @@ import com.hzgc.common.json.JSONUtil;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.Serializable;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.file.Files;
@@ -16,7 +17,7 @@ import java.nio.file.Paths;
  *
  * @author Zhaozhe
  */
-public class DataProcessLogWriter extends AbstractLogWrite {
+public class DataProcessLogWriter extends AbstractLogWrite implements Serializable {
     private String errorLog;
 
     public DataProcessLogWriter(CommonConf conf, String queueID) {

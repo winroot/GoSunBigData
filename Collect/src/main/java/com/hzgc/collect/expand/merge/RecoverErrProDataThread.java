@@ -4,11 +4,12 @@ import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.collect.expand.processer.FaceObject;
 import com.hzgc.collect.expand.util.ProducerKafka;
-import com.hzgc.collect.expand.util.ProducerOverFtpProperHelper;
+import com.hzgc.collect.expand.util.KafkaProperHelper;
 import com.hzgc.common.json.JSONUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -32,12 +33,12 @@ import java.util.List;
  * 2，删除原有已处理过的错误日志errorN.log。
  * 3，结束
  */
-public class RecoverErrProDataThread implements Runnable {
+public class RecoverErrProDataThread implements Runnable, Serializable {
 
     private Logger LOG = Logger.getLogger(RecoverErrProDataThread.class);
     private static final String SUFFIX = ".log";
     private static CommonConf commonConf;
-    private String feature = ProducerOverFtpProperHelper.getTopicFeature();
+    private String feature = KafkaProperHelper.getTopicFeature();
 
     //构造函数
     RecoverErrProDataThread(CommonConf commonConf) {

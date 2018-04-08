@@ -4,10 +4,7 @@ import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.common.json.JSONUtil;
 import org.apache.log4j.Logger;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,7 +19,7 @@ import java.util.List;
  * 3.无参构造器私有化，即不能通过无参构造器进行实例化
  * 如果需要实现LogWriter定义的功能需要继承AbstractLogGroupWrite
  */
-abstract class AbstractLogWrite implements LogWriter {
+abstract class AbstractLogWrite implements LogWriter, Serializable {
     static Logger LOG;
     /**
      * 当前队列ID

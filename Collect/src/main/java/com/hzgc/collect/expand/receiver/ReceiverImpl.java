@@ -7,11 +7,12 @@ import com.hzgc.collect.expand.log.LogWriter;
 import com.hzgc.common.json.JSONUtil;
 import org.apache.log4j.Logger;
 
+import java.io.Serializable;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class ReceiverImpl implements Receiver {
-   private static Logger LOG = Logger.getLogger(ReceiverImpl.class);
+public class ReceiverImpl implements Receiver, Serializable {
+    private static Logger LOG = Logger.getLogger(ReceiverImpl.class);
     private BlockingQueue<LogEvent> queue;
     private LogWriter receiveWriter;
     private String queueID;

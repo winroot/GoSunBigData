@@ -15,7 +15,7 @@ public class ProducerKafka implements Serializable {
     private static KafkaProducer<String, FaceObject> kafkaProducer;
 
     private ProducerKafka() {
-        kafkaProducer = new KafkaProducer<>(ProducerOverFtpProperHelper.getProps());
+        kafkaProducer = new KafkaProducer<>(KafkaProperHelper.getProps());
         LOG.info("Create ProducerKafka successfully!");
     }
 

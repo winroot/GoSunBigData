@@ -9,7 +9,7 @@ public class HelperFactory {
 	public static void regist() {
 		new ClusterOverFtpProperHelper();
 		new FTPAddressProperHelper();
-		new ProducerOverFtpProperHelper();
+		new KafkaProperHelper();
 		new RocketMQProperHelper();
 	}
 }

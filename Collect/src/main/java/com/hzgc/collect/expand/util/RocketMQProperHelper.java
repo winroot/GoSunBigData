@@ -6,13 +6,14 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Properties;
 
 /**
  * 从配置文件rocketmq.properties中：
  * 验证其中的配置；读取所需的配置。（马燊偲）
  */
-public class RocketMQProperHelper extends ProperHelper{
+public class RocketMQProperHelper extends ProperHelper implements Serializable {
     private static Logger LOG = Logger.getLogger(RocketMQProperHelper.class);
     private static Properties props = new Properties();
     private static String address;
@@ -24,26 +25,19 @@ public class RocketMQProperHelper extends ProperHelper{
         FileInputStream in = null;
         try {
             File file = ResourceFileUtil.loadResourceFile(properName);
-            if (file != null) {
-                in = new FileInputStream(file);
-                props.load(in);
-                LOG.info("Load configuration for ftp server from ./conf/rocketmq.properties");
-
-                setAddress();
-                setTopic();
-                setGroup();
-            } else {
-                LOG.error("The property file " + properName + "doesn't exist!");
-                System.exit(1);
-            }
+            in = new FileInputStream(file);
+            props.load(in);
+            setAddress();
+            setTopic();
+            setGroup();
         } catch (IOException e) {
             e.printStackTrace();
             LOG.error("Catch an unknown error, can't load the configuration file" + properName);
         } finally {
-            if (in != null){
+            if (in != null) {
                 try {
                     in.close();
-                } catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -53,15 +47,15 @@ public class RocketMQProperHelper extends ProperHelper{
     /**
      * set方法。验证配置文件中的值是否为符合条件的格式。
      */
-    private static void setAddress(){
+    private static void setAddress() {
         address = verifyIpPlusPort("address", props, LOG);
     }
 
-    private static void setTopic(){
+    private static void setTopic() {
         topic = verifyCommonValue("topic", "REALTIME_PIC_MESSAGE", props, LOG);
     }
 
-    private static void setGroup(){
+    private static void setGroup() {
         group = verifyCommonValue("group", "FaceGroup", props, LOG);
     }
 
@@ -84,7 +78,7 @@ public class RocketMQProperHelper extends ProperHelper{
     /**
      * 获取Properties属性的资源文件变量
      */
-    public static Properties getProps(){
+    public static Properties getProps() {
         return props;
     }
 

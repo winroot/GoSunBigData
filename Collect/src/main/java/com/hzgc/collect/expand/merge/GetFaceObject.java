@@ -9,10 +9,11 @@ import com.hzgc.dubbo.dynamicrepo.SearchType;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-class GetFaceObject {
+class GetFaceObject implements Serializable {
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     static FaceObject getFaceObject(String row) {
@@ -20,7 +21,7 @@ class GetFaceObject {
         if (row != null && row.length() != 0) {
             LogEvent event = JSONUtil.toObject(row, LogEvent.class);
             // 路径中不包含/opt/ftpdata
-            String portPath =event.getFtpPath();
+            String portPath = event.getFtpPath();
             String path = portPath.split("://")[1].substring(portPath.split("://")[1].indexOf("/"));
             // 路径中包含/opt/ftpdata/
             String absolutePath = event.getAbsolutePath();

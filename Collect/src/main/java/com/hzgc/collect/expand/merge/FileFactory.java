@@ -1,5 +1,6 @@
 package com.hzgc.collect.expand.merge;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -8,13 +9,12 @@ import java.util.List;
  * 成员变量含义：
  * processParentDir：process日志的根目录
  * writingLogFile：CommonConf中的logName（000000.log）
- *
+ * <p>
  * allBackupLogAbsPath：process日志根目录下所有除了0000.log、最大日志、error日志以外，
- *                      所有其他可以移到备份目录的日志文件
+ * 所有其他可以移到备份目录的日志文件
  * allProcessLogAbsPath：process目录下，所有除了error.log以外的process日志
- *
  */
-class FileFactory {
+class FileFactory implements Serializable {
 
     private MergeUtil mergeUtil = new MergeUtil();
 

@@ -4,10 +4,7 @@ import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.common.json.JSONUtil;
 import org.apache.log4j.Logger;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.charset.StandardCharsets;
@@ -20,7 +17,7 @@ import java.util.regex.Pattern;
 /**
  * merge模块与文件读写相关的工具类（马燊偲）
  */
-public class MergeUtil {
+public class MergeUtil implements Serializable {
 
     private Logger LOG = Logger.getLogger(MergeUtil.class);
     //系统换行符
@@ -185,7 +182,7 @@ public class MergeUtil {
                                     }
                                     Set<Integer> fileNameSet = fileNameMap.keySet();
                                     //当路径下除了000.log和最大文件还有其他文件时，才去获取这些其他文件；否则返回的是空的list
-                                    if (fileNameSet.size() > 1){
+                                    if (fileNameSet.size() > 1) {
                                         //获取最大的文件名对应的key
                                         int maxFile = Collections.max(fileNameMap.keySet());
                                         //从需要遍历的MAP中，删除这个最大的文件，和0000000.log文件
@@ -237,7 +234,7 @@ public class MergeUtil {
                 if (count == filePaths.length) {
                     for (String filePath : filePaths) {
                         //先将每个文件的内容，导入到各自的contentList中
-                        List<String> contentList = Files.readAllLines(Paths.get(filePath),  StandardCharsets.UTF_8);
+                        List<String> contentList = Files.readAllLines(Paths.get(filePath), StandardCharsets.UTF_8);
                         //再导入到最终的allContentList中
                         allContentList.addAll(contentList);
                     }

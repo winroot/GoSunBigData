@@ -11,9 +11,10 @@ import com.hzgc.dubbo.dynamicrepo.SearchType;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
 
+import java.io.Serializable;
 import java.util.concurrent.BlockingQueue;
 
-public class ProcessThread implements Runnable {
+public class ProcessThread implements Runnable, Serializable {
     private BlockingQueue<LogEvent> queue;
     private DataProcessLogWriter writer;
 
@@ -42,7 +43,7 @@ public class ProcessThread implements Runnable {
                     ProcessCallBack callBack = new ProcessCallBack(event.getFtpPath(),
                             System.currentTimeMillis(), this.writer, event);
                     ProducerKafka.getInstance().sendKafkaMessage(
-                            ProducerOverFtpProperHelper.getTopicFeature(),
+                            KafkaProperHelper.getTopicFeature(),
                             event.getFtpPath(),
                             faceObject,
                             callBack);
