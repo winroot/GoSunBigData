@@ -108,7 +108,7 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-            return 0;
+            return 1;
         }
         LOG.info("更新rowkey为: " + thePassId +  "数据花费的时间是: " + (System.currentTimeMillis() - start));
         //数据变动，更新objectinfo table 中的一条数据,表示静态库中的数据有变动
@@ -246,10 +246,10 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
                         }
                     }
                 } else { // 没有图片的情况下
-                   PersonSingleResult personSingleResult = new PersonSingleResult();   // 需要进行修改
-                   personSingleResult.setSearchRowkey(searchTotalId);
+                    PersonSingleResult personSingleResult = new PersonSingleResult();   // 需要进行修改
+                    personSingleResult.setSearchRowkey(searchTotalId);
                     //封装personSingleResult
-                   new ObjectInfoHandlerTool().getPersonSingleResult(personSingleResult, resultSet, false);
+                    new ObjectInfoHandlerTool().getPersonSingleResult(personSingleResult, resultSet, false);
                     if (personSingleResult.getPersons() != null || personSingleResult.getPersons().size() != 0) {
                         finalResults.add(personSingleResult);
                     }

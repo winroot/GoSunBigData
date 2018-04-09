@@ -129,7 +129,7 @@ public class ObjectInfoInnerHandlerImpl implements Serializable {
                 Array array = resultSet.getArray(ObjectInfoTable.FEATURE);
                 float[] feature = null;
                 if (array != null) {
-                     feature = (float[]) array.getArray();
+                    feature = (float[]) array.getArray();
                 }
                 if (feature != null && feature.length > 0) {
                     //将人员类型rowkey和特征值进行拼接
@@ -227,7 +227,7 @@ public class ObjectInfoInnerHandlerImpl implements Serializable {
             return 0;
         }
         String sql = "upsert into " + ObjectInfoTable.TABLE_NAME + "(" + ObjectInfoTable.ROWKEY + ", " + ObjectInfoTable.UPDATETIME +
-                 ") values(?,?)";
+                ") values(?,?)";
 
         PreparedStatement pstm = null;
         try {

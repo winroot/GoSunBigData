@@ -356,11 +356,11 @@ public class FTPDownloadUtils {
             e.printStackTrace();
         }
         boolean flag = uploadFile(hostname, port, username, password, basepath, filepath, filename, in);
-            if (flag) {
-                LOG.info("upload file successfule");
-            } else {
-                LOG.error("upload file successfule");
-            }
+        if (flag) {
+            LOG.info("upload file successfule");
+        } else {
+            LOG.error("upload file successfule");
+        }
 
     }
 }

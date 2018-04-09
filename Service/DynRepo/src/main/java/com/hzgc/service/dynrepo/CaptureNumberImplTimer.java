@@ -35,7 +35,7 @@ public class CaptureNumberImplTimer {
         Runnable runnable = () -> {
             List<String> lists = findIpcId();
             long nowTime = System.currentTimeMillis();
-            long lessOneHour = nowTime - Constants.ONE_HOUR;
+            long lessOneHour = nowTime - 1000 * 60 * 60;
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String nowTimeStr = format.format(nowTime);
             String lessOneHourStr = format.format(lessOneHour);
@@ -70,7 +70,7 @@ public class CaptureNumberImplTimer {
             }
         };
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-        service.scheduleAtFixedRate(runnable,Constants.NUM_ZERO, Constants.NUM_SIXTY * Constants.NUM_SIXTY, TimeUnit.SECONDS);
+        service.scheduleAtFixedRate(runnable,0, 60 * 60, TimeUnit.SECONDS);
     }
 
     /**
@@ -101,7 +101,7 @@ public class CaptureNumberImplTimer {
     private static long judgementTime() {
         long nowTime = System.currentTimeMillis();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long addOneHourTime = nowTime + Constants.ONE_HOUR;
+        long addOneHourTime = nowTime + 1000 * 60 * 60;
         String addTime = simpleDateFormat.format(addOneHourTime);
         String startTime = addTime.split(":")[0] + ":02:00";
         Date changeTime = null;
@@ -114,7 +114,7 @@ public class CaptureNumberImplTimer {
         if (changeTime != null) {
             changeLongTime = changeTime.getTime();
         }
-        long disTime = (changeLongTime - nowTime) / Constants.NUM_ONE_THOUSAND;
+        long disTime = (changeLongTime - nowTime) / 1000;
         System.out.println(disTime);
         return disTime;
     }

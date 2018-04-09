@@ -25,7 +25,7 @@ public class GenerateImportFile {
         if (fileList != null) {
             for (File file: fileList) {
                 if (file.isDirectory()) {
-                  findFile(file.getAbsolutePath(), addStr);
+                    findFile(file.getAbsolutePath(), addStr);
                 } else {
                     System.out.println(file.getAbsolutePath());
                     float[] temp = FaceFunction.featureExtract(file.getAbsolutePath()).getFeature();

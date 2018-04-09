@@ -11,8 +11,8 @@ import java.util.Map;
 public class WarnRuleServiceSuite {
     @Test
     public void testConfigRules(){
-       WarnRuleServiceImpl warnRuleService = new WarnRuleServiceImpl();
-       Map<String,Boolean> map =  warnRuleService.configRules(PutData.setIpcId(),PutData.setwarnRuleData());
+        WarnRuleServiceImpl warnRuleService = new WarnRuleServiceImpl();
+        Map<String,Boolean> map =  warnRuleService.configRules(PutData.setIpcId(),PutData.setwarnRuleData());
         System.out.println(map);
     }
     @Test
@@ -57,7 +57,7 @@ public class WarnRuleServiceSuite {
     @Test
     public void testParseDeviceRule(){
         WarnRuleServiceImpl warnRuleService = new WarnRuleServiceImpl();
-       // warnRuleService.parseDeviceRule(PutData.setwarnRuleData(),PutData.setIpcId(),PutData.commonRule());
+        // warnRuleService.parseDeviceRule(PutData.setwarnRuleData(),PutData.setIpcId(),PutData.commonRule());
     }
     @Test
     public void testAddMembers(){

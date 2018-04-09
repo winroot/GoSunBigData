@@ -1,6 +1,7 @@
 package com.hzgc.service.util;
 
 import com.hzgc.common.file.ResourceFileUtil;
+import org.apache.hadoop.fs.FileUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -17,11 +18,11 @@ import java.util.Properties;
 public class JDBCFactory {
     private static Logger LOG = Logger.getLogger(JDBCFactory.class);
     private static Properties propertie = new Properties();
-//    private static JDBCFactory instance = null;
+//    private static JDBCUtil instance = null;
 //    private static DataSource dataSource = new DruidDataSource();
 //    private static Properties propertie = new Properties();
 
-//    private JDBCFactory() {
+//    private JDBCUtil() {
 //    }
 
     /*
@@ -30,7 +31,7 @@ public class JDBCFactory {
     static {
         FileInputStream fis = null;
         try {
-            File resourceFile = ResourceFileUtil.loadResourceFile("jdbc.properties");
+            File resourceFile = FileUtil.loadResourceFile("jdbc.properties");
             if (resourceFile != null) {
                 fis = new FileInputStream(resourceFile);
                 propertie.load(new FileInputStream(resourceFile));
@@ -56,11 +57,11 @@ public class JDBCFactory {
      *
      * @return 返回JDBCUtil单例对象
      */
-//    public static JDBCFactory getInstance() {
+//    public static JDBCUtil getInstance() {
 //        if (instance == null) {
-//            synchronized (JDBCFactory.class) {
+//            synchronized (JDBCUtil.class) {
 //                if (instance == null) {
-//                    instance = new JDBCFactory();
+//                    instance = new JDBCUtil();
 //                }
 //            }
 //        }
