@@ -108,7 +108,7 @@ public class STOR extends AbstractCommand {
 
                 // attempt to close the output stream so that errors in
                 // closing it will return an error to the client (FTPSERVER-119)
-                if(outStream != null) {
+                if (outStream != null) {
                     outStream.close();
                 }
 
@@ -149,20 +149,13 @@ public class STOR extends AbstractCommand {
                     if (fileName.contains(".jpg") && faceNum > 0) {
                         FtpPathMessage message = FtpUtils.getFtpPathMessage(fileName);
                         if (FtpSwitch.isFtpSwitch()) {
-                            List<String> showList = ReceiveIpcIds.getInstance().getIpcIdList_show();
-                            if (!showList.isEmpty()) {
-                                if (showList.contains(message.getIpcid())) {
+                            List<String> subscriptionList = ReceiveIpcIds.getInstance().getIpcIdList();
+                            if (!subscriptionList.isEmpty()) {
+                                if (subscriptionList.contains(message.getIpcid())) {
                                     sendMQAndWriteLogEvent(fileName, file, message, context);
                                 }
                             } else {
-                                List<String> subscriptionList = ReceiveIpcIds.getInstance().getIpcIdList_subscription();
-                                if (!subscriptionList.isEmpty()) {
-                                    if (subscriptionList.contains(message.getIpcid())) {
-                                        sendMQAndWriteLogEvent(fileName, file, message, context);
-                                    }
-                                } else {
-                                    writeLogEvent(fileName, file, context);
-                                }
+                                writeLogEvent(fileName, file, context);
                             }
                         } else {
                             sendMQAndWriteLogEvent(fileName, file, message, context);

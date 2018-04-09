@@ -42,8 +42,6 @@ public class FTP extends ClusterOverFtp implements Serializable {
         new FtpSwitch();
         FtpSubscriptionClient ftpSubscription = new FtpSubscriptionClient(ZookeeperParam.SESSION_TIMEOUT, ZookeeperParam.zookeeperAddress, ZookeeperParam.PATH_SUBSCRIBE, ZookeeperParam.WATCHER);
         ftpSubscription.createFtpSubscriptionZnode();
-        FtpShowClient ftpShow = new FtpShowClient(ZookeeperParam.SESSION_TIMEOUT, ZookeeperParam.zookeeperAddress, ZookeeperParam.PATH_SHOW, ZookeeperParam.WATCHER);
-        ftpShow.createFtpShowZnode();
     }
 
     @Override

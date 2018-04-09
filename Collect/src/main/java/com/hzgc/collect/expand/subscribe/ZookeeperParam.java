@@ -14,8 +14,6 @@ public class ZookeeperParam implements Serializable{
     public static String zookeeperAddress = ClusterOverFtpProperHelper.getZookeeperAddress();
     //订阅节点路径
     public static final String PATH_SUBSCRIBE = "/ftp_subscribe";
-    //演示节点路径
-    public static final String PATH_SHOW = "/ftp_show";
     //注册在path上的Watcher,节点变更会通知会向客户端发起通知
     public static final boolean WATCHER = false;
 }
