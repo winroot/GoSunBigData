@@ -23,7 +23,7 @@ public class FtpSubscriptionImpl implements FtpSubscription, Serializable {
             properties.load(fis);
             zookeeperClient = new ZookeeperClient(
                     Integer.valueOf(properties.getProperty("zk_session_timeout")),
-                    properties.getProperty("zookeeperAddress"),
+                    properties.getProperty("zk_address"),
                     properties.getProperty("zk_path_subscribe"),
                     Boolean.valueOf(properties.getProperty("zk_watcher")));
         } catch (Exception e) {
