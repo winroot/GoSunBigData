@@ -1,7 +1,6 @@
 package com.hzgc.service.util;
 
 import com.hzgc.common.file.ResourceFileUtil;
-import org.apache.hadoop.fs.FileUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -31,7 +30,7 @@ public class JDBCFactory {
     static {
         FileInputStream fis = null;
         try {
-            File resourceFile = FileUtil.loadResourceFile("jdbc.properties");
+            File resourceFile = ResourceFileUtil.loadResourceFile("service_jdbc.properties");
             if (resourceFile != null) {
                 fis = new FileInputStream(resourceFile);
                 propertie.load(new FileInputStream(resourceFile));

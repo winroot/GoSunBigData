@@ -31,7 +31,7 @@ class DynamicPhotoServiceHelper {
         try {
             Put put = new Put(Bytes.toBytes(result.getSearchId()));
             put.setDurability(Durability.SYNC_WAL);
-            byte[] searchMessage = objectToByte(result);
+            byte[] searchMessage = ObjectUtil.objectToByte(result);
             put.addColumn(DynamicTable.SEARCHRES_COLUMNFAMILY, DynamicTable.SEARCHRES_COLUMN_SEARCHMESSAGE, searchMessage);
             searchRes.put(put);
             return true;
@@ -111,14 +111,14 @@ class DynamicPhotoServiceHelper {
             groupByIpc(result);
             for (SingleResult singleResult : result.getResults()) {
                 for (GroupByIpc groupByIpc : singleResult.getPicturesByIpc()) {
-                    ListUtils.sort(groupByIpc.getPictures(), sortNameArr, isAscArr);
+                    CapturePictureUtil.sort(groupByIpc.getPictures(), sortNameArr, isAscArr);
                     groupByIpc.setPictures(pageSplit(groupByIpc.getPictures(), option));
                 }
                 singleResult.setPictures(null);
             }
         } else {
             for (SingleResult singleResult : result.getResults()) {
-                ListUtils.sort(singleResult.getPictures(), sortNameArr, isAscArr);
+                CapturePictureUtil.sort(singleResult.getPictures(), sortNameArr, isAscArr);
                 singleResult.setPictures(pageSplit(singleResult.getPictures(), option));
             }
         }

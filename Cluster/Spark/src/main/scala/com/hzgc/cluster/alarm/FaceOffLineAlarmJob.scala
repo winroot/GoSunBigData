@@ -5,7 +5,6 @@ import java.util.Date
 
 import com.google.gson.Gson
 import com.hzgc.service.device.{DeviceTable, DeviceUtilImpl}
-import com.hzgc.service.staticrepo.ObjectInfoInnerHandlerImpl
 import com.hzgc.cluster.message.OffLineAlarmMessage
 import com.hzgc.cluster.util.PropertiesUtils
 import com.hzgc.collect.expand.processer.RocketMQProducer

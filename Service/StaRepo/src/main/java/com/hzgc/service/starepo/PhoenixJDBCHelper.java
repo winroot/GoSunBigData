@@ -23,7 +23,7 @@ public class PhoenixJDBCHelper {
 
 
     private static void initConnection() {
-        File file = FileUtil.loadResourceFile("jdbc.properties");
+        File file = ResourceFileUtil.loadResourceFile("service_jdbc.properties");
         Properties jdbcProp = new Properties();
         try {
             jdbcProp.load(new FileInputStream(file));

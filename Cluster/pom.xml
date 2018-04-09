@@ -25,6 +25,5 @@
         <module>Environment</module>
         <module>RocketMQ</module>
     </modules>
-    <dependencies>
-    </dependencies>
+
 </project>

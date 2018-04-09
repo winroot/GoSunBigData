@@ -101,7 +101,6 @@ object ResidentClustering {
         val points = idPointRDD.collect()
         val features = points.flatMap(data => data.feature)
         val status = ClusteringFunction.clusteringComputer(features, dataSize, similarityThreshold, appearCount, resultFileName, resultPath)
-
         val putDataToEs = PutDataToEs.getInstance()
         val sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val clusterList = new util.ArrayList[ClusteringAttribute]()

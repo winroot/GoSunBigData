@@ -34,7 +34,7 @@ public class PutDataToHBase {
             } else {
                 String a = fs.getName().split(".jpg")[0];
                 try {
-                    byte[] photo = ImageToByte.image2byte(fs.getAbsolutePath());
+                    byte[] photo = FileUtil.image2byte(fs.getAbsolutePath());
                     map.put(a,photo);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -72,7 +72,6 @@ public class PutDataToHBase {
             }
             FileWriter fw = new FileWriter(file);
             BufferedWriter bufferedWriter = new BufferedWriter(fw);
-            MapToJson mapToJson = new MapToJson();
             while (it.hasNext()) {
                 Map<String,Object> map1 = new HashMap<>();
                 Map<String,Object> map2 = new HashMap<>();
@@ -111,7 +110,7 @@ public class PutDataToHBase {
                 map2.put("_type","person");
                 map2.put("_id","0001111" + a);
                 map1.put("create",map2);
-                String newJson = mapToJson.mapToJson(map1);
+                String newJson = JSONUtil.toJson(map1);
                 bufferedWriter.write(newJson);
                 bufferedWriter.write("\n");
                 map3.put("platformid","0001");
@@ -121,7 +120,7 @@ public class PutDataToHBase {
                 map3.put("sex","1");
                 map3.put("creator","bigdata");
                 map3.put("cphone","18888888");
-                String newJson1 = mapToJson.mapToJson(map3);
+                String newJson1 = JSONUtil.toJson(map3);
                 bufferedWriter.write(newJson1);
                 bufferedWriter.write("\n");
             }

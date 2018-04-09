@@ -139,7 +139,8 @@ public final class FtpUtils implements Serializable {
     public static String filePath2FtpUrl(String filePath) {
         StringBuilder url = new StringBuilder();
         String hostName = IPAddressUtils.getHostName();
-        Map<Integer, Integer> ftpPIDMap = FTP.getPidMap();
+        //TODO 为编译通过，临时注释
+        /*Map<Integer, Integer> ftpPIDMap = FTP.getPidMap();
         if (!ftpPIDMap.isEmpty()) {
             Integer ftpPID = Integer.valueOf(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
             //LOG.info("ftp PID = " + ftpPID);
@@ -147,7 +148,7 @@ public final class FtpUtils implements Serializable {
             url = url.append("ftp://").append(hostName).append(":").append(ftpPort).append(filePath);
             return url.toString();
         }
-        url = url.append("ftp://").append(hostName).append(":").append("none").append(filePath);
+        url = url.append("ftp://").append(hostName).append(":").append("none").append(filePath);*/
         return url.toString();
     }
 
@@ -174,10 +175,10 @@ public final class FtpUtils implements Serializable {
      */
     public static String getFtpUrl(String ftpUrl) {
         String hostName = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
-        String ftpServerIP = FTPAddressProperHelper.getIpByHostName(hostName);
+        /*String ftpServerIP = FTPAddressProperHelper.getIpByHostName(hostName);
         if (ftpServerIP != null && ftpServerIP.length() > 0) {
             return ftpUrl.replace(hostName, ftpServerIP);
-        }
+        }*/
         return ftpUrl;
     }
 }

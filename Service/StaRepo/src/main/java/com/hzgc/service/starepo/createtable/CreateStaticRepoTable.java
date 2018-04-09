@@ -24,7 +24,7 @@ public class CreateStaticRepoTable {
         Properties tableProper = new Properties();
         InputStream inputStream = null;
         try {
-            File file = FileUtil.loadResourceFile("static-table.properties");
+            File file = ResourceFileUtil.loadResourceFile("service_starepo.properties");
             if (file == null){
                 return;
             }
