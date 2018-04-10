@@ -5,6 +5,8 @@ import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.DataProcessLogWriter;
 import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.collect.expand.util.*;
+import com.hzgc.collect.expand.util.properties.ClusterOverFtpProperHelper;
+import com.hzgc.collect.expand.util.properties.KafkaProperHelper;
 import com.hzgc.common.ftp.FtpPathMessage;
 import com.hzgc.common.ftp.FtpUtils;
 import com.hzgc.dubbo.dynamicrepo.SearchType;

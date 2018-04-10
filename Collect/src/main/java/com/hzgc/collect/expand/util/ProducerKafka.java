@@ -2,6 +2,7 @@ package com.hzgc.collect.expand.util;
 
 
 import com.hzgc.collect.expand.processer.FaceObject;
+import com.hzgc.collect.expand.util.properties.KafkaProperHelper;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;

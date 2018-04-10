@@ -1,4 +1,4 @@
-package com.hzgc.collect.expand.util;
+package com.hzgc.collect.expand.util.properties;
 
 /**
  * ProperHelper的容器类，所有ProperHelper类在这个容器内注册并实例化；

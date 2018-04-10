@@ -1,6 +1,6 @@
 package com.hzgc.collect.expand.subscribe;
 
-import com.hzgc.collect.expand.util.ClusterOverFtpProperHelper;
+import com.hzgc.collect.expand.util.properties.ClusterOverFtpProperHelper;
 
 import java.io.Serializable;
 

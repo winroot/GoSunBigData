@@ -1,6 +1,6 @@
 package com.hzgc.collect.expand.processer;
 
-import com.hzgc.collect.expand.util.RocketMQProperHelper;
+import com.hzgc.collect.expand.util.properties.RocketMQProperHelper;
 import org.apache.log4j.Logger;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.MessageQueueSelector;

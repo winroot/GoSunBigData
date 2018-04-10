@@ -1,6 +1,7 @@
-package com.hzgc.collect.expand.util;
+package com.hzgc.collect.expand.util.properties;
 
 import com.hzgc.common.file.ResourceFileUtil;
+import com.hzgc.common.properties.ProperHelper;
 import org.apache.log4j.Logger;
 
 import java.io.File;
