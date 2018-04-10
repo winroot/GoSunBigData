@@ -1,13 +1,13 @@
 package com.hzgc.common.ftp;
 
+import com.hzgc.common.file.ResourceFileUtil;
+import com.hzgc.common.io.IOUtil;
 import org.apache.log4j.Logger;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.util.Map;
+import java.util.Properties;
 
 public final class FtpUtils implements Serializable {
     private static Logger LOG = Logger.getLogger(FtpUtils.class);
@@ -134,10 +134,22 @@ public final class FtpUtils implements Serializable {
      */
     public static String getFtpUrl(String ftpUrl) {
         String hostName = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
-        /*String ftpServerIP = FTPAddressProperHelper.getIpByHostName(hostName);
+        Properties proper = new Properties();
+        String ftpServerIP = "";
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(ResourceFileUtil.loadResourceFile("ftpAddress.properties"));
+            proper.load(fis);
+            ftpServerIP = proper.getProperty(hostName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            IOUtil.closeStream(fis);
+        }
+
         if (ftpServerIP != null && ftpServerIP.length() > 0) {
             return ftpUrl.replace(hostName, ftpServerIP);
-        }*/
+        }
         return ftpUrl;
     }
 }
