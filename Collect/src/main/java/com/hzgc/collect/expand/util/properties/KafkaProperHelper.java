@@ -10,16 +10,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Properties;
 
-/**
- * 从配置文件producer-over-ftp.properties中：
- * 验证其中的配置；读取所需的配置。（马燊偲）
- */
 public class KafkaProperHelper extends ProperHelper implements Serializable {
     private static Logger LOG = Logger.getLogger(KafkaProperHelper.class);
     private static Properties props = new Properties();
 
     private static String bootstrapServers;
-    //private static String clientId;
     private static String requestRequiredAcks;
     private static String retries;
     private static String keySerializer;
