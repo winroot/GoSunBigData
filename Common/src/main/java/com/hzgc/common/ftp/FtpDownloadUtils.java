@@ -16,9 +16,9 @@ import java.util.Properties;
 /**
  * ftpClient文件下载
  */
-public class FTPDownloadUtils {
+public class FtpDownloadUtils {
 
-    private static final Logger LOG = Logger.getLogger(FTPDownloadUtils.class);
+    private static final Logger LOG = Logger.getLogger(FtpDownloadUtils.class);
 
     /**
      * 获取FTPClient对象
