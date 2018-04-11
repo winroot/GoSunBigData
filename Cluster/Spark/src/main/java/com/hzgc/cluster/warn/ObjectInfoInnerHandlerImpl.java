@@ -1,4 +1,4 @@
-package com.hzgc.cluster.warn.rule;
+package com.hzgc.cluster.warn;
 
 import com.hzgc.common.service.util.HBaseHelper;
 import com.hzgc.common.service.util.PhoenixJDBCHelper;

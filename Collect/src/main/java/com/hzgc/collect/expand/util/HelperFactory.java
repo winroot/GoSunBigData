@@ -1,4 +1,4 @@
-package com.hzgc.collect.expand.util.properties;
+package com.hzgc.collect.expand.util;
 
 import com.hzgc.common.ftp.properties.CollectProperHelper;
 import com.hzgc.common.ftp.properties.FTPAddressProperHelper;

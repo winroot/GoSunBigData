@@ -5,7 +5,7 @@ import com.hzgc.collect.expand.merge.RecoverNotProData;
 import com.hzgc.collect.expand.merge.ScheRecoErrData;
 import com.hzgc.collect.expand.subscribe.*;
 import com.hzgc.common.ftp.properties.CollectProperHelper;
-import com.hzgc.collect.expand.util.properties.HelperFactory;
+import com.hzgc.collect.expand.util.HelperFactory;
 import com.hzgc.collect.ftp.ClusterOverFtp;
 import com.hzgc.collect.ftp.ConnectionConfigFactory;
 import com.hzgc.collect.ftp.FtpServer;

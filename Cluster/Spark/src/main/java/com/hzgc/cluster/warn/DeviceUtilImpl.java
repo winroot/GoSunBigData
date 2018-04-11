@@ -1,4 +1,4 @@
-package com.hzgc.cluster.warn.rule;
+package com.hzgc.cluster.warn;
 
 import com.hzgc.common.service.device.DeviceUtil;
 import com.hzgc.common.service.table.column.DeviceTable;
