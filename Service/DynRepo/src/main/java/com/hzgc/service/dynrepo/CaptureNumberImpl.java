@@ -1,5 +1,6 @@
 package com.hzgc.service.dynrepo;
 
+import com.hzgc.common.service.DynamicTable;
 import com.hzgc.dubbo.dynamicrepo.CaptureNumberService;
 import com.hzgc.dubbo.staticrepo.ObjectInfoTable;
 import com.hzgc.service.util.ElasticSearchHelper;

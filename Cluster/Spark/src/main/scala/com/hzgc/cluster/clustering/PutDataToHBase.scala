@@ -3,7 +3,7 @@ package com.hzgc.cluster.clustering
 import java.util
 import java.util.List
 
-import com.hzgc.common.`object`.ObjectUtil
+import com.hzgc.common.util.`object`.ObjectUtil
 import com.hzgc.dubbo.clustering.{AlarmInfo, ClusteringAttribute}
 import com.hzgc.service.clustering.ClusteringTable
 import com.hzgc.service.util.HBaseHelper

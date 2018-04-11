@@ -1,6 +1,5 @@
 package com.hzgc.collect.expand.processer;
 
-
 import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.DataProcessLogWriter;
 import com.hzgc.collect.expand.log.LogEvent;

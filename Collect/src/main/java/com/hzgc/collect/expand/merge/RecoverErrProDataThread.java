@@ -5,7 +5,7 @@ import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.collect.expand.processer.FaceObject;
 import com.hzgc.collect.expand.util.ProducerKafka;
 import com.hzgc.collect.expand.util.properties.KafkaProperHelper;
-import com.hzgc.common.json.JSONUtil;
+import com.hzgc.common.util.json.JSONUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;

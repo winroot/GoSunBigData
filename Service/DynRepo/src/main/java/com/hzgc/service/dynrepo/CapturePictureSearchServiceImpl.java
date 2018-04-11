@@ -1,6 +1,7 @@
 package com.hzgc.service.dynrepo;
 
-import com.hzgc.common.uuid.UuidUtil;
+import com.hzgc.common.service.DynamicTable;
+import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.dubbo.attribute.*;
 import com.hzgc.dubbo.dynamicrepo.*;
 import com.hzgc.service.util.ElasticSearchHelper;

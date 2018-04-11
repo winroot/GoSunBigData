@@ -1,11 +1,11 @@
 package com.hzgc.service.clustering;
 
-import com.hzgc.common.object.ObjectUtil;
+import com.hzgc.common.service.DynamicTable;
+import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.dubbo.clustering.AlarmInfo;
 import com.hzgc.dubbo.clustering.ClusteringAttribute;
 import com.hzgc.dubbo.clustering.ClusteringInfo;
 import com.hzgc.dubbo.clustering.ClusteringSearchService;
-import com.hzgc.service.dynrepo.DynamicTable;
 import com.hzgc.service.util.ElasticSearchHelper;
 import com.hzgc.service.util.HBaseHelper;
 import org.apache.hadoop.hbase.client.Get;

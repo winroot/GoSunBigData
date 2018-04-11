@@ -1,6 +1,6 @@
 package com.hzgc.cluster.util;
 
-import com.hzgc.common.file.ResourceFileUtil;
+import com.hzgc.common.util.file.ResourceFileUtil;
 
 import java.io.FileInputStream;
 import java.io.InputStream;

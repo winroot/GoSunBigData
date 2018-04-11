@@ -1,6 +1,7 @@
 package com.hzgc.service.dynrepo;
 
-import com.hzgc.common.object.ObjectUtil;
+import com.hzgc.common.service.DynamicTable;
+import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.dubbo.dynamicrepo.*;
 import com.hzgc.service.util.HBaseHelper;
 import com.hzgc.service.util.HBaseUtil;

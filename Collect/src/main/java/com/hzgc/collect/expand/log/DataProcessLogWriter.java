@@ -1,7 +1,7 @@
 package com.hzgc.collect.expand.log;
 
 import com.hzgc.collect.expand.conf.CommonConf;
-import com.hzgc.common.json.JSONUtil;
+import com.hzgc.common.util.json.JSONUtil;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

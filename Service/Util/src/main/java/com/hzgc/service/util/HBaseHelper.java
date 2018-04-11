@@ -1,6 +1,6 @@
 package com.hzgc.service.util;
 
-import com.hzgc.common.file.ResourceFileUtil;
+import com.hzgc.common.util.file.ResourceFileUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.*;

@@ -1,6 +1,6 @@
 package com.hzgc.service.util;
 
-import com.hzgc.common.file.ResourceFileUtil;
+import com.hzgc.common.util.file.ResourceFileUtil;
 import org.apache.log4j.Logger;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;

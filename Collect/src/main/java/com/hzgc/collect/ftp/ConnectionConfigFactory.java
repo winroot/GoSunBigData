@@ -20,7 +20,7 @@
 package com.hzgc.collect.ftp;
 
 import com.hzgc.collect.ftp.impl.DefaultConnectionConfig;
-import com.hzgc.common.file.ResourceFileUtil;
+import com.hzgc.common.util.file.ResourceFileUtil;
 
 import java.io.FileInputStream;
 import java.io.IOException;

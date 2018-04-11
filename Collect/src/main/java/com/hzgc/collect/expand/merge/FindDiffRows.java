@@ -1,7 +1,7 @@
 package com.hzgc.collect.expand.merge;
 
 import com.hzgc.collect.expand.log.LogEvent;
-import com.hzgc.common.json.JSONUtil;
+import com.hzgc.common.util.json.JSONUtil;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package com.hzgc.service.starepo.putdata;
 
-import com.hzgc.common.file.FileUtil;
-import com.hzgc.common.json.JSONUtil;
+import com.hzgc.common.util.file.FileUtil;
+import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.jni.FaceFunction;
 import com.hzgc.service.starepo.ObjectInfoHandlerImpl;
 import com.hzgc.service.util.HBaseHelper;

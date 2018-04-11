@@ -12,6 +12,15 @@
     <groupId>com.hzgc.service</groupId>
     <artifactId>address</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-ftp</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
