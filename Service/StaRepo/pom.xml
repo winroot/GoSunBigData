@@ -50,7 +50,6 @@
             <artifactId>phoenix-core</artifactId>
             <version>4.13.1-HBase-1.2</version>
         </dependency>
-
     </dependencies>
 
 </project>

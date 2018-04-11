@@ -1,7 +1,6 @@
 package com.hzgc.service.util;
 
 import com.hzgc.common.file.ResourceFileUtil;
-import org.apache.hadoop.fs.FileUtil;
 import org.apache.log4j.Logger;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
@@ -27,7 +26,7 @@ public class ElasticSearchHelper implements Serializable{
         // 从外部读取Es集群配置信息
         Properties properties_es_config = new Properties();
         try {
-            File file = FileUtil.loadResourceFile("es-config.properties");
+            File file = ResourceFileUtil.loadResourceFile("service_es.properties");
             if (file != null) {
                 properties_es_config.load(new FileInputStream(file));
             }

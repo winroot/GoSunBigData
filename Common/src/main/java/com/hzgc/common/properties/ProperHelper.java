@@ -1,4 +1,4 @@
-package com.hzgc.collect.expand.util;
+package com.hzgc.common.properties;
 
 import org.apache.log4j.Logger;
 
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * 用来从配置文件中读取配置（马燊偲）
  */
 
-abstract class ProperHelper {
+public abstract class ProperHelper {
 
     /**
      * 验证配置文件中，无需特殊判断的属性值是否为正确格式。例如用户名user，密码password，路径格式pathRule。
@@ -23,7 +23,7 @@ abstract class ProperHelper {
      * @param log 不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的属性值
      */
-    static String verifyCommonValue(String key, String defaultValue, Properties props, Logger log){
+    protected static String verifyCommonValue(String key, String defaultValue, Properties props, Logger log){
         String returnValue = null;
         try {
             if (props.containsKey(key)) {
@@ -62,7 +62,7 @@ abstract class ProperHelper {
      * @param log 不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的IP属性字段值
      */
-    static String verifyIp(String ipKey, Properties props, Logger log){
+    protected static String verifyIp(String ipKey, Properties props, Logger log){
         return verifyIpOrPlusPort(ipKey, patternIp(), props, log);
     }
 
@@ -73,7 +73,7 @@ abstract class ProperHelper {
      * @param log 不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的IP：PORT属性字段值
      */
-    static String verifyIpPlusPort(String ipKey, Properties props, Logger log){
+    protected static String verifyIpPlusPort(String ipKey, Properties props, Logger log){
         return verifyIpOrPlusPort(ipKey, patternIpPlusPort(), props, log);
     }
 
@@ -153,7 +153,7 @@ abstract class ProperHelper {
      * @param log 不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的属性字段值
      */
-    static String verifyIpPlusPortList(String key, Properties props, Logger log){
+    protected static String verifyIpPlusPortList(String key, Properties props, Logger log){
         String returnValue = null;
         try {
             if (props.containsKey(key)) {
@@ -208,7 +208,7 @@ abstract class ProperHelper {
      * @param log 不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的Port属性字段值
      */
-    static String verifyPort(String portKey, String portDefault, Properties props, Logger log) {
+    protected static String verifyPort(String portKey, String portDefault, Properties props, Logger log) {
         String returnPort = null;
         try {
             if (props.containsKey(portKey)) {
@@ -262,7 +262,7 @@ abstract class ProperHelper {
      * @param log 不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的布尔属性字段值
      */
-    static String verifyBooleanValue(String key, String defaultValue, Properties props, Logger log){
+    protected static String verifyBooleanValue(String key, String defaultValue, Properties props, Logger log){
         String returnValue = null;
         try {
             if (props.containsKey(key)) {
@@ -305,7 +305,7 @@ abstract class ProperHelper {
      * @param log 不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的Port属性字段值
      */
-    static String verifyPositiveIntegerValue(String key, String defaultValue, Properties props, Logger log){
+    protected static String verifyPositiveIntegerValue(String key, String defaultValue, Properties props, Logger log){
         String returnValue = null;
         try {
             if (props.containsKey(key)) {
@@ -356,7 +356,7 @@ abstract class ProperHelper {
      * @param log 不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的属性值
      */
-    static String verifyIntegerValue(String key, String defaultValue, Properties props, Logger log){
+    protected static String verifyIntegerValue(String key, String defaultValue, Properties props, Logger log){
         String returnValue = null;
         try {
             if (props.containsKey(key)) {

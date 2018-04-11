@@ -14,10 +14,7 @@ public class ReceiveIpcIds implements Serializable {
     Map<String, Map<String, List<String>>> map_ZKData;
 
     //订阅功能设备列表
-    private volatile List<String> ipcIdList_subscription;
-
-    //演示功能设备列表
-    private volatile List<String> ipcIdList_show;
+    private volatile List<String> ipcIdList;
 
     private static ReceiveIpcIds instance = null;
 
@@ -35,31 +32,15 @@ public class ReceiveIpcIds implements Serializable {
         return instance;
     }
 
-    public List<String> getIpcIdList_subscription() {
-        return ipcIdList_subscription;
+    public List<String> getIpcIdList() {
+        return ipcIdList;
     }
 
-    public void setIpcIdList_subscription(List<String> ipcIdList_subscription) {
-        this.ipcIdList_subscription = ipcIdList_subscription;
+    public void setIpcIdList(List<String> ipcIdList) {
+        this.ipcIdList = ipcIdList;
     }
 
-    public void setIpcIdList_subscription(Map<String, Map<String, List<String>>> map) {
-        this.ipcIdList_subscription = setIpcIdList(map);
-    }
-
-    public List<String> getIpcIdList_show() {
-        return ipcIdList_show;
-    }
-
-    public void setIpcIdList_show(List<String> ipcIdList_show) {
-        this.ipcIdList_show = ipcIdList_show;
-    }
-
-    public void setIpcIdList_show(Map<String, Map<String, List<String>>> map) {
-        this.ipcIdList_show = setIpcIdList(map);
-    }
-
-    private List<String> setIpcIdList(Map<String, Map<String, List<String>>> map) {
+    public void setIpcIdList(Map<String, Map<String, List<String>>> map) {
         List<String> ipcIdList = new ArrayList<>();
         if (!map.isEmpty()) {
             for (String userId : map.keySet()) {
@@ -75,6 +56,6 @@ public class ReceiveIpcIds implements Serializable {
                 }
             }
         }
-        return ipcIdList;
+        this.ipcIdList = ipcIdList;
     }
 }

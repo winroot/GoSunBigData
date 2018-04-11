@@ -2,7 +2,6 @@ package com.hzgc.service.util;
 
 import com.hzgc.common.file.ResourceFileUtil;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
@@ -33,7 +32,7 @@ public class HBaseHelper implements Serializable {
     private static void initHBaseConfiguration() {
         try {
             innerHBaseConf = HBaseConfiguration.create();
-            File hbaseFile = FileUtil.loadResourceFile("hbase-site.xml");
+            File hbaseFile = ResourceFileUtil.loadResourceFile("hbase-site.xml");
             innerHBaseConf.addResource(hbaseFile.getPath());
         } catch (Exception e) {
             e.printStackTrace();

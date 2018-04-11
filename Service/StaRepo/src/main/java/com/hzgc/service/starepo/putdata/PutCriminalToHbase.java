@@ -16,9 +16,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Administrator on 2017-11-13.
- */
 public class PutCriminalToHbase {
     private static Logger LOG = Logger.getLogger(PutDataToHBase.class);
     private static ObjectInfoHandlerImpl objectInfoHandler = new ObjectInfoHandlerImpl();
@@ -40,7 +37,6 @@ public class PutCriminalToHbase {
             if (!file.exists()) {
                 file.createNewFile();
             }
-            MapToJson mapToJson = new MapToJson();
             FileOutputStream fos = new FileOutputStream(file, true);
             for (int i = 0; i < fa.length; i++) {
                 File fs = fa[i];
@@ -51,7 +47,7 @@ public class PutCriminalToHbase {
                     String tag = fs.getName().split(" ")[1];
                     Put put = new Put(Bytes.toBytes("0001111" + id));
                     try {
-                        byte[] photo = ImageToByte.image2byte(fs.getAbsolutePath());
+                        byte[] photo = FileUtil.image2byte(fs.getAbsolutePath());
                         if (photo.length != 0) {
                             feature = FaceFunction.floatArray2string(FaceFunction.featureExtract(photo).getFeature());
                             put.addColumn(Bytes.toBytes("person"), Bytes.toBytes("photo"), photo);
@@ -73,7 +69,7 @@ public class PutCriminalToHbase {
                         map2.put("_type", "person");
                         map2.put("_id", "0001111" + id);
                         map1.put("create", map2);
-                        String newJson = mapToJson.mapToJson(map1);
+                        String newJson = JSONUtil.toJson(map1);
                         fos.write(newJson.getBytes());
                         fos.write("\n".getBytes());
                         map3.put("platformid", "0001");
@@ -83,7 +79,7 @@ public class PutCriminalToHbase {
                         map3.put("sex", "1");
                         map3.put("creator", "bigdata");
                         map3.put("cphone", "18888887");
-                        String newJson1 = mapToJson.mapToJson(map3);
+                        String newJson1 = JSONUtil.toJson(map3);
                         System.out.println(newJson1);
                         fos.write(newJson1.getBytes());
                         fos.write("\n".getBytes());

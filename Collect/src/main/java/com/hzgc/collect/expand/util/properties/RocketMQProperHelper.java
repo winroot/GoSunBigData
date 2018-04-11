@@ -1,6 +1,7 @@
-package com.hzgc.collect.expand.util;
+package com.hzgc.collect.expand.util.properties;
 
 import com.hzgc.common.file.ResourceFileUtil;
+import com.hzgc.common.properties.ProperHelper;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -9,10 +10,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Properties;
 
-/**
- * 从配置文件rocketmq.properties中：
- * 验证其中的配置；读取所需的配置。（马燊偲）
- */
 public class RocketMQProperHelper extends ProperHelper implements Serializable {
     private static Logger LOG = Logger.getLogger(RocketMQProperHelper.class);
     private static Properties props = new Properties();
@@ -62,7 +59,6 @@ public class RocketMQProperHelper extends ProperHelper implements Serializable {
     /**
      * get方法。提供获取配置文件中的值的方法。
      */
-
     public static String getAddress() {
         return address;
     }
@@ -75,9 +71,6 @@ public class RocketMQProperHelper extends ProperHelper implements Serializable {
         return group;
     }
 
-    /**
-     * 获取Properties属性的资源文件变量
-     */
     public static Properties getProps() {
         return props;
     }

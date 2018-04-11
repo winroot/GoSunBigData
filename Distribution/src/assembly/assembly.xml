@@ -227,8 +227,26 @@
             <outputDirectory>ClusterBuildScripts/service</outputDirectory>
         </fileSet>
 
-
-
+        <!--项目目录-->
+        <!--项目部署文档 -->
+        <fileSet>
+            <directory>../</directory>
+            <includes>
+                <include>Product-Deployment-Documentation.docx</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare</outputDirectory>
+        </fileSet>
+        <!--cluster目录-->
+        <fileSet>
+            <directory>../Cluster/Spark/target/spark-${project.parent.version}</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <excludes>
+                <exclude>bin/cluster/**</exclude>
+            </excludes>
+            <outputDirectory>RealTimeFaceCompare/cluster</outputDirectory>
+        </fileSet>
         <!--collect目录-->
         <fileSet>
             <directory>../Collect/target/collect-${project.parent.version}</directory>
@@ -298,6 +316,13 @@
 
 
         <!--项目公共jar包-->
+        <fileSet>
+            <directory>../Cluster/Spark/target</directory>
+            <includes>
+                <include>spark-${project.parent.version}.jar</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+        </fileSet>
         <fileSet>
             <directory>../BigDataApi/target</directory>
             <includes>

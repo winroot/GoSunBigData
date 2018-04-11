@@ -1,6 +1,8 @@
-package com.hzgc.collect.expand.util;
+package com.hzgc.collect.expand.util.properties;
 
+import com.hzgc.collect.expand.util.Sharpness;
 import com.hzgc.common.file.ResourceFileUtil;
+import com.hzgc.common.properties.ProperHelper;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -9,10 +11,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Properties;
 
-/**
- * 从配置文件cluster-over-ftp.properties中：
- * 验证其中的配置；读取所需的配置。（马燊偲）
- */
 public class ClusterOverFtpProperHelper extends ProperHelper implements Serializable {
     private static Logger LOG
             = Logger.getLogger(ClusterOverFtpProperHelper.class);
@@ -35,7 +33,7 @@ public class ClusterOverFtpProperHelper extends ProperHelper implements Serializ
     private static String ftpSwitch;
 
     static {
-        String properName = "cluster-over-ftp.properties";
+        String properName = "collect.properties";
         FileInputStream in = null;
         try {
             File file = ResourceFileUtil.loadResourceFile(properName);
@@ -53,6 +51,7 @@ public class ClusterOverFtpProperHelper extends ProperHelper implements Serializ
             setPort();
             setDataPorts();
             setImplicitSsl();
+            setSharpness();
             setZookeeperAddress();
             setFtpSwitch();
         } catch (IOException e) {

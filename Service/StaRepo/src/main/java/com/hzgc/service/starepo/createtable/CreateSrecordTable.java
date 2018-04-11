@@ -17,7 +17,7 @@ public class CreateSrecordTable {
     public static void main(String[] args) {
         // 如果传入的参数不为空
         InputStream inputStream = null;
-        File srecPro = FileUtil.loadResourceFile("srecord-table.properties");
+        File srecPro = ResourceFileUtil.loadResourceFile("srecord-table.properties");
 
         // 如果表已经存在，直接返回
         try {

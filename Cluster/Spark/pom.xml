@@ -23,11 +23,6 @@
         </dependency>
         <dependency>
             <groupId>com.hzgc</groupId>
-            <artifactId>service</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.hzgc</groupId>
             <artifactId>jni</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

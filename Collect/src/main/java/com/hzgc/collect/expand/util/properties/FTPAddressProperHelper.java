@@ -1,6 +1,7 @@
-package com.hzgc.collect.expand.util;
+package com.hzgc.collect.expand.util.properties;
 
 import com.hzgc.common.file.ResourceFileUtil;
+import com.hzgc.common.properties.ProperHelper;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -9,10 +10,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Properties;
 
-/**
- * 从配置文件ftpAddress.properties中：
- * 验证其中的配置；读取所需的配置。（马燊偲）
- */
 public class FTPAddressProperHelper extends ProperHelper implements Serializable {
 
     private static Logger LOG = Logger.getLogger(FTPAddressProperHelper.class);
@@ -50,14 +47,6 @@ public class FTPAddressProperHelper extends ProperHelper implements Serializable
                 }
             }
         }
-    }
-
-    static String getIpByHostName(String hostname) {
-        String ip = getProps().getProperty(hostname);
-        if (null == ip) {
-            throw new NullPointerException("HostName in ftpAddress.properties not found");
-        }
-        return ip;
     }
 
     /**

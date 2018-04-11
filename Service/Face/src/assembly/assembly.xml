@@ -6,6 +6,17 @@
         <format>dir</format>
     </formats>
 
+    <fileSets>
+        <!--项目resources目录-->
+        <fileSet>
+            <directory>${project.basedir}/src/main/resources</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>conf</outputDirectory>
+        </fileSet>
+    </fileSets>
+
     <dependencySets>
         <dependencySet>
             <useProjectArtifact>false</useProjectArtifact>

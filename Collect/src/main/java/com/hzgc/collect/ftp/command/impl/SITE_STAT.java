@@ -65,13 +65,13 @@ public class SITE_STAT extends AbstractCommand {
                 .append('\n');
         sb.append("File Upload Number       : ").append(
                 stat.getTotalUploadNumber()).append('\n');
-        sb.append("File FTPDownloadUtils Number     : ").append(
+        sb.append("File FtpDownloadUtils Number     : ").append(
                 stat.getTotalDownloadNumber()).append('\n');
         sb.append("File Delete Number       : ").append(
                 stat.getTotalDeleteNumber()).append('\n');
         sb.append("File Upload Bytes        : ").append(
                 stat.getTotalUploadSize()).append('\n');
-        sb.append("File FTPDownloadUtils Bytes      : ").append(
+        sb.append("File FtpDownloadUtils Bytes      : ").append(
                 stat.getTotalDownloadSize()).append('\n');
         sb.append("Directory Create Number  : ").append(
                 stat.getTotalDirectoryCreated()).append('\n');

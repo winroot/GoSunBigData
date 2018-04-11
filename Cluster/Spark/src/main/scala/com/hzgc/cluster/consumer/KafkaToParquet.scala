@@ -1,10 +1,11 @@
 package com.hzgc.cluster.consumer
 
 import java.sql.Timestamp
-import java.util.{Properties, UUID}
+import java.util.Properties
 
 import com.google.common.base.Stopwatch
 import com.hzgc.cluster.util.PropertiesUtils
+import com.hzgc.collect.expand.processer.{FaceObject, FaceObjectDecoder}
 import kafka.common.TopicAndPartition
 import kafka.message.MessageAndMetadata
 import kafka.serializer.StringDecoder

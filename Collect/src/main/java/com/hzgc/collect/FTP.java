@@ -4,8 +4,8 @@ import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.merge.RecoverNotProData;
 import com.hzgc.collect.expand.merge.ScheRecoErrData;
 import com.hzgc.collect.expand.subscribe.*;
-import com.hzgc.collect.expand.util.ClusterOverFtpProperHelper;
-import com.hzgc.collect.expand.util.HelperFactory;
+import com.hzgc.collect.expand.util.properties.ClusterOverFtpProperHelper;
+import com.hzgc.collect.expand.util.properties.HelperFactory;
 import com.hzgc.collect.ftp.ClusterOverFtp;
 import com.hzgc.collect.ftp.ConnectionConfigFactory;
 import com.hzgc.collect.ftp.FtpServer;
@@ -21,7 +21,6 @@ import com.hzgc.jni.NativeFunction;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
-import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,8 +41,6 @@ public class FTP extends ClusterOverFtp implements Serializable {
         new FtpSwitch();
         FtpSubscriptionClient ftpSubscription = new FtpSubscriptionClient(ZookeeperParam.SESSION_TIMEOUT, ZookeeperParam.zookeeperAddress, ZookeeperParam.PATH_SUBSCRIBE, ZookeeperParam.WATCHER);
         ftpSubscription.createFtpSubscriptionZnode();
-        FtpShowClient ftpShow = new FtpShowClient(ZookeeperParam.SESSION_TIMEOUT, ZookeeperParam.zookeeperAddress, ZookeeperParam.PATH_SHOW, ZookeeperParam.WATCHER);
-        ftpShow.createFtpShowZnode();
     }
 
     @Override

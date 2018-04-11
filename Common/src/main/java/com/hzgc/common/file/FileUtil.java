@@ -7,8 +7,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-public class ImageToByte {
-    private static Logger LOG = Logger.getLogger(ImageToByte.class);
+public class FileUtil {
+    private static Logger LOG = Logger.getLogger(FileUtil.class);
     //图片到byte数组
     public static byte[] image2byte(String path) throws IOException {
         File file = new File(path);

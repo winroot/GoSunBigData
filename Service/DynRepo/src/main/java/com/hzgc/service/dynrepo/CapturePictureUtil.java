@@ -1,7 +1,5 @@
 package com.hzgc.service.dynrepo;
 
-import org.apache.commons.collections.ListUtils;
-
 import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.util.Date;
@@ -31,7 +29,7 @@ public class CapturePictureUtil {
             }
             try {
                 for (String sortName : sortNameArr) {
-                    ret = ListUtils.compareObject(sortName, isAsc, a, b);
+                    ret = CapturePictureUtil.compareObject(sortName, isAsc, a, b);
                     if (0 != ret) {
                         break;
                     }
@@ -69,7 +67,7 @@ public class CapturePictureUtil {
                 }
                 try {
                     for (int i = 0; i < sortNameArr.size(); i++) {
-                        ret = ListUtils.compareObject(sortNameArr.get(i), typeArr.get(i), a, b);
+                        ret = CapturePictureUtil.compareObject(sortNameArr.get(i), typeArr.get(i), a, b);
                         if (0 != ret) {
                             break;//如果两个数据根据某个字段相等，则根据下一个字段进行比较
                         }
@@ -97,8 +95,8 @@ public class CapturePictureUtil {
             Object value1 = null;
             Object value2 = null;
             try {
-                value1 = ListUtils.forceGetFieldValue(a, sortName);
-                value2 = ListUtils.forceGetFieldValue(b, sortName);
+                value1 = CapturePictureUtil.forceGetFieldValue(a, sortName);
+                value2 = CapturePictureUtil.forceGetFieldValue(b, sortName);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -112,14 +110,14 @@ public class CapturePictureUtil {
             }
             if (value1 instanceof Number && value2 instanceof Number) {
                 int maxlen = Math.max(str1.length(), str2.length());
-                str1 = ListUtils.addZero2Str((Number) value1, maxlen);
-                str2 = ListUtils.addZero2Str((Number) value2, maxlen);
+                str1 = CapturePictureUtil.addZero2Str((Number) value1, maxlen);
+                str2 = CapturePictureUtil.addZero2Str((Number) value2, maxlen);
             } else if (value1 instanceof Date && value2 instanceof Date) {
                 long time1 = ((Date) value1).getTime();
                 long time2 = ((Date) value2).getTime();
                 int maxlen = Long.toString(Math.max(time1, time2)).length();
-                str1 = ListUtils.addZero2Str(time1, maxlen);
-                str2 = ListUtils.addZero2Str(time2, maxlen);
+                str1 = CapturePictureUtil.addZero2Str(time1, maxlen);
+                str2 = CapturePictureUtil.addZero2Str(time2, maxlen);
             }
             if (isAsc) {
                 if (str2 != null && str1 != null) {
