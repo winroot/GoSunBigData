@@ -6,7 +6,7 @@ import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.collect.expand.util.*;
 import com.hzgc.common.ftp.Sharpness;
 import com.hzgc.common.ftp.properties.CollectProperHelper;
-import com.hzgc.collect.expand.util.properties.KafkaProperHelper;
+import com.hzgc.collect.expand.util.KafkaProperHelper;
 import com.hzgc.common.ftp.faceobj.FaceObject;
 import com.hzgc.common.ftp.message.FtpPathMessage;
 import com.hzgc.common.ftp.FtpUtils;

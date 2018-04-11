@@ -6,7 +6,7 @@ import java.util.Date
 import com.google.gson.Gson
 import com.hzgc.cluster.message.OffLineAlarmMessage
 import com.hzgc.cluster.util.PropertiesUtils
-import com.hzgc.cluster.warn.rule.{DeviceUtilImpl, ObjectInfoInnerHandlerImpl}
+import com.hzgc.cluster.warn.{DeviceUtilImpl, ObjectInfoInnerHandlerImpl}
 import com.hzgc.common.ftp.RocketMQProducer
 import com.hzgc.common.service.table.column.DeviceTable
 import org.apache.spark.{SparkConf, SparkContext}

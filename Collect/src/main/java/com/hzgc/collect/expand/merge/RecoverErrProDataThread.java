@@ -4,7 +4,7 @@ import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.common.ftp.faceobj.FaceObject;
 import com.hzgc.collect.expand.util.ProducerKafka;
-import com.hzgc.collect.expand.util.properties.KafkaProperHelper;
+import com.hzgc.collect.expand.util.KafkaProperHelper;
 import com.hzgc.common.util.json.JSONUtil;
 import org.apache.log4j.Logger;
 

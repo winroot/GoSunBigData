@@ -6,7 +6,6 @@ import com.hzgc.common.ftp.properties.FTPAddressProperHelper;
 import org.apache.log4j.Logger;
 
 import java.io.*;
-import java.util.Properties;
 
 public final class FtpUtils implements Serializable {
     private static Logger LOG = Logger.getLogger(FtpUtils.class);
@@ -133,7 +132,6 @@ public final class FtpUtils implements Serializable {
      */
     public static String getFtpUrl(String ftpUrl) {
         String hostName = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
-        Properties proper = new Properties();
         String ftpServerIP = FTPAddressProperHelper.getIpByHostName(hostName);
         if (ftpServerIP != null && ftpServerIP.length() > 0) {
             return ftpUrl.replace(hostName, ftpServerIP);
