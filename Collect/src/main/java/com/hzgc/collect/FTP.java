@@ -4,7 +4,7 @@ import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.merge.RecoverNotProData;
 import com.hzgc.collect.expand.merge.ScheRecoErrData;
 import com.hzgc.collect.expand.subscribe.*;
-import com.hzgc.collect.expand.util.properties.ClusterOverFtpProperHelper;
+import com.hzgc.common.ftp.properties.CollectProperHelper;
 import com.hzgc.collect.expand.util.properties.HelperFactory;
 import com.hzgc.collect.ftp.ClusterOverFtp;
 import com.hzgc.collect.ftp.ConnectionConfigFactory;
@@ -39,7 +39,11 @@ public class FTP extends ClusterOverFtp implements Serializable {
         new LoggerConfig();
         HelperFactory.regist();
         new FtpSwitch();
-        FtpSubscriptionClient ftpSubscription = new FtpSubscriptionClient(ZookeeperParam.SESSION_TIMEOUT, ZookeeperParam.zookeeperAddress, ZookeeperParam.PATH_SUBSCRIBE, ZookeeperParam.WATCHER);
+        FtpSubscriptionClient ftpSubscription = new FtpSubscriptionClient(
+                Integer.valueOf(CollectProperHelper.getZookeeperSessionTimeout()),
+                CollectProperHelper.getZookeeperAddress(),
+                CollectProperHelper.getZookeeperPathSubscribe(),
+                Boolean.valueOf(CollectProperHelper.getZookeeperWatcher()));
         ftpSubscription.createFtpSubscriptionZnode();
     }
 
@@ -95,7 +99,7 @@ public class FTP extends ClusterOverFtp implements Serializable {
     }
 
     public static void main(String args[]) throws Exception {
-        int detectorNum = ClusterOverFtpProperHelper.getFaceDetectorNumber();
+        int detectorNum = CollectProperHelper.getFaceDetectorNumber();
         LOG.info("Init face detector, number is " + detectorNum);
         for (int i = 0; i < detectorNum; i++) {
             NativeFunction.init();

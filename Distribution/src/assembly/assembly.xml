@@ -306,13 +306,6 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare/service/starepo</outputDirectory>
         </fileSet>
-        <fileSet>
-            <directory>../Service/Util/target/util-${project.parent.version}</directory>
-            <includes>
-                <include>**</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/service/util</outputDirectory>
-        </fileSet>
 
 
         <!--项目公共jar包-->
@@ -397,13 +390,6 @@
             <directory>../Service/StaRepo/target</directory>
             <includes>
                 <include>starepo-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Service/Util/target</directory>
-            <includes>
-                <include>util-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
         </fileSet>

@@ -1,10 +1,10 @@
 package com.hzgc.service.starepo.putdata;
 
+import com.hzgc.common.service.util.HBaseHelper;
 import com.hzgc.common.util.file.FileUtil;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.jni.FaceFunction;
 import com.hzgc.service.starepo.ObjectInfoHandlerImpl;
-import com.hzgc.service.util.HBaseHelper;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;

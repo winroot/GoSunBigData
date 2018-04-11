@@ -1,10 +1,12 @@
 package com.hzgc.collect.expand.util.properties;
 
-import com.hzgc.common.ftp.FTPAddressProperHelper;
+import com.hzgc.common.ftp.properties.CollectProperHelper;
+import com.hzgc.common.ftp.properties.FTPAddressProperHelper;
+import com.hzgc.common.ftp.properties.RocketMQProperHelper;
 
 public class HelperFactory {
 	public static void regist() {
-		new ClusterOverFtpProperHelper();
+		new CollectProperHelper();
 		new FTPAddressProperHelper();
 		new KafkaProperHelper();
 		new RocketMQProperHelper();

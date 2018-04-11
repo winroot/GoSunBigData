@@ -14,9 +14,19 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.hzgc</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-client</artifactId>
             <version>${hbase.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-util</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 

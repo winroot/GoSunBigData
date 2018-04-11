@@ -19,15 +19,14 @@
         <module>StaRepo</module>
         <module>Face</module>
         <module>Address</module>
-        <module>Util</module>
     </modules>
 
     <dependencies>
-        <dependency>
+        <!--<dependency>
             <groupId>com.hzgc</groupId>
             <artifactId>elasticsearch</artifactId>
             <version>1.0</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>
@@ -44,12 +43,6 @@
             <version>${hbase.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.hzgc.common</groupId>
-            <artifactId>common-util</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.hzgc</groupId>
             <artifactId>jni</artifactId>
             <version>${project.parent.version}</version>
@@ -58,6 +51,12 @@
         <dependency>
             <groupId>com.hzgc</groupId>
             <artifactId>bigdata-api</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-util</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>

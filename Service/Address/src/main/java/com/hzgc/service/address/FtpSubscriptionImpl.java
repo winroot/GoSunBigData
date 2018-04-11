@@ -1,5 +1,6 @@
 package com.hzgc.service.address;
 
+import com.hzgc.common.ftp.properties.CollectProperHelper;
 import com.hzgc.common.util.file.ResourceFileUtil;
 import com.hzgc.common.util.io.IOUtil;
 import com.hzgc.common.util.zookeeper.ZookeeperClient;
@@ -14,23 +15,13 @@ import java.util.Properties;
 public class FtpSubscriptionImpl implements FtpSubscription, Serializable {
     private static Logger LOG = Logger.getLogger(FtpSubscriptionImpl.class);
     private ZookeeperClient zookeeperClient;
-    private Properties properties = new Properties();
+    private String zk_path_subscribe = CollectProperHelper.getZookeeperPathSubscribe();
 
     public FtpSubscriptionImpl() {
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(ResourceFileUtil.loadResourceFile("service_address.properties"));
-            properties.load(fis);
-            zookeeperClient = new ZookeeperClient(
-                    Integer.valueOf(properties.getProperty("zk_session_timeout")),
-                    properties.getProperty("zk_address"),
-                    properties.getProperty("zk_path_subscribe"),
-                    Boolean.valueOf(properties.getProperty("zk_watcher")));
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            IOUtil.closeStream(fis);
-        }
+        int session_timeout = Integer.valueOf(CollectProperHelper.getZookeeperSessionTimeout());
+        String zk_address = CollectProperHelper.getZookeeperAddress();
+        boolean zk_watcher = Boolean.valueOf(CollectProperHelper.getZookeeperWatcher());
+        zookeeperClient = new ZookeeperClient(session_timeout, zk_address, zk_path_subscribe, zk_watcher);
     }
 
     /**
@@ -42,7 +33,7 @@ public class FtpSubscriptionImpl implements FtpSubscription, Serializable {
     @Override
     public void openFtpReception(String userId, List<String> ipcIdList) {
         if (!userId.equals("") && !ipcIdList.isEmpty()) {
-            String childPath = properties.getProperty("zk_path_subscribe") + "/" + userId;
+            String childPath = zk_path_subscribe + "/" + userId;
             long time = System.currentTimeMillis();
             StringBuilder data = new StringBuilder();
             data.append(userId).append(",").append(time).append(",");
@@ -61,7 +52,7 @@ public class FtpSubscriptionImpl implements FtpSubscription, Serializable {
     @Override
     public void closeFtpReception(String userId) {
         if (!userId.equals("")) {
-            zookeeperClient.delete(properties.getProperty("zk_path_subscribe") + "/" + userId);
+            zookeeperClient.delete(zk_path_subscribe + "/" + userId);
         }
     }
 }

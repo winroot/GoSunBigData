@@ -1,10 +1,9 @@
 package com.hzgc.service.dynrepo;
 
-import com.hzgc.common.service.DynamicTable;
+import com.hzgc.common.service.table.column.DynamicTable;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.dubbo.dynamicrepo.*;
-import com.hzgc.service.util.HBaseHelper;
-import com.hzgc.service.util.HBaseUtil;
+import com.hzgc.common.service.util.HBaseHelper;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
@@ -40,7 +39,7 @@ class DynamicPhotoServiceHelper {
             e.printStackTrace();
             LOG.error("Insert data by searchId from table_searchRes failed! used method DynamicPhotoServiceHelper.insertSearchRes.");
         } finally {
-            HBaseUtil.closTable(searchRes);
+            HBaseHelper.closeTable(searchRes);
         }
         return false;
     }
@@ -73,7 +72,7 @@ class DynamicPhotoServiceHelper {
             e.printStackTrace();
             LOG.info("No result get by searchId[" + searchId + "]");
         } finally {
-            HBaseUtil.closTable(searchResTable);
+            HBaseHelper.closeTable(searchResTable);
         }
         return null;
     }

@@ -4,12 +4,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import com.google.gson.Gson
-import com.hzgc.service.device.DeviceUtilImpl
 import com.hzgc.cluster.message.OffLineAlarmMessage
 import com.hzgc.cluster.util.PropertiesUtils
-import com.hzgc.collect.expand.processer.RocketMQProducer
-import com.hzgc.common.service.DeviceTable
-import com.hzgc.service.starepo.ObjectInfoInnerHandlerImpl
+import com.hzgc.cluster.warn.rule.{DeviceUtilImpl, ObjectInfoInnerHandlerImpl}
+import com.hzgc.common.ftp.RocketMQProducer
+import com.hzgc.common.service.table.column.DeviceTable
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.JavaConverters
@@ -18,7 +17,6 @@ import scala.collection.JavaConverters
   * 人脸识别离线告警任务（刘善彬）
   *
   */
-
 object FaceOffLineAlarmJob {
   def main(args: Array[String]): Unit = {
     val offLineAlarmMessage = new OffLineAlarmMessage()

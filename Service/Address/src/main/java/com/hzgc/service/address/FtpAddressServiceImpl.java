@@ -1,11 +1,8 @@
 package com.hzgc.service.address;
 
-import com.hzgc.common.ftp.FTPAddressProperHelper;
-import com.hzgc.common.util.file.ResourceFileUtil;
-import com.hzgc.common.util.io.IOUtil;
+import com.hzgc.common.ftp.properties.FTPAddressProperHelper;
 import com.hzgc.dubbo.address.FtpAddressService;
 
-import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.Properties;
 

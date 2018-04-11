@@ -1,6 +1,6 @@
 package com.hzgc.collect.expand.conf;
 
-import com.hzgc.collect.expand.util.properties.ClusterOverFtpProperHelper;
+import com.hzgc.common.ftp.properties.CollectProperHelper;
 
 import java.io.Serializable;
 
@@ -58,14 +58,14 @@ public class CommonConf implements Serializable {
      */
     public CommonConf() {
         //HelperFactory.regist();
-        this.logSize = ClusterOverFtpProperHelper.getLogSize();
-        this.capacity = ClusterOverFtpProperHelper.getReceiveQueueCapacity();
-        this.receiveLogDir = ClusterOverFtpProperHelper.getReceiveLogDir();
-        this.processLogDir = ClusterOverFtpProperHelper.getProcessLogDir();
-        this.receiveNumber = ClusterOverFtpProperHelper.getReceiveNumber();
-        this.successLogDir = ClusterOverFtpProperHelper.getSuccessLogDir();
-        this.mergeLogDir = ClusterOverFtpProperHelper.getMergeLogDir();
-        this.mergeScanTime = ClusterOverFtpProperHelper.getMergeScanTime();
+        this.logSize = CollectProperHelper.getLogSize();
+        this.capacity = CollectProperHelper.getReceiveQueueCapacity();
+        this.receiveLogDir = CollectProperHelper.getReceiveLogDir();
+        this.processLogDir = CollectProperHelper.getProcessLogDir();
+        this.receiveNumber = CollectProperHelper.getReceiveNumber();
+        this.successLogDir = CollectProperHelper.getSuccessLogDir();
+        this.mergeLogDir = CollectProperHelper.getMergeLogDir();
+        this.mergeScanTime = CollectProperHelper.getMergeScanTime();
     }
 
     /**

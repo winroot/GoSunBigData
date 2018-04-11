@@ -1,8 +1,8 @@
 package com.hzgc.service.starepo;
 
+import com.hzgc.common.service.util.HBaseHelper;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.dubbo.staticrepo.*;
-import com.hzgc.service.util.HBaseHelper;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 

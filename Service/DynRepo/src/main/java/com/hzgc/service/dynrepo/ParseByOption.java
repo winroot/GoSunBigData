@@ -1,6 +1,6 @@
 package com.hzgc.service.dynrepo;
 
-import com.hzgc.common.service.DynamicTable;
+import com.hzgc.common.service.table.column.DynamicTable;
 import com.hzgc.dubbo.attribute.Attribute;
 import com.hzgc.dubbo.attribute.Logistic;
 import com.hzgc.dubbo.dynamicrepo.SearchOption;

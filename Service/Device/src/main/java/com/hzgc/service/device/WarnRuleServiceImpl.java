@@ -1,12 +1,11 @@
 package com.hzgc.service.device;
 
-import com.hzgc.common.service.DeviceTable;
+import com.hzgc.common.service.table.column.DeviceTable;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.common.util.string.StringUtil;
 import com.hzgc.dubbo.device.WarnRule;
 import com.hzgc.dubbo.device.WarnRuleService;
-import com.hzgc.service.util.HBaseHelper;
-import com.hzgc.service.util.HBaseUtil;
+import com.hzgc.common.service.util.HBaseHelper;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
@@ -56,7 +55,7 @@ public class WarnRuleServiceImpl implements WarnRuleService {
         } catch (IOException e) {
             LOG.error(e.getMessage());
         } finally {
-            HBaseUtil.closTable(deviceTable);
+            HBaseHelper.closeTable(deviceTable);
         }
         return reply;
     }
@@ -123,7 +122,7 @@ public class WarnRuleServiceImpl implements WarnRuleService {
         } catch (IOException e) {
             LOG.error(e.getMessage());
         } finally {
-            HBaseUtil.closTable(deviceTable);
+            HBaseHelper.closeTable(deviceTable);
         }
         return reply;
     }
@@ -176,7 +175,7 @@ public class WarnRuleServiceImpl implements WarnRuleService {
             } catch (IOException e) {
                 LOG.error(e.getMessage());
             } finally {
-                HBaseUtil.closTable(table);
+                HBaseHelper.closeTable(table);
             }
         }
         return reply;
@@ -240,7 +239,7 @@ public class WarnRuleServiceImpl implements WarnRuleService {
                 reply.put(id,false);
                 LOG.error(e.getMessage());
             } finally {
-                HBaseUtil.closTable(deviceTable);
+                HBaseHelper.closeTable(deviceTable);
             }
         }
         return reply;
