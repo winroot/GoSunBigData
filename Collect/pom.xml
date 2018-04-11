@@ -89,19 +89,28 @@
             <version>${zookeeper.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.hzgc</groupId>
-            <artifactId>common</artifactId>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-ftp</artifactId>
             <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-util</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.hzgc</groupId>
             <artifactId>jni</artifactId>
             <version>${project.parent.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.hzgc</groupId>
             <artifactId>bigdata-api</artifactId>
             <version>${project.parent.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

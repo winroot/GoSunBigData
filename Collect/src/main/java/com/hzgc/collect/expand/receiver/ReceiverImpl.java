@@ -4,7 +4,7 @@ import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.DataReceiveLogWriter;
 import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.collect.expand.log.LogWriter;
-import com.hzgc.common.json.JSONUtil;
+import com.hzgc.common.util.json.JSONUtil;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;

@@ -1,7 +1,8 @@
 package com.hzgc.service.address;
 
-import com.hzgc.common.file.ResourceFileUtil;
-import com.hzgc.common.io.IOUtil;
+import com.hzgc.common.ftp.FTPAddressProperHelper;
+import com.hzgc.common.util.file.ResourceFileUtil;
+import com.hzgc.common.util.io.IOUtil;
 import com.hzgc.dubbo.address.FtpAddressService;
 
 import java.io.FileInputStream;
@@ -9,19 +10,7 @@ import java.io.Serializable;
 import java.util.Properties;
 
 public class FtpAddressServiceImpl implements FtpAddressService, Serializable {
-    private static Properties proper = new Properties();
-
-    public FtpAddressServiceImpl() {
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(ResourceFileUtil.loadResourceFile("service_address.properties"));
-            proper.load(fis);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            IOUtil.closeStream(fis);
-        }
-    }
+    private static Properties proper = FTPAddressProperHelper.getProps();
 
     @Override
     public Properties getFtpAddress() {

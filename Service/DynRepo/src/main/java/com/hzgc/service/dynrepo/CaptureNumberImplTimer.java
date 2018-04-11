@@ -1,5 +1,6 @@
 package com.hzgc.service.dynrepo;
 
+import com.hzgc.common.service.DynamicTable;
 import com.hzgc.service.util.ElasticSearchHelper;
 import com.hzgc.service.util.HBaseHelper;
 import org.apache.hadoop.hbase.client.Result;

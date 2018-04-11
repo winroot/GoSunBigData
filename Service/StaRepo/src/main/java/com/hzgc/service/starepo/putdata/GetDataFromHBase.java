@@ -1,6 +1,6 @@
 package com.hzgc.service.starepo.putdata;
 
-import com.hzgc.common.json.JSONUtil;
+import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.util.HBaseHelper;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;

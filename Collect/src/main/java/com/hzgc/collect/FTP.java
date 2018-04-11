@@ -16,7 +16,7 @@ import com.hzgc.collect.ftp.ftplet.FtpException;
 import com.hzgc.collect.ftp.listener.ListenerFactory;
 import com.hzgc.collect.ftp.usermanager.PropertiesUserManagerFactory;
 import com.hzgc.collect.ftp.util.LoggerConfig;
-import com.hzgc.common.file.ResourceFileUtil;
+import com.hzgc.common.util.file.ResourceFileUtil;
 import com.hzgc.jni.NativeFunction;
 import org.apache.log4j.Logger;
 

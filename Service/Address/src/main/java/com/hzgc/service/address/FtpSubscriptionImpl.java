@@ -1,8 +1,8 @@
 package com.hzgc.service.address;
 
-import com.hzgc.common.file.ResourceFileUtil;
-import com.hzgc.common.io.IOUtil;
-import com.hzgc.common.zookeeper.ZookeeperClient;
+import com.hzgc.common.util.file.ResourceFileUtil;
+import com.hzgc.common.util.io.IOUtil;
+import com.hzgc.common.util.zookeeper.ZookeeperClient;
 import com.hzgc.dubbo.address.FtpSubscription;
 import org.apache.log4j.Logger;
 

@@ -1,6 +1,6 @@
 package com.hzgc.service.starepo;
 
-import com.hzgc.common.object.ObjectUtil;
+import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.dubbo.staticrepo.*;
 import com.hzgc.jni.FaceAttribute;
 import org.apache.log4j.Logger;

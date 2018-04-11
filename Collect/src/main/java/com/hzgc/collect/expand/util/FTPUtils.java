@@ -1,7 +1,7 @@
 package com.hzgc.collect.expand.util;
 
 import com.hzgc.collect.FTP;
-import com.hzgc.common.ftp.IPAddressUtils;
+import com.hzgc.common.util.ip.IPAddressUtils;
 
 import java.lang.management.ManagementFactory;
 import java.util.Map;

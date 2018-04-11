@@ -1,7 +1,7 @@
 package com.hzgc.collect.expand.processer;
 
 
-import com.hzgc.common.object.ObjectUtil;
+import com.hzgc.common.util.object.ObjectUtil;
 import kafka.serializer.Decoder;
 import kafka.utils.VerifiableProperties;
 

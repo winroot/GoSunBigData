@@ -1,6 +1,7 @@
 package com.hzgc.service.dynrepo;
 
 import com.hzgc.common.ftp.FtpUtils;
+import com.hzgc.common.service.DynamicTable;
 import com.hzgc.dubbo.attribute.Attribute;
 import com.hzgc.dubbo.attribute.AttributeValue;
 import com.hzgc.dubbo.dynamicrepo.*;

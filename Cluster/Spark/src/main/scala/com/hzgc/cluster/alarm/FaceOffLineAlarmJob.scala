@@ -4,10 +4,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import com.google.gson.Gson
-import com.hzgc.service.device.{DeviceTable, DeviceUtilImpl}
+import com.hzgc.service.device.DeviceUtilImpl
 import com.hzgc.cluster.message.OffLineAlarmMessage
 import com.hzgc.cluster.util.PropertiesUtils
 import com.hzgc.collect.expand.processer.RocketMQProducer
+import com.hzgc.common.service.DeviceTable
 import com.hzgc.service.starepo.ObjectInfoInnerHandlerImpl
 import org.apache.spark.{SparkConf, SparkContext}
 
