@@ -1,6 +1,6 @@
 package com.hzgc.collect.ftp;
 
-import com.hzgc.collect.expand.util.properties.ClusterOverFtpProperHelper;
+import com.hzgc.common.ftp.properties.CollectProperHelper;
 
 import java.io.Serializable;
 
@@ -12,8 +12,8 @@ public abstract class ClusterOverFtp implements Serializable {
     public void loadConfig() throws Exception {
 
         dataConnConf = new DataConnectionConfigurationFactory();
-        listenerPort = ClusterOverFtpProperHelper.getPort();
-        passivePorts = ClusterOverFtpProperHelper.getDataPorts();
+        listenerPort = CollectProperHelper.getPort();
+        passivePorts = CollectProperHelper.getDataPorts();
         if (passivePorts != null){
             dataConnConf.setPassivePorts(passivePorts);
         }

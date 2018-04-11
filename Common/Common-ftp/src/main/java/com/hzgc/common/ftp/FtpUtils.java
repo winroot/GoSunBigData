@@ -1,7 +1,8 @@
 package com.hzgc.common.ftp;
 
-import com.hzgc.common.util.file.ResourceFileUtil;
-import com.hzgc.common.util.io.IOUtil;
+import com.hzgc.common.ftp.message.FtpPathMessage;
+import com.hzgc.common.ftp.message.FtpUrlMessage;
+import com.hzgc.common.ftp.properties.FTPAddressProperHelper;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -133,18 +134,7 @@ public final class FtpUtils implements Serializable {
     public static String getFtpUrl(String ftpUrl) {
         String hostName = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
         Properties proper = new Properties();
-        String ftpServerIP = "";
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(ResourceFileUtil.loadResourceFile("ftpAddress.properties"));
-            proper.load(fis);
-            ftpServerIP = proper.getProperty(hostName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            IOUtil.closeStream(fis);
-        }
-
+        String ftpServerIP = FTPAddressProperHelper.getIpByHostName(hostName);
         if (ftpServerIP != null && ftpServerIP.length() > 0) {
             return ftpUrl.replace(hostName, ftpServerIP);
         }

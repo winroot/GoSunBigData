@@ -1,9 +1,9 @@
 package com.hzgc.cluster.consumer;
 
-import com.hzgc.collect.expand.processer.FaceObject;
-import com.hzgc.common.service.DynamicTable;
+import com.hzgc.common.ftp.faceobj.FaceObject;
+import com.hzgc.common.service.table.column.DynamicTable;
+import com.hzgc.common.service.util.ElasticSearchHelper;
 import com.hzgc.jni.FaceAttribute;
-import com.hzgc.service.util.ElasticSearchHelper;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.rest.RestStatus;

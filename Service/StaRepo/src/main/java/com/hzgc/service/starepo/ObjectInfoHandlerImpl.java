@@ -1,5 +1,6 @@
 package com.hzgc.service.starepo;
 
+import com.hzgc.common.service.util.PhoenixJDBCHelper;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.dubbo.staticrepo.*;
 import com.hzgc.jni.FaceAttribute;

@@ -1,8 +1,8 @@
 package com.hzgc.collect.expand.merge;
 
 import com.hzgc.collect.expand.log.LogEvent;
-import com.hzgc.collect.expand.processer.FaceObject;
-import com.hzgc.common.ftp.FtpPathMessage;
+import com.hzgc.common.ftp.faceobj.FaceObject;
+import com.hzgc.common.ftp.message.FtpPathMessage;
 import com.hzgc.common.ftp.FtpUtils;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.dubbo.dynamicrepo.SearchType;

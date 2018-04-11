@@ -1,10 +1,9 @@
 package com.hzgc.service.device;
 
-import com.hzgc.common.service.DeviceTable;
+import com.hzgc.common.service.table.column.DeviceTable;
 import com.hzgc.common.util.string.StringUtil;
 import com.hzgc.dubbo.device.DeviceService;
-import com.hzgc.service.util.HBaseHelper;
-import com.hzgc.service.util.HBaseUtil;
+import com.hzgc.common.service.util.HBaseHelper;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Table;
@@ -30,7 +29,7 @@ public class DeviceServiceImpl implements DeviceService {
                 LOG.error("Current bind is failed!");
                 return false;
             } finally {
-                HBaseUtil.closTable(table);
+                HBaseHelper.closeTable(table);
             }
         } else {
             LOG.error("Please check the arguments!");
@@ -54,7 +53,7 @@ public class DeviceServiceImpl implements DeviceService {
                 LOG.error("Current unbind is failed!");
                 return false;
             } finally {
-                HBaseUtil.closTable(table);
+                HBaseHelper.closeTable(table);
             }
         } else {
             LOG.error("Please check the arguments!");

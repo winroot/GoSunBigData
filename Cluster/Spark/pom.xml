@@ -127,31 +127,13 @@
         </dependency>
         <dependency>
             <groupId>com.hzgc</groupId>
-            <artifactId>collect</artifactId>
+            <artifactId>bigdata-api</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.hzgc.service</groupId>
-            <artifactId>dynrepo</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.hzgc.service</groupId>
-            <artifactId>device</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.hzgc.service</groupId>
-            <artifactId>starepo</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.hzgc.service</groupId>
-            <artifactId>clustering</artifactId>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-ftp</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>

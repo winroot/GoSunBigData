@@ -39,8 +39,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.hzgc.service</groupId>
-            <artifactId>util</artifactId>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-service</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
