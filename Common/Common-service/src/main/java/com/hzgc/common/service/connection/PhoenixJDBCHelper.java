@@ -34,9 +34,7 @@ public class PhoenixJDBCHelper {
         try {
             Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
             conn = DriverManager.getConnection(phoenixJDBCURL);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
