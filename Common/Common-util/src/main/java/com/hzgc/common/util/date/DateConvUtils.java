@@ -1,4 +1,4 @@
-package com.hzgc.common.service.utils;
+package com.hzgc.common.util.date;
 
 import java.time.*;
 import java.util.Date;

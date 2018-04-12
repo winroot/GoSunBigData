@@ -14,6 +14,7 @@
                 <include>README.md</include>
             </includes>
         </fileSet>
+
         <!--集群搭建目录-->
         <!--集群搭建文档 -->
         <fileSet>
@@ -23,6 +24,7 @@
             </includes>
             <outputDirectory>ClusterBuildScripts</outputDirectory>
         </fileSet>
+
         <!--集群搭建一键配置文件-->
         <fileSet>
             <directory>../Cluster/conf</directory>
@@ -31,6 +33,7 @@
             </includes>
             <outputDirectory>ClusterBuildScripts/conf</outputDirectory>
         </fileSet>
+
         <!--集群搭建tool目录-->
         <fileSet>
             <directory>../Cluster/Environment/target/environment-${project.parent.version}/bin/cluster/install</directory>
@@ -41,6 +44,7 @@
             </includes>
             <outputDirectory>ClusterBuildScripts/tool</outputDirectory>
         </fileSet>
+
         <!--Azkaban-->
         <fileSet>
             <directory>../Cluster/Azkaban/target/azkaban-${project.parent.version}/bin/cluster/install</directory>
@@ -245,8 +249,9 @@
             <excludes>
                 <exclude>bin/cluster/**</exclude>
             </excludes>
-            <outputDirectory>RealTimeFaceCompare/cluster</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/spark</outputDirectory>
         </fileSet>
+
         <!--collect目录-->
         <fileSet>
             <directory>../Collect/target/collect-${project.parent.version}</directory>
@@ -255,60 +260,31 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare/ftp</outputDirectory>
         </fileSet>
+
         <!--common目录-->
-        <!--<fileSet>
-            <directory>../Common/target/common-${project.parent.version}</directory>
-            <includes>
-                <include>**</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/common</outputDirectory>
-        </fileSet>-->
-        <!--service目录-->
         <fileSet>
-            <directory>../Service/Address/target/address-${project.parent.version}</directory>
+            <directory>../Common/Common-ftp/target/common-ftp-${project.parent.version}</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/service/address</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/common/ftp</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Service/Clustering/target/clustering-${project.parent.version}</directory>
+            <directory>../Common/Common-service/target/common-service-${project.parent.version}</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/service/clustering</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/common/service</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Service/Device/target/device-${project.parent.version}</directory>
+            <directory>../Common/Common-util/target/common-util-${project.parent.version}</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/service/device</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/common/util</outputDirectory>
         </fileSet>
-        <fileSet>
-            <directory>../Service/DynRepo/target/dynrepo-${project.parent.version}</directory>
-            <includes>
-                <include>**</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/service/dynrepo</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Service/Face/target/face-${project.parent.version}</directory>
-            <includes>
-                <include>**</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/service/face</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Service/StaRepo/target/starepo-${project.parent.version}</directory>
-            <includes>
-                <include>**</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/service/starepo</outputDirectory>
-        </fileSet>
-
-
         <!--项目公共jar包-->
+        <!--Cluster模块jar包-->
         <fileSet>
             <directory>../Cluster/Spark/target</directory>
             <includes>
@@ -316,6 +292,7 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
         </fileSet>
+        <!--BigDataApi模块jar包-->
         <fileSet>
             <directory>../BigDataApi/target</directory>
             <includes>
@@ -323,6 +300,7 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
         </fileSet>
+        <!--Collect模块jar包-->
         <fileSet>
             <directory>../Collect/target</directory>
             <includes>
@@ -330,13 +308,29 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
         </fileSet>
+        <!--Common模块jar包-->
         <fileSet>
-            <directory>../Common/target</directory>
+            <directory>../Common/Common-ftp/target</directory>
             <includes>
-                <include>common-${project.parent.version}.jar</include>
+                <include>common-ftp-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>../Common/Common-service/target</directory>
+            <includes>
+                <include>common-service-${project.parent.version}.jar</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Common/Common-util/target</directory>
+            <includes>
+                <include>common-util-${project.parent.version}.jar</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+        </fileSet>
+        <!--JNI模块jar包-->
         <fileSet>
             <directory>../JNI/target</directory>
             <includes>
@@ -344,6 +338,7 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
         </fileSet>
+        <!--Service模块jar包-->
         <fileSet>
             <directory>../Service/Address/target</directory>
             <includes>
@@ -393,6 +388,53 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
         </fileSet>
+
+        <!--service目录-->
+        <fileSet>
+            <directory>../Service/Address/target/address-${project.parent.version}</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/address</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Service/Clustering/target/clustering-${project.parent.version}</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/clustering</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Service/Device/target/device-${project.parent.version}</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/device</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Service/DynRepo/target/dynrepo-${project.parent.version}</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/dynrepo</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Service/Face/target/face-${project.parent.version}</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/face</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Service/StaRepo/target/starepo-${project.parent.version}</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/starepo</outputDirectory>
+        </fileSet>
+
+
+
 
     </fileSets>
 </assembly>
