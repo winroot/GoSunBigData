@@ -1,8 +1,8 @@
 package com.hzgc.service.dynrepo;
 
 import com.hzgc.common.service.table.column.DynamicTable;
-import com.hzgc.common.service.util.ElasticSearchHelper;
-import com.hzgc.common.service.util.HBaseHelper;
+import com.hzgc.common.service.connection.ElasticSearchHelper;
+import com.hzgc.common.service.connection.HBaseHelper;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;

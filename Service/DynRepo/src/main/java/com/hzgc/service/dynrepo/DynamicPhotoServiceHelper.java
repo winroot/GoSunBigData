@@ -3,7 +3,7 @@ package com.hzgc.service.dynrepo;
 import com.hzgc.common.service.table.column.DynamicTable;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.dubbo.dynamicrepo.*;
-import com.hzgc.common.service.util.HBaseHelper;
+import com.hzgc.common.service.connection.HBaseHelper;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;

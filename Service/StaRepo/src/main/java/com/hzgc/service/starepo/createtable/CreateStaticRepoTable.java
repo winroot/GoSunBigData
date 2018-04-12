@@ -1,6 +1,6 @@
 package com.hzgc.service.starepo.createtable;
 
-import com.hzgc.common.service.util.HBaseHelper;
+import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.common.util.file.ResourceFileUtil;
 import com.hzgc.common.util.io.IOUtil;
 import com.hzgc.dubbo.staticrepo.ObjectInfoTable;

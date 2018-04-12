@@ -1,7 +1,7 @@
 package com.hzgc.cluster.warn;
 
-import com.hzgc.common.service.util.HBaseHelper;
-import com.hzgc.common.service.util.PhoenixJDBCHelper;
+import com.hzgc.common.service.connection.HBaseHelper;
+import com.hzgc.common.service.connection.PhoenixJDBCHelper;
 import com.hzgc.dubbo.staticrepo.ObjectInfoTable;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Result;

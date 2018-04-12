@@ -29,7 +29,7 @@
     <bean id="ObjectInfoHandler" class="com.hzgc.service.staticrepo.ObjectInfoHandlerImpl"/>
     <dubbo:service interface="com.hzgc.dubbo.staticrepo.ObjectInfoHandler" ref="ObjectInfoHandler"/>
 
-    <bean id="HBaseHelper" class="com.hzgc.common.service.util.HBaseHelper"/>
+    <bean id="HBaseHelper" class="com.hzgc.common.service.connection.HBaseHelper"/>
     <bean id="DeviceTable" class="com.hzgc.common.service.table.column.DeviceTable"/>
     <bean id="ElasticSearchHelper" class="com.hzgc.service.staticrepo.ElasticSearchHelper"/>
 

@@ -1,4 +1,4 @@
-package com.hzgc.common.service.util;
+package com.hzgc.common.service.connection;
 
 import com.hzgc.common.util.file.ResourceFileUtil;
 import org.apache.log4j.Logger;

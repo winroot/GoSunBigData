@@ -2,7 +2,7 @@ package com.hzgc.cluster.warn;
 
 import com.hzgc.common.service.device.DeviceUtil;
 import com.hzgc.common.service.table.column.DeviceTable;
-import com.hzgc.common.service.util.HBaseHelper;
+import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.common.util.string.StringUtil;
 import org.apache.hadoop.hbase.client.Get;
