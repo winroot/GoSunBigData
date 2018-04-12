@@ -1,4 +1,4 @@
-package com.hzgc.common.service.utils;
+package com.hzgc.common.util.md5;
 
 import java.security.MessageDigest;
 
