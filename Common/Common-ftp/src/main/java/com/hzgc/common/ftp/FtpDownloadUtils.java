@@ -2,6 +2,7 @@ package com.hzgc.common.ftp;
 
 import com.hzgc.common.util.file.ResourceFileUtil;
 import com.hzgc.common.util.io.IOUtil;
+import com.hzgc.common.util.empty.IsEmpty;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPClientConfig;
@@ -119,9 +120,7 @@ public class FtpDownloadUtils {
      * @param localFileName 下载到本地的文件名称
      */
     public static void downloadFtpFile(String ftpUrl, String localPath, String localFileName) {
-        if (ftpUrl != null && ftpUrl.length() > 0 &&
-                localPath != null && localPath.length() > 0 &&
-                localFileName != null && localFileName.length() > 0) {
+        if (IsEmpty.strIsRight(ftpUrl) && IsEmpty.strIsRight(localPath) && IsEmpty.strIsRight(localFileName)) {
             //解析FTP地址，得到ftpAddress、ftpPort、ftpFilePath、ftpFileName
             String ftpAddress = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
             String path = ftpUrl.substring(ftpUrl.lastIndexOf(":") + 1);
@@ -157,7 +156,7 @@ public class FtpDownloadUtils {
      */
     public static byte[] downloadftpFile2Bytes(String ftpUrl) {
         byte[] ftpFileBytes = null;
-        if (ftpUrl != null && ftpUrl.length() > 0) {
+        if (IsEmpty.strIsRight(ftpUrl)) {
             //解析FTP地址，得到ftpAddress、ftpPort、ftpFilePath、ftpFileName
             String ftpAddress = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
             String path = ftpUrl.substring(ftpUrl.lastIndexOf(":") + 1);

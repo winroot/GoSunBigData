@@ -4,7 +4,7 @@ import com.hzgc.common.service.device.DeviceUtil;
 import com.hzgc.common.service.table.column.DeviceTable;
 import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.common.util.object.ObjectUtil;
-import com.hzgc.common.util.string.StringUtil;
+import com.hzgc.common.util.empty.IsEmpty;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Table;
@@ -19,7 +19,7 @@ public class DeviceUtilImpl implements DeviceUtil, Serializable {
     @Override
     public String getplatfromID(String ipcID) {
         Table table = null;
-        if (StringUtil.strIsRight(ipcID)) {
+        if (IsEmpty.strIsRight(ipcID)) {
             try {
                 table = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
                 Get get = new Get(Bytes.toBytes(ipcID));
@@ -39,7 +39,7 @@ public class DeviceUtilImpl implements DeviceUtil, Serializable {
     @Override
     public Map<Integer, Map<String, Integer>> isWarnTypeBinding(String ipcID) {
         Table table = null;
-        if (StringUtil.strIsRight(ipcID)) {
+        if (IsEmpty.strIsRight(ipcID)) {
             try {
                 table = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
                 Get get = new Get(Bytes.toBytes(ipcID));

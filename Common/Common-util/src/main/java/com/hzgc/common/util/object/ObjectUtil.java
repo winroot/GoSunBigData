@@ -24,7 +24,7 @@ public class ObjectUtil {
             }
             return buffer;
         }
-        return buffer;
+        return null;
     }
 
     public static java.lang.Object byteToObject(byte[] bc) {

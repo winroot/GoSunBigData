@@ -1,6 +1,7 @@
 package com.hzgc.service.address;
 
 import com.hzgc.common.ftp.properties.FTPAddressProperHelper;
+import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.dubbo.address.FtpAddressService;
 
 import java.io.Serializable;
@@ -23,7 +24,7 @@ public class FtpAddressServiceImpl implements FtpAddressService, Serializable {
     @Override
     public String getIPAddress(String hostname) {
         String ftpIpAddress = "";
-        if (hostname != null && hostname.length() > 0) {
+        if (IsEmpty.strIsRight(hostname)) {
             ftpIpAddress = proper.getProperty(hostname);
         }
         return ftpIpAddress;

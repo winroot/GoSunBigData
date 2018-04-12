@@ -1,6 +1,7 @@
 package com.hzgc.service.dynrepo;
 
 import com.hzgc.common.service.table.column.DynamicTable;
+import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.dubbo.attribute.Attribute;
 import com.hzgc.dubbo.attribute.Logistic;
 import com.hzgc.dubbo.dynamicrepo.SearchOption;
@@ -288,7 +289,7 @@ class ParseByOption {
      */
     private static String getAttributes(SearchOption option) {
         StringBuilder SQL = new StringBuilder();
-        if (option.getAttributes() != null && option.getAttributes().size() > 0) {
+        if (IsEmpty.listIsRight(option.getAttributes())) {
             for (Attribute attribute : option.getAttributes()) {
                 if (attribute.getValues() != null && attribute.getValues().size() > 0) {
                     if (attribute.getLogistic() == Logistic.AND) {
@@ -308,9 +309,9 @@ class ParseByOption {
      */
     private static String getAttributesAndValues(SearchOption option) {
         StringBuilder SQL = new StringBuilder();
-        if (option.getAttributes() != null && option.getAttributes().size() > 0) {
+        if (IsEmpty.listIsRight(option.getAttributes())) {
             for (Attribute attribute : option.getAttributes()) {
-                if (attribute.getValues() != null && attribute.getValues().size() > 0 && attribute.getLogistic() == Logistic.AND) {
+                if (IsEmpty.listIsRight(attribute.getValues()) && attribute.getLogistic() == Logistic.AND) {
                     StringBuilder tempStr = new StringBuilder();
                     for (int i = 0; i < attribute.getValues().size(); i++) {
                         if (attribute.getValues().get(i).getValue() != 0) {
@@ -413,7 +414,7 @@ class ParseByOption {
                 .append(">=")
                 .append(option.getThreshold())
                 .append(getAttributesAndValues(option));
-        if (option.getIntervals() != null && option.getIntervals().size() > 0) {
+        if (IsEmpty.listIsRight(option.getIntervals())) {
             getIntervals(finalSql, option);
         }
         if (option.getStartDate() != null && option.getEndDate() != null) {

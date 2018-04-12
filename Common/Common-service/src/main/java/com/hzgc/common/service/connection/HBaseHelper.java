@@ -1,6 +1,7 @@
 package com.hzgc.common.service.connection;
 
 import com.hzgc.common.util.file.ResourceFileUtil;
+import com.hzgc.common.util.empty.IsEmpty;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.*;
@@ -182,7 +183,7 @@ public class HBaseHelper implements Serializable {
      * @return 表对象
      */
     public static Table getTable(String tableName) {
-        if (null != tableName && tableName.length() > 0) {
+        if (IsEmpty.strIsRight(tableName)) {
             try {
                 return HBaseHelper.getHBaseConnection().getTable(TableName.valueOf(tableName));
             } catch (IOException e) {
