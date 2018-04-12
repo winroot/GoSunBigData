@@ -1,4 +1,4 @@
-package com.hzgc.common.service.util;
+package com.hzgc.common.service.connection;
 
 import com.hzgc.common.util.file.ResourceFileUtil;
 import org.apache.log4j.Logger;
@@ -34,9 +34,7 @@ public class PhoenixJDBCHelper {
         try {
             Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
             conn = DriverManager.getConnection(phoenixJDBCURL);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }

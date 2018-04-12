@@ -5,7 +5,7 @@ import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.common.util.string.StringUtil;
 import com.hzgc.dubbo.device.WarnRule;
 import com.hzgc.dubbo.device.WarnRuleService;
-import com.hzgc.common.service.util.HBaseHelper;
+import com.hzgc.common.service.connection.HBaseHelper;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;

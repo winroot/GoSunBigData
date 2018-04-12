@@ -5,7 +5,7 @@ import com.hzgc.common.service.table.column.DynamicTable;
 import com.hzgc.dubbo.attribute.Attribute;
 import com.hzgc.dubbo.attribute.AttributeValue;
 import com.hzgc.dubbo.dynamicrepo.*;
-import com.hzgc.common.service.util.ElasticSearchHelper;
+import com.hzgc.common.service.connection.ElasticSearchHelper;
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;

@@ -1,6 +1,7 @@
-package com.hzgc.common.service.util;
+package com.hzgc.common.service.connection;
 
 import com.hzgc.common.util.file.ResourceFileUtil;
+import com.hzgc.common.util.io.IOUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -17,12 +18,6 @@ import java.util.Properties;
 public class JDBCFactory {
     private static Logger LOG = Logger.getLogger(JDBCFactory.class);
     private static Properties propertie = new Properties();
-//    private static JDBCUtil instance = null;
-//    private static DataSource dataSource = new DruidDataSource();
-//    private static Properties propertie = new Properties();
-
-//    private JDBCUtil() {
-//    }
 
     /*
       加载数据源配置信息
@@ -35,37 +30,13 @@ public class JDBCFactory {
                 fis = new FileInputStream(resourceFile);
                 propertie.load(new FileInputStream(resourceFile));
             }
-//            dataSource = DruidDataSourceFactory.createDataSource(propertie);
-//            dataSource.getConnection().close();
         } catch (Exception e) {
             e.printStackTrace();
             LOG.info("get jdbc.properties failure");
         } finally {
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            IOUtil.closeStream(fis);
         }
     }
-
-    /**
-     * 获取单例
-     *
-     * @return 返回JDBCUtil单例对象
-     */
-//    public static JDBCUtil getInstance() {
-//        if (instance == null) {
-//            synchronized (JDBCUtil.class) {
-//                if (instance == null) {
-//                    instance = new JDBCUtil();
-//                }
-//            }
-//        }
-//        return instance;
-//    }
 
     /**
      * 获取数据库连接池连接
@@ -75,11 +46,6 @@ public class JDBCFactory {
     public static Connection getConnection() {
         long start = System.currentTimeMillis();
         Connection conn = null;
-//        try {
-//            return dataSource.getConnection();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
         try {
             Class.forName("org.apache.hive.jdbc.HiveDriver");
         } catch (ClassNotFoundException e) {

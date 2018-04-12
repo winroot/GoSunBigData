@@ -4,7 +4,7 @@ import java.util
 import java.util.List
 
 import com.hzgc.common.service.table.column.ClusteringTable
-import com.hzgc.common.service.util.HBaseHelper
+import com.hzgc.common.service.connection.HBaseHelper
 import com.hzgc.common.util.`object`.ObjectUtil
 import com.hzgc.dubbo.clustering.{AlarmInfo, ClusteringAttribute}
 import org.apache.hadoop.hbase.client.{Put, Table}

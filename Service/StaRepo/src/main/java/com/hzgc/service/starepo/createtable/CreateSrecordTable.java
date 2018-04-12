@@ -1,6 +1,6 @@
 package com.hzgc.service.starepo.createtable;
 
-import com.hzgc.common.service.util.HBaseHelper;
+import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.common.util.file.ResourceFileUtil;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.log4j.Logger;
