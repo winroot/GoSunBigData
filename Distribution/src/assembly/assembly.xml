@@ -240,7 +240,7 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare</outputDirectory>
         </fileSet>
-        <!--cluster目录-->
+        <!--spark目录-->
         <fileSet>
             <directory>../Cluster/Spark/target/spark-${project.parent.version}</directory>
             <includes>
@@ -252,11 +252,18 @@
             <outputDirectory>RealTimeFaceCompare/spark</outputDirectory>
         </fileSet>
 
-        <!--collect目录-->
+        <!--ftp目录-->
         <fileSet>
             <directory>../Collect/target/collect-${project.parent.version}</directory>
             <includes>
                 <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/ftp</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Common/Common-ftp/target/common-ftp-${project.parent.version}</directory>
+            <includes>
+                <include>conf/**</include>
             </includes>
             <outputDirectory>RealTimeFaceCompare/ftp</outputDirectory>
         </fileSet>
@@ -267,6 +274,9 @@
             <includes>
                 <include>**</include>
             </includes>
+            <excludes>
+                <exclude>conf/**</exclude>
+            </excludes>
             <outputDirectory>RealTimeFaceCompare/common/ftp</outputDirectory>
         </fileSet>
         <fileSet>
@@ -274,6 +284,9 @@
             <includes>
                 <include>**</include>
             </includes>
+            <excludes>
+                <exclude>conf/**</exclude>
+            </excludes>
             <outputDirectory>RealTimeFaceCompare/common/service</outputDirectory>
         </fileSet>
         <fileSet>
@@ -281,6 +294,9 @@
             <includes>
                 <include>**</include>
             </includes>
+            <excludes>
+                <exclude>conf/**</exclude>
+            </excludes>
             <outputDirectory>RealTimeFaceCompare/common/util</outputDirectory>
         </fileSet>
         <!--项目公共jar包-->
@@ -391,6 +407,13 @@
 
         <!--service目录-->
         <fileSet>
+            <directory>../Common/Common-service/target/common-service-${project.parent.version}</directory>
+            <includes>
+                <include>conf/**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service</outputDirectory>
+        </fileSet>
+        <fileSet>
             <directory>../Service/Address/target/address-${project.parent.version}</directory>
             <includes>
                 <include>**</include>
@@ -432,9 +455,6 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare/service/starepo</outputDirectory>
         </fileSet>
-
-
-
 
     </fileSets>
 </assembly>
