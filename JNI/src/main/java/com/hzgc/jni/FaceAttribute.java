@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 public class FaceAttribute implements Serializable{
+
     /**
      * 特征值
      */

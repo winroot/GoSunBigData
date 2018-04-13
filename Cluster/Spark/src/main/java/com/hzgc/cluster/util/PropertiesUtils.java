@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class PropertiesUtils implements Serializable {
+
     public static Integer getSimilarity(Map<String, Integer> map) {
         for (String key : map.keySet()) {
             if (map.get(key) != null) {

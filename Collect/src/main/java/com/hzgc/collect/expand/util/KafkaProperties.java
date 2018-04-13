@@ -12,9 +12,10 @@ import java.io.Serializable;
 import java.util.Properties;
 
 public class KafkaProperties extends ProperHelper implements Serializable {
-    private static Logger LOG = Logger.getLogger(KafkaProperties.class);
-    private static Properties props = new Properties();
 
+    private static Logger LOG = Logger.getLogger(KafkaProperties.class);
+
+    private static Properties props = new Properties();
     private static String bootstrapServers;
     private static String requestRequiredAcks;
     private static String retries;

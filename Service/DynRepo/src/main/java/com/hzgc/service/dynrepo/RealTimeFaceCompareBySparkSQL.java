@@ -3,7 +3,7 @@ package com.hzgc.service.dynrepo;
 import com.hzgc.common.ftp.FtpUtils;
 import com.hzgc.common.service.table.column.DynamicTable;
 import com.hzgc.dubbo.dynamicrepo.*;
-import com.hzgc.common.service.connection.JDBCFactory;
+import com.hzgc.common.service.connection.HiveJDBCFactory;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
@@ -19,6 +19,7 @@ import static java.util.stream.Collectors.toList;
  * 通过parkSQL以图搜图
  */
 class RealTimeFaceCompareBySparkSQL {
+
     private Logger LOG = Logger.getLogger(RealTimeFaceCompareBySparkSQL.class);
 
     RealTimeFaceCompareBySparkSQL() {
@@ -64,7 +65,7 @@ class RealTimeFaceCompareBySparkSQL {
         try {
             //开始通过spark执行查询
             long start = System.currentTimeMillis();
-            conn = JDBCFactory.getConnection();
+            conn = HiveJDBCFactory.getConnection();
             LOG.info("Get jdbc connection time is:" + (System.currentTimeMillis() - start));
             statement = conn.createStatement();
             resultSet = statement.executeQuery(selectBySparkSQL);

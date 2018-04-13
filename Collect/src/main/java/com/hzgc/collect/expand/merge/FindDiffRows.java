@@ -17,6 +17,7 @@ import java.util.List;
  * getAllDiffRows：获取集合中不同行；
  */
 class FindDiffRows {
+
     private Logger LOG = Logger.getLogger(FindDiffRows.class);
 
     /**

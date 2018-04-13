@@ -11,7 +11,9 @@ import java.util.List;
  * 删除ZK中“/ftp_subscribe”与“ftp_show”节点数据
  */
 public class DeleteDataFromZookeeper extends ZookeeperClient {
+
     private static Logger LOG = Logger.getLogger(DeleteDataFromZookeeper.class);
+
     private DeleteDataFromZookeeper(int session_timeout, String zookeeper_address, String path, boolean watcher) {
         super(session_timeout, zookeeper_address, path, watcher);
     }

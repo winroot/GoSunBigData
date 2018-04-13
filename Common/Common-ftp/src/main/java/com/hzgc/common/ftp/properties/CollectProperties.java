@@ -13,10 +13,10 @@ import java.io.Serializable;
 import java.util.Properties;
 
 public class CollectProperties extends ProperHelper implements Serializable {
-    private static Logger LOG
-            = Logger.getLogger(CollectProperties.class);
-    private static Properties props = new Properties();
 
+    private static Logger LOG = Logger.getLogger(CollectProperties.class);
+
+    private static Properties props = new Properties();
     private static String logSize;
     private static String receiveQueueCapacity;
     private static String receiveLogDir;

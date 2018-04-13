@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.util.concurrent.BlockingQueue;
 
 public class ProcessThread implements Runnable, Serializable {
+
     private BlockingQueue<LogEvent> queue;
     private DataProcessLogWriter writer;
 

@@ -5,6 +5,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import java.io.Serializable;
 
 public class DeviceTable implements Serializable {
+
     public final static String TABLE_DEVICE = "device";
     public final static byte[] CF_DEVICE = Bytes.toBytes("device");
     public final static byte[] PLAT_ID = Bytes.toBytes("p");

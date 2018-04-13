@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 public class HBaseHelper implements Serializable {
+
     private static Logger LOG = Logger.getLogger(HBaseHelper.class);
+
     private static Configuration innerHBaseConf = null;
     private static Connection innerHBaseConnection = null;
 

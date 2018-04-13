@@ -15,7 +15,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ReceiverScheduler implements Serializable {
+
     private Logger LOG = Logger.getLogger(ReceiverScheduler.class);
+
     private final List<ReceiverImpl> container = new ArrayList<>();
     //公共配置类
     private CommonConf conf;

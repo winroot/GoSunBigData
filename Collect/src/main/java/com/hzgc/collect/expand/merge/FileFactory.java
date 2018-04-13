@@ -17,7 +17,6 @@ import java.util.List;
 class FileFactory implements Serializable {
 
     private MergeUtil mergeUtil = new MergeUtil();
-
     private String processParentDir;
     private String writingLogFile;
     private List<String> allBackupLogAbsPath;

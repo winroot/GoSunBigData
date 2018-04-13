@@ -1,6 +1,6 @@
 package com.hzgc.service.starepo;
 
-import com.hzgc.common.service.connection.PhoenixJDBCHelper;
+import com.hzgc.common.service.connection.PhoenixJDBCFactory;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.dubbo.staticrepo.*;
 import com.hzgc.jni.FaceAttribute;
@@ -17,7 +17,7 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
 
     private static Logger LOG = Logger.getLogger(ObjectInfoHandlerImpl.class);
 
-    private static Connection conn = PhoenixJDBCHelper.getPhoenixJdbcConn();
+    private static Connection conn = PhoenixJDBCFactory.getPhoenixJdbcConn();
 
     public ObjectInfoHandlerImpl() {
     }
@@ -282,7 +282,7 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
     @Override
     public byte[] getPhotoByKey(String rowkey) {
         String sql = "select photo from " + ObjectInfoTable.TABLE_NAME + " where id = ?";
-        Connection conn = PhoenixJDBCHelper.getPhoenixJdbcConn();
+        Connection conn = PhoenixJDBCFactory.getPhoenixJdbcConn();
         PreparedStatement pstm;
         byte[] photo = null;
         try {
@@ -331,7 +331,7 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
         // 排序参数
         List<StaticSortParam> staticSortParams = searchRecordOpts.getStaticSortParams();
 
-        Connection conn = PhoenixJDBCHelper.getPhoenixJdbcConn();
+        Connection conn = PhoenixJDBCFactory.getPhoenixJdbcConn();
         PreparedStatement pstm;
         // sql 查询语句
         String sql = "select " + SearchRecordTable.ID + ", " + SearchRecordTable.RESULT + " from "

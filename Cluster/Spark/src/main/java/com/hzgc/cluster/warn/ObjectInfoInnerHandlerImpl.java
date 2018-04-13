@@ -1,7 +1,7 @@
 package com.hzgc.cluster.warn;
 
 import com.hzgc.common.service.connection.HBaseHelper;
-import com.hzgc.common.service.connection.PhoenixJDBCHelper;
+import com.hzgc.common.service.connection.PhoenixJDBCFactory;
 import com.hzgc.dubbo.staticrepo.ObjectInfoTable;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Result;
@@ -25,8 +25,7 @@ public class ObjectInfoInnerHandlerImpl implements Serializable {
     private static ObjectInfoInnerHandlerImpl instance;
     private static long totalNums = getTotalNums();
     private static List<Object[]> totalList = null;
-    private static java.sql.Connection conn = PhoenixJDBCHelper.getPhoenixJdbcConn();
-
+    private static java.sql.Connection conn = PhoenixJDBCFactory.getPhoenixJdbcConn();
 
     /**
      * 接口实现使用单例模式
@@ -145,7 +144,7 @@ public class ObjectInfoInnerHandlerImpl implements Serializable {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            PhoenixJDBCHelper.closeConnection(null, pstm);
+            PhoenixJDBCFactory.closeConnection(null, pstm);
         }
 
         return findResult;
@@ -212,7 +211,7 @@ public class ObjectInfoInnerHandlerImpl implements Serializable {
             e.printStackTrace();
             return null;
         } finally {
-            PhoenixJDBCHelper.closeConnection(null, pstm);
+            PhoenixJDBCFactory.closeConnection(null, pstm);
         }
         return findResult;
     }
@@ -246,7 +245,7 @@ public class ObjectInfoInnerHandlerImpl implements Serializable {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            PhoenixJDBCHelper.closeConnection(null, pstm);
+            PhoenixJDBCFactory.closeConnection(null, pstm);
         }
         return 0;
     }

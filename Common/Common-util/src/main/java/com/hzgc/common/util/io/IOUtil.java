@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class IOUtil {
+
     public static void closeStream(InputStream is) {
         if (null != is) {
             try {

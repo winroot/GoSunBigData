@@ -11,7 +11,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class ElasticSearchHelper implements Serializable{
+
     private static Logger LOG = Logger.getLogger(ElasticSearchHelper.class);
+
     private static TransportClient client = null;
 
     /**

@@ -11,7 +11,9 @@ import org.apache.log4j.Logger;
 import java.sql.Date;
 
 class ParseByOption {
+
     private static Logger LOG = Logger.getLogger(ParseByOption.class);
+
     private static String MID_FIELD = null;
 
     static {

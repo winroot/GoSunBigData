@@ -15,8 +15,8 @@ import java.util.Properties;
 public class FTPAddressProperties extends ProperHelper implements Serializable {
 
     private static Logger LOG = Logger.getLogger(FTPAddressProperties.class);
-    private static Properties props = new Properties();
 
+    private static Properties props = new Properties();
     private static String ip;
     private static String port;
     private static String user;

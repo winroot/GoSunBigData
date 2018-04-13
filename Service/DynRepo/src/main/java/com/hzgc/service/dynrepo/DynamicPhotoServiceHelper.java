@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
  * 动态库实现类
  */
 class DynamicPhotoServiceHelper {
+
     private static Logger LOG = Logger.getLogger(DynamicPhotoServiceHelper.class);
 
     /**

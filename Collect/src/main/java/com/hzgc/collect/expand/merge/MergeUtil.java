@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 public class MergeUtil implements Serializable {
 
     private Logger LOG = Logger.getLogger(MergeUtil.class);
+
     //系统换行符
     private String newLine = System.getProperty("line.separator");
     private static final String SUFFIX = ".log";

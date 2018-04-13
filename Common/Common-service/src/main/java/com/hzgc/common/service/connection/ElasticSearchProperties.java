@@ -12,7 +12,9 @@ import java.io.Serializable;
 import java.util.Properties;
 
 public class ElasticSearchProperties extends ProperHelper implements Serializable {
+
     private static Logger LOG = Logger.getLogger(ElasticSearchProperties.class);
+
     private static Properties props = new Properties();
     private static String es_cluster_name;
     private static String es_hosts;

@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 public class ZookeeperClient implements Serializable {
+
     private static Logger LOG = Logger.getLogger(ZookeeperClient.class);
+
     //session失效时间
     private int session_timeout;
     //Zookeeper地址

@@ -12,7 +12,9 @@ import java.util.Map;
  * 人脸抓拍订阅功能及人脸抓拍演示功能定时刷新及去除过期数据任务
  */
 public class ReceiveThread extends ReceiveIpcIds implements Serializable {
+
     private static Logger LOG = Logger.getLogger(ReceiveThread.class);
+
     private FtpSubscriptionClient ftpSubscriptionClient;
     private ReceiveIpcIds object = ReceiveIpcIds.getInstance();
 

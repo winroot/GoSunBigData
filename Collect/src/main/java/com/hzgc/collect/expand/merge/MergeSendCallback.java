@@ -8,10 +8,10 @@ import org.apache.log4j.Logger;
 import java.io.Serializable;
 
 public class MergeSendCallback implements Callback, Serializable {
+
     private Logger LOG = Logger.getLogger(MergeSendCallback.class);
     private final long startTime = System.currentTimeMillis();
     private static MergeUtil mergeUtil = new MergeUtil();
-
     private String topic;
     private String key;
     private LogEvent event;

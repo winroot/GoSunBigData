@@ -9,7 +9,9 @@ import org.apache.log4j.Logger;
 import java.io.Serializable;
 
 public class ProcessCallBack implements Callback, Serializable {
+
     private static Logger LOG = Logger.getLogger(ProcessCallBack.class);
+
     private DataProcessLogWriter writer;
     private LogEvent event;
     private long elapsedTime;

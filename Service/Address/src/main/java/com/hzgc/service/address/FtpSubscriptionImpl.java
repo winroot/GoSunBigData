@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class FtpSubscriptionImpl implements FtpSubscription, Serializable {
-    private static Logger LOG = Logger.getLogger(FtpSubscriptionImpl.class);
+
     private ZookeeperClient zookeeperClient;
     private String zk_path_subscribe = CollectProperties.getZookeeperPathSubscribe();
 

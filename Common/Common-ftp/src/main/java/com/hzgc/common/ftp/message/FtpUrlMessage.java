@@ -3,6 +3,7 @@ package com.hzgc.common.ftp.message;
 import java.io.Serializable;
 
 public class FtpUrlMessage extends FtpPathMessage implements Serializable {
+
     private String ip;
     private String port;
     private String filePath;

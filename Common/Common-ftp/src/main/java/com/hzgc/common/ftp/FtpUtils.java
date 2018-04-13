@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import java.io.*;
 
 public final class FtpUtils implements Serializable {
+
     private static Logger LOG = Logger.getLogger(FtpUtils.class);
 
     public static boolean checkPort(int checkPort) throws Exception {

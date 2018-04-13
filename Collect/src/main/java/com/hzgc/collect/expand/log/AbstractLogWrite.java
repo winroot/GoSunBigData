@@ -20,6 +20,7 @@ import java.util.List;
  * 如果需要实现LogWriter定义的功能需要继承AbstractLogGroupWrite
  */
 abstract class AbstractLogWrite implements LogWriter, Serializable {
+
     static Logger LOG;
     /**
      * 当前队列ID

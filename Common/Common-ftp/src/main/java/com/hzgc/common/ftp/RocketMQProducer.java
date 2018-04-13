@@ -13,7 +13,9 @@ import java.io.Serializable;
 import java.util.List;
 
 public class RocketMQProducer implements Serializable {
+
     private static Logger LOG = Logger.getLogger(RocketMQProducer.class);
+
     private static String topic;
     private static RocketMQProducer instance = null;
     private DefaultMQProducer producer;

@@ -37,6 +37,7 @@ import java.util.List;
 public class RecoverErrProDataThread implements Runnable, Serializable {
 
     private Logger LOG = Logger.getLogger(RecoverErrProDataThread.class);
+
     private static final String SUFFIX = ".log";
     private static CommonConf commonConf;
     private String feature = KafkaProperties.getTopicFeature();

@@ -16,7 +16,6 @@ public class RowsListFactory implements Serializable {
     //初始化要用到的两个工具类
     private MergeUtil mergeUtil = new MergeUtil();
     private FindDiffRows findDiffRows = new FindDiffRows();
-
     private List<String> notProRows;
 
     //有参构造函数，传入需要处理的某个process文件路径，及其对应的receiveFileDir文件路径

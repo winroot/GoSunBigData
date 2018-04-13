@@ -3,6 +3,7 @@ package com.hzgc.common.ftp.message;
 import java.io.Serializable;
 
 public class FtpPathMessage implements Serializable {
+
     private String ipcid;
     private String timeStamp;
     private String date;

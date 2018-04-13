@@ -11,6 +11,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 
 public class DeviceServiceImpl implements DeviceService {
+
     private static Logger LOG = Logger.getLogger(DeviceServiceImpl.class);
 
     @Override

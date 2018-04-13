@@ -17,8 +17,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class CreateStaticRepoTable {
-    private static Logger LOG = Logger.getLogger(CreateStaticRepoTable.class);
 
+    private static Logger LOG = Logger.getLogger(CreateStaticRepoTable.class);
 
     public static void main(String[] args) {
         Properties tableProper = new Properties();

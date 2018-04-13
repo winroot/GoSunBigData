@@ -4,11 +4,11 @@ import org.apache.log4j.Logger;
 
 import java.sql.*;
 
-public class PhoenixJDBCHelper {
-    private Logger LOG = Logger.getLogger(PhoenixJDBCHelper.class);
+public class PhoenixJDBCFactory {
+    private Logger LOG = Logger.getLogger(PhoenixJDBCFactory.class);
     private static Connection conn;
 
-    private PhoenixJDBCHelper() {}
+    private PhoenixJDBCFactory() {}
     public static Connection getPhoenixJdbcConn() {
         if (conn == null) {
             initConnection();

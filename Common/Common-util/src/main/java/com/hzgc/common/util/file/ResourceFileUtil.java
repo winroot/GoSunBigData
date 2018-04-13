@@ -7,6 +7,7 @@ import java.io.File;
 import java.net.URL;
 
 public class ResourceFileUtil {
+
     private static Logger LOG = Logger.getLogger(ResourceFileUtil.class);
 
     public static File loadResourceFile(String resourceName) {

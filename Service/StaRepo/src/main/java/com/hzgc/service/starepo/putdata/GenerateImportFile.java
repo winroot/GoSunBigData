@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GenerateImportFile {
+
     private static List<String> importList = new ArrayList<>();
     private  static String sepator = "ZHONGXIAN";
+
     static {
         NativeFunction.init();
     }
+
     private static void findFile(String path, String addStr) {
         File filePath = new File(path);
         if (!filePath.exists()) {
@@ -56,6 +59,7 @@ public class GenerateImportFile {
             ps.close();
         }
     }
+
     public static void main(String[] args) throws Exception {
         if (args.length != 4) {
             System.out.println("[Parameter error] Please set the correct parameters for example \n" +

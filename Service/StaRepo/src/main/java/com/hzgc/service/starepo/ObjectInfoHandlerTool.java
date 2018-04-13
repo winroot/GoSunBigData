@@ -5,6 +5,7 @@ import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.dubbo.staticrepo.*;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.*;
@@ -13,7 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 class ObjectInfoHandlerTool {
-    private org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ObjectInfoHandlerTool.class);
+
+    private Logger LOG = Logger.getLogger(ObjectInfoHandlerTool.class);
+
     public void saveSearchRecord(Connection conn, ObjectSearchResult objectSearchResult) {
         if (objectSearchResult == null || objectSearchResult.getSearchStatus() == 1
                 || objectSearchResult.getFinalResults() == null || objectSearchResult.getFinalResults().size() == 0) {
@@ -51,7 +54,6 @@ class ObjectInfoHandlerTool {
             }
         }
     }
-
 
     public  PersonObject getPersonObjectFromResultSet(ResultSet resultSet) {
         PersonObject personObject = new PersonObject();

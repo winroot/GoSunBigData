@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class WarnRuleServiceImpl implements WarnRuleService {
+
     private static Logger LOG = Logger.getLogger(WarnRuleServiceImpl.class);
 
     /**

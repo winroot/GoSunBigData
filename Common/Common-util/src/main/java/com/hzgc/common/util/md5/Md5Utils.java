@@ -11,6 +11,7 @@ import java.security.MessageDigest;
  * 
  */
 public class Md5Utils {
+
 	private static String defoult_encoding = "UTF-8";
 	/** 16进制的字符数组 */
 	private final static String[] HEX_DIGITS = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d",

@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Properties;
 
 public class FtpAddressServiceImpl implements FtpAddressService, Serializable {
+
     private static Properties proper = FTPAddressProperties.getProps();
 
     @Override

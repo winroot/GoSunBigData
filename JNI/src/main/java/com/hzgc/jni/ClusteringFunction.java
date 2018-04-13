@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 
 public class ClusteringFunction implements Serializable {
+
     /**
      * permanent resident population calculate
      *

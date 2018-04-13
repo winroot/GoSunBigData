@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public class UuidUtil implements Serializable {
+
     private String uuid;
 
     public static String setUuid() {

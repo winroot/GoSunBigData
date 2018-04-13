@@ -9,8 +9,9 @@ import java.sql.SQLException;
 /**
  * JDBC工具类 乔凯峰（内）
  */
-public class JDBCFactory {
-    private static Logger LOG = Logger.getLogger(JDBCFactory.class);
+public class HiveJDBCFactory {
+
+    private static Logger LOG = Logger.getLogger(HiveJDBCFactory.class);
 
     /**
      * 获取数据库连接池连接

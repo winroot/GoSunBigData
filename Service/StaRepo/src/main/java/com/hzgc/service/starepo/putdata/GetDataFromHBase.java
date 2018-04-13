@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GetDataFromHBase {
+
     private static Logger LOG = Logger.getLogger(GetDataFromHBase.class);
 
     private static void getJson(String jsonFile, String photoFilePath) {

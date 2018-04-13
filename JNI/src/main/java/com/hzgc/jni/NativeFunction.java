@@ -3,6 +3,7 @@ package com.hzgc.jni;
 import java.io.Serializable;
 
 public class NativeFunction implements Serializable {
+
     /**
      * @param faceAttribute 人脸属性
      * @param data

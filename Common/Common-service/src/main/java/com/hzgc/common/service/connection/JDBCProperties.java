@@ -12,7 +12,9 @@ import java.io.Serializable;
 import java.util.Properties;
 
 public class JDBCProperties extends ProperHelper implements Serializable {
+
     private static Logger LOG = Logger.getLogger(JDBCProperties.class);
+
     private static Properties props = new Properties();
     private static String hiveJDBCURL;
     private static String phoenixJDBCURL;
