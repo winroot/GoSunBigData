@@ -12,9 +12,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Properties;
 
-public class FTPAddressProperHelper extends ProperHelper implements Serializable {
+public class FTPAddressProperties extends ProperHelper implements Serializable {
 
-    private static Logger LOG = Logger.getLogger(FTPAddressProperHelper.class);
+    private static Logger LOG = Logger.getLogger(FTPAddressProperties.class);
     private static Properties props = new Properties();
 
     private static String ip;

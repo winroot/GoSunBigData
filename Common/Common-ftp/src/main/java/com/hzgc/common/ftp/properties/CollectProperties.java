@@ -12,9 +12,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Properties;
 
-public class CollectProperHelper extends ProperHelper implements Serializable {
+public class CollectProperties extends ProperHelper implements Serializable {
     private static Logger LOG
-            = Logger.getLogger(CollectProperHelper.class);
+            = Logger.getLogger(CollectProperties.class);
     private static Properties props = new Properties();
 
     private static String logSize;

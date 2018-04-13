@@ -1,6 +1,6 @@
 package com.hzgc.common.ftp;
 
-import com.hzgc.common.ftp.properties.FTPAddressProperHelper;
+import com.hzgc.common.ftp.properties.FTPAddressProperties;
 import com.hzgc.common.util.empty.IsEmpty;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -124,7 +124,7 @@ public class FtpDownloadUtils {
             int ftpPort = Integer.parseInt(path.substring(0, path.indexOf("/")));
             String ftpFilePath = path.substring(path.indexOf("/"), path.lastIndexOf("/"));
             String ftpFileName = path.substring(path.lastIndexOf("/") + 1);
-            downloadFtpFile(ftpAddress, FTPAddressProperHelper.getUser(), FTPAddressProperHelper.getPassword(),
+            downloadFtpFile(ftpAddress, FTPAddressProperties.getUser(), FTPAddressProperties.getPassword(),
                     ftpPort, ftpFilePath, ftpFileName, localPath, localFileName);
         }
     }
@@ -150,7 +150,7 @@ public class FtpDownloadUtils {
 
             try {
                 //连接FTPClient并转移到FTP服务器目录
-                ftpClient = getFTPClient(ftpAddress, FTPAddressProperHelper.getUser(), FTPAddressProperHelper.getPassword(), ftpPort);
+                ftpClient = getFTPClient(ftpAddress, FTPAddressProperties.getUser(), FTPAddressProperties.getPassword(), ftpPort);
                 ftpClient.setControlEncoding("UTF-8"); // 中文支持
                 ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
                 ftpClient.enterLocalPassiveMode();

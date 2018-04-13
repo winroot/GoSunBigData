@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Properties;
 
-public class KafkaProperHelper extends ProperHelper implements Serializable {
-    private static Logger LOG = Logger.getLogger(KafkaProperHelper.class);
+public class KafkaProperties extends ProperHelper implements Serializable {
+    private static Logger LOG = Logger.getLogger(KafkaProperties.class);
     private static Properties props = new Properties();
 
     private static String bootstrapServers;

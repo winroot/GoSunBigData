@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Properties;
 
-public class RocketMQProperHelper extends ProperHelper implements Serializable {
-    private static Logger LOG = Logger.getLogger(RocketMQProperHelper.class);
+public class RocketMQProperties extends ProperHelper implements Serializable {
+    private static Logger LOG = Logger.getLogger(RocketMQProperties.class);
     private static Properties props = new Properties();
     private static String address;
     private static String topic;

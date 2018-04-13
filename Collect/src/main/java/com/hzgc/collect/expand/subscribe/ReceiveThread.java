@@ -1,6 +1,6 @@
 package com.hzgc.collect.expand.subscribe;
 
-import com.hzgc.common.ftp.properties.CollectProperHelper;
+import com.hzgc.common.ftp.properties.CollectProperties;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
@@ -18,13 +18,13 @@ public class ReceiveThread extends ReceiveIpcIds implements Serializable {
 
     public ReceiveThread() {
         ftpSubscriptionClient = new FtpSubscriptionClient(
-                Integer.valueOf(CollectProperHelper.getZookeeperSessionTimeout()),
-                CollectProperHelper.getZookeeperAddress(),
-                CollectProperHelper.getZookeeperPathSubscribe(),
-                Boolean.valueOf(CollectProperHelper.getZookeeperWatcher()));
+                Integer.valueOf(CollectProperties.getZookeeperSessionTimeout()),
+                CollectProperties.getZookeeperAddress(),
+                CollectProperties.getZookeeperPathSubscribe(),
+                Boolean.valueOf(CollectProperties.getZookeeperWatcher()));
         ftpSubscriptionClient.createConnection(
-                CollectProperHelper.getZookeeperAddress(),
-                Integer.valueOf(CollectProperHelper.getZookeeperSessionTimeout()));
+                CollectProperties.getZookeeperAddress(),
+                Integer.valueOf(CollectProperties.getZookeeperSessionTimeout()));
     }
 
     private boolean isInDate(String time) {
@@ -45,7 +45,7 @@ public class ReceiveThread extends ReceiveIpcIds implements Serializable {
                         Map<String, List<String>> map = map_ZKData.get(userId);
                         for (String time : map.keySet()) {
                             if (isInDate(time)) {
-                                ftpSubscriptionClient.delete(CollectProperHelper.getZookeeperPathSubscribe() + "/" + userId);
+                                ftpSubscriptionClient.delete(CollectProperties.getZookeeperPathSubscribe() + "/" + userId);
                             }
                         }
                     }
