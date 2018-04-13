@@ -22,7 +22,7 @@ public class KafkaProperHelper extends ProperHelper implements Serializable {
     private static String topicFeature;
 
     static {
-        String properName = "kafka.properties";
+        String properName = "kafka-producer.properties";
         FileInputStream in = null;
         try {
             File file = ResourceFileUtil.loadResourceFile(properName);
