@@ -1,6 +1,7 @@
 package com.hzgc.collect.expand.util;
 
 import com.hzgc.common.util.file.ResourceFileUtil;
+import com.hzgc.common.util.io.IOUtil;
 import com.hzgc.common.util.properties.ProperHelper;
 import org.apache.log4j.Logger;
 
@@ -38,13 +39,7 @@ public class KafkaProperHelper extends ProperHelper implements Serializable {
             e.printStackTrace();
             LOG.error("Catch an unknown error, can't load the configuration file" + properName);
         } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            IOUtil.closeStream(in);
         }
     }
 

@@ -1,13 +1,8 @@
 package com.hzgc.common.service.connection;
 
-import com.hzgc.common.util.file.ResourceFileUtil;
 import org.apache.log4j.Logger;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.*;
-import java.util.Properties;
 
 public class PhoenixJDBCHelper {
     private Logger LOG = Logger.getLogger(PhoenixJDBCHelper.class);
@@ -23,14 +18,7 @@ public class PhoenixJDBCHelper {
 
 
     private static void initConnection() {
-        File file = ResourceFileUtil.loadResourceFile("common_service_jdbc.properties");
-        Properties jdbcProp = new Properties();
-        try {
-            jdbcProp.load(new FileInputStream(file));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String phoenixJDBCURL = jdbcProp.getProperty("phoenixJDBCURL");
+        String phoenixJDBCURL = JDBCProperties.getPhoenixJDBCURL();
         try {
             Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
             conn = DriverManager.getConnection(phoenixJDBCURL);

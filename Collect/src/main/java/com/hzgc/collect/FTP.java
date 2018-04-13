@@ -5,7 +5,6 @@ import com.hzgc.collect.expand.merge.RecoverNotProData;
 import com.hzgc.collect.expand.merge.ScheRecoErrData;
 import com.hzgc.collect.expand.subscribe.*;
 import com.hzgc.common.ftp.properties.CollectProperHelper;
-import com.hzgc.collect.expand.util.HelperFactory;
 import com.hzgc.collect.ftp.ClusterOverFtp;
 import com.hzgc.collect.ftp.ConnectionConfigFactory;
 import com.hzgc.collect.ftp.FtpServer;
@@ -15,12 +14,13 @@ import com.hzgc.collect.ftp.nativefs.filesystem.NativeFileSystemFactory;
 import com.hzgc.collect.ftp.ftplet.FtpException;
 import com.hzgc.collect.ftp.listener.ListenerFactory;
 import com.hzgc.collect.ftp.usermanager.PropertiesUserManagerFactory;
-import com.hzgc.collect.ftp.util.LoggerConfig;
 import com.hzgc.common.util.file.ResourceFileUtil;
 import com.hzgc.jni.NativeFunction;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import java.io.Serializable;
+import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,12 +32,12 @@ public class FTP extends ClusterOverFtp implements Serializable {
     //expand模块的公共Conf对象
     private static CommonConf commonConf = new CommonConf();
 
-    /*
-      Set the dynamic log configuration file refresh time
-     */
     static {
-        new LoggerConfig();
-        HelperFactory.regist();
+        //Set the dynamic log configuration file refresh time
+        PropertyConfigurator.configureAndWatch(
+                ResourceFileUtil.loadResourceFile("log4j.properties").getAbsolutePath(), 10000);
+        LOG.info("Dynamic log configuration is successful! Log configuration file refresh time:" + 10000 + "ms");
+        //ftp capture subscription
         new FtpSwitch();
         FtpSubscriptionClient ftpSubscription = new FtpSubscriptionClient(
                 Integer.valueOf(CollectProperHelper.getZookeeperSessionTimeout()),
@@ -86,6 +86,8 @@ public class FTP extends ClusterOverFtp implements Serializable {
         FtpServer server = serverFactory.createServer();
         try {
             server.start();
+            Integer ftpPID = Integer.valueOf(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
+            pidMap.put(ftpPID, listenerPort);
         } catch (FtpException e) {
             e.printStackTrace();
         }

@@ -12,8 +12,8 @@ import java.util.List;
  */
 public class DeleteDataFromZookeeper extends ZookeeperClient {
     private static Logger LOG = Logger.getLogger(DeleteDataFromZookeeper.class);
-    private DeleteDataFromZookeeper(int session_timeout, String zookeeperAddress, String path, boolean watcher) {
-        super(session_timeout, zookeeperAddress, path, watcher);
+    private DeleteDataFromZookeeper(int session_timeout, String zookeeper_address, String path, boolean watcher) {
+        super(session_timeout, zookeeper_address, path, watcher);
     }
 
     private static void deleteData(String path) {
