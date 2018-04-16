@@ -1,7 +1,7 @@
 package com.hzgc.service.device;
 
 import com.hzgc.common.service.table.column.DeviceTable;
-import com.hzgc.common.util.string.StringUtil;
+import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.dubbo.device.DeviceService;
 import com.hzgc.common.service.connection.HBaseHelper;
 import org.apache.hadoop.hbase.client.Delete;
@@ -11,12 +11,13 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 
 public class DeviceServiceImpl implements DeviceService {
+
     private static Logger LOG = Logger.getLogger(DeviceServiceImpl.class);
 
     @Override
     public boolean bindDevice(String platformId, String ipcID, String notes) {
         Table table = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
-        if (StringUtil.strIsRight(ipcID) && StringUtil.strIsRight(platformId)) {
+        if (IsEmpty.strIsRight(ipcID) && IsEmpty.strIsRight(platformId)) {
             String ipcIDTrim = ipcID.trim();
             try {
                 Put put = new Put(Bytes.toBytes(ipcIDTrim));
@@ -40,7 +41,7 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public boolean unbindDevice(String platformId, String ipcID) {
         Table table = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
-        if (StringUtil.strIsRight(platformId) && StringUtil.strIsRight(ipcID)) {
+        if (IsEmpty.strIsRight(platformId) && IsEmpty.strIsRight(ipcID)) {
             String ipcIDTrim = ipcID.trim();
             try {
                 Delete delete = new Delete(Bytes.toBytes(ipcIDTrim));
@@ -64,7 +65,7 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public boolean renameNotes(String notes, String ipcID) {
         Table table = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
-        if (StringUtil.strIsRight(ipcID)) {
+        if (IsEmpty.strIsRight(ipcID)) {
             String ipcIDTrim = ipcID.trim();
             try {
                 Put put = new Put(Bytes.toBytes(ipcIDTrim));

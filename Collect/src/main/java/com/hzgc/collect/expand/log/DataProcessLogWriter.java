@@ -18,6 +18,7 @@ import java.nio.file.Paths;
  * @author Zhaozhe
  */
 public class DataProcessLogWriter extends AbstractLogWrite implements Serializable {
+
     private String errorLog;
 
     public DataProcessLogWriter(CommonConf conf, String queueID) {

@@ -1,6 +1,7 @@
 package com.hzgc.common.ftp;
 
-import com.hzgc.common.ftp.properties.RocketMQProperHelper;
+import com.hzgc.common.ftp.properties.RocketMQProperties;
+import com.hzgc.common.util.empty.IsEmpty;
 import org.apache.log4j.Logger;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.MessageQueueSelector;
@@ -12,19 +13,21 @@ import java.io.Serializable;
 import java.util.List;
 
 public class RocketMQProducer implements Serializable {
+
     private static Logger LOG = Logger.getLogger(RocketMQProducer.class);
+
     private static String topic;
     private static RocketMQProducer instance = null;
     private DefaultMQProducer producer;
 
     private RocketMQProducer() {
         try {
-            String namesrvAddr = RocketMQProperHelper.getAddress();
-            topic = RocketMQProperHelper.getTopic();
-            String producerGroup = RocketMQProperHelper.getGroup();
-            if (null != namesrvAddr && namesrvAddr.length() > 0 &&
-                    null != topic && topic.length() > 0 &&
-                    null != producerGroup && producerGroup.length() > 0) {
+            String namesrvAddr = RocketMQProperties.getAddress();
+            topic = RocketMQProperties.getTopic();
+            String producerGroup = RocketMQProperties.getGroup();
+            if (IsEmpty.strIsRight(namesrvAddr) &&
+                    IsEmpty.strIsRight(topic) &&
+                    IsEmpty.strIsRight(producerGroup)) {
                 producer = new DefaultMQProducer(producerGroup);
                 producer.setRetryTimesWhenSendFailed(4);
                 producer.setRetryAnotherBrokerWhenNotStoreOK(true);

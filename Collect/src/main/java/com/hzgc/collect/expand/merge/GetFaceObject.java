@@ -4,6 +4,7 @@ import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.common.ftp.faceobj.FaceObject;
 import com.hzgc.common.ftp.message.FtpPathMessage;
 import com.hzgc.common.ftp.FtpUtils;
+import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.dubbo.dynamicrepo.SearchType;
 import com.hzgc.jni.FaceAttribute;
@@ -14,11 +15,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 class GetFaceObject implements Serializable {
+
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     static FaceObject getFaceObject(String row) {
         FaceObject faceObject = null;
-        if (row != null && row.length() != 0) {
+        if (IsEmpty.strIsRight(row)) {
             LogEvent event = JSONUtil.toObject(row, LogEvent.class);
             // 路径中不包含/opt/ftpdata
             String portPath = event.getFtpPath();

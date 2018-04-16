@@ -1,6 +1,7 @@
 package com.hzgc.common.ftp.properties;
 
 import com.hzgc.common.util.file.ResourceFileUtil;
+import com.hzgc.common.util.io.IOUtil;
 import com.hzgc.common.util.properties.ProperHelper;
 import org.apache.log4j.Logger;
 
@@ -10,8 +11,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Properties;
 
-public class RocketMQProperHelper extends ProperHelper implements Serializable {
-    private static Logger LOG = Logger.getLogger(RocketMQProperHelper.class);
+public class RocketMQProperties extends ProperHelper implements Serializable {
+
+    private static Logger LOG = Logger.getLogger(RocketMQProperties.class);
+
     private static Properties props = new Properties();
     private static String address;
     private static String topic;
@@ -31,13 +34,7 @@ public class RocketMQProperHelper extends ProperHelper implements Serializable {
             e.printStackTrace();
             LOG.error("Catch an unknown error, can't load the configuration file" + properName);
         } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            IOUtil.closeStream(in);
         }
     }
 

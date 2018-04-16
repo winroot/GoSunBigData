@@ -17,7 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PutCriminalToHbase {
+
     private static Logger LOG = Logger.getLogger(PutDataToHBase.class);
+
     private static ObjectInfoHandlerImpl objectInfoHandler = new ObjectInfoHandlerImpl();
 
     public static void getPhotoName(String jsonFile, String photoPath) {

@@ -2,12 +2,14 @@ package com.hzgc.common.ftp;
 
 import com.hzgc.common.ftp.message.FtpPathMessage;
 import com.hzgc.common.ftp.message.FtpUrlMessage;
-import com.hzgc.common.ftp.properties.FTPAddressProperHelper;
+import com.hzgc.common.ftp.properties.FTPAddressProperties;
+import com.hzgc.common.util.empty.IsEmpty;
 import org.apache.log4j.Logger;
 
 import java.io.*;
 
 public final class FtpUtils implements Serializable {
+
     private static Logger LOG = Logger.getLogger(FtpUtils.class);
 
     public static boolean checkPort(int checkPort) throws Exception {
@@ -132,8 +134,8 @@ public final class FtpUtils implements Serializable {
      */
     public static String getFtpUrl(String ftpUrl) {
         String hostName = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
-        String ftpServerIP = FTPAddressProperHelper.getIpByHostName(hostName);
-        if (ftpServerIP != null && ftpServerIP.length() > 0) {
+        String ftpServerIP = FTPAddressProperties.getIpByHostName(hostName);
+        if (IsEmpty.strIsRight(ftpServerIP)) {
             return ftpUrl.replace(hostName, ftpServerIP);
         }
         return ftpUrl;

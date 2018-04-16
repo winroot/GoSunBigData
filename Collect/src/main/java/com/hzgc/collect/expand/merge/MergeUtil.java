@@ -1,6 +1,7 @@
 package com.hzgc.collect.expand.merge;
 
 import com.hzgc.collect.expand.log.LogEvent;
+import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import org.apache.log4j.Logger;
 
@@ -20,6 +21,7 @@ import java.util.regex.Pattern;
 public class MergeUtil implements Serializable {
 
     private Logger LOG = Logger.getLogger(MergeUtil.class);
+
     //系统换行符
     private String newLine = System.getProperty("line.separator");
     private static final String SUFFIX = ".log";
@@ -53,7 +55,7 @@ public class MergeUtil implements Serializable {
     List<String> listAllFileAbsPath(String path) {
         List<String> allFilePath = new ArrayList<>();
         try {
-            if (path != null && !Objects.equals(path, "")) {
+            if (IsEmpty.strIsRight(path)) {
                 //若传入的参数是一个目录
                 if (Files.isDirectory(Paths.get(path))) {
                     //用NIO对path目录下的文件进行递归遍历
@@ -85,7 +87,7 @@ public class MergeUtil implements Serializable {
     List<String> listAllErrorLogAbsPath(String path) {
         List<String> allErrorFilePath = new ArrayList<>();
         try {
-            if (path != null && !Objects.equals(path, "")) {
+            if (IsEmpty.strIsRight(path)) {
                 //若传入的参数是一个目录
                 if (Files.isDirectory(Paths.get(path))) {
                     //用NIO对path目录下的文件进行递归遍历
@@ -118,7 +120,7 @@ public class MergeUtil implements Serializable {
     List<String> listAllProcessLogAbsPath(String path) {
         List<String> allProcessLogPath = new ArrayList<>();
         try {
-            if (path != null && !Objects.equals(path, "")) {
+            if (IsEmpty.strIsRight(path)) {
                 //若传入的参数是一个目录
                 if (Files.isDirectory(Paths.get(path))) {
                     //用NIO对path目录下的文件进行递归遍历
@@ -151,7 +153,7 @@ public class MergeUtil implements Serializable {
         //writingLogFile：遍历时需要跳过的0000000.log文件
         List<String> allFileOfPath = new ArrayList<>();
         try {
-            if (path != null && !Objects.equals(path, "")) {
+            if (IsEmpty.strIsRight(path)) {
                 //若传入的参数是一个目录
                 if (Files.isDirectory(Paths.get(path))) {
                     //用NIO对path目录下的文件进行递归遍历
@@ -221,7 +223,7 @@ public class MergeUtil implements Serializable {
         if (filePaths != null) {
             for (String filePath : filePaths) {
                 //入参均不为空，再执行以下操作
-                if (filePath != null && !Objects.equals(filePath, "")) {
+                if (IsEmpty.strIsRight(filePath)) {
                     File file = new File(filePath);
                     //判断入参类型是文件的个数
                     if (file.isFile()) {
@@ -254,7 +256,7 @@ public class MergeUtil implements Serializable {
      */
 
     public void deleteFile(String path) {
-        if (path != null && !Objects.equals(path, "")) {
+        if (IsEmpty.strIsRight(path)) {
             deleteFile(new File(path));
         }
     }
@@ -307,7 +309,7 @@ public class MergeUtil implements Serializable {
      * @param mergeFilePath 要写入的文件绝对路径
      */
     void writeMergeFile(LogEvent event, String mergeFilePath) {
-        if (mergeFilePath != null && !Objects.equals(mergeFilePath, "")) {
+        if (IsEmpty.strIsRight(mergeFilePath)) {
             FileWriter fw = null;
             File mergeFile = new File(mergeFilePath);
             //获取入参文件绝对路径的父目录
@@ -348,9 +350,7 @@ public class MergeUtil implements Serializable {
      * @param destinationFile 目标文件绝对路径
      */
     void moveFile(String sourceFile, String destinationFile) {
-        if (sourceFile != null && destinationFile != null
-                && !Objects.equals(sourceFile, "")
-                && !Objects.equals(destinationFile, "")) {
+        if (IsEmpty.strIsRight(sourceFile) && IsEmpty.strIsRight(destinationFile)) {
             //判断源文件是否存在、是否是文件
             if (new File(sourceFile).exists() && new File(sourceFile).isFile()) {
                 try {
@@ -378,9 +378,7 @@ public class MergeUtil implements Serializable {
      * @param destinationFile 目标文件
      */
     void copyFile(String sourceFile, String destinationFile) {
-        if (sourceFile != null && destinationFile != null
-                && !Objects.equals(sourceFile, "")
-                && !Objects.equals(destinationFile, "")) {
+        if (IsEmpty.strIsRight(sourceFile) && IsEmpty.strIsRight(destinationFile)) {
             //判断源文件是否存在、是否是文件
             if (new File(sourceFile).exists() && new File(sourceFile).isFile()) {
                 try {
@@ -409,7 +407,7 @@ public class MergeUtil implements Serializable {
      */
     String getRecFilePathFromProFile(String processFilePath) {
         String receiveFilePath = "";
-        if (processFilePath != null && !Objects.equals(processFilePath, "")) {
+        if (IsEmpty.strIsRight(processFilePath)) {
             File file = new File(processFilePath);
             if (file.isFile() && processFilePath.contains("process" + File.separator + "process-")) {
                 receiveFilePath = processFilePath.replace("process" + File.separator + "process-",
@@ -429,7 +427,7 @@ public class MergeUtil implements Serializable {
      */
     String getErrFilePathFromProFile(String processFilePath) {
         String errorFilePath = "";
-        if (processFilePath != null && !Objects.equals(processFilePath, "")) {
+        if (IsEmpty.strIsRight(processFilePath)) {
             File file = new File(processFilePath);
             if (file.isFile() && processFilePath.contains("process" + File.separator + "process-")) {
                 //获取process日志路径的父目录：/ftp/data/process/p-0/
@@ -454,7 +452,7 @@ public class MergeUtil implements Serializable {
      */
     String getMergeFilePath(String file) {
         String mergeFilePath = "";
-        if (file != null && !Objects.equals(file, "")) {
+        if (IsEmpty.strIsRight(file)) {
             if (new File(file).isFile()) {
                 String subStrEnd;
                 //如果是receive日志
@@ -493,7 +491,7 @@ public class MergeUtil implements Serializable {
      */
     String getSuccessFilePath(String datafile) {
         String successFilePath = "";
-        if (datafile != null && !Objects.equals(datafile, "")) {
+        if (IsEmpty.strIsRight(datafile)) {
             File file = new File(datafile);
             if (file.isFile() && datafile.contains("data" + File.separator)) {
                 //替换data文件路径中的“data”字串为success，得到初步的没有日期的目录：
@@ -548,8 +546,7 @@ public class MergeUtil implements Serializable {
         FileChannel toFileChannel = null;
 
         //判断入参不为空，是一个文件。
-        if (sourceFilePath != null && !Objects.equals(sourceFilePath, "")
-                && targetFilePath != null && !Objects.equals(targetFilePath, "")) {
+        if (IsEmpty.strIsRight(sourceFilePath) && IsEmpty.strIsRight(targetFilePath)) {
             File sourceFile = new File(sourceFilePath);
             File targetFile = new File(targetFilePath);
 

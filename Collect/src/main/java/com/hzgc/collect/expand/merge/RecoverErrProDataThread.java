@@ -4,7 +4,8 @@ import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.common.ftp.faceobj.FaceObject;
 import com.hzgc.collect.expand.util.ProducerKafka;
-import com.hzgc.collect.expand.util.KafkaProperHelper;
+import com.hzgc.collect.expand.util.KafkaProperties;
+import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import org.apache.log4j.Logger;
 
@@ -36,9 +37,10 @@ import java.util.List;
 public class RecoverErrProDataThread implements Runnable, Serializable {
 
     private Logger LOG = Logger.getLogger(RecoverErrProDataThread.class);
+
     private static final String SUFFIX = ".log";
     private static CommonConf commonConf;
-    private String feature = KafkaProperHelper.getTopicFeature();
+    private String feature = KafkaProperties.getTopicFeature();
 
     //构造函数
     RecoverErrProDataThread(CommonConf commonConf) {
@@ -69,14 +71,14 @@ public class RecoverErrProDataThread implements Runnable, Serializable {
         //获取merge/error下所有error日记文件的绝对路径，放入一个List中（errLogPaths）
         List<String> errFilePaths = mergeUtil.listAllFileAbsPath(mergeErrLogDir);
         //若errLogPaths这个list不为空（merge/error下有错误日志）
-        if (errFilePaths != null && errFilePaths.size() != 0) { // V-1 if start
+        if (IsEmpty.listIsRight(errFilePaths)) { // V-1 if start
             //对于每一个error.log
             for (String errorFilePath : errFilePaths) {
                 ProducerKafka kafkaProducer = ProducerKafka.getInstance();
                 //获取其中每一行数据
                 List<String> errorRows = mergeUtil.getAllContentFromFile(errorFilePath);
                 //判断errorRows是否为空，若不为空，则需要处理出错数据
-                if (errorRows != null && errorRows.size() != 0) { // V-2 if start
+                if (IsEmpty.listIsRight(errorRows)) { // V-2 if start
                     for (String row : errorRows) {
                         //用JSONHelper将某行数据转化为LogEvent格式
                         LogEvent event = JSONUtil.toObject(row, LogEvent.class);

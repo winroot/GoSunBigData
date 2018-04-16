@@ -1,16 +1,17 @@
 package com.hzgc.common.util.file;
 
-import com.hzgc.common.util.string.StringUtil;
+import com.hzgc.common.util.empty.IsEmpty;
 import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.net.URL;
 
 public class ResourceFileUtil {
+
     private static Logger LOG = Logger.getLogger(ResourceFileUtil.class);
 
     public static File loadResourceFile(String resourceName) {
-        if (StringUtil.strIsRight(resourceName)) {
+        if (IsEmpty.strIsRight(resourceName)) {
             URL url = ClassLoader.getSystemResource(resourceName);
             if (url != null) {
                 File file = new File(url.getPath());

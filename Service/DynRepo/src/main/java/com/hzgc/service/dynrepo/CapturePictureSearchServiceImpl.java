@@ -22,6 +22,7 @@ import java.util.Objects;
  * 以图搜图接口实现类，内含四个方法（外）（彭聪）
  */
 public class CapturePictureSearchServiceImpl implements CapturePictureSearchService {
+
     private static Logger LOG = Logger.getLogger(CapturePictureSearchServiceImpl.class);
 
     static {

@@ -2,7 +2,7 @@ package com.hzgc.service.device;
 
 import com.hzgc.common.service.table.column.DeviceTable;
 import com.hzgc.common.util.object.ObjectUtil;
-import com.hzgc.common.util.string.StringUtil;
+import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.dubbo.device.WarnRule;
 import com.hzgc.dubbo.device.WarnRuleService;
 import com.hzgc.common.service.connection.HBaseHelper;
@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class WarnRuleServiceImpl implements WarnRuleService {
+
     private static Logger LOG = Logger.getLogger(WarnRuleServiceImpl.class);
 
     /**
@@ -134,7 +135,7 @@ public class WarnRuleServiceImpl implements WarnRuleService {
     public List<WarnRule> getCompareRules(String ipcID) {
         List<WarnRule> reply = new ArrayList<>();
         Table table = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
-        if (StringUtil.strIsRight(ipcID)) {
+        if (IsEmpty.strIsRight(ipcID)) {
             try {
                 Get get = new Get(Bytes.toBytes(ipcID));
                 Result result = table.get(get);

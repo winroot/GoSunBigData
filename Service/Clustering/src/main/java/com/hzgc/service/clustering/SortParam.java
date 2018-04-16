@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 public class SortParam implements Serializable {
+
     /**
      * 排序参数名称
      */

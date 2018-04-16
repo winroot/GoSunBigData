@@ -1,26 +1,22 @@
 package com.hzgc.service.address;
 
-import com.hzgc.common.ftp.properties.CollectProperHelper;
-import com.hzgc.common.util.file.ResourceFileUtil;
-import com.hzgc.common.util.io.IOUtil;
+import com.hzgc.common.ftp.properties.CollectProperties;
 import com.hzgc.common.util.zookeeper.ZookeeperClient;
 import com.hzgc.dubbo.address.FtpSubscription;
 import org.apache.log4j.Logger;
 
-import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Properties;
 
 public class FtpSubscriptionImpl implements FtpSubscription, Serializable {
-    private static Logger LOG = Logger.getLogger(FtpSubscriptionImpl.class);
+
     private ZookeeperClient zookeeperClient;
-    private String zk_path_subscribe = CollectProperHelper.getZookeeperPathSubscribe();
+    private String zk_path_subscribe = CollectProperties.getZookeeperPathSubscribe();
 
     public FtpSubscriptionImpl() {
-        int session_timeout = Integer.valueOf(CollectProperHelper.getZookeeperSessionTimeout());
-        String zk_address = CollectProperHelper.getZookeeperAddress();
-        boolean zk_watcher = Boolean.valueOf(CollectProperHelper.getZookeeperWatcher());
+        int session_timeout = Integer.valueOf(CollectProperties.getZookeeperSessionTimeout());
+        String zk_address = CollectProperties.getZookeeperAddress();
+        boolean zk_watcher = Boolean.valueOf(CollectProperties.getZookeeperWatcher());
         zookeeperClient = new ZookeeperClient(session_timeout, zk_address, zk_path_subscribe, zk_watcher);
     }
 

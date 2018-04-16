@@ -1,5 +1,7 @@
 package com.hzgc.collect.expand.subscribe;
 
+import com.hzgc.common.util.empty.IsEmpty;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +46,11 @@ public class ReceiveIpcIds implements Serializable {
         List<String> ipcIdList = new ArrayList<>();
         if (!map.isEmpty()) {
             for (String userId : map.keySet()) {
-                if (userId != null && !userId.equals("")) {
+                if (IsEmpty.strIsRight(userId)) {
                     Map<String, List<String>> map1 = map.get(userId);
                     if (!map1.isEmpty()) {
                         for (String time : map1.keySet()) {
-                            if (time != null && !time.equals("")) {
+                            if (IsEmpty.strIsRight(time)) {
                                 ipcIdList.addAll(map1.get(time));
                             }
                         }

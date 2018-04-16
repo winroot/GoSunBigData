@@ -6,6 +6,7 @@ import org.apache.kafka.common.serialization.Serializer;
 import java.util.Map;
 
 public class FaceObjectEncoder implements Serializer<FaceObject> {
+
     @Override
     public void configure(Map<String, ?> map, boolean b) {
 

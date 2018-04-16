@@ -17,8 +17,11 @@ import java.io.IOException;
 import java.util.*;
 
 public class PutDataToHBase {
+
     private static Logger LOG = Logger.getLogger(PutDataToHBase.class);
+
     private ObjectInfoHandlerImpl objectInfoHandler = new ObjectInfoHandlerImpl();
+
     private static Map<String,byte[]> getPhotoName(String jsonFile, String photoPath){
         String path = photoPath;
         File f = new File(path);

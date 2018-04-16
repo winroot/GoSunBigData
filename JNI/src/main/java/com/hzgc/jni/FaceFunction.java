@@ -6,6 +6,7 @@ import java.io.*;
 import java.math.BigDecimal;
 
 public class FaceFunction {
+
     private static final String SPLIT = ":";
 
     public static byte[] getPictureBytes(String picPath) {

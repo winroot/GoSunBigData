@@ -240,7 +240,7 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare</outputDirectory>
         </fileSet>
-        <!--cluster目录-->
+        <!--spark目录-->
         <fileSet>
             <directory>../Cluster/Spark/target/spark-${project.parent.version}</directory>
             <includes>
@@ -252,11 +252,18 @@
             <outputDirectory>RealTimeFaceCompare/spark</outputDirectory>
         </fileSet>
 
-        <!--collect目录-->
+        <!--ftp目录-->
         <fileSet>
             <directory>../Collect/target/collect-${project.parent.version}</directory>
             <includes>
                 <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/ftp</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Common/Common-ftp/target/common-ftp-${project.parent.version}</directory>
+            <includes>
+                <include>conf/**</include>
             </includes>
             <outputDirectory>RealTimeFaceCompare/ftp</outputDirectory>
         </fileSet>
@@ -267,6 +274,9 @@
             <includes>
                 <include>**</include>
             </includes>
+            <excludes>
+                <exclude>conf/**</exclude>
+            </excludes>
             <outputDirectory>RealTimeFaceCompare/common/ftp</outputDirectory>
         </fileSet>
         <fileSet>
@@ -274,6 +284,9 @@
             <includes>
                 <include>**</include>
             </includes>
+            <excludes>
+                <exclude>conf/**</exclude>
+            </excludes>
             <outputDirectory>RealTimeFaceCompare/common/service</outputDirectory>
         </fileSet>
         <fileSet>
@@ -281,6 +294,9 @@
             <includes>
                 <include>**</include>
             </includes>
+            <excludes>
+                <exclude>conf/**</exclude>
+            </excludes>
             <outputDirectory>RealTimeFaceCompare/common/util</outputDirectory>
         </fileSet>
         <!--项目公共jar包-->
@@ -290,7 +306,7 @@
             <includes>
                 <include>spark-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
         <!--BigDataApi模块jar包-->
         <fileSet>
@@ -298,7 +314,7 @@
             <includes>
                 <include>bigdata-api-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
         <!--Collect模块jar包-->
         <fileSet>
@@ -306,7 +322,7 @@
             <includes>
                 <include>collect-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
         <!--Common模块jar包-->
         <fileSet>
@@ -314,21 +330,21 @@
             <includes>
                 <include>common-ftp-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Common/Common-service/target</directory>
             <includes>
                 <include>common-service-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Common/Common-util/target</directory>
             <includes>
                 <include>common-util-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
         <!--JNI模块jar包-->
         <fileSet>
@@ -336,7 +352,7 @@
             <includes>
                 <include>jni-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
         <!--Service模块jar包-->
         <fileSet>
@@ -344,52 +360,59 @@
             <includes>
                 <include>address-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Alarm/target</directory>
             <includes>
                 <include>alarm-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Clustering/target</directory>
             <includes>
                 <include>clustering-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Device/target</directory>
             <includes>
                 <include>device-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/DynRepo/target</directory>
             <includes>
                 <include>dynrepo-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Face/target</directory>
             <includes>
                 <include>face-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/StaRepo/target</directory>
             <includes>
                 <include>starepo-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/common/lib</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
 
         <!--service目录-->
+        <fileSet>
+            <directory>../Common/Common-service/target/common-service-${project.parent.version}</directory>
+            <includes>
+                <include>conf/**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service</outputDirectory>
+        </fileSet>
         <fileSet>
             <directory>../Service/Address/target/address-${project.parent.version}</directory>
             <includes>
@@ -432,9 +455,6 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare/service/starepo</outputDirectory>
         </fileSet>
-
-
-
 
     </fileSets>
 </assembly>

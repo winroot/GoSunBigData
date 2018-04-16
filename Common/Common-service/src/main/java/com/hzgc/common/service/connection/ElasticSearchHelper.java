@@ -1,41 +1,28 @@
 package com.hzgc.common.service.connection;
 
-import com.hzgc.common.util.file.ResourceFileUtil;
 import org.apache.log4j.Logger;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Properties;
 
 public class ElasticSearchHelper implements Serializable{
+
     private static Logger LOG = Logger.getLogger(ElasticSearchHelper.class);
+
     private static TransportClient client = null;
 
     /**
      * 初始化Es 集群信息
      */
     private static void initElasticSearchClient() {
-        // 从外部读取Es集群配置信息
-        Properties properties_es_config = new Properties();
-        try {
-            File file = ResourceFileUtil.loadResourceFile("common_service_es.properties");
-            if (file != null) {
-                properties_es_config.load(new FileInputStream(file));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String es_cluster = properties_es_config.getProperty("es.cluster.name");
-        String es_hosts = properties_es_config.getProperty("es.hosts").trim();
-        Integer es_port = Integer.parseInt(properties_es_config.getProperty("es.cluster.port"));
+        String es_cluster = ElasticSearchProperties.getEs_cluster_name();
+        String es_hosts = ElasticSearchProperties.getEs_hosts().trim();
+        Integer es_port = Integer.parseInt(ElasticSearchProperties.getEs_cluster_port());
         // 初始化配置文件
         Settings settings = Settings.builder().put("cluster.name", es_cluster)
                 .put("client.transport.sniff", true).build();

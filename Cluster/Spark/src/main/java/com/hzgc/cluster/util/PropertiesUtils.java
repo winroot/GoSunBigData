@@ -1,6 +1,7 @@
 package com.hzgc.cluster.util;
 
 import com.hzgc.common.util.file.ResourceFileUtil;
+import com.hzgc.common.util.empty.IsEmpty;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -11,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class PropertiesUtils implements Serializable {
+
     public static Integer getSimilarity(Map<String, Integer> map) {
         for (String key : map.keySet()) {
             if (map.get(key) != null) {
@@ -64,7 +66,7 @@ public class PropertiesUtils implements Serializable {
     public static List<String> getOffLineArarmObjType(Map map) {
         List<String> list = new ArrayList<String>();
         for (Object s : map.keySet()) {
-            if (map.get(s) != null && map.get(s).toString().length() > 0) {
+            if (IsEmpty.strIsRight(map.get(s).toString())) {
                 list.add(s.toString());
             }
         }

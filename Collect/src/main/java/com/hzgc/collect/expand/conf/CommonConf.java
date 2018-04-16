@@ -1,6 +1,6 @@
 package com.hzgc.collect.expand.conf;
 
-import com.hzgc.common.ftp.properties.CollectProperHelper;
+import com.hzgc.common.ftp.properties.CollectProperties;
 
 import java.io.Serializable;
 
@@ -58,14 +58,14 @@ public class CommonConf implements Serializable {
      */
     public CommonConf() {
         //HelperFactory.regist();
-        this.logSize = CollectProperHelper.getLogSize();
-        this.capacity = CollectProperHelper.getReceiveQueueCapacity();
-        this.receiveLogDir = CollectProperHelper.getReceiveLogDir();
-        this.processLogDir = CollectProperHelper.getProcessLogDir();
-        this.receiveNumber = CollectProperHelper.getReceiveNumber();
-        this.successLogDir = CollectProperHelper.getSuccessLogDir();
-        this.mergeLogDir = CollectProperHelper.getMergeLogDir();
-        this.mergeScanTime = CollectProperHelper.getMergeScanTime();
+        this.logSize = CollectProperties.getLogSize();
+        this.capacity = CollectProperties.getReceiveQueueCapacity();
+        this.receiveLogDir = CollectProperties.getReceiveLogDir();
+        this.processLogDir = CollectProperties.getProcessLogDir();
+        this.receiveNumber = CollectProperties.getReceiveNumber();
+        this.successLogDir = CollectProperties.getSuccessLogDir();
+        this.mergeLogDir = CollectProperties.getMergeLogDir();
+        this.mergeScanTime = CollectProperties.getMergeScanTime();
     }
 
     /**

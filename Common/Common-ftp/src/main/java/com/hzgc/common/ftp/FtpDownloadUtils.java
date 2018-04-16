@@ -1,7 +1,7 @@
 package com.hzgc.common.ftp;
 
-import com.hzgc.common.util.file.ResourceFileUtil;
-import com.hzgc.common.util.io.IOUtil;
+import com.hzgc.common.ftp.properties.FTPAddressProperties;
+import com.hzgc.common.util.empty.IsEmpty;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPClientConfig;
@@ -10,8 +10,6 @@ import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.SocketException;
-import java.util.Properties;
-
 
 /**
  * ftpClient文件下载
@@ -119,33 +117,15 @@ public class FtpDownloadUtils {
      * @param localFileName 下载到本地的文件名称
      */
     public static void downloadFtpFile(String ftpUrl, String localPath, String localFileName) {
-        if (ftpUrl != null && ftpUrl.length() > 0 &&
-                localPath != null && localPath.length() > 0 &&
-                localFileName != null && localFileName.length() > 0) {
+        if (IsEmpty.strIsRight(ftpUrl) && IsEmpty.strIsRight(localPath) && IsEmpty.strIsRight(localFileName)) {
             //解析FTP地址，得到ftpAddress、ftpPort、ftpFilePath、ftpFileName
             String ftpAddress = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
             String path = ftpUrl.substring(ftpUrl.lastIndexOf(":") + 1);
             int ftpPort = Integer.parseInt(path.substring(0, path.indexOf("/")));
             String ftpFilePath = path.substring(path.indexOf("/"), path.lastIndexOf("/"));
             String ftpFileName = path.substring(path.lastIndexOf("/") + 1);
-
-            //通过ftpAddress.properties配置文件，ftpUserName、ftpPassword
-            String ftpUserName = "";
-            String ftpPassword = "";
-            Properties properties = new Properties();
-            InputStream inputStream = null;
-            try {
-                inputStream = new BufferedInputStream(new FileInputStream(ResourceFileUtil.loadResourceFile("ftpAddress.properties")));
-                properties.load(inputStream);
-                ftpUserName = properties.getProperty("user");
-                ftpPassword = properties.getProperty("password");
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                IOUtil.closeStream(inputStream);
-            }
-
-            downloadFtpFile(ftpAddress, ftpUserName, ftpPassword, ftpPort, ftpFilePath, ftpFileName, localPath, localFileName);
+            downloadFtpFile(ftpAddress, FTPAddressProperties.getUser(), FTPAddressProperties.getPassword(),
+                    ftpPort, ftpFilePath, ftpFileName, localPath, localFileName);
         }
     }
 
@@ -157,7 +137,7 @@ public class FtpDownloadUtils {
      */
     public static byte[] downloadftpFile2Bytes(String ftpUrl) {
         byte[] ftpFileBytes = null;
-        if (ftpUrl != null && ftpUrl.length() > 0) {
+        if (IsEmpty.strIsRight(ftpUrl)) {
             //解析FTP地址，得到ftpAddress、ftpPort、ftpFilePath、ftpFileName
             String ftpAddress = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
             String path = ftpUrl.substring(ftpUrl.lastIndexOf(":") + 1);
@@ -165,28 +145,12 @@ public class FtpDownloadUtils {
             String ftpFilePath = path.substring(path.indexOf("/"), path.lastIndexOf("/"));
             String ftpFileName = path.substring(path.lastIndexOf("/") + 1);
 
-            //通过ftpAddress.properties配置文件，ftpUserName、ftpPassword
-            String ftpUserName = "";
-            String ftpPassword = "";
-            Properties properties = new Properties();
-            InputStream inputStream = null;
-            try {
-                inputStream = new BufferedInputStream(new FileInputStream(ResourceFileUtil.loadResourceFile("ftpAddress.properties")));
-                properties.load(inputStream);
-                ftpUserName = properties.getProperty("user");
-                ftpPassword = properties.getProperty("password");
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                IOUtil.closeStream(inputStream);
-            }
-
             FTPClient ftpClient;
             InputStream in;
 
             try {
                 //连接FTPClient并转移到FTP服务器目录
-                ftpClient = getFTPClient(ftpAddress, ftpUserName, ftpPassword, ftpPort);
+                ftpClient = getFTPClient(ftpAddress, FTPAddressProperties.getUser(), FTPAddressProperties.getPassword(), ftpPort);
                 ftpClient.setControlEncoding("UTF-8"); // 中文支持
                 ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
                 ftpClient.enterLocalPassiveMode();
@@ -361,6 +325,5 @@ public class FtpDownloadUtils {
         } else {
             LOG.error("upload file successfule");
         }
-
     }
 }

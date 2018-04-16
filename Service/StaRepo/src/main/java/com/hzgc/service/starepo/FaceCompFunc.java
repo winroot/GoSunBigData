@@ -18,6 +18,7 @@ import java.util.List;
         @FunctionParseNode.Argument(allowedTypes = {PVarchar.class})})
 
 public class FaceCompFunc extends ScalarFunction {
+
     public static final String NAME = "FACECOMP";
 
     private List<float[]> thePassfeatures = new ArrayList<>();

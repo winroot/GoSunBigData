@@ -9,12 +9,14 @@ import org.apache.log4j.Logger;
 import java.io.Serializable;
 
 public class ProducerKafka implements Serializable {
+
     private static Logger LOG = Logger.getLogger(ProducerKafka.class);
+
     public static ProducerKafka instance;
     private static KafkaProducer<String, FaceObject> kafkaProducer;
 
     private ProducerKafka() {
-        kafkaProducer = new KafkaProducer<>(KafkaProperHelper.getProps());
+        kafkaProducer = new KafkaProducer<>(KafkaProperties.getProps());
         LOG.info("Create ProducerKafka successfully!");
     }
 

@@ -12,7 +12,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class ReceiverImpl implements Receiver, Serializable {
+
     private static Logger LOG = Logger.getLogger(ReceiverImpl.class);
+
     private BlockingQueue<LogEvent> queue;
     private LogWriter receiveWriter;
     private String queueID;

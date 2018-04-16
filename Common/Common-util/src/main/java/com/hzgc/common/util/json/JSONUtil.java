@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JSONUtil {
+
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public static String toJson(Object o) {

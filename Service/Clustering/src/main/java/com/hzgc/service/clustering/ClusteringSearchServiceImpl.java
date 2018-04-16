@@ -2,13 +2,13 @@ package com.hzgc.service.clustering;
 
 import com.hzgc.common.service.table.column.ClusteringTable;
 import com.hzgc.common.service.table.column.DynamicTable;
+import com.hzgc.common.service.connection.ElasticSearchHelper;
+import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.dubbo.clustering.AlarmInfo;
 import com.hzgc.dubbo.clustering.ClusteringAttribute;
 import com.hzgc.dubbo.clustering.ClusteringInfo;
 import com.hzgc.dubbo.clustering.ClusteringSearchService;
-import com.hzgc.common.service.connection.ElasticSearchHelper;
-import com.hzgc.common.service.connection.HBaseHelper;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
@@ -31,7 +31,9 @@ import java.util.List;
  * 告警聚类结果查询接口实现(彭聪)
  */
 public class ClusteringSearchServiceImpl implements ClusteringSearchService {
+
     private static Logger LOG = Logger.getLogger(ClusteringSearchServiceImpl.class);
+
     private static final String IGNORE_FLAG_YES = "yes";
     private static final String IGNORE_FLAG_NO = "no";
 

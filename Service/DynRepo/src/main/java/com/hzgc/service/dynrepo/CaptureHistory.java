@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class CaptureHistory {
+
     private static Logger LOG = Logger.getLogger(CaptureHistory.class);
 
     static {
