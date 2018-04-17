@@ -1,5 +1,6 @@
 package com.hzgc.service.device;
 
+import com.alibaba.fastjson.JSON;
 import com.hzgc.common.service.table.column.DeviceTable;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.common.util.empty.IsEmpty;
@@ -25,17 +26,17 @@ public class WarnRuleServiceImpl implements WarnRuleService {
     public Map<String, Boolean> configRules(List<String> ipcIDs, List<WarnRule> rules) {
         //从Hbase读device表
         Table deviceTable = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
-        //初始化设备布控预案对象
+        //初始化设备布控预案对象Map<告警类型，Map<对象类型，阈值>>
         Map<Integer, Map<String, Integer>> commonRule = new HashMap<>();
-        //初始化离线告警对象
+        //初始化离线告警对象Map<对象类型，Map<设备ID，离线天数>>
         Map<String, Map<String, Integer>> offlineMap = new HashMap<>();
         List<Put> putList = new ArrayList<>();
         //reply表示：是否添加成功
         Map<String, Boolean> reply = new HashMap<>();
 
         // 把传进来的rules：List<WarnRule> rules转化为commonRule：Map<Integer, Map<String, Integer>>格式
-        parseDeviceRule(rules, ipcIDs, commonRule);
-        byte[] commonRuleBytes = ObjectUtil.objectToByte(commonRule);
+        String jsonString = parseDeviceRule(rules, ipcIDs, commonRule);
+        byte[] commonRuleBytes = ObjectUtil.objectToByte(jsonString);
         for (String ipcID : ipcIDs) {
             //“以传入的设备ID为行键，device为列族，告警类型w为列，commonRuleBytes为值”，的Put对象添加到putList列表
             Put put = new Put(Bytes.toBytes(ipcID));
@@ -51,6 +52,7 @@ public class WarnRuleServiceImpl implements WarnRuleService {
         try {
             //把putList列表添加到表device表中
             deviceTable.put(putList);
+            LOG.info("configRules are " + jsonString);
             //config模式下，把离线告警offlineMap对象插入到device表中
             configOfflineWarn(offlineMap, deviceTable);
         } catch (IOException e) {
@@ -73,8 +75,8 @@ public class WarnRuleServiceImpl implements WarnRuleService {
         Map<String, Boolean> reply = new HashMap<>();
 
         //把传进来的rules：List<WarnRule> rules转化为commonRule：Map<Integer, Map<String, Integer>>格式
-        parseDeviceRule(rules, ipcIDs, commonRule);
-        byte[] commonRuleBytes = ObjectUtil.objectToByte(commonRule);
+        String commonRuleString = parseDeviceRule(rules, ipcIDs, commonRule);
+        byte[] commonRuleBytes = ObjectUtil.objectToByte(commonRuleString);
         for (String ipcID : ipcIDs) {
             Put put = new Put(Bytes.toBytes(ipcID));
             put.addColumn(DeviceTable.CF_DEVICE, DeviceTable.WARN, commonRuleBytes);
@@ -92,9 +94,12 @@ public class WarnRuleServiceImpl implements WarnRuleService {
                 Result result = deviceTable.get(get);
                 //若device表中的值不为空
                 if (!result.isEmpty()) {
-                    Map<Integer, Map<String, Integer>> tempMap =
+                    String tempMapStr =
                             //告警类型      对象类型,阈值
                             deSerializDevice(result.getValue(DeviceTable.CF_DEVICE, DeviceTable.WARN));
+                    //json字符串转化成对象
+                    Map<Integer, Map<String, Integer>> map = new HashMap <>();
+                    Map<Integer, Map<String, Integer>> tempMap = JSON.parseObject(tempMapStr,map.getClass());
                     //对于每一种告警类型：
                     for (Integer code : commonRule.keySet()) {
                         //若device表中存在这种告警类型
@@ -109,8 +114,10 @@ public class WarnRuleServiceImpl implements WarnRuleService {
                         }
                     }
                     Put put = new Put(Bytes.toBytes(ipcID));
-                    put.addColumn(DeviceTable.CF_DEVICE, DeviceTable.WARN, ObjectUtil.objectToByte(tempMap));
+                    String tempMapString = JSON.toJSONString(tempMap);
+                    put.addColumn(DeviceTable.CF_DEVICE, DeviceTable.WARN, ObjectUtil.objectToByte(tempMapString));
                     putList.add(put);
+                    LOG.info("addRules are " + tempMapString);
                 } else {
                     //若device表中的值为空，直接添加
                     Put put = new Put(Bytes.toBytes(ipcID));
@@ -120,6 +127,7 @@ public class WarnRuleServiceImpl implements WarnRuleService {
             }
             deviceTable.put(putList);
             configOfflineWarn(offlineMap, deviceTable);
+            LOG.info("addRules are " + commonRuleString);
         } catch (IOException e) {
             LOG.error(e.getMessage());
         } finally {
@@ -144,7 +152,9 @@ public class WarnRuleServiceImpl implements WarnRuleService {
                     //获取告警列中的值
                     byte[] deviceByte = result.getValue(DeviceTable.CF_DEVICE, DeviceTable.WARN);
                     //并转化为Map嵌套格式（反序列化）
-                    Map<Integer, Map<String, Integer>> deviceMap = deSerializDevice(deviceByte);
+                    String deviceMapStr = deSerializDevice(deviceByte);
+                    Map<Integer, Map<String, Integer>> map = new HashMap <>();
+                    Map<Integer, Map<String, Integer>> deviceMap = JSON.parseObject(deviceMapStr,map.getClass());
                     /*
                      * 设备布控预案数据类型Map<Integer, Map<String, Integer>>    （即deviceMap）
                      *                                     告警类型,      对象类型,阈值
@@ -213,8 +223,10 @@ public class WarnRuleServiceImpl implements WarnRuleService {
                 //若离线告警数据非空
                 if (!offlineResult.isEmpty()) {
                     //将离线告警数据反序列化
-                    Map<String, Map<String, Integer>> offlineMap =
+                    String offlineStr =
                             deSerializOffLine(offlineResult.getValue(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL));
+                    Map<String, Map<String, Integer>> map = new HashMap <>();
+                    Map<String, Map<String, Integer>> offlineMap = JSON.parseObject(offlineStr,map.getClass());
                     /*
                      * offlineMap：Map<String, Map<String, Integer>>
                      *                      对象类型      设备ID,离线天数
@@ -229,8 +241,10 @@ public class WarnRuleServiceImpl implements WarnRuleService {
                     }
                     //把删除后的离线告警数据存入device表中
                     Put offlinePut = new Put(DeviceTable.OFFLINERK);
-                    offlinePut.addColumn(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL, ObjectUtil.objectToByte(offlineMap));
+                    String offline = JSON.toJSONString(offlineMap);
+                    offlinePut.addColumn(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL, ObjectUtil.objectToByte(offline));
                     deviceTable.put(offlinePut);
+                    LOG.info("delete rule is " + offline);
                 }
 
                 deviceTable.delete(deviceDelList);
@@ -271,14 +285,17 @@ public class WarnRuleServiceImpl implements WarnRuleService {
      */
     private void configOfflineWarn(Map<String, Map<String, Integer>> offlineMap, Table deviceTable) {
         try {
+            String offlineString = null;
             Get offlinGet = new Get(DeviceTable.OFFLINERK);
             //获取device表中offlineWarnRowKey行键对应的数据
             Result offlineResult = deviceTable.get(offlinGet);
             //若device表中offlineWarnRowKey行键对应的数据offlineResult非空（value中有值）
             if (!offlineResult.isEmpty()) {
                 //反序列化该值类型（转化为Object）
-                Map<String, Map<String, Integer>> tempMap = deSerializOffLine(offlineResult.
+                String tempMapStr = deSerializOffLine(offlineResult.
                         getValue(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL));
+                Map<String, Map<String, Integer>> map = new HashMap <>();
+                Map<String, Map<String, Integer>> tempMap = JSON.parseObject(tempMapStr,map.getClass());
                 //对于离线告警offlineMap中的每个对象类型
                 for (String type : offlineMap.keySet()) {
                     //假如Hbase数据库中的device表中包含离线告警offlineMap的对象类型
@@ -297,15 +314,17 @@ public class WarnRuleServiceImpl implements WarnRuleService {
                     }
                 }
                 Put offlinePut = new Put(DeviceTable.OFFLINERK);
-                offlinePut.addColumn(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL, ObjectUtil.objectToByte(tempMap));
+                offlineString = JSON.toJSONString(offlineMap);
+                offlinePut.addColumn(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL, ObjectUtil.objectToByte(offlineString));
                 deviceTable.put(offlinePut);
             } else {
                 //若hbase的device表中offlineWarnRowKey行键对应的数据为空，直接把offlineMap的值加入到device表
                 Put offlinePut = new Put(DeviceTable.OFFLINERK);
-                offlinePut.addColumn(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL, ObjectUtil.objectToByte(offlineMap));
+                offlineString = JSON.toJSONString(offlineMap);
+                offlinePut.addColumn(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL, ObjectUtil.objectToByte(offlineString));
                 deviceTable.put(offlinePut);
             }
-
+            LOG.info("configRules are " + offlineString);
         } catch (IOException e) {
             LOG.error(e.getMessage());
         }
@@ -317,7 +336,7 @@ public class WarnRuleServiceImpl implements WarnRuleService {
      * 把传进来的rules：List<WarnRule> rules转化为commonRule：Map<Integer, Map<String, Integer>>格式
      */
 
-    private void parseDeviceRule(List<WarnRule> rules,
+    private String parseDeviceRule(List<WarnRule> rules,
                                  List<String> ipcIDs,
                                  Map<Integer, Map<String, Integer>> commonRule) {
         //判断：规则不为空，设备ID不为空
@@ -359,6 +378,7 @@ public class WarnRuleServiceImpl implements WarnRuleService {
                 }
             }
         }
+        return JSON.toJSONString(commonRule);
     }
 
 
@@ -397,9 +417,9 @@ public class WarnRuleServiceImpl implements WarnRuleService {
      * 设备布控预案数据类型：Map<Integer, Map<String, Integer>>（内部方法）
      * 反序列化此数据类型
      */
-    private Map<Integer, Map<String, Integer>> deSerializDevice(byte[] bytes) {
+    private String deSerializDevice(byte[] bytes) {
         if (bytes != null) {
-            return (Map<Integer, Map<String, Integer>>) ObjectUtil.byteToObject(bytes);
+            return (String) ObjectUtil.byteToObject(bytes);
         }
         return null;
     }
@@ -408,9 +428,9 @@ public class WarnRuleServiceImpl implements WarnRuleService {
      * 离线告警数据类型：Map<String, Map<String, Integer>>（内部方法）
      * 反序列化此数据类型
      */
-    private Map<String, Map<String, Integer>> deSerializOffLine(byte[] bytes) {
+    private String deSerializOffLine(byte[] bytes) {
         if (bytes != null) {
-            return (Map<String, Map<String, Integer>>) ObjectUtil.byteToObject(bytes);
+            return (String) ObjectUtil.byteToObject(bytes);
         }
         return null;
     }
