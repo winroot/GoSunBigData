@@ -1,11 +1,13 @@
-package com.hzgc.service.face;
+package com.hzgc.service.face.impl;
 
 import com.hzgc.dubbo.feature.FaceExtract;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
 import com.hzgc.jni.NativeFunction;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FaceExtractImpl implements FaceExtract {
 
     private static Logger LOG = Logger.getLogger(FaceExtractImpl.class);
