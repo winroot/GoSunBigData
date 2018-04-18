@@ -4,7 +4,7 @@ import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
 import com.hzgc.dubbo.feature.FaceExtract;
 import com.hzgc.jni.FaceAttribute;
-import com.hzgc.service.face.vo.ImageData;
+import com.hzgc.service.face.vo.ImageDataVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +29,9 @@ public class FaceController {
 
     //特征值获取
     @RequestMapping(value = BigDataPath.FEATURE_EXTRACT,method = RequestMethod.POST)
-    public ResponseResult<ImageData> featureExtract(MultipartFile image) throws IOException {
-        ResponseResult<ImageData> response = ResponseResult.ok();
-        ImageData imageData = new ImageData();
+    public ResponseResult<ImageDataVo> featureExtract(MultipartFile image) throws IOException {
+        ResponseResult<ImageDataVo> response = ResponseResult.ok();
+        ImageDataVo imageData = new ImageDataVo();
         byte[] pictureBody = null;
         FaceAttribute faceAttribute = null;
 
