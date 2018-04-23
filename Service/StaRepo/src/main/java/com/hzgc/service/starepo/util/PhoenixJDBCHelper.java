@@ -1,5 +1,6 @@
 package com.hzgc.service.starepo.util;
 
+import com.hzgc.common.util.file.ResourceFileUtil;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -43,7 +44,7 @@ public class PhoenixJDBCHelper {
     }
 
     private void initConnection() {
-        File file = FileUtil.loadResourceFile("jdbc.properties");
+        File file = ResourceFileUtil.loadResourceFile("jdbc.properties");
         Properties jdbcProp = new Properties();
         try {
             jdbcProp.load(new FileInputStream(file));

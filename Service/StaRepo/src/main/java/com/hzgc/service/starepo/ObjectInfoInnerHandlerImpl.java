@@ -1,7 +1,7 @@
 package com.hzgc.service.starepo;
 
+import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.dubbo.staticrepo.ObjectInfoTable;
-import com.hzgc.service.starepo.util.HBaseHelper;
 import com.hzgc.service.starepo.util.PhoenixJDBCHelper;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Result;

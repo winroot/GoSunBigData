@@ -1,9 +1,9 @@
 package com.hzgc.service.starepo.createtable;
 
+import com.hzgc.common.service.connection.HBaseHelper;
+import com.hzgc.common.util.file.ResourceFileUtil;
+import com.hzgc.common.util.io.IOUtil;
 import com.hzgc.dubbo.staticrepo.ObjectInfoTable;
-import com.hzgc.service.starepo.util.FileUtil;
-import com.hzgc.service.starepo.util.HBaseHelper;
-import com.hzgc.service.starepo.util.IOUtil;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Table;
@@ -24,7 +24,7 @@ public class CreateStaticRepoTable {
         Properties tableProper = new Properties();
         InputStream inputStream = null;
         try {
-            File file = FileUtil.loadResourceFile("static-table.properties");
+            File file = ResourceFileUtil.loadResourceFile("static-table.properties");
             if (file == null){
                 return;
             }
