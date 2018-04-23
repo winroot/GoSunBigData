@@ -1,4 +1,4 @@
-package com.hzgc.service.device;
+package com.hzgc.service.device.impl;
 
 import com.hzgc.common.service.table.column.DeviceTable;
 import com.hzgc.common.util.empty.IsEmpty;
@@ -9,7 +9,9 @@ import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DeviceServiceImpl implements DeviceService {
 
     private static Logger LOG = Logger.getLogger(DeviceServiceImpl.class);
