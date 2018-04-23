@@ -1,22 +1,21 @@
 package com.hzgc.service.starepo;
 
-import com.hzgc.common.service.connection.HBaseHelper;
-import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.dubbo.staticrepo.*;
+import com.hzgc.service.starepo.util.HBaseHelper;
+import com.hzgc.service.starepo.util.ObjectUtil;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.*;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 class ObjectInfoHandlerTool {
-
-    private Logger LOG = Logger.getLogger(ObjectInfoHandlerTool.class);
-
+    private org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ObjectInfoHandlerTool.class);
     public void saveSearchRecord(Connection conn, ObjectSearchResult objectSearchResult) {
         if (objectSearchResult == null || objectSearchResult.getSearchStatus() == 1
                 || objectSearchResult.getFinalResults() == null || objectSearchResult.getFinalResults().size() == 0) {
@@ -27,7 +26,7 @@ class ObjectInfoHandlerTool {
 
         PreparedStatement pstm;
         String sql = "upsert into " + SearchRecordTable.TABLE_NAME + "(" + SearchRecordTable.ID
-                + ", " +SearchRecordTable.RESULT + ", " + SearchRecordTable.RECORDDATE + ") values(?,?,?)";
+                + ", " + SearchRecordTable.RESULT + ", " + SearchRecordTable.RECORDDATE + ") values(?,?,?)";
         if (conn != null) {
             try{
                 for (PersonSingleResult personSingleResult : personSingleResults) {
@@ -55,7 +54,8 @@ class ObjectInfoHandlerTool {
         }
     }
 
-    public  PersonObject getPersonObjectFromResultSet(ResultSet resultSet) {
+
+    public PersonObject getPersonObjectFromResultSet(ResultSet resultSet) {
         PersonObject personObject = new PersonObject();
         try {
             while (resultSet.next()) {
@@ -126,7 +126,7 @@ class ObjectInfoHandlerTool {
      * @param searchByPics
      * @return personSingelResult
      */
-    PersonSingleResult getPersonSingleResult(PersonSingleResult personSingleResult, ResultSet resultSet, boolean searchByPics) {
+     PersonSingleResult getPersonSingleResult(PersonSingleResult personSingleResult, ResultSet resultSet, boolean searchByPics) {
         List<PersonObject> personObjects = new ArrayList<>();
         try {
             while (resultSet.next()) {
@@ -145,6 +145,7 @@ class ObjectInfoHandlerTool {
                 personObject.setTag(resultSet.getString(ObjectInfoTable.TAG));
                 personObject.setImportant(resultSet.getInt(ObjectInfoTable.IMPORTANT));
                 personObject.setStatus(resultSet.getInt(ObjectInfoTable.STATUS));
+                personObject.setLocation(resultSet.getString(ObjectInfoTable.LOCATION));
                 if (searchByPics) {
                     personObject.setSim(resultSet.getFloat(ObjectInfoTable.RELATED));
                 }
@@ -224,6 +225,76 @@ class ObjectInfoHandlerTool {
             objectinfo.put(putOfTNums);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 对结果进行排序
+     * @param personObjects 最终返回的一个人员列表
+     * @param staticSortParams 排序参数
+     */
+    public void sortPersonObject(List<PersonObject> personObjects, List<StaticSortParam> staticSortParams) {
+        if (staticSortParams != null) {
+            if (staticSortParams.contains(StaticSortParam.RELATEDDESC)) {
+                Collections.sort(personObjects, new Comparator<PersonObject>() {
+                    @Override
+                    public int compare(PersonObject o1, PersonObject o2) {
+                        float sim1 = o1.getSim();
+                        float sim2 = o2.getSim();
+                        return Float.compare(sim2, sim1);
+                    }
+                });
+            }
+            if (staticSortParams.contains(StaticSortParam.RELATEDASC)) {
+                Collections.sort(personObjects, new Comparator<PersonObject>() {
+                    @Override
+                    public int compare(PersonObject o1, PersonObject o2) {
+                        float sim1 = o1.getSim();
+                        float sim2 = o2.getSim();
+                        return Float.compare(sim1, sim2);
+                    }
+                });
+            }
+            if (staticSortParams.contains(StaticSortParam.IMPORTANTASC)) {
+                Collections.sort(personObjects, new Comparator<PersonObject>() {
+                    @Override
+                    public int compare(PersonObject o1, PersonObject o2) {
+                        int important1 = o1.getImportant();
+                        int important2 = o2.getImportant();
+                        return Integer.compare(important1, important2);
+                    }
+                });
+            }
+            if (staticSortParams.contains(StaticSortParam.IMPORTANTDESC)) {
+                Collections.sort(personObjects, new Comparator<PersonObject>() {
+                    @Override
+                    public int compare(PersonObject o1, PersonObject o2) {
+                        int important1 = o1.getImportant();
+                        int important2 = o2.getImportant();
+                        return Integer.compare(important2, important1);
+                    }
+                });
+            }
+            if (staticSortParams.contains(StaticSortParam.TIMEASC)) {
+                Collections.sort(personObjects, new Comparator<PersonObject>() {
+                    @Override
+                    public int compare(PersonObject o1, PersonObject o2) {
+                        Timestamp timestamp1 = o1.getCreatetime();
+                        Timestamp timestamp2 = o2.getCreatetime();
+                        return Long.compare(timestamp1.getTime(), timestamp2.getTime());
+                    }
+                });
+            }
+            if (staticSortParams.contains(StaticSortParam.TIMEDESC)) {
+                Collections.sort(personObjects, new Comparator<PersonObject>() {
+                    @Override
+                    public int compare(PersonObject o1, PersonObject o2) {
+                        Timestamp timestamp1 = o1.getCreatetime();
+                        Timestamp timestamp2 = o2.getCreatetime();
+                        return Long.compare(timestamp2.getTime(), timestamp1.getTime());
+                    }
+                });
+            }
         }
     }
 
