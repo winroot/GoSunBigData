@@ -1,8 +1,12 @@
 package com.hzgc.service.dynrepo.service;
 
-import com.hzgc.dubbo.attribute.Attribute;
-import com.hzgc.dubbo.attribute.AttributeCount;
-import com.hzgc.dubbo.dynamicrepo.*;
+import com.hzgc.common.util.searchtype.SearchType;
+import com.hzgc.service.dynrepo.attribute.Attribute;
+import com.hzgc.service.dynrepo.attribute.AttributeCount;
+import com.hzgc.service.dynrepo.object.CaptureCount;
+import com.hzgc.service.dynrepo.object.SearchOption;
+import com.hzgc.service.dynrepo.object.SearchResult;
+import com.hzgc.service.dynrepo.object.SearchResultOption;
 
 import java.util.List;
 

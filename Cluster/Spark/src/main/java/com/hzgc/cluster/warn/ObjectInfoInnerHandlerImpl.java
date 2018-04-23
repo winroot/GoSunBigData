@@ -2,7 +2,7 @@ package com.hzgc.cluster.warn;
 
 import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.common.service.connection.PhoenixJDBCFactory;
-import com.hzgc.dubbo.staticrepo.ObjectInfoTable;
+import com.hzgc.common.service.table.column.ObjectInfoTable;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Table;

@@ -1,6 +1,6 @@
 package com.hzgc.service.clustering.dto;
 
-import com.hzgc.dubbo.clustering.AlarmInfo;
+import com.hzgc.common.service.clustering.AlarmInfo;
 import com.hzgc.service.clustering.service.ClusteringInfo;
 
 import java.util.List;

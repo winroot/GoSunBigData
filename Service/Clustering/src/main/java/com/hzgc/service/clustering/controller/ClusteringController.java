@@ -2,7 +2,7 @@ package com.hzgc.service.clustering.controller;
 
 import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
-import com.hzgc.dubbo.clustering.AlarmInfo;
+import com.hzgc.common.service.clustering.AlarmInfo;
 import com.hzgc.service.clustering.service.ClusteringInfo;
 import com.hzgc.service.clustering.dto.ClusteringSearchDTO;
 import com.hzgc.service.clustering.service.ClusteringSearchServiceImpl;

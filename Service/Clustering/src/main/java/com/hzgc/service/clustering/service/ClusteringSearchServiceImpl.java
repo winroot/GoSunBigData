@@ -1,12 +1,12 @@
 package com.hzgc.service.clustering.service;
 
+import com.hzgc.common.service.clustering.AlarmInfo;
+import com.hzgc.common.service.clustering.ClusteringAttribute;
 import com.hzgc.common.service.table.column.ClusteringTable;
 import com.hzgc.common.service.table.column.DynamicTable;
 import com.hzgc.common.service.connection.ElasticSearchHelper;
 import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.common.util.object.ObjectUtil;
-import com.hzgc.dubbo.clustering.AlarmInfo;
-import com.hzgc.dubbo.clustering.ClusteringAttribute;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;

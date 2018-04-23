@@ -1,6 +1,9 @@
 package com.hzgc.service.starepo.service;
 
-import com.hzgc.dubbo.staticrepo.*;
+import com.hzgc.common.service.table.column.ObjectInfoTable;
+import com.hzgc.service.starepo.object.PrisonCountResult;
+import com.hzgc.service.starepo.object.PrisonCountResults;
+import com.hzgc.service.starepo.object.PrisonSearchOpts;
 import com.hzgc.service.starepo.util.PhoenixJDBCHelper;
 import org.apache.log4j.Logger;
 

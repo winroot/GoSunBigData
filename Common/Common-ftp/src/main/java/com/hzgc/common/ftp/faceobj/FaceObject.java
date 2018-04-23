@@ -1,6 +1,6 @@
 package com.hzgc.common.ftp.faceobj;
 
-import com.hzgc.dubbo.dynamicrepo.SearchType;
+import com.hzgc.common.util.searchtype.SearchType;
 import com.hzgc.jni.FaceAttribute;
 
 import java.io.Serializable;

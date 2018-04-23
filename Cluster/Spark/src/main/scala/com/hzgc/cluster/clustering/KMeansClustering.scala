@@ -7,7 +7,7 @@ import java.util.{Calendar, Date, Properties, UUID}
 
 import com.hzgc.cluster.consumer.PutDataToEs
 import com.hzgc.cluster.util.PropertiesUtils
-import com.hzgc.dubbo.clustering.ClusteringAttribute
+import com.hzgc.common.service.clustering.ClusteringAttribute
 import edu.berkeley.cs.amplab.spark.indexedrdd.IndexedRDD
 import edu.berkeley.cs.amplab.spark.indexedrdd.IndexedRDD._
 import org.apache.log4j.Logger

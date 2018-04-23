@@ -11,7 +11,7 @@ import com.hzgc.common.ftp.Sharpness;
 import com.hzgc.common.ftp.faceobj.FaceObject;
 import com.hzgc.common.ftp.message.FtpPathMessage;
 import com.hzgc.common.ftp.properties.CollectProperties;
-import com.hzgc.dubbo.dynamicrepo.SearchType;
+import com.hzgc.common.util.searchtype.SearchType;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
 

@@ -2,8 +2,9 @@ package com.hzgc.service.dynrepo.service;
 
 import com.hzgc.common.ftp.FtpUtils;
 import com.hzgc.common.service.table.column.DynamicTable;
-import com.hzgc.dubbo.dynamicrepo.*;
+import com.hzgc.common.util.searchtype.SearchType;
 import com.hzgc.common.service.connection.HiveJDBCFactory;
+import com.hzgc.service.dynrepo.object.*;
 import org.apache.log4j.Logger;
 
 import java.sql.*;

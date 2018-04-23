@@ -1,7 +1,6 @@
 package com.hzgc.service.clustering.service;
 
-
-import com.hzgc.dubbo.clustering.ClusteringAttribute;
+import com.hzgc.common.service.clustering.ClusteringAttribute;
 
 import java.io.Serializable;
 import java.util.List;

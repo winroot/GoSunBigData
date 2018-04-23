@@ -1,8 +1,9 @@
 package com.hzgc.service.starepo.service;
 
+import com.hzgc.common.service.table.column.ObjectInfoTable;
 import com.hzgc.common.util.object.ObjectUtil;
-import com.hzgc.dubbo.staticrepo.*;
 import com.hzgc.jni.FaceAttribute;
+import com.hzgc.service.starepo.object.*;
 import com.hzgc.service.starepo.util.PhoenixJDBCHelper;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;

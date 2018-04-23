@@ -1,6 +1,5 @@
 package com.hzgc.cluster.warn;
 
-import com.hzgc.common.service.device.DeviceUtil;
 import com.hzgc.common.service.table.column.DeviceTable;
 import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.common.util.object.ObjectUtil;
@@ -14,9 +13,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 
-public class DeviceUtilImpl implements DeviceUtil, Serializable {
+public class DeviceUtilImpl implements Serializable {
 
-    @Override
     public String getplatfromID(String ipcID) {
         Table table = null;
         if (IsEmpty.strIsRight(ipcID)) {
@@ -36,7 +34,6 @@ public class DeviceUtilImpl implements DeviceUtil, Serializable {
         return "";
     }
 
-    @Override
     public Map<Integer, Map<String, Integer>> isWarnTypeBinding(String ipcID) {
         Table table = null;
         if (IsEmpty.strIsRight(ipcID)) {
@@ -59,7 +56,6 @@ public class DeviceUtilImpl implements DeviceUtil, Serializable {
         return null;
     }
 
-    @Override
     public Map<String, Map<String, Integer>> getThreshold() {
         try {
             Table table = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);

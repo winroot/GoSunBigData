@@ -1,8 +1,8 @@
 package com.hzgc.service.starepo.service;
 
-import com.hzgc.dubbo.staticrepo.ObjectSearchResult;
-import com.hzgc.dubbo.staticrepo.PSearchArgsModel;
-import com.hzgc.dubbo.staticrepo.SearchRecordOpts;
+import com.hzgc.service.starepo.object.ObjectSearchResult;
+import com.hzgc.service.starepo.object.PSearchArgsModel;
+import com.hzgc.service.starepo.object.SearchRecordOpts;
 
 import java.util.List;
 import java.util.Map;
