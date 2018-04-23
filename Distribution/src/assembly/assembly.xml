@@ -308,14 +308,6 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
-        <!--BigDataApi模块jar包-->
-        <fileSet>
-            <directory>../BigDataApi/target</directory>
-            <includes>
-                <include>bigdata-api-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
         <!--Collect模块jar包-->
         <fileSet>
             <directory>../Collect/target</directory>

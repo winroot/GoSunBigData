@@ -2,9 +2,9 @@ package com.hzgc.service.starepo.controller;
 
 import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
-import com.hzgc.dubbo.staticrepo.ObjectSearchResult;
-import com.hzgc.dubbo.staticrepo.PSearchArgsModel;
-import com.hzgc.dubbo.staticrepo.SearchRecordOpts;
+import com.hzgc.service.starepo.object.ObjectSearchResult;
+import com.hzgc.service.starepo.object.PSearchArgsModel;
+import com.hzgc.service.starepo.object.SearchRecordOpts;
 import com.hzgc.service.starepo.service.ObjectInfoHandlerImpl;
 import com.hzgc.service.starepo.vo.ObjectInfoHandlerVO;
 import org.springframework.beans.factory.annotation.Autowired;

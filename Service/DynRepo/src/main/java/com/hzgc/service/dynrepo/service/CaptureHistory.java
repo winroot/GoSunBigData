@@ -1,11 +1,12 @@
 package com.hzgc.service.dynrepo.service;
 
 import com.hzgc.common.ftp.FtpUtils;
+import com.hzgc.common.util.searchtype.SearchType;
 import com.hzgc.common.service.table.column.DynamicTable;
-import com.hzgc.dubbo.attribute.Attribute;
-import com.hzgc.dubbo.attribute.AttributeValue;
-import com.hzgc.dubbo.dynamicrepo.*;
 import com.hzgc.common.service.connection.ElasticSearchHelper;
+import com.hzgc.service.dynrepo.attribute.Attribute;
+import com.hzgc.service.dynrepo.attribute.AttributeValue;
+import com.hzgc.service.dynrepo.object.*;
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;

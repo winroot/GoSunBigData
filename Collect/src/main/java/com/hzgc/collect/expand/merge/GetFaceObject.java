@@ -6,7 +6,7 @@ import com.hzgc.common.ftp.message.FtpPathMessage;
 import com.hzgc.common.ftp.FtpUtils;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.dubbo.dynamicrepo.SearchType;
+import com.hzgc.common.util.searchtype.SearchType;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
 

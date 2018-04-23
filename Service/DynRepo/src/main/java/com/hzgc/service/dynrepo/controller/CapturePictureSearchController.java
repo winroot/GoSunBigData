@@ -2,9 +2,13 @@ package com.hzgc.service.dynrepo.controller;
 
 import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
-import com.hzgc.dubbo.attribute.Attribute;
-import com.hzgc.dubbo.attribute.AttributeCount;
-import com.hzgc.dubbo.dynamicrepo.*;
+import com.hzgc.common.util.searchtype.SearchType;
+import com.hzgc.service.dynrepo.attribute.Attribute;
+import com.hzgc.service.dynrepo.attribute.AttributeCount;
+import com.hzgc.service.dynrepo.object.CaptureCount;
+import com.hzgc.service.dynrepo.object.SearchOption;
+import com.hzgc.service.dynrepo.object.SearchResult;
+import com.hzgc.service.dynrepo.object.SearchResultOption;
 import com.hzgc.service.dynrepo.service.CapturePictureSearchServiceImpl;
 import com.hzgc.service.dynrepo.vo.CapturePictureSearchVO;
 import org.springframework.beans.factory.annotation.Autowired;

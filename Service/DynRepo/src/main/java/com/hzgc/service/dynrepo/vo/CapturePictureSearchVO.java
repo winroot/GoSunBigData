@@ -1,8 +1,8 @@
 package com.hzgc.service.dynrepo.vo;
 
-import com.hzgc.dubbo.dynamicrepo.SearchOption;
-import com.hzgc.dubbo.dynamicrepo.SearchResultOption;
-import com.hzgc.dubbo.dynamicrepo.SearchType;
+import com.hzgc.service.dynrepo.object.SearchOption;
+import com.hzgc.service.dynrepo.object.SearchResultOption;
+import com.hzgc.common.util.searchtype.SearchType;
 
 import java.util.List;
 

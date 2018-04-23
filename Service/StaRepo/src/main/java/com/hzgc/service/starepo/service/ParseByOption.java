@@ -1,10 +1,10 @@
 package com.hzgc.service.starepo.service;
 
-import com.hzgc.dubbo.staticrepo.ObjectInfoTable;
-import com.hzgc.dubbo.staticrepo.PSearchArgsModel;
-import com.hzgc.dubbo.staticrepo.StaticSortParam;
+import com.hzgc.common.service.table.column.ObjectInfoTable;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
+import com.hzgc.service.starepo.object.PSearchArgsModel;
+import com.hzgc.service.starepo.object.StaticSortParam;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;

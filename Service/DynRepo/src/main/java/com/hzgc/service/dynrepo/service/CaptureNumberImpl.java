@@ -1,7 +1,7 @@
 package com.hzgc.service.dynrepo.service;
 
 import com.hzgc.common.service.table.column.DynamicTable;
-import com.hzgc.dubbo.staticrepo.ObjectInfoTable;
+import com.hzgc.common.service.table.column.ObjectInfoTable;
 import com.hzgc.common.service.connection.ElasticSearchHelper;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;

@@ -2,10 +2,11 @@ package com.hzgc.service.dynrepo.service;
 
 import com.hzgc.common.service.table.column.DynamicTable;
 import com.hzgc.common.util.uuid.UuidUtil;
-import com.hzgc.dubbo.attribute.*;
-import com.hzgc.dubbo.dynamicrepo.*;
+import com.hzgc.common.util.searchtype.SearchType;
+import com.hzgc.service.dynrepo.attribute.*;
 import com.hzgc.common.service.connection.ElasticSearchHelper;
 import com.hzgc.common.service.connection.HBaseHelper;
+import com.hzgc.service.dynrepo.object.*;
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;

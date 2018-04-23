@@ -19,7 +19,6 @@
         <module>Collect</module>
         <module>Common</module>
         <module>JNI</module>
-        <module>BigDataApi</module>
         <module>Distribution</module>
     </modules>
 
