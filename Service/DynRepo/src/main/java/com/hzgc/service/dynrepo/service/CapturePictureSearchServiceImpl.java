@@ -13,6 +13,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.Objects;
 /**
  * 以图搜图接口实现类，内含四个方法（外）（彭聪）
  */
+@Service
 public class CapturePictureSearchServiceImpl implements CapturePictureSearchService {
 
     private static Logger LOG = Logger.getLogger(CapturePictureSearchServiceImpl.class);

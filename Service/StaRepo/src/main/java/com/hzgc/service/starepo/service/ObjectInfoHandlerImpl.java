@@ -5,6 +5,7 @@ import com.hzgc.jni.FaceAttribute;
 import com.hzgc.service.starepo.util.ObjectUtil;
 import com.hzgc.service.starepo.util.PhoenixJDBCHelper;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
 
     private static Logger LOG = Logger.getLogger(ObjectInfoHandlerImpl.class);

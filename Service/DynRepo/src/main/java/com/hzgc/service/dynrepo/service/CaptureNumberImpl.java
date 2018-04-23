@@ -14,6 +14,7 @@ import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
+import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -26,6 +27,7 @@ import java.util.*;
  * 2、staticNumberService：查询es的静态库，返回每个平台下（对应platformId），每个对象库（对应pkey）下的人员的数量
  * 3、timeSoltNumber：根据入参ipcid的list、startTime和endTime去es查询到相应的值
  */
+@Service
 public class CaptureNumberImpl implements CaptureNumberService {
 
     /**
