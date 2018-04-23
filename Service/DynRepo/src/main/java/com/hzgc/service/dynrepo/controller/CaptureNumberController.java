@@ -14,13 +14,13 @@ import java.util.Map;
 
 @RestController
 @FeignClient(name = "dynRepo")
-@RequestMapping(value = BigDataPath.DYNREPO_CAPTURENUM)
+@RequestMapping(value = BigDataPath.CAPTURENUM)
 public class CaptureNumberController {
 
     @Autowired
     private CaptureNumberImpl captureNumberService;
 
-    @RequestMapping(value = BigDataPath.DYNREPO_CAPTURENUM_SEARCHDYNREPO)
+    @RequestMapping(value = BigDataPath.CAPTURENUM_SEARCHDYNREPO)
     public ResponseResult dynaicNumberService(CaptureNumberVO captureNumberVO) {
         List<String> ipcIdList;
         if (captureNumberVO != null){
@@ -32,7 +32,7 @@ public class CaptureNumberController {
         return ResponseResult.init(count);
     }
 
-    @RequestMapping(value = BigDataPath.DYNREPO_CAPTURENUM_SEARCHSTAREPO)
+    @RequestMapping(value = BigDataPath.CAPTURENUM_SEARCHSTAREPO)
     public ResponseResult staticNumberService(CaptureNumberVO captureNumberVO) {
         String platformId;
         if (captureNumberVO != null){
@@ -44,7 +44,7 @@ public class CaptureNumberController {
         return ResponseResult.init(count);
     }
 
-    @RequestMapping(value = BigDataPath.DYNREPO_CAPTURENUM_FILTER)
+    @RequestMapping(value = BigDataPath.CAPTURENUM_FILTER)
     public ResponseResult timeSoltNumber(CaptureNumberVO captureNumberVO) {
         List<String> ipcIdList;
         String startTime;

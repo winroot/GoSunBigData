@@ -27,6 +27,7 @@ public class BigDataPath {
     public static final String DEVICE_BIND = "/bindDevice";
     public static final String DEVICE_UNBIND = "/unbindDevice";
     public static final String DEVICE_RENAMENOTES = "/renameNotes";
+
     public static final String WARNRULE = "/warnRule";
     public static final String WARNRULE_CONFIG = "/configRules";
     public static final String WARNRULE_ADD = "/addRules";
@@ -38,18 +39,19 @@ public class BigDataPath {
     /**
      * DynRepo模块请求路径
      */
-    public static final String DYNREPO_CAPTURENUM = "/dynRepo/CaptureNumber";
-    public static final String DYNREPO_CAPTURENUM_SEARCHDYNREPO = "/dynaicNumberService";
-    public static final String DYNREPO_CAPTURENUM_SEARCHSTAREPO = "/staticNumberService";
-    public static final String DYNREPO_CAPTURENUM_FILTER = "/timeSoltNumber";
-    public static final String DYNREPO_CAPTUREPICTURESEARCH = "/dynRepo/CapturePictureSearch";
-    public static final String DYNREPO_CAPTUREPICTURESEARCH_SEARCH = "/search";
-    public static final String DYNREPO_CAPTUREPICTURESEARCH_SEARCHRESULT = "/getSearchResult";
-    public static final String DYNREPO_CAPTUREPICTURESEARCH_ATTRIBUTE = "/getAttribute";
-    public static final String DYNREPO_CAPTUREPICTURESEARCH_COUNT = "/captureCountQuery";
-    public static final String DYNREPO_CAPTUREPICTURESEARCH_COUNTS = "/getCaptureNumber";
-    public static final String DYNREPO_CAPTUREPICTURESEARCH_HISTORY = "/getCaptureHistory";
-    public static final String DYNREPO_CAPTUREPICTURESEARCH_ATTRIBUTECOUNT = "/captureAttributeQuery";
+    public static final String CAPTURENUM = "/CaptureNumber";
+    public static final String CAPTURENUM_SEARCHDYNREPO = "/dynaicNumberService";
+    public static final String CAPTURENUM_SEARCHSTAREPO = "/staticNumberService";
+    public static final String CAPTURENUM_FILTER = "/timeSoltNumber";
+
+    public static final String CAPTUREPICTURESEARCH = "/CapturePictureSearch";
+    public static final String CAPTUREPICTURESEARCH_SEARCH = "/search";
+    public static final String CAPTUREPICTURESEARCH_SEARCHRESULT = "/getSearchResult";
+    public static final String CAPTUREPICTURESEARCH_ATTRIBUTE = "/getAttribute";
+    public static final String CAPTUREPICTURESEARCH_COUNT = "/captureCountQuery";
+    public static final String CAPTUREPICTURESEARCH_COUNTS = "/getCaptureNumber";
+    public static final String CAPTUREPICTURESEARCH_HISTORY = "/getCaptureHistory";
+    public static final String CAPTUREPICTURESEARCH_ATTRIBUTECOUNT = "/captureAttributeQuery";
 
     /**
      * Face模块请求路径
