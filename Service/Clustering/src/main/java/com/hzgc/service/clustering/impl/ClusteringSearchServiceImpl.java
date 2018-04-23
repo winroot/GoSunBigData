@@ -1,4 +1,4 @@
-package com.hzgc.service.clustering;
+package com.hzgc.service.clustering.impl;
 
 import com.hzgc.common.service.table.column.ClusteringTable;
 import com.hzgc.common.service.table.column.DynamicTable;
@@ -20,6 +20,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import java.util.List;
 /**
  * 告警聚类结果查询接口实现(彭聪)
  */
+@Service
 public class ClusteringSearchServiceImpl implements ClusteringSearchService {
 
     private static Logger LOG = Logger.getLogger(ClusteringSearchServiceImpl.class);

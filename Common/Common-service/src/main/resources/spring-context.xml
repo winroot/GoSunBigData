@@ -21,21 +21,21 @@
     <dubbo:service interface="com.hzgc.dubbo.device.WarnRuleService" ref="WarnRuleService"/>
 
     <!--dynamicrepo 模块接口以及实现-->
-    <bean id="CapturePictureSearchService" class="com.hzgc.service.dynrepo.CapturePictureSearchServiceImpl"/>
+    <bean id="CapturePictureSearchService" class="com.hzgc.service.dynrepo.service.CapturePictureSearchServiceImpl"/>
     <dubbo:service interface="com.hzgc.dubbo.dynamicrepo.CapturePictureSearchService" ref="CapturePictureSearchService" />
 
     <!--静态信息库的接口，以及相应的实现类-->
     <!--对象信息的处理-->
-    <bean id="ObjectInfoHandler" class="com.hzgc.service.starepo.ObjectInfoHandlerImpl"/>
+    <bean id="ObjectInfoHandler" class="com.hzgc.service.starepo.service.ObjectInfoHandlerImpl"/>
     <dubbo:service interface="com.hzgc.dubbo.staticrepo.ObjectInfoHandler" ref="ObjectInfoHandler"/>
 
     <bean id="HBaseHelper" class="com.hzgc.common.service.connection.HBaseHelper"/>
     <bean id="DeviceTable" class="com.hzgc.common.service.table.column.DeviceTable"/>
     <bean id="ElasticSearchHelper" class="com.hzgc.service.starepo.ElasticSearchHelper"/>
 
-    <bean id="CaptureNumberService" class="com.hzgc.service.dynrepo.CaptureNumberImpl"/>
+    <bean id="CaptureNumberService" class="com.hzgc.service.dynrepo.service.CaptureNumberImpl"/>
     <dubbo:service interface="com.hzgc.dubbo.dynamicrepo.CaptureNumberService" ref="CaptureNumberService"/>
 
-    <bean id="ClusteringSearchService" class="com.hzgc.service.clustering.ClusteringSearchServiceImpl"/>
+    <bean id="ClusteringSearchService" class="com.hzgc.service.clustering.impl.ClusteringSearchServiceImpl"/>
     <dubbo:service interface="com.hzgc.dubbo.clustering.ClusteringSearchService" ref="ClusteringSearchService"/>
 </beans>

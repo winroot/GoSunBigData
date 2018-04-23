@@ -1,4 +1,4 @@
-package com.hzgc.service.starepo;
+package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.common.util.object.ObjectUtil;

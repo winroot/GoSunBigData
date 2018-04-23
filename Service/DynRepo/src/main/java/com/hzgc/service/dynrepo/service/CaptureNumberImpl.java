@@ -1,4 +1,4 @@
-package com.hzgc.service.dynrepo;
+package com.hzgc.service.dynrepo.service;
 
 import com.hzgc.common.service.table.column.DynamicTable;
 import com.hzgc.dubbo.dynamicrepo.CaptureNumberService;

@@ -1,4 +1,4 @@
-package com.hzgc.service.dynrepo;
+package com.hzgc.service.dynrepo.service;
 
 import java.lang.reflect.Field;
 import java.text.NumberFormat;
