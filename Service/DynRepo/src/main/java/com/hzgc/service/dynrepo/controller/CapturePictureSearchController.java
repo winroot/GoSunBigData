@@ -20,13 +20,13 @@ import java.util.List;
 
 @RestController
 @FeignClient(name = "dynRepo")
-@RequestMapping(value = BigDataPath.DYNREPO_CAPTUREPICTURESEARCH)
+@RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH)
 public class CapturePictureSearchController {
 
     @Autowired
     private CapturePictureSearchServiceImpl capturePictureSearchService;
 
-    @RequestMapping(value = BigDataPath.DYNREPO_CAPTUREPICTURESEARCH_SEARCH)
+    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_SEARCH)
     public ResponseResult search(CapturePictureSearchVO capturePictureSearchVO) {
         SearchOption searchOption;
         if (capturePictureSearchVO != null) {
@@ -38,7 +38,7 @@ public class CapturePictureSearchController {
         return ResponseResult.init(searchResult);
     }
 
-    @RequestMapping(value = BigDataPath.DYNREPO_CAPTUREPICTURESEARCH_SEARCHRESULT)
+    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_SEARCHRESULT)
     public ResponseResult getSearchResult(CapturePictureSearchVO capturePictureSearchVO) {
         SearchResultOption searchResultOption;
         if (capturePictureSearchVO != null) {
@@ -50,7 +50,7 @@ public class CapturePictureSearchController {
         return ResponseResult.init(searchResult);
     }
 
-    @RequestMapping(value = BigDataPath.DYNREPO_CAPTUREPICTURESEARCH_ATTRIBUTE)
+    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_ATTRIBUTE)
     public ResponseResult getAttribute(CapturePictureSearchVO capturePictureSearchVO) {
         SearchType type;
         if (capturePictureSearchVO != null) {
@@ -62,7 +62,7 @@ public class CapturePictureSearchController {
         return ResponseResult.init(attributeList);
     }
 
-    @RequestMapping(value = BigDataPath.DYNREPO_CAPTUREPICTURESEARCH_COUNT)
+    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_COUNT)
     public ResponseResult captureCountQuery(CapturePictureSearchVO capturePictureSearchVO) {
         String startTime;
         String endTime;
@@ -78,7 +78,7 @@ public class CapturePictureSearchController {
         return ResponseResult.init(captureCount);
     }
 
-    @RequestMapping(value = BigDataPath.DYNREPO_CAPTUREPICTURESEARCH_COUNTS)
+    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_COUNTS)
     public ResponseResult getCaptureNumber(CapturePictureSearchVO capturePictureSearchVO) {
         String startTime;
         String endTime;
@@ -94,7 +94,7 @@ public class CapturePictureSearchController {
         return ResponseResult.init(count);
     }
 
-    @RequestMapping(value = BigDataPath.DYNREPO_CAPTUREPICTURESEARCH_HISTORY)
+    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_HISTORY)
     public ResponseResult getCaptureHistory(CapturePictureSearchVO capturePictureSearchVO) {
         SearchOption searchOption;
         if (capturePictureSearchVO != null) {
@@ -106,7 +106,7 @@ public class CapturePictureSearchController {
         return ResponseResult.init(searchResultList);
     }
 
-    @RequestMapping(value = BigDataPath.DYNREPO_CAPTUREPICTURESEARCH_ATTRIBUTECOUNT)
+    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_ATTRIBUTECOUNT)
     public ResponseResult captureAttributeQuery(CapturePictureSearchVO capturePictureSearchVO) {
         String startTime;
         String endTime;

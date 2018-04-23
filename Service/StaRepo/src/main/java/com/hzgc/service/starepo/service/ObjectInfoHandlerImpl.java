@@ -1,6 +1,7 @@
 package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.service.table.column.ObjectInfoTable;
+import com.hzgc.common.service.table.column.SearchRecordTable;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.service.starepo.object.*;
