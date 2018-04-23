@@ -14,10 +14,10 @@
     <dubbo:service interface="com.hzgc.dubbo.address.FtpAddressService" ref="FtpAddressService" />
 
     <!--device 模块的接口和实现-->
-    <bean id="DeviceService" class="com.hzgc.service.device.DeviceServiceImpl"/>
+    <bean id="DeviceService" class="com.hzgc.service.device.impl.DeviceServiceImpl"/>
     <dubbo:service interface="com.hzgc.dubbo.device.DeviceService" ref="DeviceService" />
 
-    <bean id="WarnRuleService" class="com.hzgc.service.device.WarnRuleServiceImpl"/>
+    <bean id="WarnRuleService" class="com.hzgc.service.device.impl.WarnRuleServiceImpl"/>
     <dubbo:service interface="com.hzgc.dubbo.device.WarnRuleService" ref="WarnRuleService"/>
 
     <!--dynamicrepo 模块接口以及实现-->
