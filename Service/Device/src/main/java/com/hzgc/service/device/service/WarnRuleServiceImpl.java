@@ -1,11 +1,9 @@
-package com.hzgc.service.device.impl;
+package com.hzgc.service.device.service;
 
 import com.alibaba.fastjson.JSON;
 import com.hzgc.common.service.table.column.DeviceTable;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.common.util.empty.IsEmpty;
-import com.hzgc.dubbo.device.WarnRule;
-import com.hzgc.dubbo.device.WarnRuleService;
 import com.hzgc.common.service.connection.HBaseHelper;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;

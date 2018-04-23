@@ -2,8 +2,8 @@ package com.hzgc.service.device.controller;
 
 import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
-import com.hzgc.dubbo.device.WarnRule;
-import com.hzgc.dubbo.device.WarnRuleService;
+import com.hzgc.service.device.service.WarnRule;
+import com.hzgc.service.device.service.WarnRuleService;
 import com.hzgc.service.device.vo.ConfigRuleVO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

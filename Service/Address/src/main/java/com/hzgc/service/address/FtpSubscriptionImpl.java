@@ -2,8 +2,6 @@ package com.hzgc.service.address;
 
 import com.hzgc.common.ftp.properties.CollectProperties;
 import com.hzgc.common.util.zookeeper.ZookeeperClient;
-import com.hzgc.dubbo.address.FtpSubscription;
-import org.apache.log4j.Logger;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.hzgc.dubbo.address;
+package com.hzgc.service.address;
 
 import java.util.List;
 

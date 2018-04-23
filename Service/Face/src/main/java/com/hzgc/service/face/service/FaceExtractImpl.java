@@ -1,6 +1,5 @@
-package com.hzgc.service.face.impl;
+package com.hzgc.service.face.service;
 
-import com.hzgc.dubbo.feature.FaceExtract;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
 import com.hzgc.jni.NativeFunction;

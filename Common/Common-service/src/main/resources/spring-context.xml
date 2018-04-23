@@ -14,27 +14,27 @@
     <dubbo:service interface="com.hzgc.dubbo.address.FtpAddressService" ref="FtpAddressService" />
 
     <!--device 模块的接口和实现-->
-    <bean id="DeviceService" class="com.hzgc.service.device.impl.DeviceServiceImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.device.DeviceService" ref="DeviceService" />
+    <bean id="DeviceService" class="com.hzgc.service.device.service.DeviceServiceImpl"/>
+    <dubbo:service interface="com.hzgc.service.device.service.DeviceService" ref="DeviceService" />
 
-    <bean id="WarnRuleService" class="com.hzgc.service.device.impl.WarnRuleServiceImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.device.WarnRuleService" ref="WarnRuleService"/>
+    <bean id="WarnRuleService" class="com.hzgc.service.device.service.WarnRuleServiceImpl"/>
+    <dubbo:service interface="com.hzgc.service.device.service.WarnRuleService" ref="WarnRuleService"/>
 
     <!--dynamicrepo 模块接口以及实现-->
     <bean id="CapturePictureSearchService" class="com.hzgc.service.dynrepo.service.CapturePictureSearchServiceImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.dynamicrepo.CapturePictureSearchService" ref="CapturePictureSearchService" />
+    <dubbo:service interface="com.hzgc.service.dynrepo.service.CapturePictureSearchService" ref="CapturePictureSearchService" />
 
     <!--静态信息库的接口，以及相应的实现类-->
     <!--对象信息的处理-->
     <bean id="ObjectInfoHandler" class="com.hzgc.service.starepo.service.ObjectInfoHandlerImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.staticrepo.ObjectInfoHandler" ref="ObjectInfoHandler"/>
+    <dubbo:service interface="com.hzgc.service.starepo.service.ObjectInfoHandler" ref="ObjectInfoHandler"/>
 
     <bean id="HBaseHelper" class="com.hzgc.common.service.connection.HBaseHelper"/>
     <bean id="DeviceTable" class="com.hzgc.common.service.table.column.DeviceTable"/>
     <bean id="ElasticSearchHelper" class="com.hzgc.service.starepo.ElasticSearchHelper"/>
 
     <bean id="CaptureNumberService" class="com.hzgc.service.dynrepo.service.CaptureNumberImpl"/>
-    <dubbo:service interface="com.hzgc.dubbo.dynamicrepo.CaptureNumberService" ref="CaptureNumberService"/>
+    <dubbo:service interface="com.hzgc.service.dynrepo.service.CaptureNumberService" ref="CaptureNumberService"/>
 
     <bean id="ClusteringSearchService" class="com.hzgc.service.clustering.impl.ClusteringSearchServiceImpl"/>
     <dubbo:service interface="com.hzgc.dubbo.clustering.ClusteringSearchService" ref="ClusteringSearchService"/>

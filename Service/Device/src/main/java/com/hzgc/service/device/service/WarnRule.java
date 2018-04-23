@@ -1,4 +1,4 @@
-package com.hzgc.dubbo.device;
+package com.hzgc.service.device.service;
 
 import java.io.Serializable;
 

@@ -1,7 +1,8 @@
-package com.hzgc.dubbo.dynamicrepo;
+package com.hzgc.service.dynrepo.service;
 
 import com.hzgc.dubbo.attribute.Attribute;
 import com.hzgc.dubbo.attribute.AttributeCount;
+import com.hzgc.dubbo.dynamicrepo.*;
 
 import java.util.List;
 

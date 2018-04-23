@@ -2,7 +2,7 @@ package com.hzgc.service.device.controller;
 
 import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
-import com.hzgc.service.device.impl.DeviceServiceImpl;
+import com.hzgc.service.device.service.DeviceServiceImpl;
 import com.hzgc.service.device.vo.DeviceDataVO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.hzgc.service.clustering.impl;
+package com.hzgc.service.clustering.service;
 
 import org.apache.log4j.Logger;
 

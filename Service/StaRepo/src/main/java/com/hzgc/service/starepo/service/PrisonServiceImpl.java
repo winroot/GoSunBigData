@@ -1,4 +1,4 @@
-package com.hzgc.service.starepo;
+package com.hzgc.service.starepo.service;
 
 import com.hzgc.dubbo.staticrepo.*;
 import com.hzgc.service.starepo.util.PhoenixJDBCHelper;

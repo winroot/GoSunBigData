@@ -1,4 +1,7 @@
-package com.hzgc.dubbo.staticrepo;
+package com.hzgc.service.starepo.service;
+
+import com.hzgc.dubbo.staticrepo.PrisonCountResults;
+import com.hzgc.dubbo.staticrepo.PrisonSearchOpts;
 
 import java.sql.SQLException;
 

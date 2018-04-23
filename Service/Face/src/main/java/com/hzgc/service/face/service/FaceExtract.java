@@ -1,4 +1,4 @@
-package com.hzgc.dubbo.feature;
+package com.hzgc.service.face.service;
 
 import com.hzgc.jni.FaceAttribute;
 

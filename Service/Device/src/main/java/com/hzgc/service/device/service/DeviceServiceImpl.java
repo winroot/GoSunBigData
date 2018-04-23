@@ -1,8 +1,7 @@
-package com.hzgc.service.device.impl;
+package com.hzgc.service.device.service;
 
 import com.hzgc.common.service.table.column.DeviceTable;
 import com.hzgc.common.util.empty.IsEmpty;
-import com.hzgc.dubbo.device.DeviceService;
 import com.hzgc.common.service.connection.HBaseHelper;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;

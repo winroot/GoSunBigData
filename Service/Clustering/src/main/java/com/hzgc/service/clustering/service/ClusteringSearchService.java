@@ -1,5 +1,7 @@
-package com.hzgc.dubbo.clustering;
+package com.hzgc.service.clustering.service;
 
+
+import com.hzgc.dubbo.clustering.AlarmInfo;
 
 import java.util.List;
 
