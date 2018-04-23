@@ -1,4 +1,4 @@
-package com.hzgc.service.starepo.object;
+package com.hzgc.common.service.table.column;
 
 import java.io.Serializable;
 
