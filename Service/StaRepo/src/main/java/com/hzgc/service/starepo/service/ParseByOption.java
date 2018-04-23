@@ -14,9 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ParseByOption {
-
     private static Logger LOG = Logger.getLogger(PSearchArgsModel.class);
-
     public static Map<String, List<Object>> getSqlFromPSearchArgsModel(Connection conn, PSearchArgsModel pSearchArgsModel) {
         StringBuffer sql = new StringBuffer("");
 
@@ -222,8 +220,12 @@ public class ParseByOption {
         sameFieldReturn.append(ObjectInfoTable.IMPORTANT);
         sameFieldReturn.append(", ");
         sameFieldReturn.append(ObjectInfoTable.STATUS);
+        sameFieldReturn.append(", ");
+        sameFieldReturn.append(ObjectInfoTable.LOCATION);
         return sameFieldReturn;
     }
+
+
 
     /**
      * 封装共同的子where 查询
@@ -418,6 +420,21 @@ public class ParseByOption {
             whereQuery.append(" = ?");
             setArgsList.add(status);
         }
+
+        // 人员位置搜索，location
+        String location = pSearchArgsModel.getLocation();
+        if (location != null && !"".equals(location)) {
+            if (count > 0) {
+                whereQuery.append(" and ");
+            } else {
+                whereQuery.append(" where ");
+            }
+            count++;
+            whereQuery.append(ObjectInfoTable.LOCATION);
+            whereQuery.append(" = ?");
+            setArgsList.add(location);
+        }
+
         return whereQuery;
     }
 

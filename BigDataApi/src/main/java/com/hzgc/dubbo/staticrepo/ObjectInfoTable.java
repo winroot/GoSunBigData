@@ -3,6 +3,7 @@ package com.hzgc.dubbo.staticrepo;
 import java.io.Serializable;
 
 public class ObjectInfoTable implements Serializable {
+
     public static final String TABLE_NAME = "objectinfo"; // 表名
     public static final String ROWKEY = "id";              // 对象信息的唯一标志
     public static final String PERSON_COLF = "person";  // person列族
@@ -28,4 +29,5 @@ public class ObjectInfoTable implements Serializable {
     public static final String RELATED = "sim";        // 相关度
     public static final String IMPORTANT = "important";  // 是否重点关注人员，0，是，1，不是
     public static final String STATUS = "status";  // 人员状态，0，常住人口，1，建议迁出
+    public static final String LOCATION = "location"; // 人员所在位置
 }

@@ -7,8 +7,11 @@ import java.util.List;
  * 静态库查询的时候返回的结果
  */
 public class ObjectSearchResult implements Serializable {
+
     private String searchTotalId; //总的searchId
+
     private int searchStatus;  // 查询成功与否状态，
+
     private List<PersonSingleResult> finalResults; //最终需要返回的结果，String是分别的Id
 
     public ObjectSearchResult() {
