@@ -11,6 +11,7 @@ import java.util.UUID;
  * 静态库人员中每个人的信息
  */
 public class PersonObject implements Serializable{
+
     private String id;  // 数据库中的唯一标志
     private String pkey;  // 对象类型key
     private String platformid;  // 平台Id

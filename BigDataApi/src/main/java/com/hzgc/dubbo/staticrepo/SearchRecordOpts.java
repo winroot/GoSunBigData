@@ -7,6 +7,7 @@ import java.util.List;
  * 历史查询的时候传过来的参数
  */
 public class SearchRecordOpts implements Serializable {
+
     private String totalSearchId; // 查询ID
     private List<StaticSortParam> staticSortParams;  // 排序参数
     private List<SubQueryOpts> subQueryOptsList; // 子查询Id,以及子查询中按照对象类型分类的对象类型类表

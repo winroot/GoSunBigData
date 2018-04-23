@@ -64,7 +64,8 @@ public class BigDataPath {
     public static final String STAREPO_ADD = "/addObjectInfo";
     public static final String STAREPO_DELETE = "/deleteObjectInfo";
     public static final String STAREPO_UPDATE = "/updateObjectInfo";
-    public static final String STAREPO_GET = "/getObjectInfo";
+    public static final String STAREPO_GET_OBJECTINFO = "/getObjectInfo";
+    public static final String STAREPO_GET_PHOTOBYKEY = "/getPhotoByKey";
     public static final String STAREPO_SEARCH_BYROWKEY = "/searchByRowkey";
     public static final String STAREPO_GETSEARCHRESULT= "/getRocordOfObjectInfo";
     public static final String STAREPO_GETSEARCHPHOTO = "/getSearchPhoto";

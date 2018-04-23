@@ -2,7 +2,7 @@ package com.hzgc.service.face.controller;
 
 import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
-import com.hzgc.dubbo.feature.FaceExtract;
+import com.hzgc.service.face.service.FaceExtract;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.service.face.vo.ImageDataVo;
 import org.slf4j.Logger;

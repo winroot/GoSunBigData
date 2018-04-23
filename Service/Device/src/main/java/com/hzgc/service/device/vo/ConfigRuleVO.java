@@ -1,6 +1,6 @@
 package com.hzgc.service.device.vo;
 
-import com.hzgc.dubbo.device.WarnRule;
+import com.hzgc.service.device.service.WarnRule;
 
 import java.util.List;
 

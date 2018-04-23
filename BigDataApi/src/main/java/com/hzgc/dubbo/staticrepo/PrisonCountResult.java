@@ -7,7 +7,9 @@ import java.util.Map;
  *
  */
 public class PrisonCountResult implements Serializable{
+
     private String pkey;
+
     private Map<String, Integer> locationCounts;
 
     public PrisonCountResult() {

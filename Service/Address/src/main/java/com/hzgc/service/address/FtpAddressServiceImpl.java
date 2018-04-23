@@ -2,7 +2,6 @@ package com.hzgc.service.address;
 
 import com.hzgc.common.ftp.properties.FTPAddressProperties;
 import com.hzgc.common.util.empty.IsEmpty;
-import com.hzgc.dubbo.address.FtpAddressService;
 
 import java.io.Serializable;
 import java.util.Properties;
