@@ -13,7 +13,7 @@ public class BigDataPath {
     /**
      * Clustering模块请求路径
      */
-    public static final String CLUSTERING = "/clustering";
+    public static final String CLUSTERING = ROOT + "/clustering";
     public static final String CLUSTERING_SEARCH = "/clusteringSearch";
     public static final String CLUSTERING_DETAILSEARCH = "/detailClusteringSearch";
     public static final String CLUSTERING_DETAILSEARCH_V1 = "/detailClusteringSearch_v1";
@@ -23,12 +23,12 @@ public class BigDataPath {
     /**
      * Device模块请求路径
      */
-    public static final String DEVICE = "/device";
+    public static final String DEVICE = ROOT + "/device";
     public static final String DEVICE_BIND = "/bindDevice";
     public static final String DEVICE_UNBIND = "/unbindDevice";
     public static final String DEVICE_RENAMENOTES = "/renameNotes";
 
-    public static final String WARNRULE = "/warnRule";
+    public static final String WARNRULE = ROOT + "/warnRule";
     public static final String WARNRULE_CONFIG = "/configRules";
     public static final String WARNRULE_ADD = "/addRules";
     public static final String WARNRULE_GETCOMPARE = "/getCompareRules";
@@ -39,12 +39,12 @@ public class BigDataPath {
     /**
      * DynRepo模块请求路径
      */
-    public static final String CAPTURENUM = "/CaptureNumber";
+    public static final String CAPTURENUM = ROOT + "/CaptureNumber";
     public static final String CAPTURENUM_SEARCHDYNREPO = "/dynaicNumberService";
     public static final String CAPTURENUM_SEARCHSTAREPO = "/staticNumberService";
     public static final String CAPTURENUM_FILTER = "/timeSoltNumber";
 
-    public static final String CAPTUREPICTURESEARCH = "/CapturePictureSearch";
+    public static final String CAPTUREPICTURESEARCH = ROOT + "/CapturePictureSearch";
     public static final String CAPTUREPICTURESEARCH_SEARCH = "/search";
     public static final String CAPTUREPICTURESEARCH_SEARCHRESULT = "/getSearchResult";
     public static final String CAPTUREPICTURESEARCH_ATTRIBUTE = "/getAttribute";
@@ -56,13 +56,13 @@ public class BigDataPath {
     /**
      * Face模块请求路径
      */
-    public static final String FACE = "/face";
+    public static final String FACE = ROOT + "/face";
     public static final String FEATURE_EXTRACT = "/featureExtract";
 
     /**
      * StaRepo模块请求路径
      */
-    public static final String STAREPO = "/staRepo";
+    public static final String STAREPO = ROOT + "/staRepo";
     public static final String STAREPO_ADD = "/addObjectInfo";
     public static final String STAREPO_DELETE = "/deleteObjectInfo";
     public static final String STAREPO_UPDATE = "/updateObjectInfo";
