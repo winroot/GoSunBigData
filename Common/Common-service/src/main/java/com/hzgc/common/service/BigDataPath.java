@@ -27,6 +27,13 @@ public class BigDataPath {
     public static final String DEVICE_BIND = "/bindDevice";
     public static final String DEVICE_UNBIND = "/unbindDevice";
     public static final String DEVICE_RENAMENOTES = "/renameNotes";
+    public static final String WARNRULE = "/warnRule";
+    public static final String WARNRULE_CONFIG = "/configRules";
+    public static final String WARNRULE_ADD = "/addRules";
+    public static final String WARNRULE_GETCOMPARE = "/getCompareRules";
+    public static final String WARNRULE_DELETE = "/deleteRules";
+    public static final String WARNRULE_OBJECTTYPE_GET = "/objectTypeHasRule";
+    public static final String WARNRULE_OBJECTTYPE_DELETE = "/deleteObjectTypeOfRules";
 
     /**
      * DynRepo模块请求路径

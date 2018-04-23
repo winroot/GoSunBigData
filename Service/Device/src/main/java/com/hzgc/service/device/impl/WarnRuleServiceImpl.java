@@ -1,4 +1,4 @@
-package com.hzgc.service.device;
+package com.hzgc.service.device.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.hzgc.common.service.table.column.DeviceTable;
@@ -10,10 +10,12 @@ import com.hzgc.common.service.connection.HBaseHelper;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
 
+@Service
 public class WarnRuleServiceImpl implements WarnRuleService {
 
     private static Logger LOG = Logger.getLogger(WarnRuleServiceImpl.class);
