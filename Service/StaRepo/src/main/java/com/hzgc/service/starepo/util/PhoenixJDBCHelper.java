@@ -10,13 +10,13 @@ import java.sql.*;
 import java.util.Properties;
 
 public class PhoenixJDBCHelper {
+
     private Logger LOG = Logger.getLogger(PhoenixJDBCHelper.class);
 
     private static volatile PhoenixJDBCHelper instance;
 
-//    // druid 数据库连接池
-//    private volatile static DruidDataSource druidDataSource;
-//
+    //druid 数据库连接池
+    //private volatile static DruidDataSource druidDataSource;
 
     private static volatile Connection connection;
 
@@ -126,7 +126,7 @@ public class PhoenixJDBCHelper {
 
 
     public static void closeConnection(Connection conn, Statement pstm) {
-       closeConnection(conn, pstm, null);
+        closeConnection(conn, pstm, null);
     }
 
     public static void closeConnection(Connection conn, Statement pstm, ResultSet resultSet) {

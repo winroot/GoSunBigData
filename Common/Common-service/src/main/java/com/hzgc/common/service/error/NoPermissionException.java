@@ -6,6 +6,7 @@ package com.hzgc.common.service.error;
  * @author liuzk
  */
 public class NoPermissionException extends BusinessException {
+
     private static final long serialVersionUID = 1L;
 
     public NoPermissionException() {

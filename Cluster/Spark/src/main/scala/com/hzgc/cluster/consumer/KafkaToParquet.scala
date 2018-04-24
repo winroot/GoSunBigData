@@ -19,6 +19,7 @@ import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.streaming.kafka.{HasOffsetRanges, KafkaUtils}
 
 object KafkaToParquet {
+
   val LOG: Logger = Logger.getLogger(KafkaToParquet.getClass)
   val properties: Properties = PropertiesUtils.getProperties
 
@@ -31,7 +32,7 @@ object KafkaToParquet {
                      eyeglasses: Int, gender: Int, haircolor: Int,
                      //人脸属性：发型、帽子、胡子、领带
                      hairstyle: Int, hat: Int, huzi: Int, tie: Int,
-                    //清晰度评价
+                     //清晰度评价
                      sharpness: Int
                     )
 

@@ -19,15 +19,26 @@ public class ReceiverScheduler implements Serializable {
     private Logger LOG = Logger.getLogger(ReceiverScheduler.class);
 
     private final List<ReceiverImpl> container = new ArrayList<>();
-    //公共配置类
-    private CommonConf conf;
-    //配置文件中配置的receiver的数量
-    private int receiveNumber;
-    //用来计算调用getReceiver的次数，并用此数量和receiver的数量的余数，对receiver依次get
-    private int pollingCount;
-    //用来存放工作线程的线程池
-    private ExecutorService pool;
 
+    /**
+     * 公共配置类
+     */
+    private CommonConf conf;
+
+    /**
+     * 配置文件中配置的receiver的数量
+     */
+    private int receiveNumber;
+
+    /**
+     * 用来计算调用getReceiver的次数，并用此数量和receiver的数量的余数，对receiver依次get
+     */
+    private int pollingCount;
+
+    /**
+     * 用来存放工作线程的线程池
+     */
+    private ExecutorService pool;
 
     public ReceiverScheduler(CommonConf conf) {
         this.conf = conf;
@@ -41,7 +52,6 @@ public class ReceiverScheduler implements Serializable {
      *
      * @param event 封装的数据对象
      */
-
     public void putData(final LogEvent event) {
         synchronized (container) {
             getReceiver().putData(event);

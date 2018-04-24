@@ -1,9 +1,11 @@
 package com.hzgc.service.clustering.vo;
 
+import java.io.Serializable;
+
 /**
  * 聚类查询前台入参
  */
-public class ClusteringSearchVO {
+public class ClusteringSearchVO implements Serializable {
 
     /**
      * 聚类ID

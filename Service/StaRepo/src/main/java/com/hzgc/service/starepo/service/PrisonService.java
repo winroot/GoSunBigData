@@ -6,6 +6,7 @@ import com.hzgc.service.starepo.object.PrisonSearchOpts;
 import java.sql.SQLException;
 
 public interface PrisonService {
+
     /**
      * 用来更新人员位置，
      * @param prisonSearchOpts，对应的是pkeysUpdate 参数

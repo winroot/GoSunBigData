@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<!-- Copyright:   HZGOSUN Tech. Co, BigData --> 
+<!-- Filename:    expect.xml --> 
+<!-- Description: 辅助安装 expect 工具，使安装时免于手动输入密码 --> 
+<!-- Version:     1.0 --> 
+<!-- Author:      mashencai --> 
+<!-- Created:     2018-04-24 --> 
+  
+<project name="expect-install" basedir="." default="redeploy">
+    
+    <!-- ssh到各个节点，创建expect安装包目录 --> 
+    <target name="ssh-mkdir">
+        <sshexec host="${host}"
+         username="root"
+         password="${password}"
+         command="mkdir -p  ${expect_rpm_install_home}"
+         trust="true"/>
+    </target>
+    
+    <!-- 把expect安装包，scp到各个节点 --> 
+    <target name="scp-tar">
+        <scp todir="root:${password}@${host}:${expect_rpm_install_home}">
+        <fileset dir="${expect_rpm_dir}"/>
+        </scp>
+    </target>
+    
+    <!-- ssh到各个节点，安装expect的rpm包 --> 
+    <target name="ssh-install">
+        <sshexec host="${host}"
+         username="root"
+         password="${password}"
+         command="rpm -ivh ${expect_rpm_install_home}/tcl-8.5.7-6.el6.x86_64.rpm; rpm -ivh ${expect_rpm_install_home}/expect-5.44.1.15-5.el6_4.x86_64.rpm; which expect; rm -rf ${INSTALL_HOME_BASIC}"
+         trust="true"/>
+    </target>
+</project>

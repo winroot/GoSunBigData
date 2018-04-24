@@ -8,11 +8,20 @@ import java.util.List;
  */
 public class ObjectSearchResult implements Serializable {
 
-    private String searchTotalId; //总的searchId
+    /**
+     * 总的searchId
+     */
+    private String searchTotalId;
 
-    private int searchStatus;  // 查询成功与否状态，
+    /**
+     * 查询成功与否状态
+     */
+    private int searchStatus;
 
-    private List<PersonSingleResult> finalResults; //最终需要返回的结果，String是分别的Id
+    /**
+     * 最终需要返回的结果，String是分别的Id
+     */
+    private List<PersonSingleResult> finalResults;
 
     public ObjectSearchResult() {
     }

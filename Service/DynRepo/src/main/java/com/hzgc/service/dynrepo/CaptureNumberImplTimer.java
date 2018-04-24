@@ -16,13 +16,8 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHits;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 
 public class CaptureNumberImplTimer {
 
@@ -31,48 +26,44 @@ public class CaptureNumberImplTimer {
     }
 
     /**
-     * 将查出来的数据插入到一个新建的dynamic表中
+     * 将查出来的数据插入到一个新建的dynamicshow表中
      */
     private static void indexTable() {
-        Runnable runnable = () -> {
-            List<String> lists = findIpcId();
-            long nowTime = System.currentTimeMillis();
-            long lessOneHour = nowTime - 1000 * 60 * 60;
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String nowTimeStr = format.format(nowTime);
-            String lessOneHourStr = format.format(lessOneHour);
-            String endTime = nowTimeStr.split(":")[0] + ":00:00";
-            String startTime = lessOneHourStr.split(":")[0] + ":00:00";
-            String index = DynamicTable.DYNAMIC_INDEX;
-            String type = DynamicTable.PERSON_INDEX_TYPE;
-            TransportClient client = ElasticSearchHelper.getEsClient();
-            if (lists != null && lists.size() > 0) {
-                for (String list : lists) {
-                    //查询动态库中数据
-                    BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-                    boolQueryBuilder.must(QueryBuilders.matchPhraseQuery(DynamicTable.IPCID, list));
-                    boolQueryBuilder.must(QueryBuilders.rangeQuery(DynamicTable.TIMESTAMP).gte(startTime).lte(endTime));
-                    SearchRequestBuilder searchRequestBuilder = client.prepareSearch(index)
-                            .setTypes(type)
-                            .setQuery(boolQueryBuilder);
-                    SearchResponse searchResponse = searchRequestBuilder.get();
-                    SearchHits searchHits = searchResponse.getHits();
-                    int number = (int) searchHits.getTotalHits();
-                    //将数据插入新表中
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("ipcid", list);
-                    map.put("time", startTime);
-                    map.put("count", number);
-                    IndexResponse indexResponse = ElasticSearchHelper.getEsClient()
-                            .prepareIndex("dynamicshow", "person")
-                            .setSource(map)
-                            .get();
-                    System.out.println(indexResponse.getVersion());
-                }
+        List<String> lists = findIpcId();
+        long nowTime = System.currentTimeMillis();
+        long lessOneHour = nowTime - 1000 * 60 * 60;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String nowTimeStr = format.format(nowTime);
+        String lessOneHourStr = format.format(lessOneHour);
+        String endTime = nowTimeStr.split(":")[0] + ":00:00";
+        String startTime = lessOneHourStr.split(":")[0] + ":00:00";
+        String index = DynamicTable.DYNAMIC_INDEX;
+        String type = DynamicTable.PERSON_INDEX_TYPE;
+        TransportClient client = ElasticSearchHelper.getEsClient();
+        if (lists != null && lists.size() > 0) {
+            for (String list : lists) {
+                //查询动态库中数据
+                BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+                boolQueryBuilder.must(QueryBuilders.matchPhraseQuery(DynamicTable.IPCID, list));
+                boolQueryBuilder.must(QueryBuilders.rangeQuery(DynamicTable.TIMESTAMP).gte(startTime).lte(endTime));
+                SearchRequestBuilder searchRequestBuilder = client.prepareSearch(index)
+                        .setTypes(type)
+                        .setQuery(boolQueryBuilder);
+                SearchResponse searchResponse = searchRequestBuilder.get();
+                SearchHits searchHits = searchResponse.getHits();
+                int number = (int) searchHits.getTotalHits();
+                //将数据插入新表中
+                Map<String, Object> map = new HashMap<>();
+                map.put("ipcid", list);
+                map.put("time", startTime);
+                map.put("count", number);
+                IndexResponse indexResponse = ElasticSearchHelper.getEsClient()
+                        .prepareIndex("dynamicshow", "person")
+                        .setSource(map)
+                        .get();
+                System.out.println(indexResponse.getVersion());
             }
-        };
-        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-        service.scheduleAtFixedRate(runnable,0, 60 * 60, TimeUnit.SECONDS);
+        }
     }
 
     /**
@@ -95,29 +86,5 @@ public class CaptureNumberImplTimer {
             e.printStackTrace();
         }
         return list;
-    }
-
-    /**
-     * 获取离整点的差距，判断第一次起线程的延时时间
-     */
-    private static long judgementTime() {
-        long nowTime = System.currentTimeMillis();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long addOneHourTime = nowTime + 1000 * 60 * 60;
-        String addTime = simpleDateFormat.format(addOneHourTime);
-        String startTime = addTime.split(":")[0] + ":02:00";
-        Date changeTime = null;
-        try {
-            changeTime = simpleDateFormat.parse(startTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        long changeLongTime = 0;
-        if (changeTime != null) {
-            changeLongTime = changeTime.getTime();
-        }
-        long disTime = (changeLongTime - nowTime) / 1000;
-        System.out.println(disTime);
-        return disTime;
     }
 }

@@ -8,30 +8,100 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
-
 /**
  * 静态库人员中每个人的信息
  */
 public class PersonObject implements Serializable{
 
-    private String id;  // 数据库中的唯一标志
-    private String pkey;  // 对象类型key
-    private String platformid;  // 平台Id
-    private String name;  // 姓名
-    private int sex;   // 性别
-    private String idcard;  // 身份证号
-    private byte[] photo;   // 照片
-    private float[] feature;  // 特征值
-    private String creator;   // 创建者
-    private String cphone;  // 创建者手机号
-    private Timestamp createtime;  // 创建时间
-    private Timestamp updatetime;   // 更新时间
-    private String reason;   // 布控理由
-    private String tag;  // 人车标志
-    private int important; // 0,重点关注，1，非重点关注
-    private int status; // 0,常住人口，1，建议迁出
-    private float sim; // 相似度
-    private String location; // 地址
+    /**
+     * 数据库中的唯一标志
+     */
+    private String id;
+
+    /**
+     * 对象类型key
+     */
+    private String pkey;
+
+    /**
+     * 平台Id
+     */
+    private String platformid;
+
+    /**
+     * 姓名
+     */
+    private String name;
+
+    /**
+     * 性别
+     */
+    private int sex;
+
+    /**
+     * 身份证号
+     */
+    private String idcard;
+
+    /**
+     * 照片
+     */
+    private byte[] photo;
+
+    /**
+     * 特征值
+     */
+    private float[] feature;
+
+    /**
+     * 创建者
+     */
+    private String creator;
+
+    /**
+     * 创建者手机号
+     */
+    private String cphone;
+
+    /**
+     * 创建时间
+     */
+    private Timestamp createtime;
+
+    /**
+     * 更新时间
+     */
+    private Timestamp updatetime;
+
+    /**
+     * 布控理由
+     */
+    private String reason;
+
+    /**
+     * 人车标志
+     */
+    private String tag;
+
+    /**
+     * 0,重点关注，1，非重点关注
+     */
+    private int important;
+
+    /**
+     * 0,常住人口，1，建议迁出
+     */
+    private int status;
+
+    /**
+     * 相似度
+     */
+    private float sim;
+
+    /**
+     * 地址
+     */
+    private String location;
 
     public float getSim() {
         return sim;

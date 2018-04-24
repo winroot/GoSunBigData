@@ -5,17 +5,20 @@ import org.apache.log4j.Logger;
 import java.sql.*;
 
 public class PhoenixJDBCFactory {
+
     private Logger LOG = Logger.getLogger(PhoenixJDBCFactory.class);
+
     private static Connection conn;
 
-    private PhoenixJDBCFactory() {}
+    private PhoenixJDBCFactory() {
+    }
+
     public static Connection getPhoenixJdbcConn() {
         if (conn == null) {
             initConnection();
         }
         return conn;
     }
-
 
     private static void initConnection() {
         String phoenixJDBCURL = JDBCProperties.getPhoenixJDBCURL();
@@ -46,5 +49,4 @@ public class PhoenixJDBCFactory {
             e.printStackTrace();
         }
     }
-
 }

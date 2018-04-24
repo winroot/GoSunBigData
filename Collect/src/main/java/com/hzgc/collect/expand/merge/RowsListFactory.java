@@ -26,17 +26,14 @@ public class RowsListFactory implements Serializable {
     /**
      * set 方法
      */
-
     private void setNotProRows(String processFileDir, String receiveFileDir) {
         List<String> allContentRows = mergeUtil.getAllContentFromFile(processFileDir, receiveFileDir);
         notProRows = findDiffRows.getNotProRows(allContentRows);
     }
 
-
     /**
      * get 方法
      */
-
     public List<String> getNotProRows() {
         return notProRows;
     }

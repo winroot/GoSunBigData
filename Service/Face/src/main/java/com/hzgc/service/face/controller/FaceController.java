@@ -4,6 +4,7 @@ import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
 import com.hzgc.service.face.service.FaceExtract;
 import com.hzgc.jni.FaceAttribute;
+import com.hzgc.service.face.service.FaceExtractImpl;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,18 +18,20 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-/*
-    以图搜图
+
+/**
+ * 以图搜图
  */
 @RestController
 @FeignClient(name = "face")
 @RequestMapping(value = BigDataPath.FACE,consumes = "application/json",produces = "application/json")
 @Api(value = "/face",tags = "以图搜图" )
 public class FaceController {
+
     private static Logger logger = LoggerFactory.getLogger(FaceController.class);
 
     @Autowired
-    FaceExtract faceExtract;
+    FaceExtractImpl faceExtractService;
 
     //特征值获取
     @ApiOperation(value = "图片的特征值提取",response =FaceAttribute.class)
@@ -51,13 +54,12 @@ public class FaceController {
         }
         //调用大数据接口，提取特征值
         try{
-            faceAttribute = faceExtract.featureExtract(pictureBody);
+            faceAttribute = faceExtractService.featureExtract(pictureBody);
         }catch (Exception e){
             logger.info("faceAttribute acquires is failed");
         }
 
         response.setBody(faceAttribute);
-
         return response;
     }
 }

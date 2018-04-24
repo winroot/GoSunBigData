@@ -19,18 +19,19 @@ import java.util.Map;
  */
 @SuppressWarnings("rawtypes")
 public class ResponseResult<T> implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     private static final String TOTAL = "totalNum";
     private static final String SIZE = "rowNum";
     private static final String DEFAULT_MESSAGE = "OK";
     public static final int OK = 0;
 
-    @JsonProperty("resthead")
     private Head head;
-    //@JsonProperty("restbody")
+
     @ApiModelProperty("body")
     private T body;
-    @JsonProperty("extend")
+
     private Map<String, Object> extend;
 
     public ResponseResult() {

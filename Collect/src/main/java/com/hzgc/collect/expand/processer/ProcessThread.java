@@ -18,6 +18,7 @@ import com.hzgc.jni.FaceFunction;
 import java.util.concurrent.BlockingQueue;
 
 public class ProcessThread implements Runnable {
+
     private BlockingQueue<LogEvent> queue;
     private DataProcessLogWriter writer;
 

@@ -4,17 +4,20 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- *
+ * 属性统计
  */
 public class AttributeCount implements Serializable {
+
     /**
      * 设备ID
      */
     private String IPCId;
+
     /**
      * 抓拍统计
      */
     private long captureCount;
+
     /**
      * 属性统计
      */

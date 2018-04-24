@@ -24,6 +24,7 @@ public interface LogWriter {
 
     /**
      * 获取指定文件的最后一行
+     *
      * @param fileName 指定文件名称
      * @return 最后一行名称
      */

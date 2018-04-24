@@ -5,7 +5,9 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.log4j.Logger;
 
 public class ProcessCallBack implements Callback {
+
     private static Logger LOG = Logger.getLogger(ProcessCallBack.class);
+
     private long elapsedTime;
     private String key;
 
@@ -13,6 +15,7 @@ public class ProcessCallBack implements Callback {
         this.key = key;
         this.elapsedTime = time;
     }
+
     @Override
     public void onCompletion(RecordMetadata metadata, Exception e) {
         if (metadata != null) {

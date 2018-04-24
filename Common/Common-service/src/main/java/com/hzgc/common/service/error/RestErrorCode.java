@@ -6,6 +6,7 @@ package com.hzgc.common.service.error;
  * @author liuzhikun
  */
 public interface RestErrorCode {
+
     /**
      * 成功
      */

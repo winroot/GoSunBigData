@@ -83,7 +83,5 @@ public class PutDataToEs implements Serializable {
         } else {
             return RestStatus.CREATED.getStatus();
         }
-
     }
-
 }

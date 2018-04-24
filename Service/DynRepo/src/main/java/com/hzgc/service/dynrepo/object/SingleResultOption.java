@@ -5,8 +5,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SingleResultOption implements Serializable {
-    private String id;    //子ID
-    private List<String> ipcList;    //传入的设备列表,在按设备归类并进行分页查询时有效
+
+    /**
+     * 子ID
+     */
+    private String id;
+
+    /**
+     * 传入的设备列表,在按设备归类并进行分页查询时有效
+     */
+    private List<String> ipcList;
 
     public String getId() {
         return id;

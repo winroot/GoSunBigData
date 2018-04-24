@@ -24,19 +24,16 @@ public class Item implements Serializable {
 
     /**
      * 构造函数
-     **/
-    public Item(String staticID, String similarity,String objType) {
+     */
+    public Item(String staticID, String similarity, String objType) {
         this.staticID = staticID;
         this.similarity = similarity;
-        this.objType=objType;
+        this.objType = objType;
     }
 
     public Item() {
     }
 
-    /**
-     * Getter and Setter
-     **/
     public String getStaticID() {
         return staticID;
     }

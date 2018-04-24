@@ -5,9 +5,21 @@ import com.hzgc.jni.FaceAttribute;
 import java.io.Serializable;
 
 public class PictureData implements Serializable {
-    private String imageID;    //图片ID
-    private byte[] binImage;    //图片二进制数据
-    private FaceAttribute faceAttr;    //人脸特征对象,包括特征值和人脸属性
+
+    /**
+     * 图片ID
+     */
+    private String imageID;
+
+    /**
+     * 图片二进制数据
+     */
+    private byte[] binImage;
+
+    /**
+     * 人脸特征对象,包括特征值和人脸属性
+     */
+    private FaceAttribute faceAttr;
 
     public String getImageID() {
         return imageID;

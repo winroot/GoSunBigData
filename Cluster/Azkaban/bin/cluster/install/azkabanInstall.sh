@@ -25,7 +25,7 @@ AZKABAN_INSTALL_HOME=${INSTALL_HOME}/Azkaban                                    
 AZKABAN_HOME=${AZKABAN_INSTALL_HOME}/azkaban                                             ### AZKABAN_HOME  azkaban 根目录
 
 ##集群组件的日志文件目录 /opt/logs
-LOGS_PATH=$(grep Cluster_LOGSDir $(CONF_DIR)/cluster_conf.properties|cut -d '=' -f2)
+LOGS_PATH=$(grep Cluster_LOGSDir ${CONF_DIR}/cluster_conf.properties|cut -d '=' -f2)
 if [ ! -d ${LOGS_PATH} ]; then
  mkdir -p ${LOGS_PATH}
 fi
