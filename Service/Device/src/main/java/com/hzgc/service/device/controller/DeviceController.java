@@ -21,29 +21,46 @@ public class DeviceController {
     private DeviceServiceImpl deviceService;
 
     @RequestMapping(value = BigDataPath.DEVICE_BIND)
-    public ResponseResult<Boolean> bindDevice(DeviceDataVO deviceDataVO) {
-        if (null != deviceDataVO && null != deviceDataVO.getPlatformId() && null != deviceDataVO.getIpcID() && null != deviceDataVO.getNotes()) {
-            boolean b = deviceService.bindDevice(deviceDataVO.getPlatformId(), deviceDataVO.getIpcID(), deviceDataVO.getNotes());
-            return ResponseResult.init(b);
+    public ResponseResult bindDevice(DeviceDataVO deviceDataVO) {
+        String platformId;
+        String ipcId;
+        String notes;
+        if (null != deviceDataVO) {
+            platformId = deviceDataVO.getPlatformId();
+            ipcId = deviceDataVO.getIpcID();
+            notes = deviceDataVO.getNotes();
+        } else {
+            return null;
         }
-        return null;
+        boolean succeed = deviceService.bindDevice(platformId, ipcId, notes);
+        return ResponseResult.init(succeed);
     }
 
     @RequestMapping(value = BigDataPath.DEVICE_UNBIND)
-    public ResponseResult<Boolean> unbindDevice(DeviceDataVO deviceDataVO) {
-        if (null != deviceDataVO && null != deviceDataVO.getPlatformId() && null != deviceDataVO.getIpcID()){
-            boolean b = deviceService.unbindDevice(deviceDataVO.getPlatformId(), deviceDataVO.getIpcID());
-            return ResponseResult.init(b);
+    public ResponseResult unbindDevice(DeviceDataVO deviceDataVO) {
+        String platformId;
+        String ipcId;
+        if (null != deviceDataVO) {
+            platformId = deviceDataVO.getPlatformId();
+            ipcId = deviceDataVO.getIpcID();
+        } else {
+            return null;
         }
-        return null;
+        boolean succeed = deviceService.unbindDevice(platformId, ipcId);
+        return ResponseResult.init(succeed);
     }
 
     @RequestMapping(value = BigDataPath.DEVICE_RENAMENOTES)
-    public ResponseResult<Boolean> renameNotes(DeviceDataVO deviceDataVO) {
-        if(null != deviceDataVO && null != deviceDataVO.getNotes() && null != deviceDataVO.getIpcID()){
-            boolean b = deviceService.renameNotes(deviceDataVO.getNotes(), deviceDataVO.getIpcID());
-            return ResponseResult.init(b);
+    public ResponseResult renameNotes(DeviceDataVO deviceDataVO) {
+        String notes;
+        String ipcId;
+        if (null != deviceDataVO) {
+            notes = deviceDataVO.getNotes();
+            ipcId = deviceDataVO.getIpcID();
+        } else {
+            return null;
         }
-        return null;
+        boolean succeed = deviceService.renameNotes(notes, ipcId);
+        return ResponseResult.init(succeed);
     }
 }

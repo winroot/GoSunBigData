@@ -3,7 +3,7 @@ package com.hzgc.service.device.controller;
 import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
 import com.hzgc.service.device.service.WarnRule;
-import com.hzgc.service.device.service.WarnRuleService;
+import com.hzgc.service.device.service.WarnRuleServiceImpl;
 import com.hzgc.service.device.vo.ConfigRuleVO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,60 +22,84 @@ public class WarnRuleController {
     private static Logger LOG = Logger.getLogger(WarnRuleController.class);
 
     @Autowired
-    WarnRuleService warnRuleServiceImpl;
+    WarnRuleServiceImpl warnRuleService;
 
     @RequestMapping(value = BigDataPath.WARNRULE_CONFIG)
-    public ResponseResult<Map<String,Boolean>> configRules(ConfigRuleVO configRuleVO) {
-        if(null != configRuleVO && null != configRuleVO.getIpcIDs() && null != configRuleVO.getRules()){
-            Map<String,Boolean> map = warnRuleServiceImpl.configRules(configRuleVO.getIpcIDs(), configRuleVO.getRules());
-            return ResponseResult.init(map);
+    public ResponseResult<Map<String, Boolean>> configRules(ConfigRuleVO configRuleVO) {
+        List<String> ipcIDs;
+        List<WarnRule> rules;
+        if (null != configRuleVO) {
+            ipcIDs = configRuleVO.getIpcIDs();
+            rules = configRuleVO.getRules();
+        } else {
+            LOG.info("configRule参数错误");
+            return null;
         }
-        LOG.info("configRule参数错误");
-        return null;
+        Map<String, Boolean> map = warnRuleService.configRules(ipcIDs, rules);
+        return ResponseResult.init(map);
     }
 
     @RequestMapping(value = BigDataPath.WARNRULE_ADD)
-    public ResponseResult<Map<String,Boolean>> addRules(ConfigRuleVO configRuleVO) {
-        if(null != configRuleVO && null != configRuleVO.getIpcIDs() && null != configRuleVO.getRules()){
-            Map<String,Boolean> map = warnRuleServiceImpl.addRules(configRuleVO.getIpcIDs(), configRuleVO.getRules());
-            return ResponseResult.init(map);
+    public ResponseResult<Map<String, Boolean>> addRules(ConfigRuleVO configRuleVO) {
+        List<String> ipcIDs;
+        List<WarnRule> rules;
+        if (null != configRuleVO) {
+            ipcIDs = configRuleVO.getIpcIDs();
+            rules = configRuleVO.getRules();
+        } else {
+            return null;
         }
-        return null;
+        Map<String, Boolean> map = warnRuleService.addRules(ipcIDs, rules);
+        return ResponseResult.init(map);
     }
 
     @RequestMapping(value = BigDataPath.WARNRULE_GETCOMPARE)
     public ResponseResult<List<WarnRule>> getCompareRules(ConfigRuleVO configRuleVO) {
-        if(null != configRuleVO && null != configRuleVO.getIpcID()){
-            List<WarnRule> list = warnRuleServiceImpl.getCompareRules(configRuleVO.getIpcID());
-            return ResponseResult.init(list);
+        String ipcID;
+        if (null != configRuleVO) {
+            ipcID = configRuleVO.getIpcID();
+        } else {
+            return null;
         }
-        return null;
+        List<WarnRule> warnRuleList = warnRuleService.getCompareRules(ipcID);
+        return ResponseResult.init(warnRuleList);
     }
 
     @RequestMapping(value = BigDataPath.WARNRULE_DELETE)
-    public ResponseResult<Map<String,Boolean>> deleteRules(ConfigRuleVO configRuleVO) {
-        if(null != configRuleVO && null != configRuleVO.getIpcIDs()){
-            Map<String,Boolean> map = warnRuleServiceImpl.deleteRules(configRuleVO.getIpcIDs());
-            return ResponseResult.init(map);
+    public ResponseResult<Map<String, Boolean>> deleteRules(ConfigRuleVO configRuleVO) {
+        List<String> ipcIdList;
+        if (null != configRuleVO) {
+            ipcIdList = configRuleVO.getIpcIDs();
+        } else {
+            return null;
         }
-        return null;
+        Map<String, Boolean> map = warnRuleService.deleteRules(ipcIdList);
+        return ResponseResult.init(map);
     }
 
     @RequestMapping(value = BigDataPath.WARNRULE_OBJECTTYPE_GET)
     public ResponseResult<List<String>> objectTypeHasRule(ConfigRuleVO configRuleVO) {
-        if(null != configRuleVO && null != configRuleVO.getObjectType()){
-            List<String> list = warnRuleServiceImpl.objectTypeHasRule(configRuleVO.getObjectType());
-            return ResponseResult.init(list);
+        String objectType;
+        if (null != configRuleVO) {
+            objectType = configRuleVO.getObjectType();
+        } else {
+            return null;
         }
-        return null;
+        List<String> list = warnRuleService.objectTypeHasRule(objectType);
+        return ResponseResult.init(list);
     }
 
     @RequestMapping(value = BigDataPath.WARNRULE_OBJECTTYPE_DELETE)
     public ResponseResult<Integer> deleteObjectTypeOfRules(ConfigRuleVO configRuleVO) {
-        if(null != configRuleVO && null != configRuleVO.getIpcIDs() && null != configRuleVO.getObjectType()){
-            int i = warnRuleServiceImpl.deleteObjectTypeOfRules(configRuleVO.getObjectType(), configRuleVO.getIpcIDs());
-            return ResponseResult.init(i);
+        String objectType;
+        List<String> ipcIdList;
+        if (null != configRuleVO) {
+            objectType = configRuleVO.getObjectType();
+            ipcIdList = configRuleVO.getIpcIDs();
+        } else {
+            return null;
         }
-        return null;
+        int i = warnRuleService.deleteObjectTypeOfRules(objectType, ipcIdList);
+        return ResponseResult.init(i);
     }
 }
