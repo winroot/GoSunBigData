@@ -126,7 +126,7 @@ public class PhoenixJDBCHelper {
 
 
     public static void closeConnection(Connection conn, Statement pstm) {
-       closeConnection(conn, pstm, null);
+        closeConnection(conn, pstm, null);
     }
 
     public static void closeConnection(Connection conn, Statement pstm, ResultSet resultSet) {

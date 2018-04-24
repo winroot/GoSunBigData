@@ -28,7 +28,7 @@ class ObjectInfoHandlerTool {
 
         PreparedStatement pstm;
         String sql = "upsert into " + SearchRecordTable.TABLE_NAME + "(" + SearchRecordTable.ID
-                + ", " + SearchRecordTable.RESULT + ", " + SearchRecordTable.RECORDDATE + ") values(?,?,?)";
+                + ", " +SearchRecordTable.RESULT + ", " + SearchRecordTable.RECORDDATE + ") values(?,?,?)";
         if (conn != null) {
             try{
                 for (PersonSingleResult personSingleResult : personSingleResults) {
@@ -57,7 +57,7 @@ class ObjectInfoHandlerTool {
     }
 
 
-    public PersonObject getPersonObjectFromResultSet(ResultSet resultSet) {
+    public  PersonObject getPersonObjectFromResultSet(ResultSet resultSet) {
         PersonObject personObject = new PersonObject();
         try {
             while (resultSet.next()) {
@@ -128,7 +128,7 @@ class ObjectInfoHandlerTool {
      * @param searchByPics
      * @return personSingelResult
      */
-     PersonSingleResult getPersonSingleResult(PersonSingleResult personSingleResult, ResultSet resultSet, boolean searchByPics) {
+    PersonSingleResult getPersonSingleResult(PersonSingleResult personSingleResult, ResultSet resultSet, boolean searchByPics) {
         List<PersonObject> personObjects = new ArrayList<>();
         try {
             while (resultSet.next()) {
@@ -281,8 +281,8 @@ class ObjectInfoHandlerTool {
                 Collections.sort(personObjects, new Comparator<PersonObject>() {
                     @Override
                     public int compare(PersonObject o1, PersonObject o2) {
-                        Timestamp timestamp1 = o1.getCreatetime();
-                        Timestamp timestamp2 = o2.getCreatetime();
+                        java.sql.Timestamp timestamp1 = o1.getCreatetime();
+                        java.sql.Timestamp timestamp2 = o2.getCreatetime();
                         return Long.compare(timestamp1.getTime(), timestamp2.getTime());
                     }
                 });
@@ -291,8 +291,8 @@ class ObjectInfoHandlerTool {
                 Collections.sort(personObjects, new Comparator<PersonObject>() {
                     @Override
                     public int compare(PersonObject o1, PersonObject o2) {
-                        Timestamp timestamp1 = o1.getCreatetime();
-                        Timestamp timestamp2 = o2.getCreatetime();
+                        java.sql.Timestamp timestamp1 = o1.getCreatetime();
+                        java.sql.Timestamp timestamp2 = o2.getCreatetime();
                         return Long.compare(timestamp2.getTime(), timestamp1.getTime());
                     }
                 });
