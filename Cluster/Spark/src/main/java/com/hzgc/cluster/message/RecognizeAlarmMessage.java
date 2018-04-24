@@ -45,7 +45,7 @@ public class RecognizeAlarmMessage implements Serializable {
 
     /**
      * 构造函数
-     **/
+     */
     public RecognizeAlarmMessage(String alarmType, String dynamicDeviceID, Item[] items, String alarmTime, String hostName, String bigPictureURL, String smallPictureURL) {
         this.alarmType = alarmType;
         this.dynamicDeviceID = dynamicDeviceID;
@@ -55,12 +55,10 @@ public class RecognizeAlarmMessage implements Serializable {
         this.bigPictureURL = bigPictureURL;
         this.smallPictureURL = smallPictureURL;
     }
+
     public RecognizeAlarmMessage() {
     }
 
-    /**
-     * Getter and Setter
-     **/
     public String getAlarmType() {
         return alarmType;
     }

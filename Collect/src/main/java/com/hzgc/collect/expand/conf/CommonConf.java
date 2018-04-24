@@ -52,7 +52,6 @@ public class CommonConf implements Serializable {
      */
     private int mergeScanTime;
 
-
     /**
      * 默认加载类路径下的cluster-over-ftp.properties文件
      */
@@ -72,7 +71,6 @@ public class CommonConf implements Serializable {
      * @param properName 指定类路径下资源文件名称
      */
     public CommonConf(String properName) {
-
     }
 
     public String getLogName() {
@@ -146,5 +144,4 @@ public class CommonConf implements Serializable {
     public void setMergeScanTime(int mergeScanTime) {
         this.mergeScanTime = mergeScanTime;
     }
-
 }

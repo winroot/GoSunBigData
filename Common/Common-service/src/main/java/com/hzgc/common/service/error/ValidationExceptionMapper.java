@@ -13,6 +13,7 @@ import javax.ws.rs.ext.ExceptionMapper;
  * @author loucy
  */
 public class ValidationExceptionMapper implements ExceptionMapper<ResteasyViolationException> {
+
     private static final String DIVIDER = ",";
 
     @Override

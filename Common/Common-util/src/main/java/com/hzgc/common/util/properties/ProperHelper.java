@@ -11,19 +11,19 @@ import java.util.regex.Pattern;
  * 每一个子类都对应一个配置文件
  * 用来从配置文件中读取配置（马燊偲）
  */
-
 public abstract class ProperHelper {
 
     /**
      * 验证配置文件中，无需特殊判断的属性值是否为正确格式。例如用户名user，密码password，路径格式pathRule。
      * 验证逻辑：若key对应的属性值未设置（为空），则设为默认值；否则获取到该属性值。
-     * @param key 配置文件中，某属性字段的Key
+     *
+     * @param key          配置文件中，某属性字段的Key
      * @param defaultValue 配置文件中，某属性字段的默认值
-     * @param props 不同的ProperHelper类中传进来的配置文件变量props
-     * @param log 不同的ProperHelper类中传进来的日志变量log
+     * @param props        不同的ProperHelper类中传进来的配置文件变量props
+     * @param log          不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的属性值
      */
-    protected static String verifyCommonValue(String key, String defaultValue, Properties props, Logger log){
+    protected static String verifyCommonValue(String key, String defaultValue, Properties props, Logger log) {
         String returnValue = null;
         try {
             if (props.containsKey(key)) {
@@ -43,8 +43,7 @@ public abstract class ProperHelper {
                         returnValue = valueFromKey;
                     }
                 }
-            }
-            else {
+            } else {
                 log.warn("The key " + key + " does not exist in the configuration file, please check it.");
             }
         } catch (Exception e) {
@@ -57,23 +56,25 @@ public abstract class ProperHelper {
     /**
      * 验证配置文件中，IP属性字段是否为正确格式。
      * 验证逻辑为：判断该值是否为空、是否为IP的格式；若key对应的属性值未设置（为空），则设为默认值。
+     *
      * @param ipKey 配置文件中，IP属性字段的Key
      * @param props 不同的ProperHelper类中传进来的配置文件变量props
-     * @param log 不同的ProperHelper类中传进来的日志变量log
+     * @param log   不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的IP属性字段值
      */
-    protected static String verifyIp(String ipKey, Properties props, Logger log){
+    protected static String verifyIp(String ipKey, Properties props, Logger log) {
         return verifyIpOrPlusPort(ipKey, patternIp(), props, log);
     }
 
     /**
      * 验证配置文件中，IP：PORT属性字段是否为正确格式。
+     *
      * @param ipKey 配置文件中，IP：PORT属性字段的Key
      * @param props 不同的ProperHelper类中传进来的配置文件变量props
-     * @param log 不同的ProperHelper类中传进来的日志变量log
+     * @param log   不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的IP：PORT属性字段值
      */
-    protected static String verifyIpPlusPort(String ipKey, Properties props, Logger log){
+    protected static String verifyIpPlusPort(String ipKey, Properties props, Logger log) {
         return verifyIpOrPlusPort(ipKey, patternIpPlusPort(), props, log);
     }
 
@@ -86,7 +87,7 @@ public abstract class ProperHelper {
      * @param log                      不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的属性字段值
      */
-    private static String verifyIpOrPlusPort(String key, Pattern patternIpOrPlusPortLegal, Properties props, Logger log){
+    private static String verifyIpOrPlusPort(String key, Pattern patternIpOrPlusPortLegal, Properties props, Logger log) {
         String returnValue = null;
         try {
             if (props.containsKey(key)) {
@@ -108,8 +109,7 @@ public abstract class ProperHelper {
                         returnValue = valueFromKey;
                     }
                 }
-            }
-            else {
+            } else {
                 log.warn("The key " + key + " does not exist in the configuration file, please check it.");
             }
         } catch (Exception e) {
@@ -124,7 +124,7 @@ public abstract class ProperHelper {
      *
      * @return 正则表达式
      */
-    private static Pattern patternIp(){
+    private static Pattern patternIp() {
         String regexIpPlusPort = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
                 + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
                 + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
@@ -137,7 +137,7 @@ public abstract class ProperHelper {
      *
      * @return 正则表达式
      */
-    private static Pattern patternIpPlusPort(){
+    private static Pattern patternIpPlusPort() {
         String regexIpPlusPort = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\."
                 + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
                 + "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
@@ -148,12 +148,13 @@ public abstract class ProperHelper {
 
     /**
      * 验证配置文件中，“IP：PORT，IP：PORT，IP：PORT”属性字段是否为正确格式的方法。
-     * @param key 配置文件中，某属性字段的Key
+     *
+     * @param key   配置文件中，某属性字段的Key
      * @param props 不同的ProperHelper类中传进来的配置文件变量props
-     * @param log 不同的ProperHelper类中传进来的日志变量log
+     * @param log   不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的属性字段值
      */
-    protected static String verifyIpPlusPortList(String key, Properties props, Logger log){
+    protected static String verifyIpPlusPortList(String key, Properties props, Logger log) {
         String returnValue = null;
         try {
             if (props.containsKey(key)) {
@@ -188,8 +189,7 @@ public abstract class ProperHelper {
                         System.exit(1);
                     }
                 }
-            }
-            else {
+            } else {
                 log.warn("The key " + key + " does not exist in the configuration file, please check it.");
             }
         } catch (Exception e) {
@@ -202,10 +202,11 @@ public abstract class ProperHelper {
     /**
      * 验证配置文件中，port属性字段是否为正确格式。
      * 验证逻辑：判断该值是否为空、是否大于1024、是否为整数。若为空，设定为默认值。
-     * @param portKey 配置文件中，port属性字段的Key
+     *
+     * @param portKey     配置文件中，port属性字段的Key
      * @param portDefault 配置文件中，port属性字段的默认值
-     * @param props 不同的ProperHelper类中传进来的配置文件变量props
-     * @param log 不同的ProperHelper类中传进来的日志变量log
+     * @param props       不同的ProperHelper类中传进来的配置文件变量props
+     * @param log         不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的Port属性字段值
      */
     protected static String verifyPort(String portKey, String portDefault, Properties props, Logger log) {
@@ -242,8 +243,7 @@ public abstract class ProperHelper {
                         returnPort = portValue;
                     }
                 }
-            }
-            else {
+            } else {
                 log.warn("The key " + portKey + " does not exist in the configuration file, please check it.");
             }
         } catch (NumberFormatException e) {
@@ -256,13 +256,14 @@ public abstract class ProperHelper {
     /**
      * 验证配置文件中，布尔值属性字段是否为正确格式。例如implicitSsl。
      * 验证逻辑：判断该值是否为空、是否为布尔值。若为空，设定为默认值。
-     * @param key 配置文件中，布尔值属性字段的Key
+     *
+     * @param key          配置文件中，布尔值属性字段的Key
      * @param defaultValue 配置文件中，布尔值属性字段的默认值
-     * @param props 不同的ProperHelper类中传进来的配置文件变量props
-     * @param log 不同的ProperHelper类中传进来的日志变量log
+     * @param props        不同的ProperHelper类中传进来的配置文件变量props
+     * @param log          不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的布尔属性字段值
      */
-    protected static String verifyBooleanValue(String key, String defaultValue, Properties props, Logger log){
+    protected static String verifyBooleanValue(String key, String defaultValue, Properties props, Logger log) {
         String returnValue = null;
         try {
             if (props.containsKey(key)) {
@@ -285,8 +286,7 @@ public abstract class ProperHelper {
                         System.exit(1);
                     }
                 }
-            }
-            else {
+            } else {
                 log.warn("The key " + key + " does not exist in the configuration file, please check it.");
             }
         } catch (Exception e) {
@@ -299,13 +299,14 @@ public abstract class ProperHelper {
     /**
      * 验证配置文件中，正整数属性字段是否为正确格式。例如队列线程数thread.number。
      * 验证逻辑：判断该值是否为空、是否为正整数。若为空，设定为默认值。
-     * @param key 配置文件中，某属性字段的Key
+     *
+     * @param key          配置文件中，某属性字段的Key
      * @param defaultValue 配置文件中，某属性字段的默认值
-     * @param props 不同的ProperHelper类中传进来的配置文件变量props
-     * @param log 不同的ProperHelper类中传进来的日志变量log
+     * @param props        不同的ProperHelper类中传进来的配置文件变量props
+     * @param log          不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的Port属性字段值
      */
-    protected static String verifyPositiveIntegerValue(String key, String defaultValue, Properties props, Logger log){
+    protected static String verifyPositiveIntegerValue(String key, String defaultValue, Properties props, Logger log) {
         String returnValue = null;
         try {
             if (props.containsKey(key)) {
@@ -336,8 +337,7 @@ public abstract class ProperHelper {
                         returnValue = valueFromKey;
                     }
                 }
-            }
-            else {
+            } else {
                 log.warn("The key " + key + " does not exist in the configuration file, please check it.");
             }
         } catch (NumberFormatException e) {
@@ -350,13 +350,14 @@ public abstract class ProperHelper {
     /**
      * 验证配置文件中，整数属性字段是否为正确格式。例如队列线程数retries。
      * 验证逻辑：判断该值是否为空、是否为整数。若为空，设定为默认值。
-     * @param key 配置文件中，某属性字段的Key
+     *
+     * @param key          配置文件中，某属性字段的Key
      * @param defaultValue 配置文件中，某属性字段的默认值
-     * @param props 不同的ProperHelper类中传进来的配置文件变量props
-     * @param log 不同的ProperHelper类中传进来的日志变量log
+     * @param props        不同的ProperHelper类中传进来的配置文件变量props
+     * @param log          不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的属性值
      */
-    protected static String verifyIntegerValue(String key, String defaultValue, Properties props, Logger log){
+    protected static String verifyIntegerValue(String key, String defaultValue, Properties props, Logger log) {
         String returnValue = null;
         try {
             if (props.containsKey(key)) {

@@ -6,6 +6,7 @@ package com.hzgc.common.service.error;
  * @author liuzk
  */
 public class BusinessException extends RuntimeException {
+
     private static final long serialVersionUID = 1L;
 
     private int errorCode = 0;
