@@ -34,8 +34,8 @@ SPARK_INSTALL_HOME=${INSTALL_HOME}/Spark
 ## SPARK_HOME  spark 根目录
 SPARK_HOME=${INSTALL_HOME}/Spark/spark
 
-##集群组件的日志文件目录 /opt/logs
-LOGS_PATH=$(grep Cluster_LOGSDir $(CONF_DIR)/cluster_conf.properties|cut -d '=' -f2)
+##集群组件的日志文件目录 /opt/hzgc/logs
+LOGS_PATH=$(grep Cluster_LOGSDir ${CONF_DIR}/cluster_conf.properties|cut -d '=' -f2)
 if [ ! -d ${LOGS_PATH} ]; then
  mkdir -p ${LOGS_PATH}
 fi
