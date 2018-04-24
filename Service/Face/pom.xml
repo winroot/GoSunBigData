@@ -11,6 +11,14 @@
 
     <groupId>com.hzgc.service</groupId>
     <artifactId>face</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-service</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+    </dependencies>
   
     <build>
         <plugins>
