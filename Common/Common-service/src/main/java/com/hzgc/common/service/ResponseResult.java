@@ -18,7 +18,9 @@ import java.util.Map;
  */
 @SuppressWarnings("rawtypes")
 public class ResponseResult<T> implements Serializable {
+
     private static final long serialVersionUID = 1L;
+
     private static final String TOTAL = "totalNum";
     private static final String SIZE = "rowNum";
     private static final String DEFAULT_MESSAGE = "OK";

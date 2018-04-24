@@ -9,6 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 @EnableEurekaClient
 @PropertySource("faceApplication.properties")
 public class FaceApplication {
+
     public static void main(String[] args){
         SpringApplication.run(FaceApplication.class,args);
     }

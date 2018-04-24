@@ -31,7 +31,9 @@ import java.util.List;
  * 3，结束
  */
 public class RecoverNotProData {
+
     private Logger LOG = Logger.getLogger(RecoverNotProData.class);
+
     private String feature = KafkaProperties.getTopicFeature();
 
     public boolean recoverNotProData(CommonConf commonConf) {

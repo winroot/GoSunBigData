@@ -12,10 +12,14 @@ import java.util.Map;
  */
 public class ReceiveIpcIds implements Serializable {
 
-    //zookeeper中保存的抓拍订阅设备信息
+    /**
+     * zookeeper中保存的抓拍订阅设备信息
+     */
     Map<String, Map<String, List<String>>> map_ZKData;
 
-    //订阅功能设备列表
+    /**
+     * 订阅功能设备列表
+     */
     private volatile List<String> ipcIdList;
 
     private static ReceiveIpcIds instance = null;

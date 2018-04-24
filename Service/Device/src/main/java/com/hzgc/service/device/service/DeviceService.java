@@ -1,6 +1,7 @@
 package com.hzgc.service.device.service;
 
 public interface DeviceService {
+
     /**
      * 绑定设备到平台（外）（赵喆）
      *

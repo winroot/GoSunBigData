@@ -14,6 +14,7 @@ import java.util.List;
  * 以图搜图接口，内含四个方法（外）（彭聪）
  */
 public interface CapturePictureSearchService {
+
     /**
      * 接收应用层传递的参数进行搜图，如果大数据处理的时间过长，
      * 则先返回searchId,finished=false,然后再开始计算；如果能够在秒级时间内计算完则计算完后再返回结果

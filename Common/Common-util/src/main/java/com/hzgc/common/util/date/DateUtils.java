@@ -14,6 +14,7 @@ import java.util.Date;
  * @version 1.0
  */
 public class DateUtils {
+
     /**
      * TIME_PATTERN
      */

@@ -15,13 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-/*
-    以图搜图
+
+/**
+ * 以图搜图
  */
 @RestController
 @FeignClient(name = "face")
 @RequestMapping(value = BigDataPath.FACE)
 public class FaceController {
+
     private static Logger logger = LoggerFactory.getLogger(FaceController.class);
 
     @Autowired

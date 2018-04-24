@@ -5,11 +5,31 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SearchResultOption implements Serializable {
-    private String searchID;    //查询总ID
-    private List<SingleResultOption> singleResultOptions;    //针对每个子ID查询的参数
-    private List<SortParam> sortParam;    //总的排序参数
-    private int start;    //查询起始位置
-    private int limit;    //查多少条
+
+    /**
+     * 查询总ID
+     */
+    private String searchID;
+
+    /**
+     * 针对每个子ID查询的参数
+     */
+    private List<SingleResultOption> singleResultOptions;
+
+    /**
+     * 总的排序参数
+     */
+    private List<SortParam> sortParam;
+
+    /**
+     * 查询起始位置
+     */
+    private int start;
+
+    /**
+     * 查多少条
+     */
+    private int limit;
 
     public String getSearchID() {
         return searchID;

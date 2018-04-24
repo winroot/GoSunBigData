@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface WarnRuleService {
+
     /**
      * 配置布控规则（外）（赵喆）
      * 设置多个设备的对比规则，如果之前存在对比规则，先清除之前的规则，再重新写入

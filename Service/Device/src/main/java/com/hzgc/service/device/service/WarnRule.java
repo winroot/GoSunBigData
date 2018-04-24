@@ -3,6 +3,7 @@ package com.hzgc.service.device.service;
 import java.io.Serializable;
 
 public class WarnRule implements Serializable {
+
     /**
      * 需要对比对象类型
      */

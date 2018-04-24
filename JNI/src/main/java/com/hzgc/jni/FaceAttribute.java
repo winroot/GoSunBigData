@@ -10,30 +10,37 @@ public class FaceAttribute implements Serializable{
      * 特征值
      */
     private float[] feature;
+
     /**
      * 头发颜色
      */
     private int hairColor;
+
     /**
      * 头发类型
      */
     private int hairStyle;
+
     /**
      * 性别
      */
     private int gender;
+
     /**
      * 是否带帽子
      */
     private int hat;
+
     /**
      * 是否系领带
      */
     private int tie;
+
     /**
      * 胡子类型
      */
     private int huzi;
+
     /**
      * 是否戴眼镜
      */

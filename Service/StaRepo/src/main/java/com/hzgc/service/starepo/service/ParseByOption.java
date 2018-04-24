@@ -16,7 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ParseByOption {
+
     private static Logger LOG = Logger.getLogger(PSearchArgsModel.class);
+
     public static Map<String, List<Object>> getSqlFromPSearchArgsModel(Connection conn, PSearchArgsModel pSearchArgsModel) {
         StringBuffer sql = new StringBuffer("");
 

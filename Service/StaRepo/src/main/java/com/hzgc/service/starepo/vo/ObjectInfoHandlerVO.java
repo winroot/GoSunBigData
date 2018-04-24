@@ -1,16 +1,16 @@
 package com.hzgc.service.starepo.vo;
 
-
 import com.hzgc.service.starepo.object.PSearchArgsModel;
 import com.hzgc.service.starepo.object.SearchRecordOpts;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 静态库前台入参
  */
-public class ObjectInfoHandlerVO {
+public class ObjectInfoHandlerVO implements Serializable{
 
     /**
      * 平台ID
@@ -23,27 +23,27 @@ public class ObjectInfoHandlerVO {
      * 表示的是身份证号（idcard）是450722199502196939，
      * 其中的K 的具体，请参考给出的数据库字段设计
      */
-    Map<String, Object> personObject;
+    private Map<String, Object> personObject;
 
     /**
      * 具体的一个人员信息的ID，值唯一
      */
-    List<String> rowkeys;
+    private List<String> rowkeys;
 
     /**
      * 搜索参数的封装
      */
-    PSearchArgsModel pSearchArgsModel;
+    private PSearchArgsModel pSearchArgsModel;
 
     /**
      * 标记一条对象信息的唯一标志
      */
-    String rowkey;
+    private String rowkey;
 
     /**
      * 历史查询参数
      */
-    SearchRecordOpts searchRecordOpts;
+    private SearchRecordOpts searchRecordOpts;
 
     public String getPlatformId() {
         return platformId;

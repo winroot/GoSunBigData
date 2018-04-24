@@ -40,11 +40,16 @@ public class AddAlarmMessage implements Serializable {
     /**
      * 类构造函数
      *
-     * @param alarmType
-     * @param dynamicDeviceID
-     * @param alarmTime
+     * @param alarmType alarmType
+     * @param dynamicDeviceID dynamicDeviceID
+     * @param alarmTime alarmTime
+     * @param hostName hostName
+     * @param bigPictureURL bigPictureURL
+     * @param smallPictureURL smallPictureURL
      */
-    public AddAlarmMessage(String alarmType, String dynamicDeviceID, String alarmTime, String hostName, String bigPictureURL, String smallPictureURL) {
+    public AddAlarmMessage(String alarmType, String dynamicDeviceID,
+                           String alarmTime, String hostName,
+                           String bigPictureURL, String smallPictureURL) {
         this.alarmType = alarmType;
         this.dynamicDeviceID = dynamicDeviceID;
         this.alarmTime = alarmTime;
@@ -52,12 +57,10 @@ public class AddAlarmMessage implements Serializable {
         this.bigPictureURL = bigPictureURL;
         this.smallPictureURL = smallPictureURL;
     }
+
     public AddAlarmMessage() {
     }
 
-    /**
-     * Getter and Setter
-     **/
     public String getAlarmType() {
         return alarmType;
     }

@@ -9,7 +9,9 @@ import java.util.List;
  * 建议迁入人口首页查询返回信息
  */
 public class ClusteringInfo implements Serializable {
+
     private int totalClustering;
+
     private List<ClusteringAttribute> clusteringAttributeList;
 
     public int getTotalClustering() {

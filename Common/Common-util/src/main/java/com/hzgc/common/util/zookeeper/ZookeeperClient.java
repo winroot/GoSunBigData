@@ -13,18 +13,15 @@ public class ZookeeperClient implements Serializable {
 
     private static Logger LOG = Logger.getLogger(ZookeeperClient.class);
 
-    //session失效时间
-    private int session_timeout;
-    //Zookeeper地址
-    private String zookeeperAddress;
-    //Zookeeper节点路径
-    protected String path;
-    //注册在path上的Watcher,节点变更会通知会向客户端发起通知
-    protected boolean watcher;
+    private int session_timeout;            // session失效时间
+    private String zookeeperAddress;        // Zookeeper地址
+    protected String path;                  // Zookeeper节点路径
+    protected boolean watcher;              // 注册在path上的Watcher,节点变更会通知会向客户端发起通知
+    protected ZooKeeper zooKeeper = null;   // Zookeeper变量
 
-    //Zookeeper变量
-    protected ZooKeeper zooKeeper = null;
-    //信号量设置，用于等待zookeeper连接建立之后，通知阻塞程序继续向下执行
+    /**
+     * 信号量设置，用于等待zookeeper连接建立之后，通知阻塞程序继续向下执行
+     */
     private CountDownLatch connectedSemaphore = new CountDownLatch(1);
 
     public ZookeeperClient(int session_timeout, String zookeeperAddress, String path, boolean watcher) {
@@ -45,19 +42,19 @@ public class ZookeeperClient implements Serializable {
             zooKeeper = new ZooKeeper(connectAddr, sessionTimeout, new Watcher() {
                 @Override
                 public void process(WatchedEvent watchedEvent) {
-                    //获取事件的状态
+                    // 获取事件的状态
                     Event.KeeperState keeperState = watchedEvent.getState();
                     Event.EventType eventType = watchedEvent.getType();
-                    //如果是建立连接
+                    // 如果是建立连接
                     if (Event.KeeperState.SyncConnected == keeperState) {
                         if (Event.EventType.None == eventType) {
-                            //如果建立连接成功，则发送信号量，让后续阻塞程序向下执行
+                            // 如果建立连接成功，则发送信号量，让后续阻塞程序向下执行
                             connectedSemaphore.countDown();
                         }
                     }
                 }
             });
-            //进行阻塞
+            // 进行阻塞
             connectedSemaphore.await();
         } catch (Exception e) {
             e.printStackTrace();

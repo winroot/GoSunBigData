@@ -4,9 +4,21 @@ import java.io.Serializable;
 import java.util.List;
 
 public class GroupByIpc implements Serializable {
-    private String ipc;    //ipcID
-    private List<CapturedPicture> pictures;    //抓拍图片
-    private int total;    //当前设备图片总计
+
+    /**
+     * ipcID
+     */
+    private String ipc;
+
+    /**
+     * 抓拍图片
+     */
+    private List<CapturedPicture> pictures;
+
+    /**
+     * 当前设备图片总计
+     */
+    private int total;
 
     public String getIpc() {
         return ipc;

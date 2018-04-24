@@ -3,6 +3,7 @@ package com.hzgc.service.face.service;
 import com.hzgc.jni.FaceAttribute;
 
 public interface FaceExtract {
+
     /**
      * 特征提取
      *

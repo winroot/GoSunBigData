@@ -5,6 +5,7 @@ import com.hzgc.collect.expand.log.LogEvent;
 import java.util.concurrent.BlockingQueue;
 
 public interface Receiver {
+
     /**
      * 此方法可将数据插入当前Receiver的队列列
      *

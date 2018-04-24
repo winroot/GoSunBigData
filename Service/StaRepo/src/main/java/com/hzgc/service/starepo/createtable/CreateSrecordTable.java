@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class CreateSrecordTable {
+
     private static Logger LOG = Logger.getLogger(CreateSrecordTable.class);
 
     public static void main(String[] args) {

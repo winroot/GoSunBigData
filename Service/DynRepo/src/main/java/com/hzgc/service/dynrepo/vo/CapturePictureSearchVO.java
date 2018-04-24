@@ -4,12 +4,13 @@ import com.hzgc.service.dynrepo.object.SearchOption;
 import com.hzgc.service.dynrepo.object.SearchResultOption;
 import com.hzgc.common.util.searchtype.SearchType;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 动态库以图搜图前台入参
  */
-public class CapturePictureSearchVO {
+public class CapturePictureSearchVO implements Serializable {
 
     /**
      * 搜索选项
