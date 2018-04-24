@@ -46,7 +46,7 @@
             <groupId>com.hzgc</groupId>
             <artifactId>jni</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>
