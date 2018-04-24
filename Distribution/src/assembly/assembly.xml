@@ -38,9 +38,10 @@
         <fileSet>
             <directory>../Cluster/Environment/target/environment-${project.parent.version}/bin/cluster/install</directory>
             <includes>
-                <include>xcall.sh</include>
-                <include>xsync.sh</include>
+                <include>xcall</include>
+                <include>xsync</include>
                 <include>yarn-utils.py</include>
+                <include>expect.xml</include>
             </includes>
             <outputDirectory>ClusterBuildScripts/tool</outputDirectory>
         </fileSet>
@@ -67,9 +68,10 @@
                 <include>**</include>
             </includes>
             <excludes>
-                <exclude>xcall.sh</exclude>
-                <exclude>xsync.sh</exclude>
+                <exclude>xcall</exclude>
+                <exclude>xsync</exclude>
                 <exclude>yarn-utils.py</exclude>
+                <exclude>expect.xml</exclude>
             </excludes>
             <outputDirectory>ClusterBuildScripts/install</outputDirectory>
         </fileSet>
