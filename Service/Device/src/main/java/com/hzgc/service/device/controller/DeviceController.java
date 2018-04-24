@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @FeignClient(name = "device")
 @RequestMapping(value = BigDataPath.DEVICE)
 public class DeviceController {
+
     private static Logger LOG = Logger.getLogger(DeviceController.class);
 
     @Autowired

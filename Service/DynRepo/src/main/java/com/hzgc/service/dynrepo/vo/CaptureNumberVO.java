@@ -1,11 +1,12 @@
 package com.hzgc.service.dynrepo.vo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 大数据可视化前台入参
  */
-public class CaptureNumberVO {
+public class CaptureNumberVO implements Serializable {
 
     /**
      * 设备ID列表

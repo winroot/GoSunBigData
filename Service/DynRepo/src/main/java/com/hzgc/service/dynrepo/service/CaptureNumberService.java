@@ -10,6 +10,7 @@ import java.util.Map;
  * 3、timeSoltNumber：根据入参ipcid的list、startTime和endTime去es查询到相应的值
  */
 public interface CaptureNumberService {
+
     String totolNum ="totolNumber";
     String todyTotolNumber ="todyTotolNumber";
 

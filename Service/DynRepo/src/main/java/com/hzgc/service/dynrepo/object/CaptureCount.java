@@ -3,6 +3,7 @@ package com.hzgc.service.dynrepo.object;
 import java.io.Serializable;
 
 public class CaptureCount implements Serializable {
+
 	/**
 	 * 匹配到的查询结果
 	 */
@@ -25,7 +26,4 @@ public class CaptureCount implements Serializable {
 	public String getLastcapturetime() {
 		return lastcapturetime;
 	}
-
-
-
 }

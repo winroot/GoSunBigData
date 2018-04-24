@@ -1,16 +1,18 @@
 package com.hzgc.service.clustering.vo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 聚类信息存储前台入参
  */
-public class ClusteringSaveVO {
+public class ClusteringSaveVO implements Serializable {
 
     /**
      * 聚类ID
      */
     private String clusterId;
+
     /**
      * 聚类ID列表(包含地区)
      */

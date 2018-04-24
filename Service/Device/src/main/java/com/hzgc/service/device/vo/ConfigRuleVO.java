@@ -2,24 +2,28 @@ package com.hzgc.service.device.vo;
 
 import com.hzgc.service.device.service.WarnRule;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ConfigRuleVO {
+public class ConfigRuleVO implements Serializable {
 
-    /*
-     *设备ID
+    /**
+     * 设备ID
      */
     private String ipcID;
-    /*
-     *设备ID的集合
+
+    /**
+     * 设备ID的集合
      */
     private List<String> ipcIDs;
-    /*
-     *告警规则集合
+
+    /**
+     * 告警规则集合
      */
     private List<WarnRule> rules;
-    /*
-     *对象类型
+
+    /**
+     * 对象类型
      */
     private String objectType;
 
@@ -31,19 +35,19 @@ public class ConfigRuleVO {
         this.ipcID = ipcID;
     }
 
-    public List <String> getIpcIDs() {
+    public List<String> getIpcIDs() {
         return ipcIDs;
     }
 
-    public void setIpcIDs(List <String> ipcIDs) {
+    public void setIpcIDs(List<String> ipcIDs) {
         this.ipcIDs = ipcIDs;
     }
 
-    public List <WarnRule> getRules() {
+    public List<WarnRule> getRules() {
         return rules;
     }
 
-    public void setRules(List <WarnRule> rules) {
+    public void setRules(List<WarnRule> rules) {
         this.rules = rules;
     }
 

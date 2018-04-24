@@ -37,9 +37,8 @@ public class ObjectUtil {
             obj = ois.readObject();
             bis.close();
             ois.close();
-        }
-        catch(Exception e) {
-            System.out.println("translation"+e.getMessage());
+        } catch (Exception e) {
+            System.out.println("translation" + e.getMessage());
             e.printStackTrace();
         } finally {
             IOUtil.closeStream(bis);
@@ -58,9 +57,8 @@ public class ObjectUtil {
             obj = ois.readObject();
             bis.close();
             ois.close();
-        }
-        catch(Exception e) {
-            System.out.println("translation"+e.getMessage());
+        } catch (Exception e) {
+            System.out.println("translation" + e.getMessage());
             e.printStackTrace();
         } finally {
             IOUtil.closeStream(bis);

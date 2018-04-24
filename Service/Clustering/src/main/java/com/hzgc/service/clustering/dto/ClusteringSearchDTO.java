@@ -3,12 +3,13 @@ package com.hzgc.service.clustering.dto;
 import com.hzgc.common.service.clustering.AlarmInfo;
 import com.hzgc.service.clustering.service.ClusteringInfo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 聚类查询返回前台封装
  */
-public class ClusteringSearchDTO {
+public class ClusteringSearchDTO implements Serializable {
 
     /**
      * 建议迁入人口首页查询返回信息

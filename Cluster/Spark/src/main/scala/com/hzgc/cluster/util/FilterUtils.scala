@@ -4,7 +4,8 @@ package com.hzgc.cluster.util
 /**
   * 自定义过滤函数（刘善彬 To 内）
   */
-object FilterUtils  {
+object FilterUtils {
+
   def similarityFilterFun(setSimilarity: String, similarity: Float): Boolean = {
     var bol = false
     if (setSimilarity.toFloat < similarity) {

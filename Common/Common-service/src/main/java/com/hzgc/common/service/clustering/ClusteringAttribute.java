@@ -6,34 +6,42 @@ import java.io.Serializable;
  * 每个聚类的信息，每个聚类作为一个对象，包含显示图片url，最早、晚出现时间及ipcId和该聚类中图片数量count(彭聪)
  */
 public class ClusteringAttribute implements Serializable {
+
     /**
      * 聚类ID
      */
     private String clusteringId;
+
     /**
      * 首页显示图片URL
      */
     private String ftpUrl;
+
     /**
      * 首次出现时间
      */
     private String firstAppearTime;
+
     /**
      * 首次出现图片IPcId
      */
     private String firstIpcId;
+
     /**
      * 最后出现时间
      */
     private String lastAppearTime;
+
     /**
      * 最后出现图片IPcId
      */
     private String lastIpcId;
+
     /**
      * 次数
      */
     private int count;
+
     /**
      * ignore flag,yes
      */

@@ -29,7 +29,9 @@ public class FTP extends ClusterOverFtp implements Serializable {
 
     private static Map<Integer, Integer> pidMap = new HashMap<>();
 
-    //expand模块的公共Conf对象
+    /**
+     * expand模块的公共Conf对象
+     */
     private static CommonConf commonConf = new CommonConf();
 
     static {

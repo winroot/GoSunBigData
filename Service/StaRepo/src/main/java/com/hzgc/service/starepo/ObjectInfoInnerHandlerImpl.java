@@ -126,7 +126,7 @@ public class ObjectInfoInnerHandlerImpl implements Serializable {
                 Array array = resultSet.getArray(ObjectInfoTable.FEATURE);
                 float[] feature = null;
                 if (array != null) {
-                     feature = (float[]) array.getArray();
+                    feature = (float[]) array.getArray();
                 }
                 if (feature != null && feature.length > 0) {
                     //将人员类型rowkey和特征值进行拼接
@@ -197,7 +197,7 @@ public class ObjectInfoInnerHandlerImpl implements Serializable {
                 while (resultSet.next()) {
                     String rowKey = resultSet.getString(ObjectInfoTable.ROWKEY);
                     String pkey = resultSet.getString(ObjectInfoTable.PKEY);
-                    Timestamp updateTime = resultSet.getTimestamp(ObjectInfoTable.UPDATETIME);
+                    java.sql.Timestamp updateTime = resultSet.getTimestamp(ObjectInfoTable.UPDATETIME);
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String finalTime = format.format(updateTime);
                     //将人员类型、rowkey和特征值进行拼接
@@ -226,14 +226,14 @@ public class ObjectInfoInnerHandlerImpl implements Serializable {
             return 0;
         }
         String sql = "upsert into " + ObjectInfoTable.TABLE_NAME + "(" + ObjectInfoTable.ROWKEY + ", " + ObjectInfoTable.UPDATETIME +
-                 ") values(?,?)";
+                ") values(?,?)";
 
         PreparedStatement pstm = null;
         java.sql.Connection conn = null;
         try {
             conn = PhoenixJDBCHelper.getInstance().getConnection();
             pstm = conn.prepareStatement(sql);
-            Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
+            java.sql.Timestamp timeStamp = new java.sql.Timestamp(System.currentTimeMillis());
             for (int i = 0;i < rowkeys.size(); i++) {
                 pstm.setString(1, rowkeys.get(i));
                 pstm.setTimestamp(2, timeStamp);
