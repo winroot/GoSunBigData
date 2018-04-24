@@ -6,6 +6,7 @@ import java.util.List;
  * 人脸抓拍订阅功能（过滤前端设备）
  */
 public interface FtpSubscription {
+
     /**
      * 打开人脸抓拍订阅功能
      *

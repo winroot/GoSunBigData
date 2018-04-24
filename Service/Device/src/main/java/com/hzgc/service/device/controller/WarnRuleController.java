@@ -18,7 +18,9 @@ import java.util.Map;
 @FeignClient(name = "warnRule")
 @RequestMapping(value = BigDataPath.WARNRULE)
 public class WarnRuleController {
+
     private static Logger LOG = Logger.getLogger(WarnRuleController.class);
+
     @Autowired
     WarnRuleService warnRuleServiceImpl;
 

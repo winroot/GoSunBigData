@@ -5,11 +5,21 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SearchResult implements Serializable {
-    private String searchId;    //总搜索ID
 
-    private List<SingleResult> results;    //子结果集集合
+    /**
+     * 总搜索ID
+     */
+    private String searchId;
 
-    private String searchType;    //搜索类型
+    /**
+     * 子结果集集合
+     */
+    private List<SingleResult> results;
+
+    /**
+     * 搜索类型
+     */
+    private String searchType;
 
     public String getSearchId() {
         return searchId;

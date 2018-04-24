@@ -10,13 +10,13 @@ import java.sql.*;
 import java.util.Properties;
 
 public class PhoenixJDBCHelper {
+
     private Logger LOG = Logger.getLogger(PhoenixJDBCHelper.class);
 
     private static volatile PhoenixJDBCHelper instance;
 
-//    // druid 数据库连接池
-//    private volatile static DruidDataSource druidDataSource;
-//
+    //druid 数据库连接池
+    //private volatile static DruidDataSource druidDataSource;
 
     private static volatile Connection connection;
 

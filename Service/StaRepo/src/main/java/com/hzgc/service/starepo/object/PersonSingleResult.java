@@ -8,11 +8,30 @@ import java.util.List;
  */
 public class PersonSingleResult implements Serializable {
 
-    private String searchRowkey;        // 子搜索Id
-    private int searchNums;             // 搜索的总数
-    private List<byte[]> searchPhotos;      // 图片
-    private List<PersonObject> persons;     // 不用聚类的时候的返回结果
-    private List<GroupByPkey> groupByPkeys;  // 根据pkey 分类后的返回结果
+    /**
+     * 子搜索Id
+     */
+    private String searchRowkey;
+
+    /**
+     * 搜索的总数
+     */
+    private int searchNums;
+
+    /**
+     * 搜索图片
+     */
+    private List<byte[]> searchPhotos;
+
+    /**
+     * 不用聚类的时候的返回结果
+     */
+    private List<PersonObject> persons;
+
+    /**
+     * 根据 pkey 分类后的返回结果
+     */
+    private List<GroupByPkey> groupByPkeys;
 
     public String getSearchRowkey() {
         return searchRowkey;

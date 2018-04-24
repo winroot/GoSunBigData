@@ -2,22 +2,22 @@ package com.hzgc.service.device.vo;
 
 import java.io.Serializable;
 
-public class DeviceDataVO implements Serializable{
+public class DeviceDataVO implements Serializable {
 
     /**
      * 平台ID
      */
-    String platformId;
+    private String platformId;
 
     /**
      * 设备ID
      */
-    String ipcID;
+    private String ipcID;
 
     /**
      * 设备备注
      */
-    String notes;
+    private String notes;
 
     public String getPlatformId() {
         return platformId;
