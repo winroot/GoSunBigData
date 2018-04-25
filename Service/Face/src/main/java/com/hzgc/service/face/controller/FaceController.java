@@ -19,13 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-/**
- * 以图搜图
- */
 @RestController
 @FeignClient(name = "face")
-@RequestMapping(value = BigDataPath.FACE,consumes = "application/json",produces = "application/json")
-@Api(value = "/face",tags = "以图搜图" )
+@RequestMapping(value = BigDataPath.FACE)
+@Api(value = "/face",tags = "特征提取" )
 public class FaceController {
 
     private static Logger logger = LoggerFactory.getLogger(FaceController.class);
@@ -36,13 +33,11 @@ public class FaceController {
     //特征值获取
     @ApiOperation(value = "图片的特征值提取",response =FaceAttribute.class)
     @ApiImplicitParam(name = "image",value = "图片",required =  true,dataType = "file", paramType = "form")
-    @ApiResponses({
-            @ApiResponse(code = 200,message = "successful response")
-    })
+    @ApiResponses(
+            {@ApiResponse(code = 200,message = "successful response")})
     @RequestMapping(value = BigDataPath.FEATURE_EXTRACT,method = RequestMethod.POST)
-    public ResponseResult<FaceAttribute> featureExtract(@RequestParam MultipartFile image) throws IOException {
+    public ResponseResult<FaceAttribute> featureExtract(@ApiParam(name = "image",value = "图片",required = true) MultipartFile image) throws IOException {
         ResponseResult<FaceAttribute> response = ResponseResult.ok();
-        System.out.println("1");
         byte[] pictureBody = null;
         FaceAttribute faceAttribute = null;
 

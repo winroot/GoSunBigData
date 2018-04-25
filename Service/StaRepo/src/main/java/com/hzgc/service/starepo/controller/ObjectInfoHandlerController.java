@@ -7,6 +7,7 @@ import com.hzgc.service.starepo.object.PSearchArgsModel;
 import com.hzgc.service.starepo.object.SearchRecordOpts;
 import com.hzgc.service.starepo.service.ObjectInfoHandlerImpl;
 import com.hzgc.service.starepo.vo.ObjectInfoHandlerVO;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
