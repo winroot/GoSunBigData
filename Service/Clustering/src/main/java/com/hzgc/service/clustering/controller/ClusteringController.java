@@ -8,23 +8,32 @@ import com.hzgc.service.clustering.dto.ClusteringSearchDTO;
 import com.hzgc.service.clustering.service.ClusteringSearchServiceImpl;
 import com.hzgc.service.clustering.vo.ClusteringSaveVO;
 import com.hzgc.service.clustering.vo.ClusteringSearchVO;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @FeignClient(name = "clustering")
-@RequestMapping(value = BigDataPath.CLUSTERING)
+@RequestMapping(value = BigDataPath.CLUSTERING, consumes = "application/json", produces = "application/json")
+@Api(value = "/clustering", tags = "聚类服务")
 public class ClusteringController {
 
     @Autowired
     private ClusteringSearchServiceImpl clusteringSearchService;
 
-    @RequestMapping(value = BigDataPath.CLUSTERING_SEARCH)
-    public ResponseResult clusteringSearch(ClusteringSearchVO clusteringSearchVO) {
+    @ApiOperation(value = "聚类信息查询", response = ClusteringSearchDTO.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful response"),
+            @ApiResponse(code = 404, message = "404")})
+    @RequestMapping(value = BigDataPath.CLUSTERING_SEARCH, method = RequestMethod.POST)
+    public ResponseResult<ClusteringSearchDTO> clusteringSearch(
+            @RequestBody @ApiParam(value = "聚类信息查询入参") ClusteringSearchVO clusteringSearchVO) {
         String region;
         String time;
         int start;
@@ -45,8 +54,13 @@ public class ClusteringController {
         return ResponseResult.init(clusteringSearchDTO);
     }
 
-    @RequestMapping(value = BigDataPath.CLUSTERING_DETAILSEARCH)
-    public ResponseResult detailClusteringSearch(ClusteringSearchVO clusteringSearchVO) {
+    @ApiOperation(value = "单个聚类信息详细查询", response = ClusteringSearchDTO.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful response"),
+            @ApiResponse(code = 404, message = "404")})
+    @RequestMapping(value = BigDataPath.CLUSTERING_DETAILSEARCH, method = RequestMethod.POST)
+    public ResponseResult detailClusteringSearch(
+            @RequestBody @ApiParam(value = "聚类信息查询入参") ClusteringSearchVO clusteringSearchVO) {
         String clusterId;
         String time;
         int start;
@@ -67,8 +81,13 @@ public class ClusteringController {
         return ResponseResult.init(clusteringSearchDTO);
     }
 
-    @RequestMapping(value = BigDataPath.CLUSTERING_DETAILSEARCH_V1)
-    public ResponseResult detailClusteringSearch_v1(ClusteringSearchVO clusteringSearchVO) {
+    @ApiOperation(value = "单个聚类信息详细查询(告警ID)", response = ClusteringSearchDTO.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful response"),
+            @ApiResponse(code = 404, message = "404")})
+    @RequestMapping(value = BigDataPath.CLUSTERING_DETAILSEARCH_V1, method = RequestMethod.POST)
+    public ResponseResult detailClusteringSearch_v1(
+            @RequestBody @ApiParam(value = "聚类信息查询入参") ClusteringSearchVO clusteringSearchVO) {
         String clusterId;
         String time;
         int start;
@@ -89,35 +108,45 @@ public class ClusteringController {
         return ResponseResult.init(clusteringSearchDTO);
     }
 
-    @RequestMapping(value = BigDataPath.CLUSTERING_DELETE)
-    public ResponseResult deleteClustering(ClusteringSaveVO clusteringSaveVO) {
+    @ApiOperation(value = "删除聚类信息", response = ClusteringSearchDTO.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful response"),
+            @ApiResponse(code = 404, message = "404")})
+    @RequestMapping(value = BigDataPath.CLUSTERING_DELETE, method = RequestMethod.DELETE)
+    public ResponseResult deleteClustering(
+            @RequestBody @ApiParam(value = "聚类信息存储入参") ClusteringSaveVO clusteringSaveVO) {
         List<String> clusterIdList;
         String time;
         String flag;
-        if (clusteringSaveVO != null){
+        if (clusteringSaveVO != null) {
             clusterIdList = clusteringSaveVO.getClusterIdList();
             time = clusteringSaveVO.getTime();
             flag = clusteringSaveVO.getFlag();
-        }else {
+        } else {
             return null;
         }
-        boolean succeed = clusteringSearchService.deleteClustering(clusterIdList,time,flag);
+        boolean succeed = clusteringSearchService.deleteClustering(clusterIdList, time, flag);
         return ResponseResult.init(succeed);
     }
 
-    @RequestMapping(value = BigDataPath.CLUSTERING_IGNORE)
-    public ResponseResult ignoreClustering(ClusteringSaveVO clusteringSaveVO) {
+    @ApiOperation(value = "忽视聚类信息", response = ClusteringSearchDTO.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful response"),
+            @ApiResponse(code = 404, message = "404")})
+    @RequestMapping(value = BigDataPath.CLUSTERING_IGNORE, method = RequestMethod.POST)
+    public ResponseResult ignoreClustering(
+            @RequestBody @ApiParam(value = "聚类信息存储入参") ClusteringSaveVO clusteringSaveVO) {
         List<String> clusterIdList;
         String time;
         String flag;
-        if (clusteringSaveVO != null){
+        if (clusteringSaveVO != null) {
             clusterIdList = clusteringSaveVO.getClusterIdList();
             time = clusteringSaveVO.getTime();
             flag = clusteringSaveVO.getFlag();
-        }else {
+        } else {
             return null;
         }
-        boolean succeed = clusteringSearchService.ignoreClustering(clusterIdList,time,flag);
+        boolean succeed = clusteringSearchService.ignoreClustering(clusterIdList, time, flag);
         return ResponseResult.init(succeed);
     }
 }
