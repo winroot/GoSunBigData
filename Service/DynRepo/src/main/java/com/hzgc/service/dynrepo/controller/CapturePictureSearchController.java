@@ -11,23 +11,32 @@ import com.hzgc.service.dynrepo.object.SearchResult;
 import com.hzgc.service.dynrepo.object.SearchResultOption;
 import com.hzgc.service.dynrepo.service.CapturePictureSearchServiceImpl;
 import com.hzgc.service.dynrepo.vo.CapturePictureSearchVO;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @FeignClient(name = "dynRepo")
-@RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH)
+@RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH, consumes = "application/json", produces = "application/json")
+@Api(value = "/capturePictureSearch", tags = "以图搜图服务")
 public class CapturePictureSearchController {
 
     @Autowired
     private CapturePictureSearchServiceImpl capturePictureSearchService;
 
-    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_SEARCH)
-    public ResponseResult search(CapturePictureSearchVO capturePictureSearchVO) {
+    @ApiOperation(value = "以图搜图", response = SearchResult.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful response"),
+            @ApiResponse(code = 404, message = "404")})
+    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_SEARCH, method = RequestMethod.POST)
+    public ResponseResult<SearchResult> search(
+            @RequestBody @ApiParam(value = "以图搜图入参") CapturePictureSearchVO capturePictureSearchVO) {
         SearchOption searchOption;
         if (capturePictureSearchVO != null) {
             searchOption = capturePictureSearchVO.getSearchOption();
@@ -38,8 +47,13 @@ public class CapturePictureSearchController {
         return ResponseResult.init(searchResult);
     }
 
-    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_SEARCHRESULT)
-    public ResponseResult getSearchResult(CapturePictureSearchVO capturePictureSearchVO) {
+    @ApiOperation(value = "获取搜索历史记录", response = SearchResult.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful response"),
+            @ApiResponse(code = 404, message = "404")})
+    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_SEARCHRESULT, method = RequestMethod.POST)
+    public ResponseResult<SearchResult> getSearchResult(
+            @RequestBody @ApiParam(value = "以图搜图入参") CapturePictureSearchVO capturePictureSearchVO) {
         SearchResultOption searchResultOption;
         if (capturePictureSearchVO != null) {
             searchResultOption = capturePictureSearchVO.getSearchResultOption();
@@ -50,8 +64,13 @@ public class CapturePictureSearchController {
         return ResponseResult.init(searchResult);
     }
 
-    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_ATTRIBUTE)
-    public ResponseResult getAttribute(CapturePictureSearchVO capturePictureSearchVO) {
+    @ApiOperation(value = "属性特征查看", response = Attribute.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful response"),
+            @ApiResponse(code = 404, message = "404")})
+    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_ATTRIBUTE, method = RequestMethod.GET)
+    public ResponseResult<List<Attribute>> getAttribute(
+            @RequestBody @ApiParam(value = "以图搜图入参") CapturePictureSearchVO capturePictureSearchVO) {
         SearchType type;
         if (capturePictureSearchVO != null) {
             type = capturePictureSearchVO.getType();
@@ -62,8 +81,13 @@ public class CapturePictureSearchController {
         return ResponseResult.init(attributeList);
     }
 
-    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_COUNT)
-    public ResponseResult captureCountQuery(CapturePictureSearchVO capturePictureSearchVO) {
+    @ApiOperation(value = "单个设备抓拍统计查询", response = CaptureCount.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful response"),
+            @ApiResponse(code = 404, message = "404")})
+    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_COUNT, method = RequestMethod.GET)
+    public ResponseResult<CaptureCount> captureCountQuery(
+            @RequestBody @ApiParam(value = "以图搜图入参") CapturePictureSearchVO capturePictureSearchVO) {
         String startTime;
         String endTime;
         String ipcId;
@@ -78,8 +102,13 @@ public class CapturePictureSearchController {
         return ResponseResult.init(captureCount);
     }
 
-    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_COUNTS)
-    public ResponseResult getCaptureNumber(CapturePictureSearchVO capturePictureSearchVO) {
+    @ApiOperation(value = "多个设备抓拍统计查询", response = Long.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful response"),
+            @ApiResponse(code = 404, message = "404")})
+    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_COUNTS, method = RequestMethod.GET)
+    public ResponseResult<Long> getCaptureNumber(
+            @RequestBody @ApiParam(value = "以图搜图入参") CapturePictureSearchVO capturePictureSearchVO) {
         String startTime;
         String endTime;
         List<String> ipcIdList;
@@ -94,8 +123,13 @@ public class CapturePictureSearchController {
         return ResponseResult.init(count);
     }
 
-    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_HISTORY)
-    public ResponseResult getCaptureHistory(CapturePictureSearchVO capturePictureSearchVO) {
+    @ApiOperation(value = "抓拍历史记录查询", response = SearchResult.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful response"),
+            @ApiResponse(code = 404, message = "404")})
+    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_HISTORY, method = RequestMethod.POST)
+    public ResponseResult<List<SearchResult>> getCaptureHistory(
+            @RequestBody @ApiParam(value = "以图搜图入参") CapturePictureSearchVO capturePictureSearchVO) {
         SearchOption searchOption;
         if (capturePictureSearchVO != null) {
             searchOption = capturePictureSearchVO.getSearchOption();
@@ -106,8 +140,13 @@ public class CapturePictureSearchController {
         return ResponseResult.init(searchResultList);
     }
 
-    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_ATTRIBUTECOUNT)
-    public ResponseResult captureAttributeQuery(CapturePictureSearchVO capturePictureSearchVO) {
+    @ApiOperation(value = "抓拍属性统计查询", response = AttributeCount.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful response"),
+            @ApiResponse(code = 404, message = "404")})
+    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_ATTRIBUTECOUNT, method = RequestMethod.POST)
+    public ResponseResult<List<AttributeCount>> captureAttributeQuery(
+            @RequestBody @ApiParam(value = "以图搜图入参") CapturePictureSearchVO capturePictureSearchVO) {
         String startTime;
         String endTime;
         List<String> ipcIdList;

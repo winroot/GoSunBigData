@@ -3,6 +3,8 @@ package com.hzgc.service.dynrepo.vo;
 import com.hzgc.service.dynrepo.object.SearchOption;
 import com.hzgc.service.dynrepo.object.SearchResultOption;
 import com.hzgc.common.util.searchtype.SearchType;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,41 +12,49 @@ import java.util.List;
 /**
  * 动态库以图搜图前台入参
  */
+@ApiModel(value = "以图搜图入参")
 public class CapturePictureSearchVO implements Serializable {
 
     /**
      * 搜索选项
      */
+    @ApiModelProperty(value = "搜索选项")
     private SearchOption searchOption;
 
     /**
      * 历史结果查询参数对象
      */
+    @ApiModelProperty(value = "历史结果查询参数")
     private SearchResultOption searchResultOption;
 
     /**
      * 图片类型（人、车）
      */
+    @ApiModelProperty(value = "图片类型")
     private SearchType type;
 
     /**
      * 起始时间
      */
+    @ApiModelProperty(value = "起始时间")
     private String startTime;
 
     /**
      * 结束时间
      */
+    @ApiModelProperty(value = "结束时间")
     private String endTime;
 
     /**
      * 设备ID
      */
+    @ApiModelProperty(value = "设备ID")
     private String ipcId;
 
     /**
      * 设备ID列表
      */
+    @ApiModelProperty(value = "设备ID列表")
     private List<String> ipcIdList;
 
     public SearchOption getSearchOption() {
