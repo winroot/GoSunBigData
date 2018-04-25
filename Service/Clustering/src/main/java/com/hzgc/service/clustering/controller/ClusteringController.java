@@ -3,8 +3,8 @@ package com.hzgc.service.clustering.controller;
 import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
 import com.hzgc.common.service.clustering.AlarmInfo;
+import com.hzgc.service.clustering.dto.ClusteringDTO;
 import com.hzgc.service.clustering.service.ClusteringInfo;
-import com.hzgc.service.clustering.dto.ClusteringSearchDTO;
 import com.hzgc.service.clustering.service.ClusteringSearchServiceImpl;
 import com.hzgc.service.clustering.vo.ClusteringSaveVO;
 import com.hzgc.service.clustering.vo.ClusteringSearchVO;
@@ -27,12 +27,12 @@ public class ClusteringController {
     @Autowired
     private ClusteringSearchServiceImpl clusteringSearchService;
 
-    @ApiOperation(value = "聚类信息查询", response = ClusteringSearchDTO.class, responseContainer = "List")
+    @ApiOperation(value = "聚类信息查询", response = ClusteringDTO.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
     @RequestMapping(value = BigDataPath.CLUSTERING_SEARCH, method = RequestMethod.POST)
-    public ResponseResult<ClusteringSearchDTO> clusteringSearch(
+    public ResponseResult<ClusteringDTO> clusteringSearch(
             @RequestBody @ApiParam(value = "聚类信息查询入参") ClusteringSearchVO clusteringSearchVO) {
         String region;
         String time;
@@ -49,17 +49,17 @@ public class ClusteringController {
             return null;
         }
         ClusteringInfo clusteringInfo = clusteringSearchService.clusteringSearch(region, time, start, limit, sortParam);
-        ClusteringSearchDTO clusteringSearchDTO = new ClusteringSearchDTO();
-        clusteringSearchDTO.setClusteringInfo(clusteringInfo);
-        return ResponseResult.init(clusteringSearchDTO);
+        ClusteringDTO clusteringDTO = new ClusteringDTO();
+        clusteringDTO.setClusteringInfo(clusteringInfo);
+        return ResponseResult.init(clusteringDTO);
     }
 
-    @ApiOperation(value = "单个聚类信息详细查询", response = ClusteringSearchDTO.class, responseContainer = "List")
+    @ApiOperation(value = "单个聚类信息详细查询", response = ClusteringDTO.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
     @RequestMapping(value = BigDataPath.CLUSTERING_DETAILSEARCH, method = RequestMethod.POST)
-    public ResponseResult<ClusteringSearchDTO> detailClusteringSearch(
+    public ResponseResult<ClusteringDTO> detailClusteringSearch(
             @RequestBody @ApiParam(value = "聚类信息查询入参") ClusteringSearchVO clusteringSearchVO) {
         String clusterId;
         String time;
@@ -76,17 +76,17 @@ public class ClusteringController {
             return null;
         }
         List<AlarmInfo> alarmInfoList = clusteringSearchService.detailClusteringSearch(clusterId, time, start, limit, sortParam);
-        ClusteringSearchDTO clusteringSearchDTO = new ClusteringSearchDTO();
-        clusteringSearchDTO.setAlarmInfoList(alarmInfoList);
-        return ResponseResult.init(clusteringSearchDTO);
+        ClusteringDTO clusteringDTO = new ClusteringDTO();
+        clusteringDTO.setAlarmInfoList(alarmInfoList);
+        return ResponseResult.init(clusteringDTO);
     }
 
-    @ApiOperation(value = "单个聚类信息详细查询(告警ID)", response = ClusteringSearchDTO.class, responseContainer = "List")
+    @ApiOperation(value = "单个聚类信息详细查询(告警ID)", response = ClusteringDTO.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
     @RequestMapping(value = BigDataPath.CLUSTERING_DETAILSEARCH_V1, method = RequestMethod.POST)
-    public ResponseResult<ClusteringSearchDTO> detailClusteringSearch_v1(
+    public ResponseResult<ClusteringDTO> detailClusteringSearch_v1(
             @RequestBody @ApiParam(value = "聚类信息查询入参") ClusteringSearchVO clusteringSearchVO) {
         String clusterId;
         String time;
@@ -103,12 +103,12 @@ public class ClusteringController {
             return null;
         }
         List<Integer> alarmIdList = clusteringSearchService.detailClusteringSearch_v1(clusterId, time, start, limit, sortParam);
-        ClusteringSearchDTO clusteringSearchDTO = new ClusteringSearchDTO();
-        clusteringSearchDTO.setAlarmIdList(alarmIdList);
-        return ResponseResult.init(clusteringSearchDTO);
+        ClusteringDTO clusteringDTO = new ClusteringDTO();
+        clusteringDTO.setAlarmIdList(alarmIdList);
+        return ResponseResult.init(clusteringDTO);
     }
 
-    @ApiOperation(value = "删除聚类信息", response = ClusteringSearchDTO.class, responseContainer = "List")
+    @ApiOperation(value = "删除聚类信息", response = ClusteringDTO.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
@@ -129,7 +129,7 @@ public class ClusteringController {
         return ResponseResult.init(succeed);
     }
 
-    @ApiOperation(value = "忽视聚类信息", response = ClusteringSearchDTO.class, responseContainer = "List")
+    @ApiOperation(value = "忽视聚类信息", response = ClusteringDTO.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})

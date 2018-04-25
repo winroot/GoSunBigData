@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 聚类查询返回前台封装
  */
-public class ClusteringSearchDTO implements Serializable {
+public class ClusteringDTO implements Serializable {
 
     /**
      * 建议迁入人口首页查询返回信息
@@ -52,7 +52,7 @@ public class ClusteringSearchDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ClusteringSearchDTO{" +
+        return "ClusteringDTO{" +
                 "clusteringInfo=" + clusteringInfo +
                 ", alarmInfoList=" + alarmInfoList +
                 ", alarmIdList=" + alarmIdList +
