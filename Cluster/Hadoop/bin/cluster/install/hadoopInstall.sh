@@ -24,8 +24,8 @@ LOG_FILE=${LOG_DIR}/hadoopInstall.log
 ##  hadoop 安装包目录
 HADOOP_SOURCE_DIR=${ROOT_HOME}/component/bigdata
 
-##集群组件的日志文件目录 /opt/logs
-LOGS_PATH=$(grep Cluster_LOGSDir $(CONF_DIR)/cluster_conf.properties|cut -d '=' -f2)
+##集群组件的日志文件目录 /opt/hzgc/logs
+LOGS_PATH=$(grep Cluster_LOGSDir ${CONF_DIR}/cluster_conf.properties|cut -d '=' -f2)
 if [ ! -d ${LOGS_PATH} ]; then
  mkdir -p ${LOGS_PATH}
 fi

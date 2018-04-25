@@ -4,13 +4,16 @@ import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
 import com.hzgc.service.face.service.FaceExtract;
 import com.hzgc.jni.FaceAttribute;
-import com.hzgc.service.face.vo.ImageDataVo;
+import com.hzgc.service.face.service.FaceExtractImpl;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,19 +24,25 @@ import java.io.IOException;
  */
 @RestController
 @FeignClient(name = "face")
-@RequestMapping(value = BigDataPath.FACE)
+@RequestMapping(value = BigDataPath.FACE,consumes = "application/json",produces = "application/json")
+@Api(value = "/face",tags = "以图搜图" )
 public class FaceController {
 
     private static Logger logger = LoggerFactory.getLogger(FaceController.class);
 
     @Autowired
-    FaceExtract faceExtract;
+    FaceExtractImpl faceExtractService;
 
     //特征值获取
+    @ApiOperation(value = "图片的特征值提取",response =FaceAttribute.class)
+    @ApiImplicitParam(name = "image",value = "图片",required =  true,dataType = "file", paramType = "form")
+    @ApiResponses({
+            @ApiResponse(code = 200,message = "successful response")
+    })
     @RequestMapping(value = BigDataPath.FEATURE_EXTRACT,method = RequestMethod.POST)
-    public ResponseResult<ImageDataVo> featureExtract(MultipartFile image) throws IOException {
-        ResponseResult<ImageDataVo> response = ResponseResult.ok();
-        ImageDataVo imageData = new ImageDataVo();
+    public ResponseResult<FaceAttribute> featureExtract(@RequestParam MultipartFile image) throws IOException {
+        ResponseResult<FaceAttribute> response = ResponseResult.ok();
+        System.out.println("1");
         byte[] pictureBody = null;
         FaceAttribute faceAttribute = null;
 
@@ -45,16 +54,12 @@ public class FaceController {
         }
         //调用大数据接口，提取特征值
         try{
-            faceAttribute = faceExtract.featureExtract(pictureBody);
+            faceAttribute = faceExtractService.featureExtract(pictureBody);
         }catch (Exception e){
             logger.info("faceAttribute acquires is failed");
         }
 
-        imageData.setBinImage(pictureBody);
-        imageData.setFaceAttr(faceAttribute);
-
-        response.setBody(imageData);
-
+        response.setBody(faceAttribute);
         return response;
     }
 }

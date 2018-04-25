@@ -12,6 +12,19 @@
     <groupId>com.hzgc.service</groupId>
     <artifactId>dynrepo</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-ftp</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-service</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -36,14 +49,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.hzgc.common</groupId>
-            <artifactId>common-ftp</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 
 </project>
