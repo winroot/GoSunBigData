@@ -49,4 +49,13 @@ public class ClusteringSearchDTO implements Serializable {
     public void setAlarmIdList(List<Integer> alarmIdList) {
         this.alarmIdList = alarmIdList;
     }
+
+    @Override
+    public String toString() {
+        return "ClusteringSearchDTO{" +
+                "clusteringInfo=" + clusteringInfo +
+                ", alarmInfoList=" + alarmInfoList +
+                ", alarmIdList=" + alarmIdList +
+                '}';
+    }
 }

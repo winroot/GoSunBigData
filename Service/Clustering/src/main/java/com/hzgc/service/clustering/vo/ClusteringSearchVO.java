@@ -94,4 +94,16 @@ public class ClusteringSearchVO implements Serializable {
     public void setSortParam(String sortParam) {
         this.sortParam = sortParam;
     }
+
+    @Override
+    public String toString() {
+        return "ClusteringSearchVO{" +
+                "clusterId='" + clusterId + '\'' +
+                ", region='" + region + '\'' +
+                ", time='" + time + '\'' +
+                ", start=" + start +
+                ", limt=" + limt +
+                ", sortParam='" + sortParam + '\'' +
+                '}';
+    }
 }

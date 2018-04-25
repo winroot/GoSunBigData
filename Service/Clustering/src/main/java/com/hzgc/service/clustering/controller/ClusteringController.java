@@ -59,7 +59,7 @@ public class ClusteringController {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
     @RequestMapping(value = BigDataPath.CLUSTERING_DETAILSEARCH, method = RequestMethod.POST)
-    public ResponseResult detailClusteringSearch(
+    public ResponseResult<ClusteringSearchDTO> detailClusteringSearch(
             @RequestBody @ApiParam(value = "聚类信息查询入参") ClusteringSearchVO clusteringSearchVO) {
         String clusterId;
         String time;
@@ -86,7 +86,7 @@ public class ClusteringController {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
     @RequestMapping(value = BigDataPath.CLUSTERING_DETAILSEARCH_V1, method = RequestMethod.POST)
-    public ResponseResult detailClusteringSearch_v1(
+    public ResponseResult<ClusteringSearchDTO> detailClusteringSearch_v1(
             @RequestBody @ApiParam(value = "聚类信息查询入参") ClusteringSearchVO clusteringSearchVO) {
         String clusterId;
         String time;
@@ -113,7 +113,7 @@ public class ClusteringController {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
     @RequestMapping(value = BigDataPath.CLUSTERING_DELETE, method = RequestMethod.DELETE)
-    public ResponseResult deleteClustering(
+    public ResponseResult<Boolean> deleteClustering(
             @RequestBody @ApiParam(value = "聚类信息存储入参") ClusteringSaveVO clusteringSaveVO) {
         List<String> clusterIdList;
         String time;
@@ -134,7 +134,7 @@ public class ClusteringController {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
     @RequestMapping(value = BigDataPath.CLUSTERING_IGNORE, method = RequestMethod.POST)
-    public ResponseResult ignoreClustering(
+    public ResponseResult<Boolean> ignoreClustering(
             @RequestBody @ApiParam(value = "聚类信息存储入参") ClusteringSaveVO clusteringSaveVO) {
         List<String> clusterIdList;
         String time;

@@ -67,4 +67,14 @@ public class ClusteringSaveVO implements Serializable {
     public void setFlag(String flag) {
         this.flag = flag;
     }
+
+    @Override
+    public String toString() {
+        return "ClusteringSaveVO{" +
+                "clusterId='" + clusterId + '\'' +
+                ", clusterIdList=" + clusterIdList +
+                ", time='" + time + '\'' +
+                ", flag='" + flag + '\'' +
+                '}';
+    }
 }
