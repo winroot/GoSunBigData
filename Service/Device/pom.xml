@@ -16,7 +16,6 @@
         <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-service</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 

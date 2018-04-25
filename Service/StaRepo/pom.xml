@@ -14,9 +14,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.hzgc</groupId>
+            <artifactId>jni</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-service</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
         <!--Phoenix JDBC -->
         <dependency>
