@@ -27,11 +27,13 @@ public class ResponseResult<T> implements Serializable {
     private static final String DEFAULT_MESSAGE = "OK";
     public static final int OK = 0;
 
+    @ApiModelProperty("head")
     private Head head;
 
     @ApiModelProperty("body")
     private T body;
 
+    @ApiModelProperty("extend")
     private Map<String, Object> extend;
 
     public ResponseResult() {

@@ -1,22 +1,29 @@
 package com.hzgc.service.device.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
+@ApiModel(value = "设备参数")
 public class DeviceDataVO implements Serializable {
 
     /**
      * 平台ID
      */
+    @ApiModelProperty(value = "平台ID",required = true)
     private String platformId;
 
     /**
      * 设备ID
      */
+    @ApiModelProperty(value = "设备ID")
     private String ipcID;
 
     /**
      * 设备备注
      */
+    @ApiModelProperty(value = "设备备注")
     private String notes;
 
     public String getPlatformId() {
