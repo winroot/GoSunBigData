@@ -65,6 +65,8 @@ public class CapturePictureSearchServiceImpl implements CapturePictureSearchServ
     }
 
     /**
+     * 历史搜索记录查询
+     *
      * @param resultOption 历史结果查询参数对象
      * @return SearchResult对象
      */

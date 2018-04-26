@@ -7,7 +7,6 @@ import com.hzgc.service.dynrepo.attribute.AttributeCount;
 import com.hzgc.service.dynrepo.object.CaptureCount;
 import com.hzgc.service.dynrepo.service.CaptureCountServiceImpl;
 import com.hzgc.service.dynrepo.vo.CaptureCountVO;
-import com.hzgc.service.dynrepo.vo.CapturePictureSearchVO;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -105,7 +104,7 @@ public class CaptureCountController {
      * 单设备抓拍统计
      * 查询指定时间段内，指定设备抓拍的图片数量、该设备最后一次抓拍时间
      *
-     * @param capturePictureSearchVO 抓拍统计入参
+     * @param captureCountVO 抓拍统计入参
      * @return CaptureCount
      */
     @ApiOperation(value = "单设备抓拍统计", response = CaptureCount.class, responseContainer = "List")
@@ -114,14 +113,14 @@ public class CaptureCountController {
             @ApiResponse(code = 404, message = "404")})
     @RequestMapping(value = BigDataPath.CAPTURECOUNT_IPCID, method = RequestMethod.GET)
     public ResponseResult<CaptureCount> captureCountQuery(
-            @RequestBody @ApiParam(value = "抓拍统计入参") CapturePictureSearchVO capturePictureSearchVO) {
+            @RequestBody @ApiParam(value = "抓拍统计入参") CaptureCountVO captureCountVO) {
         String startTime;
         String endTime;
         String ipcId;
-        if (capturePictureSearchVO != null) {
-            startTime = capturePictureSearchVO.getStartTime();
-            endTime = capturePictureSearchVO.getEndTime();
-            ipcId = capturePictureSearchVO.getIpcId();
+        if (captureCountVO != null) {
+            startTime = captureCountVO.getStartTime();
+            endTime = captureCountVO.getEndTime();
+            ipcId = captureCountVO.getIpcId();
         } else {
             return null;
         }
@@ -133,7 +132,7 @@ public class CaptureCountController {
      * 多设备抓拍统计
      * 查询指定时间段内，指定的多个设备抓拍的图片数量
      *
-     * @param capturePictureSearchVO 抓拍统计入参
+     * @param captureCountVO 抓拍统计入参
      * @return Long
      */
     @ApiOperation(value = "多设备抓拍统计", response = Long.class, responseContainer = "List")
@@ -142,14 +141,14 @@ public class CaptureCountController {
             @ApiResponse(code = 404, message = "404")})
     @RequestMapping(value = BigDataPath.CAPTURECOUNT_IPCIDS, method = RequestMethod.GET)
     public ResponseResult<Long> getCaptureCount(
-            @RequestBody @ApiParam(value = "抓拍统计入参") CapturePictureSearchVO capturePictureSearchVO) {
+            @RequestBody @ApiParam(value = "抓拍统计入参") CaptureCountVO captureCountVO) {
         String startTime;
         String endTime;
         List<String> ipcIdList;
-        if (capturePictureSearchVO != null) {
-            startTime = capturePictureSearchVO.getStartTime();
-            endTime = capturePictureSearchVO.getEndTime();
-            ipcIdList = capturePictureSearchVO.getIpcIdList();
+        if (captureCountVO != null) {
+            startTime = captureCountVO.getStartTime();
+            endTime = captureCountVO.getEndTime();
+            ipcIdList = captureCountVO.getIpcIdList();
         } else {
             return null;
         }
@@ -161,7 +160,7 @@ public class CaptureCountController {
      * 抓拍属性统计
      * 查询指定时间段内，单个或某组设备中某种属性在抓拍图片中的数量
      *
-     * @param capturePictureSearchVO 抓拍统计入参
+     * @param captureCountVO 抓拍统计入参
      * @return List<AttributeCount>
      */
     @ApiOperation(value = "抓拍属性统计", response = AttributeCount.class, responseContainer = "List")
@@ -170,16 +169,16 @@ public class CaptureCountController {
             @ApiResponse(code = 404, message = "404")})
     @RequestMapping(value = BigDataPath.CAPTURECOUNT_ATTRIBUTE, method = RequestMethod.POST)
     public ResponseResult<List<AttributeCount>> captureAttributeQuery(
-            @RequestBody @ApiParam(value = "抓拍统计入参") CapturePictureSearchVO capturePictureSearchVO) {
+            @RequestBody @ApiParam(value = "抓拍统计入参") CaptureCountVO captureCountVO) {
         String startTime;
         String endTime;
         List<String> ipcIdList;
         SearchType type;
-        if (capturePictureSearchVO != null) {
-            startTime = capturePictureSearchVO.getStartTime();
-            endTime = capturePictureSearchVO.getEndTime();
-            ipcIdList = capturePictureSearchVO.getIpcIdList();
-            type = capturePictureSearchVO.getType();
+        if (captureCountVO != null) {
+            startTime = captureCountVO.getStartTime();
+            endTime = captureCountVO.getEndTime();
+            ipcIdList = captureCountVO.getIpcIdList();
+            type = captureCountVO.getType();
         } else {
             return null;
         }
