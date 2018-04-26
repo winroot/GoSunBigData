@@ -81,48 +81,6 @@ public class CapturePictureSearchController {
         return ResponseResult.init(attributeList);
     }
 
-    @ApiOperation(value = "单个设备抓拍统计查询", response = CaptureCount.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
-    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_COUNT, method = RequestMethod.GET)
-    public ResponseResult<CaptureCount> captureCountQuery(
-            @RequestBody @ApiParam(value = "以图搜图入参") CapturePictureSearchVO capturePictureSearchVO) {
-        String startTime;
-        String endTime;
-        String ipcId;
-        if (capturePictureSearchVO != null) {
-            startTime = capturePictureSearchVO.getStartTime();
-            endTime = capturePictureSearchVO.getEndTime();
-            ipcId = capturePictureSearchVO.getIpcId();
-        } else {
-            return null;
-        }
-        CaptureCount captureCount = capturePictureSearchService.captureCountQuery(startTime, endTime, ipcId);
-        return ResponseResult.init(captureCount);
-    }
-
-    @ApiOperation(value = "多个设备抓拍统计查询", response = Long.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
-    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_COUNTS, method = RequestMethod.GET)
-    public ResponseResult<Long> getCaptureNumber(
-            @RequestBody @ApiParam(value = "以图搜图入参") CapturePictureSearchVO capturePictureSearchVO) {
-        String startTime;
-        String endTime;
-        List<String> ipcIdList;
-        if (capturePictureSearchVO != null) {
-            startTime = capturePictureSearchVO.getStartTime();
-            endTime = capturePictureSearchVO.getEndTime();
-            ipcIdList = capturePictureSearchVO.getIpcIdList();
-        } else {
-            return null;
-        }
-        Long count = capturePictureSearchService.getCaptureNumber(startTime, endTime, ipcIdList);
-        return ResponseResult.init(count);
-    }
-
     @ApiOperation(value = "抓拍历史记录查询", response = SearchResult.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
@@ -138,28 +96,5 @@ public class CapturePictureSearchController {
         }
         List<SearchResult> searchResultList = capturePictureSearchService.getCaptureHistory(searchOption);
         return ResponseResult.init(searchResultList);
-    }
-
-    @ApiOperation(value = "抓拍属性统计查询", response = AttributeCount.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
-    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_ATTRIBUTECOUNT, method = RequestMethod.POST)
-    public ResponseResult<List<AttributeCount>> captureAttributeQuery(
-            @RequestBody @ApiParam(value = "以图搜图入参") CapturePictureSearchVO capturePictureSearchVO) {
-        String startTime;
-        String endTime;
-        List<String> ipcIdList;
-        SearchType type;
-        if (capturePictureSearchVO != null) {
-            startTime = capturePictureSearchVO.getStartTime();
-            endTime = capturePictureSearchVO.getEndTime();
-            ipcIdList = capturePictureSearchVO.getIpcIdList();
-            type = capturePictureSearchVO.getType();
-        } else {
-            return null;
-        }
-        List<AttributeCount> attributeCountList = capturePictureSearchService.captureAttributeQuery(startTime, endTime, ipcIdList, type);
-        return ResponseResult.init(attributeCountList);
     }
 }
