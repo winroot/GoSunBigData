@@ -30,6 +30,12 @@ public class CapturePictureSearchController {
     @Autowired
     private CapturePictureSearchServiceImpl capturePictureSearchService;
 
+    /**
+     * 以图搜图
+     *
+     * @param capturePictureSearchVO 以图搜图入参
+     * @return SearchResult
+     */
     @ApiOperation(value = "以图搜图", response = SearchResult.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
@@ -47,7 +53,13 @@ public class CapturePictureSearchController {
         return ResponseResult.init(searchResult);
     }
 
-    @ApiOperation(value = "获取搜索历史记录", response = SearchResult.class, responseContainer = "List")
+    /**
+     * 历史搜索记录查询
+     *
+     * @param capturePictureSearchVO 以图搜图入参
+     * @return SearchResult
+     */
+    @ApiOperation(value = "历史搜索记录查询", response = SearchResult.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
@@ -64,7 +76,13 @@ public class CapturePictureSearchController {
         return ResponseResult.init(searchResult);
     }
 
-    @ApiOperation(value = "属性特征查看", response = Attribute.class, responseContainer = "List")
+    /**
+     * 人/车属性查询
+     *
+     * @param capturePictureSearchVO 以图搜图入参
+     * @return List<Attribute>
+     */
+    @ApiOperation(value = "属性特征查询", response = Attribute.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
@@ -81,6 +99,12 @@ public class CapturePictureSearchController {
         return ResponseResult.init(attributeList);
     }
 
+    /**
+     * 抓拍历史记录查询
+     *
+     * @param capturePictureSearchVO 以图搜图入参
+     * @return List<SearchResult>
+     */
     @ApiOperation(value = "抓拍历史记录查询", response = SearchResult.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),

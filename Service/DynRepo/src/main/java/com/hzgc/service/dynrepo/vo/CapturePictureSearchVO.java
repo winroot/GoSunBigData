@@ -33,30 +33,6 @@ public class CapturePictureSearchVO implements Serializable {
     @ApiModelProperty(value = "图片类型")
     private SearchType type;
 
-    /**
-     * 起始时间
-     */
-    @ApiModelProperty(value = "起始时间")
-    private String startTime;
-
-    /**
-     * 结束时间
-     */
-    @ApiModelProperty(value = "结束时间")
-    private String endTime;
-
-    /**
-     * 设备ID
-     */
-    @ApiModelProperty(value = "设备ID")
-    private String ipcId;
-
-    /**
-     * 设备ID列表
-     */
-    @ApiModelProperty(value = "设备ID列表")
-    private List<String> ipcIdList;
-
     public SearchOption getSearchOption() {
         return searchOption;
     }
@@ -79,37 +55,5 @@ public class CapturePictureSearchVO implements Serializable {
 
     public void setType(SearchType type) {
         this.type = type;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
-    public String getIpcId() {
-        return ipcId;
-    }
-
-    public void setIpcId(String ipcId) {
-        this.ipcId = ipcId;
-    }
-
-    public List<String> getIpcIdList() {
-        return ipcIdList;
-    }
-
-    public void setIpcIdList(List<String> ipcIdList) {
-        this.ipcIdList = ipcIdList;
     }
 }
