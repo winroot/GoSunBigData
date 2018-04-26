@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @FeignClient(name = "device")
 @RequestMapping(value = BigDataPath.DEVICE,consumes = "application/json",produces = "application/json")
-@Api(value = "device",tags = "设备")
+@Api(value = "device",tags = "设备管理")
 public class DeviceController {
 
     private static Logger LOG = Logger.getLogger(DeviceController.class);
