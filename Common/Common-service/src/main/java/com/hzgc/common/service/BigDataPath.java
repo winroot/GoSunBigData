@@ -39,19 +39,19 @@ public class BigDataPath {
     /**
      * DynRepo模块请求路径
      */
-    public static final String CAPTURENUM = ROOT + "/CaptureNumber";
-    public static final String CAPTURENUM_SEARCHDYNREPO = "/dynaicNumberService";
-    public static final String CAPTURENUM_SEARCHSTAREPO = "/staticNumberService";
-    public static final String CAPTURENUM_FILTER = "/timeSoltNumber";
+    public static final String CAPTURECOUNT = ROOT + "/CaptureCount";
+    public static final String CAPTURECOUNT_DYNREPO = "/dynaicNumberService";
+    public static final String CAPTURECOUNT_STAREPO = "/staticNumberService";
+    public static final String CAPTURECOUNT_IPCIDS_TIME = "/timeSoltNumber";
+    public static final String CAPTURECOUNT_IPCID = "/captureCountQuery";
+    public static final String CAPTURECOUNT_IPCIDS = "/getCaptureCount";
+    public static final String CAPTURECOUNT_ATTRIBUTE = "/captureAttributeQuery";
 
     public static final String CAPTUREPICTURESEARCH = ROOT + "/CapturePictureSearch";
     public static final String CAPTUREPICTURESEARCH_SEARCH = "/search";
     public static final String CAPTUREPICTURESEARCH_SEARCHRESULT = "/getSearchResult";
     public static final String CAPTUREPICTURESEARCH_ATTRIBUTE = "/getAttribute";
-    public static final String CAPTUREPICTURESEARCH_COUNT = "/captureCountQuery";
-    public static final String CAPTUREPICTURESEARCH_COUNTS = "/getCaptureNumber";
     public static final String CAPTUREPICTURESEARCH_HISTORY = "/getCaptureHistory";
-    public static final String CAPTUREPICTURESEARCH_ATTRIBUTECOUNT = "/captureAttributeQuery";
 
     /**
      * Face模块请求路径
