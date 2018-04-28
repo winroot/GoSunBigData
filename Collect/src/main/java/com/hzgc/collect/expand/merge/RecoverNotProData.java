@@ -2,6 +2,7 @@ package com.hzgc.collect.expand.merge;
 
 import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.LogEvent;
+import com.hzgc.collect.expand.util.FTPConstants;
 import com.hzgc.collect.expand.util.KafkaProperties;
 import com.hzgc.collect.expand.util.ProducerKafka;
 import com.hzgc.common.ftp.faceobj.FaceObject;
@@ -59,7 +60,7 @@ public class RecoverNotProData {
                     List<String> notProRows = rowsListFactory.getNotProRows();
 
                     //用于标记发送Kafka数据数
-                    long rowCount = 0;
+                    long rowCount = FTPConstants.NUM_ZERO;
                     ProducerKafka producerKafka = ProducerKafka.getInstance();
                     for (String row : notProRows) {
                         //获取未处理数据的ftpUrl

@@ -1,6 +1,7 @@
 package com.hzgc.collect.expand.merge;
 
 import com.hzgc.collect.expand.log.LogEvent;
+import com.hzgc.collect.expand.util.FTPConstants;
 import com.hzgc.common.util.json.JSONUtil;
 import org.apache.log4j.Logger;
 
@@ -28,21 +29,21 @@ class FindDiffRows {
      */
     List<String> getNotProRows(List<String> allRows) {
         List<String> notProList = new ArrayList<>();
-        if (allRows == null || allRows.size() == 0) {
+        if (allRows == null || allRows.size() == FTPConstants.NUM_ZERO) {
             LOG.warn("The unionAllRows size is None");
-        } else if (allRows.size() == 1) {
+        } else if (allRows.size() == FTPConstants.NUM_ONE) {
             LOG.info("The unionAllRows size is OnlyOne");
-            LogEvent eventState = JSONUtil.toObject(allRows.get(0), LogEvent.class);
+            LogEvent eventState = JSONUtil.toObject(allRows.get(FTPConstants.NUM_ZERO), LogEvent.class);
             String processState = eventState.getStatus();
             if (processState.equals("0")) {
-                notProList.add(allRows.get(0));
+                notProList.add(allRows.get(FTPConstants.NUM_ZERO));
             }
         } else {
             Collections.sort(allRows);
-            for (int i = 1; i <= allRows.size() - 2; i++) {
+            for (int i = FTPConstants.NUM_ONE; i <= allRows.size() - FTPConstants.NUM_TWO; i++) {
                 LogEvent rowEvent = JSONUtil.toObject(allRows.get(i), LogEvent.class);
-                LogEvent upRowEvent = JSONUtil.toObject(allRows.get(i - 1), LogEvent.class);
-                LogEvent downRowEvent = JSONUtil.toObject(allRows.get(i + 1), LogEvent.class);
+                LogEvent upRowEvent = JSONUtil.toObject(allRows.get(i - FTPConstants.NUM_ONE), LogEvent.class);
+                LogEvent downRowEvent = JSONUtil.toObject(allRows.get(i + FTPConstants.NUM_ONE), LogEvent.class);
                 long rowCount = rowEvent.getCount();
                 long upRowCount = upRowEvent.getCount();
                 long downRowCount = downRowEvent.getCount();
@@ -53,16 +54,16 @@ class FindDiffRows {
                 }
             }
             //判断第一行数据是否已经处理
-            LogEvent firstEventCount = JSONUtil.toObject(allRows.get(0), LogEvent.class);
-            LogEvent secondEventCount = JSONUtil.toObject(allRows.get(1), LogEvent.class);
+            LogEvent firstEventCount = JSONUtil.toObject(allRows.get(FTPConstants.NUM_ZERO), LogEvent.class);
+            LogEvent secondEventCount = JSONUtil.toObject(allRows.get(FTPConstants.NUM_ONE), LogEvent.class);
             if (firstEventCount.getCount() != secondEventCount.getCount()) {
-                notProList.add(allRows.get(0));
+                notProList.add(allRows.get(FTPConstants.NUM_ZERO));
             }
             //判断最后一行数据是否已经处理
-            LogEvent lastEventCount = JSONUtil.toObject(allRows.get(allRows.size() - 1), LogEvent.class);
-            LogEvent eventCount = JSONUtil.toObject(allRows.get(allRows.size() - 2), LogEvent.class);
+            LogEvent lastEventCount = JSONUtil.toObject(allRows.get(allRows.size() - FTPConstants.NUM_ONE), LogEvent.class);
+            LogEvent eventCount = JSONUtil.toObject(allRows.get(allRows.size() - FTPConstants.NUM_TWO), LogEvent.class);
             if (lastEventCount.getCount() != eventCount.getCount()) {
-                notProList.add(allRows.get(allRows.size() - 1));
+                notProList.add(allRows.get(allRows.size() - FTPConstants.NUM_ONE));
             }
         }
         notProList.sort(new ListComparator());
@@ -78,24 +79,24 @@ class FindDiffRows {
     List<String> getAllDiffRows(List<String> allRows) {
         List<String> rows = new ArrayList<>();
         String row;
-        if (allRows == null || allRows.size() == 0) {
+        if (allRows == null || allRows.size() == FTPConstants.NUM_ZERO) {
             LOG.warn("The unionAllRows size is None");
-        } else if (allRows.size() == 1) {
+        } else if (allRows.size() == FTPConstants.NUM_ONE) {
             LOG.info("The unionAllRows size is OnlyOne");
-            rows.add(allRows.get(0));
+            rows.add(allRows.get(FTPConstants.NUM_ZERO));
         } else {
             Collections.sort(allRows);
-            for (int i = 1; i < allRows.size() - 2; i++) {
+            for (int i = FTPConstants.NUM_ONE; i < allRows.size() - FTPConstants.NUM_TWO; i++) {
                 row = allRows.get(i);
-                if (!row.equals(allRows.get(i - 1)) && !row.equals(allRows.get(i + 1))) {
+                if (!row.equals(allRows.get(i - FTPConstants.NUM_ONE)) && !row.equals(allRows.get(i + FTPConstants.NUM_ONE))) {
                     rows.add(row);
                 }
             }
-            if (!allRows.get(0).equals(allRows.get(1))) {
-                rows.add(allRows.get(0));
+            if (!allRows.get(FTPConstants.NUM_ZERO).equals(allRows.get(FTPConstants.NUM_ONE))) {
+                rows.add(allRows.get(FTPConstants.NUM_ZERO));
             }
-            if (!allRows.get(allRows.size() - 1).equals(allRows.get(allRows.size() - 2))) {
-                rows.add(allRows.get(allRows.size() - 1));
+            if (!allRows.get(allRows.size() - FTPConstants.NUM_ONE).equals(allRows.get(allRows.size() - FTPConstants.NUM_TWO))) {
+                rows.add(allRows.get(allRows.size() - FTPConstants.NUM_ONE));
             }
 
         }
