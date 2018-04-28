@@ -29,9 +29,4 @@ public class FTPConstants {
     public static final long LONG_ZERO = 0L;
     public static final long LONG_ONE = 1L;
 
-    public static final Integer NUM_ONE_THOUSAND = 1000;
-    public static final Integer NUM_SIXTY= 60;
-    public static final Long ONE_HOUR = 1000 * 60 * 60L;
-    public static final Byte CHANGE_INFO_SUCCESS = 0;
-    public static final Byte CHANGE_INFO_FAILURE = 1;
 }
