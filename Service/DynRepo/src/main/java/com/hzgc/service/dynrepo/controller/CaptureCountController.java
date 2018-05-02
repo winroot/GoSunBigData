@@ -4,9 +4,11 @@ import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
 import com.hzgc.common.util.searchtype.SearchType;
 import com.hzgc.service.dynrepo.attribute.AttributeCount;
-import com.hzgc.service.dynrepo.object.CaptureCount;
-import com.hzgc.service.dynrepo.service.CaptureCountServiceImpl;
-import com.hzgc.service.dynrepo.vo.CaptureCountVO;
+import com.hzgc.service.dynrepo.bean.CaptureCount;
+import com.hzgc.service.dynrepo.bean.TimeSlotNumber;
+import com.hzgc.service.dynrepo.bean.TotalAndTodayCount;
+import com.hzgc.service.dynrepo.service.CaptureCountService;
+import com.hzgc.service.dynrepo.bean.CaptureCountVO;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -22,7 +24,7 @@ import java.util.Map;
 public class CaptureCountController {
 
     @Autowired
-    private CaptureCountServiceImpl captureCountService;
+    private CaptureCountService captureCountService;
 
     /**
      * 抓拍统计与今日抓拍统计
@@ -36,7 +38,7 @@ public class CaptureCountController {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
     @RequestMapping(value = BigDataPath.CAPTURECOUNT_DYNREPO, method = RequestMethod.GET)
-    public ResponseResult<Map<String, Integer>> dynaicNumberService(
+    public ResponseResult<TotalAndTodayCount> dynaicNumberService(
             @RequestBody @ApiParam(value = "抓拍统计入参") CaptureCountVO captureCountVO) {
         List<String> ipcIdList;
         if (captureCountVO != null) {
@@ -44,31 +46,7 @@ public class CaptureCountController {
         } else {
             return null;
         }
-        Map<String, Integer> count = captureCountService.dynaicNumberService(ipcIdList);
-        return ResponseResult.init(count);
-    }
-
-    /**
-     * 单平台下对象库人员统计
-     * 查询es的静态库，返回每个平台下（对应platformId），每个对象库（对应pkey）下的人员的数量
-     *
-     * @param captureCountVO 抓拍统计入参
-     * @return Map
-     */
-    @ApiOperation(value = "单平台下对象库人员统计", response = Map.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
-    @RequestMapping(value = BigDataPath.CAPTURECOUNT_STAREPO, method = RequestMethod.GET)
-    public ResponseResult<Map<String, Integer>> staticNumberService(
-            @RequestBody @ApiParam(value = "抓拍统计入参") CaptureCountVO captureCountVO) {
-        String platformId;
-        if (captureCountVO != null) {
-            platformId = captureCountVO.getPlatformId();
-        } else {
-            return null;
-        }
-        Map<String, Integer> count = captureCountService.staticNumberService(platformId);
+        TotalAndTodayCount count = captureCountService.dynamicNumberService(ipcIdList);
         return ResponseResult.init(count);
     }
 
@@ -84,7 +62,7 @@ public class CaptureCountController {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
     @RequestMapping(value = BigDataPath.CAPTURECOUNT_IPCIDS_TIME, method = RequestMethod.GET)
-    public ResponseResult<Map<String, Integer>> timeSoltNumber(
+    public ResponseResult<TimeSlotNumber> timeSoltNumber(
             @RequestBody @ApiParam(value = "抓拍统计入参") CaptureCountVO captureCountVO) {
         List<String> ipcIdList;
         String startTime;
@@ -96,7 +74,7 @@ public class CaptureCountController {
         } else {
             return null;
         }
-        Map<String, Integer> count = captureCountService.timeSoltNumber(ipcIdList, startTime, endTime);
+        TimeSlotNumber count = captureCountService.timeSoltNumber(ipcIdList, startTime, endTime);
         return ResponseResult.init(count);
     }
 

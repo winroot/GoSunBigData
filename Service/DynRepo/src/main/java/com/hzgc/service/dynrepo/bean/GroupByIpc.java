@@ -1,4 +1,4 @@
-package com.hzgc.service.dynrepo.object;
+package com.hzgc.service.dynrepo.bean;
 
 import java.io.Serializable;
 import java.util.List;

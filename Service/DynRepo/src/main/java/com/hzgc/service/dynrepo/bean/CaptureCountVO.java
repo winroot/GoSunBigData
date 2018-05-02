@@ -1,4 +1,4 @@
-package com.hzgc.service.dynrepo.vo;
+package com.hzgc.service.dynrepo.bean;
 
 import com.hzgc.common.util.searchtype.SearchType;
 import io.swagger.annotations.ApiModel;

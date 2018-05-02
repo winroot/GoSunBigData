@@ -9,34 +9,14 @@ import java.io.Serializable;
  */
 public class DynamicTable implements Serializable {
 
-    //upFea表
-    public static final String TABLE_UPFEA = "upFea";
-    //upFea表列簇-人
-    public static final byte[] UPFEA_PERSON_COLUMNFAMILY = Bytes.toBytes("p");
-    //图片-人
-    public static final byte[] UPFEA_PERSON_COLUMN_SMALLIMAGE = Bytes.toBytes("s");
-    //特征值-人
-    public static final byte[] UPFEA_PERSON_COLUMN_FEA = Bytes.toBytes("f");
-    //upFea表列簇-车
-    public static final byte[] UPFEA_CAR_COLUMNFAMILY = Bytes.toBytes("c");
-    //图片-车
-    public static final byte[] UPFEA_CAR_COLUMN_SMALLIMAGE = Bytes.toBytes("s");
-    //特征值-车
-    public static final byte[] UPFEA_CAR_COLUMN_FEA = Bytes.toBytes("f");
-    //车牌号-车 保留字段
-    public static final byte[] UPFEA_CAR_COLUMN_PLATENUM = Bytes.toBytes("n");
     //searchRes表
     public static final String TABLE_SEARCHRES = "searchRes";
     //searchRes表列簇
     public static final byte[] SEARCHRES_COLUMNFAMILY = Bytes.toBytes("i");
-    //查询类型
-    public static final byte[] SEARCHRES_COLUMN_SEARCHTYPE = Bytes.toBytes("t");
     //只有人脸图
     public static final String PERSON_TYPE = "PERSON";
     //只有车辆图
     public static final String CAR_TYPE = "CAR";
-    //同时包含人脸和车辆 保留字段
-    public static final String MIX_TYPE = "MIX";
     //查询信息
     public static final byte[] SEARCHRES_COLUMN_SEARCHMESSAGE = Bytes.toBytes("m");
     //es索引
