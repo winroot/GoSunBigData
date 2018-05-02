@@ -1,14 +1,15 @@
-package com.hzgc.service.dynrepo.service;
+package com.hzgc.service.dynrepo.dao;
 
 import com.hzgc.common.service.table.column.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.service.dynrepo.attribute.Attribute;
 import com.hzgc.service.dynrepo.attribute.Logistic;
-import com.hzgc.service.dynrepo.object.SearchOption;
+import com.hzgc.service.dynrepo.bean.SearchOption;
 import com.hzgc.jni.FaceFunction;
 import org.apache.log4j.Logger;
 
 import java.sql.Date;
+import java.sql.SQLException;
 
 class ParseByOption {
 
@@ -28,7 +29,7 @@ class ParseByOption {
                 DynamicTable.DATE;
     }
 
-    static String getFinalSQLwithOption(SearchOption option, boolean printSql) throws Exception {
+    static String getFinalSQLwithOption(SearchOption option, boolean printSql) throws SQLException {
         if (option.getImages().size() == 1) {
             String feature = FaceFunction.
                     floatArray2string(option.getImages().get(0).getFaceAttr().getFeature());
@@ -38,7 +39,7 @@ class ParseByOption {
         } else if (option.isOnePerson()) {
             return getOnePersonSQL(option, printSql);
         } else {
-            throw new Exception("Arguments error, method:getFinalSQLwithOption()");
+            throw new SQLException("Arguments error, method:getFinalSQLwithOption()");
         }
     }
 

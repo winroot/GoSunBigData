@@ -166,31 +166,31 @@ public class ObjectInfoInnerHandlerImpl implements Serializable {
 
         String sql = "select " + ObjectInfoTable.ROWKEY + ", " + ObjectInfoTable.PKEY +
                 ", " + ObjectInfoTable.UPDATETIME + " from " + ObjectInfoTable.TABLE_NAME;
-        String pkeysWhere = "";
+        StringBuilder pkeysWhere = new StringBuilder();
         if (pkeys.size() == 1) {
-            pkeysWhere = " where " + ObjectInfoTable.PKEY +" = ?";
+            pkeysWhere = new StringBuilder(" where " + ObjectInfoTable.PKEY + " = ?");
         } else {
-            pkeysWhere += " where (";
+            pkeysWhere.append(" where (");
             int i = 0;
-            for (String pkey : pkeys) {
-                if (i == 0){
-                    pkeysWhere += ObjectInfoTable.PKEY;
-                    pkeysWhere += " = ? ";
+            for (String ignored : pkeys) {
+                if (i == 0) {
+                    pkeysWhere.append(ObjectInfoTable.PKEY);
+                    pkeysWhere.append(" = ? ");
                 } else {
-                    pkeysWhere += " or ";
-                    pkeysWhere += ObjectInfoTable.PKEY;
-                    pkeysWhere += " = ?";
+                    pkeysWhere.append(" or ");
+                    pkeysWhere.append(ObjectInfoTable.PKEY);
+                    pkeysWhere.append(" = ?");
                 }
                 i++;
             }
-            pkeysWhere += ")";
+            pkeysWhere.append(")");
         }
         sql = sql + pkeysWhere;
 
         PreparedStatement pstm = null;
         try {
             pstm = conn.prepareStatement(sql);
-            for(int i = 0; i< pkeys.size(); i++) {
+            for (int i = 0; i < pkeys.size(); i++) {
                 pstm.setString(i + 1, pkeys.get(i));
             }
             ResultSet resultSet = pstm.executeQuery();
@@ -233,7 +233,7 @@ public class ObjectInfoInnerHandlerImpl implements Serializable {
         try {
             pstm = conn.prepareStatement(sql);
             java.sql.Timestamp timeStamp = new java.sql.Timestamp(System.currentTimeMillis());
-            for (int i = 0;i < rowkeys.size(); i++) {
+            for (int i = 0; i < rowkeys.size(); i++) {
                 pstm.setString(1, rowkeys.get(i));
                 pstm.setTimestamp(2, timeStamp);
                 pstm.executeUpdate();
