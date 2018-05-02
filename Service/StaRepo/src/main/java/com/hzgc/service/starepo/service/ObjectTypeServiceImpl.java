@@ -13,6 +13,14 @@ import java.util.*;
 @Service
 public class ObjectTypeServiceImpl implements ObjectTypeService {
     private static Logger LOG = Logger.getLogger(ObjectInfoHandlerImpl.class);
+
+    /**
+     * 添加objectType
+     * @param name
+     * @param creator
+     * @param remark
+     * @return
+     */
     @Override
     public boolean addObjectType(String name, String creator, String remark) {
         LOG.info("objectType" + name);
@@ -51,6 +59,11 @@ public class ObjectTypeServiceImpl implements ObjectTypeService {
         return true;
     }
 
+    /**
+     * 删除objectType
+     * @param id
+     * @return
+     */
     @Override
     public boolean deleteObjectType(String id) {
         LOG.info("rowkey to delete : " + id);
@@ -89,6 +102,14 @@ public class ObjectTypeServiceImpl implements ObjectTypeService {
         return true;
     }
 
+    /**
+     * 修改ObjectType
+     * @param id
+     * @param name
+     * @param creator
+     * @param remark
+     * @return
+     */
     @Override
     public boolean updateObjectType(String  id, String name, String creator, String remark) {
         LOG.info("objectType" + id + " : " + name);
@@ -127,6 +148,13 @@ public class ObjectTypeServiceImpl implements ObjectTypeService {
         return true;
     }
 
+    /**
+     * 查询objectType
+     * @param name
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
     @Override
     public List<Map<String, String>> searchObjectType(String name, int pageIndex, int pageSize) {
         if(pageIndex == 0){
