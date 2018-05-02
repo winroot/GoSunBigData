@@ -1,6 +1,7 @@
 package com.hzgc.collect.expand.log;
 
 import com.hzgc.collect.expand.conf.CommonConf;
+import com.hzgc.collect.expand.util.FTPConstants;
 import com.hzgc.common.util.json.JSONUtil;
 import org.apache.log4j.Logger;
 
@@ -82,9 +83,9 @@ abstract class AbstractLogWrite implements LogWriter, Serializable {
         File logDir = new File(this.currentDir);
         if (!logDir.exists() || logDir.list() == null) {
             logDir.mkdirs();
-            this.count = 1;
-        } else if (logDir.length() == 0) {
-            this.count = 1;
+            this.count = FTPConstants.NOT_FOUND_OR_FIRST_CREATION;
+        } else if (logDir.length() == FTPConstants.NUM_ZERO) {
+            this.count = FTPConstants.NOT_FOUND_OR_FIRST_CREATION;
         } else {
             this.count = getLastCount();
         }
@@ -103,8 +104,8 @@ abstract class AbstractLogWrite implements LogWriter, Serializable {
     public String logNameUpdate(String defaultName, long count) {
         char[] oldChar = defaultName.toCharArray();
         char[] content = (count + "").toCharArray();
-        for (int i = 0; i < content.length; i++) {
-            oldChar[oldChar.length - 5 - i] = content[content.length - 1 - i];
+        for (int i = FTPConstants.NUM_ZERO; i < content.length; i++) {
+            oldChar[oldChar.length - FTPConstants.NUM_FIVE - i] = content[content.length - FTPConstants.NUM_ONE - i];
         }
         return new String(oldChar);
     }
@@ -123,15 +124,15 @@ abstract class AbstractLogWrite implements LogWriter, Serializable {
             raf = new RandomAccessFile(tempFile, "r");
             LOG.info("Start get last line from " + tempFile);
             long length = raf.length();
-            long position = length - 1;
-            if (position != -1) {
+            long position = length - FTPConstants.NUM_ONE;
+            if (position != FTPConstants.NUM_MINUS_ONE) {
                 raf.seek(position);
-                while (position >= 0) {
+                while (position >= FTPConstants.NUM_ZERO) {
                     int bb = raf.read();
                     if (bb != '\r' && bb != '\n') {
                         break;
                     }
-                    if (position == 0) {
+                    if (position == FTPConstants.NUM_ZERO) {
                         raf.seek(position);
                         break;
                     } else {
@@ -139,9 +140,9 @@ abstract class AbstractLogWrite implements LogWriter, Serializable {
                         raf.seek(position);
                     }
                 }
-                if (position >= 0) {
-                    while (position >= 0) {
-                        if (position == 0) {
+                if (position >= FTPConstants.NUM_ZERO) {
+                    while (position >= FTPConstants.NUM_ZERO) {
+                        if (position == FTPConstants.NUM_ZERO) {
                             raf.seek(position);
                             break;
                         } else {
@@ -191,36 +192,36 @@ abstract class AbstractLogWrite implements LogWriter, Serializable {
         File[] allFileList = currentDir.listFiles();
         List<String> dirList = new ArrayList<>();
         File defaultFile = new File(this.currentFile);
-        if (allFileList != null && allFileList.length > 0) {
+        if (allFileList != null && allFileList.length > FTPConstants.NUM_ZERO) {
             for (File file : allFileList) {
                 if (!file.isDirectory()) {
                     dirList.add(file.getName());
                 }
             }
-            if (dirList.size() > 0) {
+            if (dirList.size() > FTPConstants.NUM_ZERO) {
                 if (defaultFile.exists()) {
                     String countLine = getLastLine(defaultFile.getName());
-                    if (countLine.length() > 0) {
+                    if (countLine.length() > FTPConstants.NUM_ZERO) {
                         LogEvent event = JSONUtil.toObject(countLine, LogEvent.class);
-                        return event.getCount() + 1;
-                    } else if (dirList.size() == 1) {
+                        return event.getCount() + FTPConstants.NUM_ONE;
+                    } else if (dirList.size() == FTPConstants.NUM_ONE) {
                         LOG.info("Get count from " + this.currentFile
                                 + ", but the file content is null, so queue id is "
                                 + this.queueID + ", count is 1");
-                        return 1;
+                        return FTPConstants.NUM_ONE;
                     } else {
                         LOG.info("Default log file" + this.currentFile
                                 + " is exists, but can not get count from it, so get count from other log file, " +
                                 "start check other log file and sort by file name");
                         Arrays.sort(dirList.toArray());
                         LOG.info("Sort result is " + Arrays.toString(dirList.toArray()));
-                        String countFile = dirList.get(dirList.size() - 1);
+                        String countFile = dirList.get(dirList.size() - FTPConstants.NUM_ONE);
                         countLine = getLastLine(countFile);
                         LogEvent event = JSONUtil.toObject(countLine, LogEvent.class);
                         LOG.info("Get count from " + countFile
                                 + ", queue is " + this.queueID
                                 + ", count is " + event.getCount());
-                        return event.getCount() + 1;
+                        return event.getCount() + FTPConstants.NUM_ONE;
                     }
                 } else {
                     LOG.info("Default log file "
@@ -228,23 +229,23 @@ abstract class AbstractLogWrite implements LogWriter, Serializable {
                             + "is not exists, start check other log file and sort by file name");
                     Arrays.sort(dirList.toArray());
                     LOG.info("Sort result is " + Arrays.toString(dirList.toArray()));
-                    String countFile = dirList.get(dirList.size() - 1);
+                    String countFile = dirList.get(dirList.size() - FTPConstants.NUM_ONE);
                     String countLine = getLastLine(countFile);
                     LogEvent event = JSONUtil.toObject(countLine, LogEvent.class);
                     LOG.info("Get count from " + countFile
                             + ", queue is is " + this.queueID
                             + ", count is " + event.getCount());
-                    return event.getCount() + 1;
+                    return event.getCount() + FTPConstants.NUM_ONE;
                 }
             } else {
                 LOG.info("Directory " + this.currentDir + " is not exists or empty, so queue id is "
                         + this.queueID + ", count is 1");
-                return 1;
+                return FTPConstants.NUM_ONE;
             }
         } else {
             LOG.info("Directory " + this.currentDir + " is not exists or empty, so queue id is "
                     + this.queueID + ", count is 1");
-            return 1;
+            return FTPConstants.NUM_ONE;
         }
     }
 
@@ -279,7 +280,7 @@ abstract class AbstractLogWrite implements LogWriter, Serializable {
     public void countCheckAndWrite(LogEvent event) {
         Path oldFile;
         Path newFile;
-        if (this.count % this.logSize == 0) {
+        if (this.count % this.logSize == FTPConstants.NUM_ZERO) {
             try {
                 oldFile = Paths.get(this.currentFile);
                 newFile = Paths.get(currentDir + logNameUpdate(this.logName, count));
