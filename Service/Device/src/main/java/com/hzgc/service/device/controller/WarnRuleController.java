@@ -2,9 +2,9 @@ package com.hzgc.service.device.controller;
 
 import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
-import com.hzgc.service.device.service.WarnRule;
+import com.hzgc.service.device.bean.WarnRule;
 import com.hzgc.service.device.service.WarnRuleServiceImpl;
-import com.hzgc.service.device.vo.ConfigRuleVO;
+import com.hzgc.service.device.bean.ConfigRule;
 import io.swagger.annotations.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +33,12 @@ public class WarnRuleController {
             @ApiResponse(code = 200,message = "successful response")
     })
     @RequestMapping(value = BigDataPath.WARNRULE_CONFIG,method = RequestMethod.POST)
-    public ResponseResult<Map<String, Boolean>> configRules(@RequestBody @ApiParam(value = "规则配置参数") ConfigRuleVO configRuleVO) {
+    public ResponseResult<Map<String, Boolean>> configRules(@RequestBody @ApiParam(value = "规则配置参数") ConfigRule configRule) {
         List<String> ipcIDs;
         List<WarnRule> rules;
-        if (null != configRuleVO) {
-            ipcIDs = configRuleVO.getIpcIDs();
-            rules = configRuleVO.getRules();
+        if (null != configRule) {
+            ipcIDs = configRule.getIpcIDs();
+            rules = configRule.getRules();
         } else {
             LOG.info("configRule参数错误");
             return null;
@@ -52,12 +52,12 @@ public class WarnRuleController {
             @ApiResponse(code = 200,message = "successful response")
     })
     @RequestMapping(value = BigDataPath.WARNRULE_ADD,method = RequestMethod.POST)
-    public ResponseResult<Map<String, Boolean>> addRules(@RequestBody @ApiParam(value = "规则配置参数") ConfigRuleVO configRuleVO) {
+    public ResponseResult<Map<String, Boolean>> addRules(@RequestBody @ApiParam(value = "规则配置参数") ConfigRule configRule) {
         List<String> ipcIDs;
         List<WarnRule> rules;
-        if (null != configRuleVO) {
-            ipcIDs = configRuleVO.getIpcIDs();
-            rules = configRuleVO.getRules();
+        if (null != configRule) {
+            ipcIDs = configRule.getIpcIDs();
+            rules = configRule.getRules();
         } else {
             return null;
         }
@@ -70,10 +70,10 @@ public class WarnRuleController {
             @ApiResponse(code = 200,message = "successful response")
     })
     @RequestMapping(value = BigDataPath.WARNRULE_GETCOMPARE,method = RequestMethod.POST)
-    public ResponseResult<List<WarnRule>> getCompareRules(@RequestBody @ApiParam(value = "规则配置参数") ConfigRuleVO configRuleVO) {
+    public ResponseResult<List<WarnRule>> getCompareRules(@RequestBody @ApiParam(value = "规则配置参数") ConfigRule configRule) {
         String ipcID;
-        if (null != configRuleVO) {
-            ipcID = configRuleVO.getIpcID();
+        if (null != configRule) {
+            ipcID = configRule.getIpcID();
         } else {
             return null;
         }
@@ -86,10 +86,10 @@ public class WarnRuleController {
             @ApiResponse(code = 200,message = "successful response")
     })
     @RequestMapping(value = BigDataPath.WARNRULE_DELETE,method = RequestMethod.DELETE)
-    public ResponseResult<Map<String, Boolean>> deleteRules(@RequestBody @ApiParam(value = "规则配置参数") ConfigRuleVO configRuleVO) {
+    public ResponseResult<Map<String, Boolean>> deleteRules(@RequestBody @ApiParam(value = "规则配置参数") ConfigRule configRule) {
         List<String> ipcIdList;
-        if (null != configRuleVO) {
-            ipcIdList = configRuleVO.getIpcIDs();
+        if (null != configRule) {
+            ipcIdList = configRule.getIpcIDs();
         } else {
             return null;
         }
@@ -102,10 +102,10 @@ public class WarnRuleController {
             @ApiResponse(code = 200,message = "successful response")
     })
     @RequestMapping(value = BigDataPath.WARNRULE_OBJECTTYPE_GET,method = RequestMethod.POST)
-    public ResponseResult<List<String>> objectTypeHasRule(@RequestBody @ApiParam(value = "规则配置参数") ConfigRuleVO configRuleVO) {
+    public ResponseResult<List<String>> objectTypeHasRule(@RequestBody @ApiParam(value = "规则配置参数") ConfigRule configRule) {
         String objectType;
-        if (null != configRuleVO) {
-            objectType = configRuleVO.getObjectType();
+        if (null != configRule) {
+            objectType = configRule.getObjectType();
         } else {
             return null;
         }
@@ -118,12 +118,12 @@ public class WarnRuleController {
             @ApiResponse(code = 200,message = "successful response")
     })
     @RequestMapping(value = BigDataPath.WARNRULE_OBJECTTYPE_DELETE,method = RequestMethod.DELETE)
-    public ResponseResult<Integer> deleteObjectTypeOfRules(@RequestBody @ApiParam(value = "规则配置参数") ConfigRuleVO configRuleVO) {
+    public ResponseResult<Integer> deleteObjectTypeOfRules(@RequestBody @ApiParam(value = "规则配置参数") ConfigRule configRule) {
         String objectType;
         List<String> ipcIdList;
-        if (null != configRuleVO) {
-            objectType = configRuleVO.getObjectType();
-            ipcIdList = configRuleVO.getIpcIDs();
+        if (null != configRule) {
+            objectType = configRule.getObjectType();
+            ipcIdList = configRule.getIpcIDs();
         } else {
             return null;
         }

@@ -1,6 +1,5 @@
-package com.hzgc.service.device.vo;
+package com.hzgc.service.device.bean;
 
-import com.hzgc.service.device.service.WarnRule;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -8,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @ApiModel(value = "规则配置参数")
-public class ConfigRuleVO implements Serializable {
+public class ConfigRule implements Serializable {
 
     /**
      * 设备ID
@@ -68,7 +67,7 @@ public class ConfigRuleVO implements Serializable {
 
     @Override
     public String toString() {
-        return "ConfigRuleVO{" +
+        return "ConfigRule{" +
                 "ipcID='" + ipcID + '\'' +
                 ", ipcIDs=" + ipcIDs +
                 ", rules=" + rules +
