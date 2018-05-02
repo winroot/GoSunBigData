@@ -3,6 +3,7 @@ package com.hzgc.collect;
 import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.merge.RecoverNotProData;
 import com.hzgc.collect.expand.subscribe.*;
+import com.hzgc.collect.expand.util.FTPConstants;
 import com.hzgc.common.ftp.properties.CollectProperties;
 import com.hzgc.collect.ftp.ClusterOverFtp;
 import com.hzgc.collect.ftp.ConnectionConfigFactory;
@@ -37,8 +38,8 @@ public class FTP extends ClusterOverFtp implements Serializable {
     static {
         //Set the dynamic log configuration file refresh time
         PropertyConfigurator.configureAndWatch(
-                ResourceFileUtil.loadResourceFile("log4j.properties").getAbsolutePath(), 10000);
-        LOG.info("Dynamic log configuration is successful! Log configuration file refresh time:" + 10000 + "ms");
+                ResourceFileUtil.loadResourceFile("log4j.properties").getAbsolutePath(), FTPConstants.LOG4J_REFRESH_TIME);
+        LOG.info("Dynamic log configuration is successful! Log configuration file refresh time:" + FTPConstants.LOG4J_REFRESH_TIME + "ms");
         //ftp capture subscription
         new FtpSwitch();
         FtpSubscriptionClient ftpSubscription = new FtpSubscriptionClient(
@@ -88,7 +89,7 @@ public class FTP extends ClusterOverFtp implements Serializable {
         FtpServer server = serverFactory.createServer();
         try {
             server.start();
-            Integer ftpPID = Integer.valueOf(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
+            Integer ftpPID = Integer.valueOf(ManagementFactory.getRuntimeMXBean().getName().split("@")[FTPConstants.NUM_ZERO]);
             pidMap.put(ftpPID, listenerPort);
         } catch (FtpException e) {
             e.printStackTrace();
@@ -105,7 +106,7 @@ public class FTP extends ClusterOverFtp implements Serializable {
     public static void main(String args[]) throws Exception {
         int detectorNum = CollectProperties.getFaceDetectorNumber();
         LOG.info("Init face detector, number is " + detectorNum);
-        for (int i = 0; i < detectorNum; i++) {
+        for (int i = FTPConstants.NUM_ZERO; i < detectorNum; i++) {
             NativeFunction.init();
         }
         //启动ftp之前，先恢复未处理数据

@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * 每一个子类都对应一个配置文件
  * 用来从配置文件中读取配置（马燊偲）
  */
-public abstract class ProperHelper {
+public class ProperHelper {
 
     /**
      * 验证配置文件中，无需特殊判断的属性值是否为正确格式。例如用户名user，密码password，路径格式pathRule。

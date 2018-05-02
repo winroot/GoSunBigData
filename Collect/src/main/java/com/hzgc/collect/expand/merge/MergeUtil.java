@@ -1,6 +1,7 @@
 package com.hzgc.collect.expand.merge;
 
 import com.hzgc.collect.expand.log.LogEvent;
+import com.hzgc.collect.expand.util.FTPConstants;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import org.apache.log4j.Logger;
@@ -20,15 +21,6 @@ import java.util.regex.Pattern;
 public class MergeUtil implements Serializable {
 
     private Logger LOG = Logger.getLogger(MergeUtil.class);
-
-    //系统换行符
-    private String newLine = System.getProperty("line.separator");
-    private static final String SUFFIX = ".log";
-    private static final String ERR_FILE_NAME = "error.log";
-    //用于生成success目录下备份日志目录的日期格式
-    private static final String SUC_DATE_FORMAT = "yyyy-MM";
-    //用于生成错误日志文件名随机数的日期格式
-    private static final String ERR_DATE_FORMAT = "yyyy-MM-dd-HHmmSSS-";
 
     /*
       使用Files工具类中的walkFileTree()方法实现对目录下的所有文件进行遍历。
@@ -62,7 +54,7 @@ public class MergeUtil implements Serializable {
                         //访问文件时触发该方法。
                         @Override
                         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                            if (file.toString().contains(SUFFIX)) {
+                            if (file.toString().contains(FTPConstants.LOG_FILE_SUFFIX)) {
                                 allFilePath.add(file.toString());
                             }
                             return FileVisitResult.CONTINUE;
@@ -95,7 +87,7 @@ public class MergeUtil implements Serializable {
                         @Override
                         public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
                             //将所有process下所有error日志添加到List
-                            if (path.toString().contains("error.log")) {
+                            if (path.toString().contains(FTPConstants.LOG_ERROR_FILE_NAME)) {
                                 allErrorFilePath.add(path.toString());
                             }
                             return FileVisitResult.CONTINUE;
@@ -173,7 +165,7 @@ public class MergeUtil implements Serializable {
                                 if (allFiles != null) {
                                     for (File allFile : allFiles) {
                                         //文件名，不含后缀
-                                        String filename = allFile.getName().replace(SUFFIX, "");
+                                        String filename = allFile.getName().replace(FTPConstants.LOG_FILE_SUFFIX, "");
                                         Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
                                         //判断文件名是否是整数，并排除读到error/error.log的可能性
                                         if (pattern.matcher(filename).matches() && !filename.contains("error")) {
@@ -183,12 +175,12 @@ public class MergeUtil implements Serializable {
                                     }
                                     Set<Integer> fileNameSet = fileNameMap.keySet();
                                     //当路径下除了000.log和最大文件还有其他文件时，才去获取这些其他文件；否则返回的是空的list
-                                    if (fileNameSet.size() > 1) {
+                                    if (fileNameSet.size() > FTPConstants.NUM_ONE) {
                                         //获取最大的文件名对应的key
                                         int maxFile = Collections.max(fileNameMap.keySet());
                                         //从需要遍历的MAP中，删除这个最大的文件，和0000000.log文件
                                         fileNameMap.remove(maxFile);
-                                        fileNameMap.remove(Integer.parseInt(writingLogFile.replace(SUFFIX, "")));
+                                        fileNameMap.remove(Integer.parseInt(writingLogFile.replace(FTPConstants.LOG_FILE_SUFFIX, "")));
                                         //遍历map，将除去这两个文件后的所有文件，放入list
                                         for (Map.Entry<Integer, String> entry : fileNameMap.entrySet()) {
                                             allFileOfPath.add(entry.getValue());
@@ -218,7 +210,7 @@ public class MergeUtil implements Serializable {
         //最终添加到的List
         List<String> allContentList = new ArrayList<>();
         //记录入参中符合文件路径格式的参数个数（入参可能为文件夹路径）
-        int count = 0;
+        int count = FTPConstants.NUM_ZERO;
         if (filePaths != null) {
             for (String filePath : filePaths) {
                 //入参均不为空，再执行以下操作
@@ -266,7 +258,7 @@ public class MergeUtil implements Serializable {
         }
         if (file.exists() && file.isDirectory()) {
             File[] files = file.listFiles();
-            if (files == null || files.length == 0) {
+            if (files == null || files.length == FTPConstants.NUM_ZERO) {
                 file.delete();
             } else {
                 for (File file1 : files) {
@@ -325,7 +317,7 @@ public class MergeUtil implements Serializable {
                 //用File对象构造FileWriter，如果第二个参数为true，表示以追加的方式写数据，从文件尾部开始写起
                 fw = new FileWriter(mergeFilePath, true);
                 fw.write(JSONUtil.toJson(event));
-                fw.write(newLine);
+                fw.write(FTPConstants.SYSTEM_LINE);
                 fw.flush();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -431,7 +423,7 @@ public class MergeUtil implements Serializable {
             if (file.isFile() && processFilePath.contains("process" + File.separator + "process-")) {
                 //获取process日志路径的父目录：/ftp/data/process/p-0/
                 String parentFolder = file.getParent();
-                errorFilePath = parentFolder + File.separator + "error.log";
+                errorFilePath = parentFolder + File.separator + FTPConstants.LOG_ERROR_FILE_NAME;
             }
         }
         return errorFilePath;
@@ -507,7 +499,7 @@ public class MergeUtil implements Serializable {
                 //获取路径子串：/opt/RealTimeFaceCompare/ftp/success/process/
                 String substringStart = tmpString.replace(substringEnd, "");
                 //获取日期路径子串：
-                String substringDate = getFileLastModified(datafile, SUC_DATE_FORMAT) + File.separator;
+                String substringDate = getFileLastModified(datafile, FTPConstants.SUCCESS_DATE_FORMAT) + File.separator;
                 successFilePath = substringStart + substringDate + substringEnd;
 
                 // 如果是错误日志，获取其对应的success目录下路径时，需要对error.log重命名。
@@ -549,7 +541,7 @@ public class MergeUtil implements Serializable {
             File sourceFile = new File(sourceFilePath);
             File targetFile = new File(targetFilePath);
 
-            if (sourceFile.isFile() && sourceFile.exists() && sourceFile.length() != 0) {
+            if (sourceFile.isFile() && sourceFile.exists() && sourceFile.length() != FTPConstants.NUM_ZERO) {
                 try {
                     while (true) {
                         fromFile = new RandomAccessFile(sourceFile, "rw");
@@ -576,11 +568,11 @@ public class MergeUtil implements Serializable {
                             toFile = new RandomAccessFile(targetFile, "rw");
                             toFileChannel = toFile.getChannel();
                             long length = fromFileChannel.size();
-                            int position = 0;
+                            int position = FTPConstants.NUM_ZERO;
                             // transferTo()：position 开始位置，count 要读取的字节数，target 目标通道。返回实际转化的字节数
                             fromFileChannel.transferTo(position, length, toFileChannel);
                             //写入新文件后，将原来的error.log清空
-                            fromFileChannel.truncate(0); //截取一个文件，删除指定长度后面的部分。
+                            fromFileChannel.truncate(FTPConstants.NUM_ZERO); //截取一个文件，删除指定长度后面的部分。
                             break;
                         }
                     }
@@ -630,13 +622,13 @@ public class MergeUtil implements Serializable {
         //获取文件的父目录
         String folderPath = errorFile.getParent() + File.separator;
         //获取原文件名，去除文件后缀名
-        String oldFileName = ERR_FILE_NAME.replace(SUFFIX, "");
+        String oldFileName = FTPConstants.LOG_ERROR_FILE_NAME.replace(FTPConstants.LOG_FILE_SUFFIX, "");
         //获取文件最后修改时间
-        String date = getFileLastModified(sourceFile, ERR_DATE_FORMAT);
+        String date = getFileLastModified(sourceFile, FTPConstants.ERROR_DATE_FORMAT);
         //生成随机数
         String random = Integer.toString(new Random().nextInt());
 
-        return folderPath + oldFileName + date + random + SUFFIX;
+        return folderPath + oldFileName + date + random + FTPConstants.LOG_FILE_SUFFIX;
     }
 
 

@@ -14,9 +14,9 @@ public class FTPUtils {
      * lager than 0, it is a face picture
      */
     public static int pickPicture(String pictureName) {
-        int picType = 0;
+        int picType = FTPConstants.NUM_ZERO;
         if (null != pictureName) {
-            String tmpStr = pictureName.substring(pictureName.lastIndexOf("_") + 1, pictureName.lastIndexOf("."));
+            String tmpStr = pictureName.substring(pictureName.lastIndexOf("_") + FTPConstants.NUM_ONE, pictureName.lastIndexOf("."));
             try {
                 picType = Integer.parseInt(tmpStr);
             } catch (Exception e) {
@@ -37,7 +37,7 @@ public class FTPUtils {
         String hostName = IPAddressUtils.getHostName();
         Map<Integer, Integer> ftpPIDMap = FTP.getPidMap();
         if (!ftpPIDMap.isEmpty()) {
-            Integer ftpPID = Integer.valueOf(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
+            Integer ftpPID = Integer.valueOf(ManagementFactory.getRuntimeMXBean().getName().split("@")[FTPConstants.NUM_ZERO]);
             //LOG.info("ftp PID = " + ftpPID);
             int ftpPort = ftpPIDMap.get(ftpPID);
             url = url.append("ftp://").append(hostName).append(":").append(ftpPort).append(filePath);

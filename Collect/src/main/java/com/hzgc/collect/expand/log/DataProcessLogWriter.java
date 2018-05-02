@@ -1,6 +1,7 @@
 package com.hzgc.collect.expand.log;
 
 import com.hzgc.collect.expand.conf.CommonConf;
+import com.hzgc.collect.expand.util.FTPConstants;
 import com.hzgc.common.util.json.JSONUtil;
 
 import java.io.IOException;
@@ -63,10 +64,12 @@ public class DataProcessLogWriter extends AbstractLogWrite implements Serializab
                         break;
                     }
                 } catch (Exception e) {
-                    LOG.info("other thread is operating this file,the current thread is: " + Thread.currentThread().getName() + " sleep 1 second and try it again");
+                    LOG.info("other thread is operating this file,the current thread is: "
+                            + Thread.currentThread().getName()
+                            + " sleep 1 second and try it again");
                     try {
                         //读写线程通过设置不同的睡眠时间解决死锁的问题
-                        Thread.sleep(1000);
+                        Thread.sleep(FTPConstants.THREAD_SLEEP_ONE_SECOND);
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     }
@@ -74,11 +77,11 @@ public class DataProcessLogWriter extends AbstractLogWrite implements Serializab
             }
             byte[] bytes = JSONUtil.toJson(event).getBytes("utf-8");
             long length = randomAccessFile.length();
-            long position = length - 1;
-            if (length != 0L) {
+            long position = length - FTPConstants.NUM_ONE;
+            if (length != FTPConstants.LONG_ZERO) {
                 randomAccessFile.seek(position);
             } else {
-                randomAccessFile.seek(0L);
+                randomAccessFile.seek(FTPConstants.LONG_ZERO);
             }
             randomAccessFile.write(bytes);
             randomAccessFile.write(System.getProperty("line.separator").getBytes());

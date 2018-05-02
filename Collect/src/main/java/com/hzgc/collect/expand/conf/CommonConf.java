@@ -1,5 +1,6 @@
 package com.hzgc.collect.expand.conf;
 
+import com.hzgc.collect.expand.util.FTPConstants;
 import com.hzgc.common.ftp.properties.CollectProperties;
 
 import java.io.Serializable;
@@ -9,12 +10,12 @@ public class CommonConf implements Serializable {
     /**
      * 队列日志名称
      */
-    private String logName = "0000000000000000000.log";
+    private String logName = FTPConstants.LOG_NAME;
 
     /**
      * 日志文件大小
      */
-    private int logSize = 300000;
+    private int logSize = FTPConstants.LOG_SIZE_THREE_HUNDRED_THOUSAND;
 
     /**
      * 当前队列缓冲容量

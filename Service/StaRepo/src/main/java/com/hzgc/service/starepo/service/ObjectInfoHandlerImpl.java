@@ -18,17 +18,25 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 @Service
-public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
+public class ObjectInfoHandlerImpl {
 
     private static Logger LOG = Logger.getLogger(ObjectInfoHandlerImpl.class);
 
     public ObjectInfoHandlerImpl() {
     }
 
-    @Override
+    /**
+     * 针对单个对象信息的添加处理  （外）（李第亮）
+     * @param  platformId 表示的是平台的ID， 平台的唯一标识。
+     * @param personObject K-V 对，里面存放的是字段和值之间的一一对应关系,
+     *               例如：传入一个Map 里面的值如下map.put("idcard", "450722199502196939")
+     *               表示的是身份证号（idcard）是450722199502196939，
+     *               其中的K 的具体，请参考给出的数据库字段设计
+     * @return 返回值为0，表示插入成功，返回值为1，表示插入失败
+     */
     public byte addObjectInfo(String platformId, Map<String, Object> personObject) {
         LOG.info("personObject: " + personObject.entrySet().toString());
-        java.sql.Connection conn = null;
+        java.sql.Connection conn;
         long start = System.currentTimeMillis();
         PersonObject person = PersonObject.mapToPersonObject(personObject);
         person.setPlatformid(platformId);
@@ -59,7 +67,11 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
         return 0;
     }
 
-    @Override
+    /**
+     * 删除对象的信息  （外）（李第亮）
+     * @param rowkeys 具体的一个人员信息的ID，值唯一
+     * @return 返回值为0，表示删除成功，返回值为1，表示删除失败
+     */
     public int deleteObjectInfo(List<String> rowkeys) {
         LOG.info("rowKeys: " + rowkeys);
         // 获取table 对象，通过封装HBaseHelper 来获取
@@ -91,10 +103,10 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
     }
 
     /**
+     * 修改对象的信息   （外）（李第亮）
      * @param personObject K-V 对，里面存放的是字段和值之间的一一对应关系，参考添加里的描述
-     * @return 更新成功与否的标志，0成功，1失败
+     * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
-    @Override
     public int updateObjectInfo(Map<String, Object> personObject) {
         LOG.info("personObject: " + personObject.entrySet().toString());
         long start = System.currentTimeMillis();
@@ -132,7 +144,11 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
         return 0;
     }
 
-    @Override
+    /**
+     * 根据rowkey 进行查询 （外）
+     * @param id  标记一条对象信息的唯一标志。
+     * @return  返回搜索所需要的结果封装成的对象，包含搜索id，成功与否标志，记录数，记录信息，照片id
+     */
     public ObjectSearchResult searchByRowkey(String id) {
         long start = System.currentTimeMillis();
         java.sql.Connection conn = null;
@@ -166,7 +182,11 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
         return result;
     }
 
-    @Override
+    /**
+     * 可以匹配精确查找，以图搜索人员信息，模糊查找   （外）（李第亮）
+     * @param pSearchArgsModel 搜索参数的封装
+     * @return 返回搜索所需要的结果封装成的对象，包含搜索id，成功与否标志，记录数，记录信息，照片id
+     */
     public ObjectSearchResult getObjectInfo(PSearchArgsModel pSearchArgsModel) {
         LOG.info("pSearchArgsModel: " + pSearchArgsModel);
         long start = System.currentTimeMillis();
@@ -315,7 +335,11 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
     }
 
 
-    @Override
+    /**
+     * 根据rowkey 返回人员的照片
+     * @param rowkey 人员在对象信息库中的唯一标志。
+     * @return 图片的byte[] 数组
+     */
     public byte[] getPhotoByKey(String rowkey) {
         String sql = "select photo from " + ObjectInfoTable.TABLE_NAME + " where id = ?";
         java.sql.Connection conn = null;
@@ -346,12 +370,13 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
     }
 
     /**
-     * 根据传进来的参数，进行及实际路查询
-     *
-     * @param searchRecordOpts 历史查询参数
-     * @return ObjectSearchResult 返回结果，封装好的历史数据。
+     * 根据传过来的搜索rowkey 返回搜索记录 （外） （李第亮）
+     * @param  searchRecordOpts 历史查询参数
+     * @return  返回一个ObjectSearchResult 对象，
+     * @author 李第亮
+     * 里面包含了本次查询ID，查询成功标识，
+     * 查询照片ID（无照片，此参数为空），结果数，人员信息列表
      */
-    @Override
     public ObjectSearchResult getRocordOfObjectInfo(SearchRecordOpts searchRecordOpts) {
         LOG.info("searchRecordOpts: " + searchRecordOpts);
         // 传过来的参数中为空，或者子查询为空，或者子查询大小为0，都返回查询错误。
@@ -450,7 +475,11 @@ public class ObjectInfoHandlerImpl implements ObjectInfoHandler {
         return finnalObjectSearchResult;
     }
 
-    @Override
+    /**
+     * 根据穿过来的rowkey 返回照片 （外） （李第亮）
+     * @param rowkey 即Hbase 数据库中的rowkey，查询记录唯一标志
+     * @return 返回查询的照片
+     */
     public byte[] getSearchPhoto(String rowkey) {
         return null;
     }
