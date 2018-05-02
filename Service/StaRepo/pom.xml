@@ -21,6 +21,11 @@
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-service</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>16.0</version>
+        </dependency>
         <!--Phoenix JDBC -->
         <dependency>
             <groupId>org.apache.phoenix</groupId>

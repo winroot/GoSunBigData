@@ -12,6 +12,13 @@ public class ObjectInfoTable implements Serializable {
     public static final String TOTAL_NUMS_ROW_NAME = "99999999999999999999999999";  // 保存总的记录数的行的名字
     public static final String TOTAL_NUMS = "tnums";        // 总的记录数
 
+    public static final String TYPE_COLF = "type";          //type列族
+    public static final String TYPE_NAME = "name";
+    public static final String TYPE_CREATOR = "creator";
+    public static final String TYPE_REMARK = "remark";
+    public static final String TYPE_ADD_TIME = "addtime";
+    public static final String TYPE_UPDATE_TIME = "updatetime";
+
     // 以下是和平台组公用的属性
     public static final String PLATFORMID = "platformid";   // 平台ID
     public static final String TAG = "tag";                 // 人车标志
