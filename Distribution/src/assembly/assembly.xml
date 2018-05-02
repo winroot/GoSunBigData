@@ -9,7 +9,7 @@
     <fileSets>
         <!--项目README 文件-->
         <fileSet>
-            <directory>../Distribution/src/resources</directory>
+            <directory>../</directory>
             <includes>
                 <include>README.md</include>
             </includes>
@@ -18,7 +18,7 @@
         <!--集群搭建目录-->
         <!--集群搭建文档 -->
         <fileSet>
-            <directory>../</directory>
+            <directory>../Distribution/src/resources</directory>
             <includes>
                 <include>cluster-install-guide.docx</include>
             </includes>
@@ -242,7 +242,7 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare</outputDirectory>
         </fileSet>
-        <!--项目部署一件配置文件 -->
+        <!--项目部署一键配置文件 -->
         <fileSet>
             <directory>../Distribution/src/resources</directory>
             <includes>
