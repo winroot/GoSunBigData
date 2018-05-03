@@ -5,6 +5,8 @@ import com.hzgc.common.service.clustering.ClusteringAttribute;
 import com.hzgc.common.service.table.column.ClusteringTable;
 import com.hzgc.common.service.table.column.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
+import com.hzgc.service.clustering.bean.ClusteringInfo;
+import com.hzgc.service.clustering.bean.SortParam;
 import com.hzgc.service.clustering.dao.ElasticSearchDao;
 import com.hzgc.service.clustering.dao.HBaseDao;
 import org.apache.log4j.Logger;

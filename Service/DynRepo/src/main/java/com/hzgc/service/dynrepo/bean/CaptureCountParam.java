@@ -11,7 +11,7 @@ import java.util.List;
  * 大数据可视化前台入参
  */
 @ApiModel(value = "大数据可视化入参")
-public class CaptureCountVO implements Serializable {
+public class CaptureCountParam implements Serializable {
 
     /**
      * 设备ID
@@ -99,7 +99,7 @@ public class CaptureCountVO implements Serializable {
 
     @Override
     public String toString() {
-        return "CaptureCountVO{" +
+        return "CaptureCountParam{" +
                 "ipcId='" + ipcId + '\'' +
                 ", ipcIdList=" + ipcIdList +
                 ", platformId='" + platformId + '\'' +

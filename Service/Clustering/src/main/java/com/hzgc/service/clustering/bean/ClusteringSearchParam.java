@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 聚类查询前台入参
  */
 @ApiModel(value = "聚类信息查询入参")
-public class ClusteringSearchDTO implements Serializable {
+public class ClusteringSearchParam implements Serializable {
 
     /**
      * 聚类ID
@@ -97,7 +97,7 @@ public class ClusteringSearchDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ClusteringSearchDTO{" +
+        return "ClusteringSearchParam{" +
                 "clusterId='" + clusterId + '\'' +
                 ", region='" + region + '\'' +
                 ", time='" + time + '\'' +

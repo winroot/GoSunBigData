@@ -10,7 +10,7 @@ import java.util.List;
  * 聚类信息存储前台入参
  */
 @ApiModel(value = "聚类信息存储入参")
-public class ClusteringSaveDTO implements Serializable {
+public class ClusteringSaveParam implements Serializable {
 
     /**
      * 聚类ID
@@ -70,7 +70,7 @@ public class ClusteringSaveDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ClusteringSaveDTO{" +
+        return "ClusteringSaveParam{" +
                 "clusterId='" + clusterId + '\'' +
                 ", clusterIdList=" + clusterIdList +
                 ", time='" + time + '\'' +
