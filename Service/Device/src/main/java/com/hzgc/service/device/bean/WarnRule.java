@@ -1,4 +1,4 @@
-package com.hzgc.service.device.service;
+package com.hzgc.service.device.bean;
 
 import java.io.Serializable;
 

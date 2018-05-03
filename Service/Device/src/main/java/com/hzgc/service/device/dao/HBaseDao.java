@@ -1,21 +1,24 @@
-package com.hzgc.service.device.service;
+package com.hzgc.service.device.dao;
 
+import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.common.service.table.column.DeviceTable;
 import com.hzgc.common.util.empty.IsEmpty;
-import com.hzgc.common.service.connection.HBaseHelper;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
-public class DeviceServiceImpl implements DeviceService {
+@Repository
+public class HBaseDao {
 
-    private static Logger LOG = Logger.getLogger(DeviceServiceImpl.class);
+    private static Logger LOG = Logger.getLogger(HBaseDao.class);
 
-    @Override
+    public HBaseDao() {
+        HBaseHelper.getHBaseConnection();
+    }
+
     public boolean bindDevice(String platformId, String ipcID, String notes) {
         Table table = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
         if (IsEmpty.strIsRight(ipcID) && IsEmpty.strIsRight(platformId)) {
@@ -39,7 +42,6 @@ public class DeviceServiceImpl implements DeviceService {
         }
     }
 
-    @Override
     public boolean unbindDevice(String platformId, String ipcID) {
         Table table = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
         if (IsEmpty.strIsRight(platformId) && IsEmpty.strIsRight(ipcID)) {
@@ -47,7 +49,7 @@ public class DeviceServiceImpl implements DeviceService {
             try {
                 Delete delete = new Delete(Bytes.toBytes(ipcIDTrim));
                 //根据设备ID（rowkey），删除该行的平台ID列，而非删除这整行数据。
-                delete.addColumns(DeviceTable.CF_DEVICE,DeviceTable.PLAT_ID);
+                delete.addColumns(DeviceTable.CF_DEVICE, DeviceTable.PLAT_ID);
                 table.delete(delete);
                 LOG.info("Unbind device:" + ipcIDTrim + " and " + platformId + " successful");
                 return true;
@@ -63,7 +65,6 @@ public class DeviceServiceImpl implements DeviceService {
         }
     }
 
-    @Override
     public boolean renameNotes(String notes, String ipcID) {
         Table table = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
         if (IsEmpty.strIsRight(ipcID)) {

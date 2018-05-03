@@ -1,4 +1,4 @@
-package com.hzgc.service.device.vo;
+package com.hzgc.service.device.bean;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 @ApiModel(value = "设备参数")
-public class DeviceDataVO implements Serializable {
+public class DeviceDataParam implements Serializable {
 
     /**
      * 平台ID
@@ -52,7 +52,7 @@ public class DeviceDataVO implements Serializable {
 
     @Override
     public String toString() {
-        return "DeviceDataVO{" +
+        return "DeviceDataParam{" +
                 "platformId='" + platformId + '\'' +
                 ", ipcID='" + ipcID + '\'' +
                 ", notes='" + notes + '\'' +
