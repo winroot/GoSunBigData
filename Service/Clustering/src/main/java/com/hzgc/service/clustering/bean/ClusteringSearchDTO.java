@@ -1,4 +1,4 @@
-package com.hzgc.service.clustering.vo;
+package com.hzgc.service.clustering.bean;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 聚类查询前台入参
  */
 @ApiModel(value = "聚类信息查询入参")
-public class ClusteringSearchVO implements Serializable {
+public class ClusteringSearchDTO implements Serializable {
 
     /**
      * 聚类ID
@@ -97,7 +97,7 @@ public class ClusteringSearchVO implements Serializable {
 
     @Override
     public String toString() {
-        return "ClusteringSearchVO{" +
+        return "ClusteringSearchDTO{" +
                 "clusterId='" + clusterId + '\'' +
                 ", region='" + region + '\'' +
                 ", time='" + time + '\'' +

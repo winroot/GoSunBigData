@@ -1,4 +1,4 @@
-package com.hzgc.service.clustering.vo;
+package com.hzgc.service.clustering.bean;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,7 +10,7 @@ import java.util.List;
  * 聚类信息存储前台入参
  */
 @ApiModel(value = "聚类信息存储入参")
-public class ClusteringSaveVO implements Serializable {
+public class ClusteringSaveDTO implements Serializable {
 
     /**
      * 聚类ID
@@ -70,7 +70,7 @@ public class ClusteringSaveVO implements Serializable {
 
     @Override
     public String toString() {
-        return "ClusteringSaveVO{" +
+        return "ClusteringSaveDTO{" +
                 "clusterId='" + clusterId + '\'' +
                 ", clusterIdList=" + clusterIdList +
                 ", time='" + time + '\'' +
