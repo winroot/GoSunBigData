@@ -66,7 +66,7 @@ public class HBaseDao {
             byte[] bytes = result.getValue(ClusteringTable.ClUSTERINGINFO_COLUMNFAMILY, colName);
             if (bytes != null) {
                 clusteringAttributeList = (List<ClusteringAttribute>) ObjectUtil.byteToObject(bytes);
-            }else {
+            } else {
                 LOG.info("no clustering in the database to be delete");
                 return null;
             }
@@ -89,8 +89,6 @@ public class HBaseDao {
         }
         return false;
     }
-
-
 
     public List<Integer> detailClusteringSearch_Hbase(String clusterId, String time) {
         Table clusteringInfoTable = HBaseHelper.getTable(ClusteringTable.TABLE_DETAILINFO);
