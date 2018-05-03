@@ -9,7 +9,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @EnableEurekaClient
 @SpringBootApplication
-@PropertySource("clusteringApplication.properties")
+@PropertySource("ftpApplication.properties")
 public class FtpApplication {
 
     public static void main(String[] args) {
