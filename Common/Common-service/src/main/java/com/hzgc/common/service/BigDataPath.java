@@ -72,4 +72,10 @@ public class BigDataPath {
     public static final String STAREPO_GETSEARCHRESULT= "/getRocordOfObjectInfo";
     public static final String STAREPO_GETSEARCHPHOTO = "/getSearchPhoto";
 
+    public static final String TYPE = ROOT + "/objecttype";
+    public static final String TYPE_ADD = "/addObjecttype";
+    public static final String TYPE_DELETE = "/deleteObjecttype";
+    public static final String TYPE_UPDATE = "/updateObjecttype";
+    public static final String TYPE_SEARCH = "/searchObjecttype";
+
 }
