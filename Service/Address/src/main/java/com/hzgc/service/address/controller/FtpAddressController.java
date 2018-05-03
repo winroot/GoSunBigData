@@ -42,7 +42,7 @@ public class FtpAddressController {
      * @return IP地址
      */
     @ApiOperation(value = "ftp配置信息查询", response = String.class, responseContainer = "List")
-    @ApiImplicitParam(name = "hostname", value = "主机名", required = true, dataType = "text", paramType = "form")
+    @ApiImplicitParam(name = "hostname", value = "主机名", required = true, dataType = "String", paramType = "form")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.FTP_GET_IP, method = RequestMethod.GET)
     public ResponseResult<String> getIPAddress(@ApiParam(value = "聚类信息查询入参") String hostname) {
