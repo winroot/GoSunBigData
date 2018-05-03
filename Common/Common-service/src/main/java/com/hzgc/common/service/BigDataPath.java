@@ -11,6 +11,16 @@ public class BigDataPath {
     public static final String ROOT = "/bigData";
 
     /**
+     * ftp模块请求路径
+     */
+    public static final String FTP = ROOT + "/ftpProper";
+    public static final String FTP_GET_PROPERTIES = "/get";
+    public static final String FTP_GET_IP = "/getIP";
+
+    public static final String FTP_SUBSCRIPTION = ROOT + "/ftpSubscription";
+    public static final String FTP_SUBSCRIPTION_OPEN = "/open";
+    public static final String FTP_SUBSCRIPTION_CLOSE = "/close";
+    /**
      * Clustering模块请求路径
      */
     public static final String CLUSTERING = ROOT + "/clustering";
