@@ -33,7 +33,7 @@ public class CaptureCountController {
      * @param captureCountParam 抓拍统计入参
      * @return Map
      */
-    @ApiOperation(value = "抓拍统计与今日抓拍统计", response = Map.class, responseContainer = "List")
+    @ApiOperation(value = "抓拍统计与今日抓拍统计", response = TotalAndTodayCount.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
@@ -57,7 +57,7 @@ public class CaptureCountController {
      * @param captureCountParam 抓拍统计入参
      * @return Map
      */
-    @ApiOperation(value = "多设备每小时抓拍统计", response = Map.class, responseContainer = "List")
+    @ApiOperation(value = "多设备每小时抓拍统计", response = TimeSlotNumber.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
