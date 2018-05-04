@@ -33,6 +33,7 @@ public class FaceController {
     //特征值获取
     @ApiOperation(value = "图片的特征值提取",response =FaceAttribute.class)
     @ApiImplicitParam(name = "image",value = "图片",required =  true,dataType = "file", paramType = "form")
+
     @ApiResponses(
             {@ApiResponse(code = 200,message = "successful response")})
     @RequestMapping(value = BigDataPath.FEATURE_EXTRACT,method = RequestMethod.POST)

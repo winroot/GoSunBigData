@@ -1,4 +1,4 @@
-package com.hzgc.service.starepo.vo;
+package com.hzgc.service.starepo.bean;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 静态库前台入参
  */
 @ApiModel(value = "对象类型封装类")
-public class ObjectTypeVO implements Serializable {
+public class ObjectType implements Serializable {
 
     @ApiModelProperty(value = "类型ID")
     private String id;

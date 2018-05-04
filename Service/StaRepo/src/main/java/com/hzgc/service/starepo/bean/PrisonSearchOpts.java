@@ -1,4 +1,4 @@
-package com.hzgc.service.starepo.object;
+package com.hzgc.service.starepo.bean;
 
 import java.io.Serializable;
 import java.util.List;
