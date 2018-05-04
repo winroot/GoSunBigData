@@ -1,7 +1,5 @@
-package com.hzgc.service.starepo.vo;
+package com.hzgc.service.starepo.bean;
 
-import com.hzgc.service.starepo.object.PSearchArgsModel;
-import com.hzgc.service.starepo.object.SearchRecordOpts;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -13,7 +11,7 @@ import java.util.Map;
  * 静态库前台入参
  */
 @ApiModel(value = "对象信息封装类")
-public class ObjectInfoHandlerVO implements Serializable{
+public class ObjectInfoHandler implements Serializable{
 
     /**
      * 平台ID
