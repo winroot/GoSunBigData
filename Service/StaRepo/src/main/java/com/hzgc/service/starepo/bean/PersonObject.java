@@ -1,4 +1,4 @@
-package com.hzgc.service.starepo.object;
+package com.hzgc.service.starepo.bean;
 
 import com.hzgc.common.service.table.column.ObjectInfoTable;
 import io.swagger.annotations.ApiModel;

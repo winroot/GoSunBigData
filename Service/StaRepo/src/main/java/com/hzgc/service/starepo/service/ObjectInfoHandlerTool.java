@@ -4,9 +4,10 @@ import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.common.service.table.column.ObjectInfoTable;
 import com.hzgc.common.service.table.column.SearchRecordTable;
 import com.hzgc.common.util.object.ObjectUtil;
-import com.hzgc.service.starepo.object.*;
+import com.hzgc.service.starepo.bean.*;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.IOException;
 import java.sql.*;
@@ -16,11 +17,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-class ObjectInfoHandlerTool {
+public class ObjectInfoHandlerTool {
 
     private org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ObjectInfoHandlerTool.class);
 
-    public void saveSearchRecord(Connection conn, ObjectSearchResult objectSearchResult) {
+    public void saveSearchRecord(JdbcTemplate jdbcTemplate, ObjectSearchResult objectSearchResult) {
         if (objectSearchResult == null || objectSearchResult.getSearchStatus() == 1
                 || objectSearchResult.getFinalResults() == null || objectSearchResult.getFinalResults().size() == 0) {
             LOG.info("获取的结果为空");
@@ -28,32 +29,21 @@ class ObjectInfoHandlerTool {
         }
         List<PersonSingleResult> personSingleResults = objectSearchResult.getFinalResults();
 
-        PreparedStatement pstm;
         String sql = "upsert into " + SearchRecordTable.TABLE_NAME + "(" + SearchRecordTable.ID
                 + ", " +SearchRecordTable.RESULT + ", " + SearchRecordTable.RECORDDATE + ") values(?,?,?)";
-        if (conn != null) {
+        if (jdbcTemplate != null) {
             try{
                 for (PersonSingleResult personSingleResult : personSingleResults) {
-                    pstm = conn.prepareStatement(sql);
                     String id;
                     if (personSingleResults.size() == 1) {
                         id = objectSearchResult.getSearchTotalId();
                     } else {
                         id = personSingleResult.getSearchRowkey();
                     }
-                    pstm.setString(1, id);
-                    pstm.setBytes(2, ObjectUtil.objectToByte(personSingleResult));
-                    pstm.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-                    pstm.executeUpdate();
+                    jdbcTemplate.update(sql,id,ObjectUtil.objectToByte(personSingleResult),new Timestamp(System.currentTimeMillis()));
                 }
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    conn.commit();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
@@ -129,7 +119,7 @@ class ObjectInfoHandlerTool {
      * @param searchByPics
      * @return personSingelResult
      */
-    PersonSingleResult getPersonSingleResult(PersonSingleResult personSingleResult, ResultSet resultSet, boolean searchByPics) {
+    public PersonSingleResult getPersonSingleResult(PersonSingleResult personSingleResult, ResultSet resultSet, boolean searchByPics) {
         List<PersonObject> personObjects = new ArrayList<>();
         try {
             while (resultSet.next()) {
@@ -166,7 +156,7 @@ class ObjectInfoHandlerTool {
     /**
      * 根据请求参数，进行分页处理
      */
-    void formatTheObjectSearchResult(ObjectSearchResult objectSearchResult, int start, int size) {
+    public void formatTheObjectSearchResult(ObjectSearchResult objectSearchResult, int start, int size) {
         if (objectSearchResult == null) {
             return;
         }
