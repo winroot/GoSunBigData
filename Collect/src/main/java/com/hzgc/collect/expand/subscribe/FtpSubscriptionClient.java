@@ -1,6 +1,7 @@
 package com.hzgc.collect.expand.subscribe;
 
 
+import com.hzgc.collect.expand.util.FTPConstants;
 import com.hzgc.common.util.zookeeper.ZookeeperClient;
 import org.apache.log4j.Logger;
 import org.apache.zookeeper.KeeperException;
@@ -60,7 +61,7 @@ public class FtpSubscriptionClient extends ZookeeperClient {
      */
     public void delete(String path) {
         try {
-            zooKeeper.delete(path, -1);
+            zooKeeper.delete(path, FTPConstants.NUM_MINUS_ONE);
         } catch (InterruptedException | KeeperException e) {
             LOG.error("Delete MQ znode Failed!");
             e.printStackTrace();
@@ -80,13 +81,13 @@ public class FtpSubscriptionClient extends ZookeeperClient {
                 byte[] data = getDate(childPath);
                 if (data != null) {
                     String ipcIds = new String(data);
-                    if (!ipcIds.equals("") && ipcIds.contains(",") && ipcIds.split(",").length >= 3) {
-                        ipcIds = ipcIds.substring(0, ipcIds.length() - 1);
+                    if (!ipcIds.equals("") && ipcIds.contains(",") && ipcIds.split(",").length >= FTPConstants.NUM_THREE) {
+                        ipcIds = ipcIds.substring(FTPConstants.NUM_ZERO, ipcIds.length() - FTPConstants.NUM_ONE);
                         List<String> list = Arrays.asList(ipcIds.split(","));
-                        String userId = list.get(0);
-                        String time = list.get(1);
+                        String userId = list.get(FTPConstants.NUM_ZERO);
+                        String time = list.get(FTPConstants.NUM_ONE);
                         List<String> ipcIdList = new ArrayList<>();
-                        for (int i = 2; i < list.size(); i++) {
+                        for (int i = FTPConstants.NUM_TWO; i < list.size(); i++) {
                             ipcIdList.add(list.get(i));
                         }
                         map.put(time, ipcIdList);

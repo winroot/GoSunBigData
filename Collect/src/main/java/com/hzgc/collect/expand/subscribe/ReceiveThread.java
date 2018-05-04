@@ -1,5 +1,6 @@
 package com.hzgc.collect.expand.subscribe;
 
+import com.hzgc.collect.expand.util.FTPConstants;
 import com.hzgc.common.ftp.properties.CollectProperties;
 import org.apache.log4j.Logger;
 
@@ -31,7 +32,7 @@ public class ReceiveThread extends ReceiveIpcIds implements Serializable {
 
     private boolean isInDate(String time) {
         Calendar now = Calendar.getInstance();
-        now.add(Calendar.MONTH, -6);
+        now.add(Calendar.MONTH, FTPConstants.SIX_MONTH_AGO);
         long endTime = now.getTimeInMillis();
         long startTime = Long.parseLong(time);
         return startTime <= endTime;
@@ -53,7 +54,7 @@ public class ReceiveThread extends ReceiveIpcIds implements Serializable {
                     }
                     LOG.info("Ftp Subscription, ipcIdList:" + object.getIpcIdList());
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(FTPConstants.THREAD_SLEEP_ONE_SECOND);
                     } catch (InterruptedException e) {
                         LOG.error("ReceiveThread thread error!");
                         e.printStackTrace();

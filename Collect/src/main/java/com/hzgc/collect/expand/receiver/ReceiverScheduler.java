@@ -3,6 +3,7 @@ package com.hzgc.collect.expand.receiver;
 import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.collect.expand.processer.ProcessThread;
+import com.hzgc.collect.expand.util.FTPConstants;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -43,7 +44,7 @@ public class ReceiverScheduler implements Serializable {
     public ReceiverScheduler(CommonConf conf) {
         this.conf = conf;
         this.receiveNumber = conf.getReceiveNumber();
-        this.pollingCount = 0;
+        this.pollingCount = FTPConstants.NUM_ZERO;
     }
 
     /**
@@ -87,9 +88,9 @@ public class ReceiverScheduler implements Serializable {
     public void prepareReceiver() {
         int receiveNumber = conf.getReceiveNumber();
         String logDir = conf.getProcessLogDir();
-        if (receiveNumber != 0 && logDir != null) {
+        if (receiveNumber != FTPConstants.NUM_ZERO && logDir != null) {
             List<String> queueIdList = rebalanceReceiver(receiveNumber, logDir);
-            if (queueIdList.size() > 0) {
+            if (queueIdList.size() > FTPConstants.NUM_ZERO) {
                 pool = Executors.newFixedThreadPool(queueIdList.size());
                 for (String id : queueIdList) {
                     ReceiverImpl receiver = new ReceiverImpl(conf, id);
@@ -97,7 +98,7 @@ public class ReceiverScheduler implements Serializable {
                     pool.execute(new ProcessThread(conf, receiver.getQueue(), id));
                 }
             } else {
-                for (int i = 0; i < receiveNumber; i++) {
+                for (int i = FTPConstants.NUM_ZERO; i < receiveNumber; i++) {
                     pool = Executors.newFixedThreadPool(receiveNumber);
                     ReceiverImpl receiver = new ReceiverImpl(conf, i + "");
                     register(receiver);
@@ -131,19 +132,19 @@ public class ReceiverScheduler implements Serializable {
             if (fileList != null) {
                 if (receiverNum == fileList.length) {
                     for (String fl : fileList) {
-                        queueIDList.add(fl.split("-")[1].split("\\.")[0]);
+                        queueIDList.add(fl.split("-")[FTPConstants.NUM_ONE].split("\\.")[FTPConstants.NUM_ZERO]);
                     }
                 } else if (receiverNum > fileList.length) {
-                    for (int i = 0; i < receiverNum; i++) {
+                    for (int i = FTPConstants.NUM_ZERO; i < receiverNum; i++) {
                         queueIDList.add(i + "");
                     }
                 } else {
                     int[] queueIdArr = new int[fileList.length];
-                    for (int i = 0; i < fileList.length; i++) {
-                        queueIdArr[i] = Integer.parseInt(fileList[i].split("-")[1].split("\\.")[0]);
+                    for (int i = FTPConstants.NUM_ZERO; i < fileList.length; i++) {
+                        queueIdArr[i] = Integer.parseInt(fileList[i].split("-")[FTPConstants.NUM_ONE].split("\\.")[FTPConstants.NUM_ZERO]);
                     }
                     Arrays.sort(queueIdArr);
-                    for (int j = 0; j < receiverNum; j++) {
+                    for (int j = FTPConstants.NUM_ZERO; j < receiverNum; j++) {
                         queueIDList.add(queueIdArr[j] + "");
                     }
                     return queueIDList;

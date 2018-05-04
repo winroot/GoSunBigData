@@ -1,6 +1,7 @@
 package com.hzgc.collect.expand.merge;
 
 import com.hzgc.collect.expand.log.LogEvent;
+import com.hzgc.collect.expand.util.FTPConstants;
 import com.hzgc.common.ftp.faceobj.FaceObject;
 import com.hzgc.common.ftp.message.FtpPathMessage;
 import com.hzgc.common.ftp.FtpUtils;
@@ -24,7 +25,7 @@ class GetFaceObject implements Serializable {
             LogEvent event = JSONUtil.toObject(row, LogEvent.class);
             // 路径中不包含/opt/ftpdata
             String portPath = event.getFtpPath();
-            String path = portPath.split("://")[1].substring(portPath.split("://")[1].indexOf("/"));
+            String path = portPath.split("://")[FTPConstants.NUM_ONE].substring(portPath.split("://")[FTPConstants.NUM_ONE].indexOf("/"));
             // 路径中包含/opt/ftpdata/
             String absolutePath = event.getAbsolutePath();
 
