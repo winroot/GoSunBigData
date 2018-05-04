@@ -1,5 +1,6 @@
 package com.hzgc.service.starepo.service;
 
+import com.hzgc.common.service.table.column.ObjectInfoTable;
 import com.hzgc.service.starepo.bean.*;
 import com.hzgc.service.starepo.dao.PhoenixDao;
 import org.apache.log4j.Logger;
@@ -30,7 +31,14 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示插入成功，返回值为1，表示插入失败
      */
     public Integer addObjectInfo(String platformId, Map<String, Object> personObject) {
-        return phoenixDao.addObjectInfo(platformId, personObject);
+        LOG.info("personObject: " + personObject.entrySet().toString());
+        long start = System.currentTimeMillis();
+        PersonObject person = PersonObject.mapToPersonObject(personObject);
+        person.setPlatformid(platformId);
+        LOG.info("the rowkey off this add person is: " + person.getId());
+        Integer i = phoenixDao.addObjectInfo(person);
+        LOG.info("添加一条数据到静态库花费时间： " + (System.currentTimeMillis() - start));
+        return i;
     }
 
     /**
@@ -39,6 +47,7 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示删除成功，返回值为1，表示删除失败
      */
     public int deleteObjectInfo(List<String> rowkeys) {
+
         return phoenixDao.deleteObjectInfo(rowkeys);
     }
 
@@ -47,8 +56,18 @@ public class ObjectInfoHandlerService {
      * @param personObject K-V 对，里面存放的是字段和值之间的一一对应关系，参考添加里的描述
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
-    public int updateObjectInfo(Map<String, Object> personObject) {
-        return phoenixDao.updateObjectInfo(personObject);
+    public Integer updateObjectInfo(Map<String, Object> personObject) {
+        LOG.info("personObject: " + personObject.entrySet().toString());
+        long start = System.currentTimeMillis();
+        String thePassId = (String) personObject.get(ObjectInfoTable.ROWKEY);
+        if (thePassId == null) {
+            LOG.info("the pass Id can not be null....");
+            return 1;
+        }
+
+        Integer i = phoenixDao.updateObjectInfo(personObject);
+        LOG.info("更新rowkey为: " + thePassId + "数据花费的时间是: " + (System.currentTimeMillis() - start));
+        return i;
     }
 
     /**
@@ -94,12 +113,6 @@ public class ObjectInfoHandlerService {
         return phoenixDao.getPhotoByKey(rowkey);
     }
 
-    private static ObjectSearchResult getObjectSearchResultError(String errorMsg) {
-        ObjectSearchResult objectSearchResultError = new ObjectSearchResult();
-        objectSearchResultError.setSearchStatus(1);
-        LOG.info(errorMsg);
-        return objectSearchResultError;
-    }
 
     /**
      * 根据传过来的搜索rowkey 返回搜索记录 （外） （李第亮）
@@ -186,14 +199,5 @@ public class ObjectInfoHandlerService {
         LOG.info(finnalObjectSearchResult);
         LOG.info("***********************");
         return finnalObjectSearchResult;
-    }
-
-    /**
-     * 根据穿过来的rowkey 返回照片 （外） （李第亮）
-     * @param rowkey 即Hbase 数据库中的rowkey，查询记录唯一标志
-     * @return 返回查询的照片
-     */
-    public byte[] getSearchPhoto(String rowkey) {
-        return null;
     }
 }
