@@ -1,4 +1,4 @@
-package com.hzgc.service.clustering.service;
+package com.hzgc.service.clustering.bean;
 
 import com.hzgc.common.service.clustering.ClusteringAttribute;
 

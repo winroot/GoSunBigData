@@ -1,13 +1,12 @@
-package com.hzgc.service.device.util;
+package com.hzgc.service.device.service;
 
 import com.alibaba.fastjson.JSON;
-import com.hzgc.common.util.object.ObjectUtil;
 
 import java.util.Map;
 
-public class ChangeUtil<T> {
+public class JsonToMap<T> {
 
-    //bytes数组转换成Map
+    //String转换成Map
     public static<T> Map<T,Map<String,Integer>> stringToMap(String jsonString){
         Map<T,Map<String,Integer>> map = JSON.parseObject(jsonString,Map.class);
         for (T t:map.keySet()) {
