@@ -200,4 +200,12 @@ public class ObjectInfoHandlerService {
         LOG.info("***********************");
         return finnalObjectSearchResult;
     }
+    /**
+     * 根据穿过来的rowkey 返回照片 （外） （李第亮）
+     * @param rowkey 即Hbase 数据库中的rowkey，查询记录唯一标志
+     * @return 返回查询的照片
+     */
+    public byte[] getSearchPhoto(String rowkey) {
+        return null;
+    }
 }
