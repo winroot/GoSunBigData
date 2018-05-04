@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 @ApiModel(value = "设备参数")
-public class DeviceData implements Serializable {
+public class DeviceDataParam implements Serializable {
 
     /**
      * 平台ID
@@ -52,7 +52,7 @@ public class DeviceData implements Serializable {
 
     @Override
     public String toString() {
-        return "DeviceData{" +
+        return "DeviceDataParam{" +
                 "platformId='" + platformId + '\'' +
                 ", ipcID='" + ipcID + '\'' +
                 ", notes='" + notes + '\'' +

@@ -1,25 +1,32 @@
-package com.hzgc.service.device.dao;
+package com.hzgc.service.device.service;
 
 import com.alibaba.fastjson.JSON;
-import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.common.service.table.column.DeviceTable;
-import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.object.ObjectUtil;
+import com.hzgc.common.util.empty.IsEmpty;
+import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.service.device.bean.WarnRule;
-import com.hzgc.service.device.util.ChangeUtil;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
 
-@Repository
-public class WarnRuleDao {
+@Service
+public class WarnRuleService {
 
-    private static Logger LOG = Logger.getLogger(WarnRuleDao.class);
+    private static Logger LOG = Logger.getLogger(WarnRuleService.class);
 
+    /**
+     * 配置布控规则
+     * 设置多个设备的对比规则，如果之前存在对比规则，先清除之前的规则，再重新写入
+     *
+     * @param ipcIDs 设备 ipcID 列表
+     * @param rules         对比规则
+     * @return 是否设置成功
+     */
     public Map<String, Boolean> configRules(List<String> ipcIDs, List<WarnRule> rules) {
         //从Hbase读device表
         Table deviceTable = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
@@ -61,7 +68,11 @@ public class WarnRuleDao {
     }
 
     /**
-     *添加布控规则（外）（赵喆）
+     * 添加布控规则
+     *
+     * @param ipcIDs 设备 ipcID 列表
+     * @param rules         对比规则
+     * @return boxChannelId 是否添加成功的 map
      */
     public Map<String, Boolean> addRules(List<String> ipcIDs, List<WarnRule> rules) {
         Table deviceTable = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
@@ -94,8 +105,8 @@ public class WarnRuleDao {
                             //告警类型      对象类型,阈值
                             deSerializDevice(result.getValue(DeviceTable.CF_DEVICE, DeviceTable.WARN));
                     //json字符串转化成对象
-//                    Map<Integer, Map<String, Integer>> map = new HashMap <>();
-                    Map<Integer, Map<String, Integer>> tempMap = ChangeUtil.<Integer>stringToMap(tempMapStr);
+                    Map<Integer, Map<String, Integer>> map = new HashMap <>();
+                    Map<Integer, Map<String, Integer>> tempMap = JSON.parseObject(tempMapStr,map.getClass());
                     //对于每一种告警类型：
                     for (Integer code : commonRule.keySet()) {
                         //若device表中存在这种告警类型
@@ -133,7 +144,10 @@ public class WarnRuleDao {
     }
 
     /**
-     * 获取设备的对比规则 （外）（赵喆）
+     * 获取设备的对比规则
+     *
+     * @param ipcID 设备 ipcID
+     * @return 设备的布控规则
      */
     public List<WarnRule> getCompareRules(String ipcID) {
         List<WarnRule> reply = new ArrayList<>();
@@ -149,7 +163,7 @@ public class WarnRuleDao {
                     //并转化为Map嵌套格式（反序列化）
                     String deviceMapStr = deSerializDevice(deviceByte);
                     Map<Integer, Map<String, Integer>> map = new HashMap <>();
-                    Map<Integer, Map<String, Integer>> deviceMap = ChangeUtil.<Integer>stringToMap(deviceMapStr);
+                    Map<Integer, Map<String, Integer>> deviceMap = JSON.parseObject(deviceMapStr,map.getClass());
                     /*
                      * 设备布控预案数据类型Map<Integer, Map<String, Integer>>    （即deviceMap）
                      *                                     告警类型,      对象类型,阈值
@@ -188,7 +202,10 @@ public class WarnRuleDao {
     }
 
     /**
-     * 删除设备的布控规则（外）（赵喆）
+     * 删除设备的布控规则
+     *
+     * @param ipcIDs 设备 ipcID 列表
+     * @return channelId 是否删除成功的 map
      */
     public Map<String, Boolean> deleteRules(List<String> ipcIDs) {
         //获取device表
@@ -219,8 +236,8 @@ public class WarnRuleDao {
                     //将离线告警数据反序列化
                     String offlineStr =
                             deSerializOffLine(offlineResult.getValue(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL));
-//                    Map<String, Map<String, Integer>> map = new HashMap <>();
-                    Map<String, Map<String, Integer>> offlineMap = ChangeUtil.<String>stringToMap(offlineStr);
+                    Map<String, Map<String, Integer>> map = new HashMap <>();
+                    Map<String, Map<String, Integer>> offlineMap = JSON.parseObject(offlineStr,map.getClass());
                     /*
                      * offlineMap：Map<String, Map<String, Integer>>
                      *                      对象类型      设备ID,离线天数
@@ -255,7 +272,10 @@ public class WarnRuleDao {
     }
 
     /**
-     * 查看有多少设备绑定了此人员类型objectType （外）（赵喆）
+     * 查看有多少设备绑定了此人员类型objectType
+     *
+     * @param objectType  识别库 id
+     * @return ipcIDs
      */
     public List<String> objectTypeHasRule(String objectType) {
         return null;
@@ -263,7 +283,11 @@ public class WarnRuleDao {
 
 
     /**
-     * objectTypeHasRule(String objectType)的子方法 （外）（赵喆）
+     * 在所有设备列表绑定的规则中，删除此objectType
+     *
+     * @param objectType 对象类型
+     * @param ipcIDs 设备列表
+     * @return 删除成功的条数
      */
     public int deleteObjectTypeOfRules(String objectType, List<String> ipcIDs) {
         return 0;
@@ -287,8 +311,8 @@ public class WarnRuleDao {
                 //反序列化该值类型（转化为Object）
                 String tempMapStr = deSerializOffLine(offlineResult.
                         getValue(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL));
-//                Map<String, Map<String, Integer>> map = new HashMap <>();
-                Map<String, Map<String, Integer>> tempMap = ChangeUtil.<String>stringToMap(tempMapStr);
+                Map<String, Map<String, Integer>> map = new HashMap <>();
+                Map<String, Map<String, Integer>> tempMap = JSON.parseObject(tempMapStr,map.getClass());
                 //对于离线告警offlineMap中的每个对象类型
                 for (String type : offlineMap.keySet()) {
                     //假如Hbase数据库中的device表中包含离线告警offlineMap的对象类型
@@ -330,8 +354,8 @@ public class WarnRuleDao {
      */
 
     private String parseDeviceRule(List<WarnRule> rules,
-                                   List<String> ipcIDs,
-                                   Map<Integer, Map<String, Integer>> commonRule) {
+                                 List<String> ipcIDs,
+                                 Map<Integer, Map<String, Integer>> commonRule) {
         //判断：规则不为空，设备ID不为空
         if (rules != null && commonRule != null && ipcIDs != null) {
             for (WarnRule rule : rules) {

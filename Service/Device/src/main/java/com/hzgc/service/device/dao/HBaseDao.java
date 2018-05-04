@@ -10,22 +10,18 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
-//数据库相关操作
 @Repository
-public class DeviceDao {
+public class HBaseDao {
 
-    private static Logger LOG = Logger.getLogger(DeviceDao.class);
+    private static Logger LOG = Logger.getLogger(HBaseDao.class);
 
-    /**
-     * 绑定设备到平台（外）（赵喆）
-     *
-     * @param platformId 平台 id
-     * @param ipcID   设备 ipcID
-     * @param notes      备注
-     * @return 是否绑定成功
-     */
-    public boolean bindDevice(String platformId, String ipcID, String notes){
+    public HBaseDao() {
+        HBaseHelper.getHBaseConnection();
+    }
+
+    public boolean bindDevice(String platformId, String ipcID, String notes) {
         Table table = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
+        if (IsEmpty.strIsRight(ipcID) && IsEmpty.strIsRight(platformId)) {
             String ipcIDTrim = ipcID.trim();
             try {
                 Put put = new Put(Bytes.toBytes(ipcIDTrim));
@@ -40,22 +36,20 @@ public class DeviceDao {
             } finally {
                 HBaseHelper.closeTable(table);
             }
+        } else {
+            LOG.error("Please check the arguments!");
+            return false;
+        }
     }
 
-    /**
-     * 解除设备与平台的绑定关系（外）（赵喆）
-     *
-     * @param platformId 平台 id
-     * @param ipcID   设备 ipcID
-     * @return 是否解除绑定成功
-     */
-    public boolean unbindDevice(String platformId, String ipcID){
+    public boolean unbindDevice(String platformId, String ipcID) {
         Table table = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
+        if (IsEmpty.strIsRight(platformId) && IsEmpty.strIsRight(ipcID)) {
             String ipcIDTrim = ipcID.trim();
             try {
                 Delete delete = new Delete(Bytes.toBytes(ipcIDTrim));
                 //根据设备ID（rowkey），删除该行的平台ID列，而非删除这整行数据。
-                delete.addColumns(DeviceTable.CF_DEVICE,DeviceTable.PLAT_ID);
+                delete.addColumns(DeviceTable.CF_DEVICE, DeviceTable.PLAT_ID);
                 table.delete(delete);
                 LOG.info("Unbind device:" + ipcIDTrim + " and " + platformId + " successful");
                 return true;
@@ -65,17 +59,15 @@ public class DeviceDao {
             } finally {
                 HBaseHelper.closeTable(table);
             }
+        } else {
+            LOG.error("Please check the arguments!");
+            return false;
+        }
     }
 
-    /**
-     * 修改备注
-     *
-     * @param notes 备注信息（外）（赵喆）
-     * @param ipcID    设备在平台上的 ipcID
-     * @return 是否重命名成功
-     */
-    public boolean renameNotes(String notes, String ipcID){
+    public boolean renameNotes(String notes, String ipcID) {
         Table table = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
+        if (IsEmpty.strIsRight(ipcID)) {
             String ipcIDTrim = ipcID.trim();
             try {
                 Put put = new Put(Bytes.toBytes(ipcIDTrim));
@@ -87,5 +79,9 @@ public class DeviceDao {
                 LOG.error("Current renameNotes is failed!");
                 return false;
             }
+        } else {
+            LOG.error("Please check the arguments!");
+            return false;
         }
+    }
 }

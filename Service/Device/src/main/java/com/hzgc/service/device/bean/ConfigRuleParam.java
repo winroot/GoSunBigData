@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @ApiModel(value = "规则配置参数")
-public class ConfigRule implements Serializable {
+public class ConfigRuleParam implements Serializable {
 
     /**
      * 设备ID
@@ -67,7 +67,7 @@ public class ConfigRule implements Serializable {
 
     @Override
     public String toString() {
-        return "ConfigRule{" +
+        return "ConfigRuleParam{" +
                 "ipcID='" + ipcID + '\'' +
                 ", ipcIDs=" + ipcIDs +
                 ", rules=" + rules +
