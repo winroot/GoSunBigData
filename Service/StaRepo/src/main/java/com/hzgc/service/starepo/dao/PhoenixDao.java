@@ -30,20 +30,10 @@ public class PhoenixDao implements Serializable {
     private JdbcTemplate jdbcTemplate;
 
     /**
-     * 针对单个对象信息的添加处理  （外）（李第亮）
-     * @param  platformId 表示的是平台的ID， 平台的唯一标识。
-     * @param personObject K-V 对，里面存放的是字段和值之间的一一对应关系,
-     *               例如：传入一个Map 里面的值如下map.put("idcard", "450722199502196939")
-     *               表示的是身份证号（idcard）是450722199502196939，
-     *               其中的K 的具体，请参考给出的数据库字段设计
+     * 针对单个对象信息的添加处理  （外）
      * @return 返回值为0，表示插入成功，返回值为1，表示插入失败
      */
-    public Integer addObjectInfo(String platformId, Map<String, Object> personObject) {
-        LOG.info("personObject: " + personObject.entrySet().toString());
-        long start = System.currentTimeMillis();
-        PersonObject person = PersonObject.mapToPersonObject(personObject);
-        person.setPlatformid(platformId);
-        LOG.info("the rowkey off this add person is: " + person.getId());
+    public Integer addObjectInfo(PersonObject person) {
 
         String sql = "upsert into objectinfo(" + ObjectInfoTable.ROWKEY + ", " + ObjectInfoTable.NAME + ", "
                 + ObjectInfoTable.PLATFORMID + ", " + ObjectInfoTable.TAG + ", " + ObjectInfoTable.PKEY + ", "
@@ -62,7 +52,6 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return 1;
         }
-        LOG.info("添加一条数据到静态库花费时间： " + (System.currentTimeMillis() - start));
         //数据变动，更新objectinfo table 中的一条数据,表示静态库中的数据有变动
         new ObjectInfoHandlerTool().updateTotalNumOfHbase();
         return 0;
@@ -100,13 +89,6 @@ public class PhoenixDao implements Serializable {
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
     public Integer updateObjectInfo(Map<String, Object> personObject) {
-        LOG.info("personObject: " + personObject.entrySet().toString());
-        long start = System.currentTimeMillis();
-        String thePassId = (String) personObject.get(ObjectInfoTable.ROWKEY);
-        if (thePassId == null) {
-            LOG.info("the pass Id can not be null....");
-            return 1;
-        }
         try {
             ConcurrentHashMap<String, CopyOnWriteArrayList<Object>> sqlAndSetValues = ParseByOption.getUpdateSqlFromPersonMap(personObject);
             String sql = null;
@@ -126,7 +108,6 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return 1;
         }
-        LOG.info("更新rowkey为: " + thePassId + "数据花费的时间是: " + (System.currentTimeMillis() - start));
         //数据变动，更新objectinfo table 中的一条数据,表示静态库中的数据有变动
         new ObjectInfoHandlerTool().updateTotalNumOfHbase();
         return 0;
@@ -161,8 +142,6 @@ public class PhoenixDao implements Serializable {
         //封装的sql 以及需要设置的值
         Map<String, List<Object>> finalSqlAndValues = ParseByOption.getSqlFromPSearchArgsModel( pSearchArgsModel);
 
-        ResultSet resultSet = null;
-
         // 取出封装的sql 以及需要设置的值，进行sql 查询
         if (finalSqlAndValues == null) {
             objectSearchResult.setSearchStatus(1);
@@ -195,8 +174,8 @@ public class PhoenixDao implements Serializable {
                         PersonObject personObject;
                         List<String> types = new ArrayList<>();
                         int lable = 0;
-                        while (resultSet.next()) {
-                            String type = resultSet.getString("type");
+                        while (sqlRowSet.next()) {
+                            String type = sqlRowSet.getString("type");
                             if (!types.contains(type)) {
                                 types.add(type);
                                 if (types.size() > 1) {
@@ -206,22 +185,22 @@ public class PhoenixDao implements Serializable {
                                 }
                             }
                             personObject = new PersonObject();
-                            personObject.setId(resultSet.getString(ObjectInfoTable.ROWKEY));
-                            personObject.setPkey(resultSet.getString(ObjectInfoTable.PKEY));
-                            personObject.setPlatformid(resultSet.getString(ObjectInfoTable.PLATFORMID));
-                            personObject.setName(resultSet.getString(ObjectInfoTable.NAME));
-                            personObject.setSex(resultSet.getInt(ObjectInfoTable.SEX));
-                            personObject.setIdcard(resultSet.getString(ObjectInfoTable.IDCARD));
-                            personObject.setCreator(resultSet.getString(ObjectInfoTable.CREATOR));
-                            personObject.setCphone(resultSet.getString(ObjectInfoTable.CPHONE));
-                            personObject.setUpdatetime(resultSet.getTimestamp(ObjectInfoTable.UPDATETIME));
-                            personObject.setCreatetime(resultSet.getTimestamp(ObjectInfoTable.CREATETIME));
-                            personObject.setReason(resultSet.getString(ObjectInfoTable.REASON));
-                            personObject.setTag(resultSet.getString(ObjectInfoTable.TAG));
-                            personObject.setImportant(resultSet.getInt(ObjectInfoTable.IMPORTANT));
-                            personObject.setStatus(resultSet.getInt(ObjectInfoTable.STATUS));
-                            personObject.setSim(resultSet.getFloat(ObjectInfoTable.RELATED));
-                            personObject.setLocation(resultSet.getString(ObjectInfoTable.LOCATION));
+                            personObject.setId(sqlRowSet.getString(ObjectInfoTable.ROWKEY));
+                            personObject.setPkey(sqlRowSet.getString(ObjectInfoTable.PKEY));
+                            personObject.setPlatformid(sqlRowSet.getString(ObjectInfoTable.PLATFORMID));
+                            personObject.setName(sqlRowSet.getString(ObjectInfoTable.NAME));
+                            personObject.setSex(sqlRowSet.getInt(ObjectInfoTable.SEX));
+                            personObject.setIdcard(sqlRowSet.getString(ObjectInfoTable.IDCARD));
+                            personObject.setCreator(sqlRowSet.getString(ObjectInfoTable.CREATOR));
+                            personObject.setCphone(sqlRowSet.getString(ObjectInfoTable.CPHONE));
+                            personObject.setUpdatetime(sqlRowSet.getTimestamp(ObjectInfoTable.UPDATETIME));
+                            personObject.setCreatetime(sqlRowSet.getTimestamp(ObjectInfoTable.CREATETIME));
+                            personObject.setReason(sqlRowSet.getString(ObjectInfoTable.REASON));
+                            personObject.setTag(sqlRowSet.getString(ObjectInfoTable.TAG));
+                            personObject.setImportant(sqlRowSet.getInt(ObjectInfoTable.IMPORTANT));
+                            personObject.setStatus(sqlRowSet.getInt(ObjectInfoTable.STATUS));
+                            personObject.setSim(sqlRowSet.getFloat(ObjectInfoTable.RELATED));
+                            personObject.setLocation(sqlRowSet.getString(ObjectInfoTable.LOCATION));
                             personObjects.add(personObject);
                         }
                         // 封装最后需要返回的结果
@@ -249,7 +228,7 @@ public class PhoenixDao implements Serializable {
                         }
                         personSingleResult.setSearchPhotos(searchPhotos);
                         // 封装personSingleResult
-                        new ObjectInfoHandlerTool().getPersonSingleResult(personSingleResult, resultSet, true);
+                        new ObjectInfoHandlerTool().getPersonSingleResult(personSingleResult, sqlRowSet, true);
                         if (personSingleResult.getPersons() != null || personSingleResult.getPersons().size() != 0) {
                             finalResults.add(personSingleResult);
                         }
@@ -258,12 +237,12 @@ public class PhoenixDao implements Serializable {
                     PersonSingleResult personSingleResult = new PersonSingleResult();   // 需要进行修改
                     personSingleResult.setSearchRowkey(searchTotalId);
                     //封装personSingleResult
-                    new ObjectInfoHandlerTool().getPersonSingleResult(personSingleResult, resultSet, false);
+                    new ObjectInfoHandlerTool().getPersonSingleResult(personSingleResult, sqlRowSet, false);
                     if (personSingleResult.getPersons() != null || personSingleResult.getPersons().size() != 0) {
                         finalResults.add(personSingleResult);
                     }
                 }
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 objectSearchResult.setSearchStatus(1);
                 e.printStackTrace();
                 return objectSearchResult;

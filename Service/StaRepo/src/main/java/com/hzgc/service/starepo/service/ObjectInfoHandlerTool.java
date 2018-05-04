@@ -8,6 +8,7 @@ import com.hzgc.service.starepo.bean.*;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import java.io.IOException;
 import java.sql.*;
@@ -119,7 +120,7 @@ public class ObjectInfoHandlerTool {
      * @param searchByPics
      * @return personSingelResult
      */
-    public PersonSingleResult getPersonSingleResult(PersonSingleResult personSingleResult, ResultSet resultSet, boolean searchByPics) {
+    public PersonSingleResult getPersonSingleResult(PersonSingleResult personSingleResult, SqlRowSet resultSet, boolean searchByPics) {
         List<PersonObject> personObjects = new ArrayList<>();
         try {
             while (resultSet.next()) {
@@ -144,7 +145,7 @@ public class ObjectInfoHandlerTool {
                 }
                 personObjects.add(personObject);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
