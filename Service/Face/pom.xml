@@ -14,8 +14,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.hzgc</groupId>
-            <artifactId>jni</artifactId>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>commom-jni</artifactId>
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>

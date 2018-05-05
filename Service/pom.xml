@@ -72,8 +72,8 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.hzgc</groupId>
-                <artifactId>jni</artifactId>
+                <groupId>com.hzgc.common</groupId>
+                <artifactId>commom-jni</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
