@@ -3,11 +3,10 @@ package com.hzgc.service.starepo.service;
 import com.hzgc.common.service.table.column.ObjectInfoTable;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
-import com.hzgc.service.starepo.object.PSearchArgsModel;
-import com.hzgc.service.starepo.object.StaticSortParam;
+import com.hzgc.service.starepo.bean.PSearchArgsModel;
+import com.hzgc.service.starepo.bean.StaticSortParam;
 import org.apache.log4j.Logger;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +18,7 @@ public class ParseByOption {
 
     private static Logger LOG = Logger.getLogger(PSearchArgsModel.class);
 
-    public static Map<String, List<Object>> getSqlFromPSearchArgsModel(Connection conn, PSearchArgsModel pSearchArgsModel) {
+    public static Map<String, List<Object>> getSqlFromPSearchArgsModel(PSearchArgsModel pSearchArgsModel) {
         StringBuffer sql = new StringBuffer("");
 
         Map<String, byte[]> photos = pSearchArgsModel.getImages();

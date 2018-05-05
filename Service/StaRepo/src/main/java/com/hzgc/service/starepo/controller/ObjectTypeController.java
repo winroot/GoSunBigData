@@ -2,8 +2,8 @@ package com.hzgc.service.starepo.controller;
 
 import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
-import com.hzgc.service.starepo.service.ObjectTypeServiceImpl;
-import com.hzgc.service.starepo.vo.ObjectTypeVO;
+import com.hzgc.service.starepo.service.ObjectTypeService;
+import com.hzgc.service.starepo.bean.ObjectType;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -16,63 +16,86 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@FeignClient(name = "type")
+@FeignClient(name = "staRepo")
 @RequestMapping(value = BigDataPath.TYPE, consumes = "application/json", produces = "application/json")
-@Api(value = "type", tags = "对象类型")
+@Api(value = "objectType", tags = "对象类型服务")
 public class ObjectTypeController {
 
     @Autowired
-    private ObjectTypeServiceImpl objectTypeServiceImpl;
+    private ObjectTypeService objectTypeService;
 
-    @ApiOperation(value = "添加对象类型", response = Byte.class)
+    @ApiOperation(value = "添加对象类型", response = Boolean.class)
     @ApiResponses(
             {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.TYPE_ADD, method = RequestMethod.POST)
-    public ResponseResult<Boolean> addObjectType(@RequestBody @ApiParam(value = "对象类型封装类") ObjectTypeVO vo) {
-        if(vo == null || vo.getName() == null || "".equals(vo.getName())){
+    public ResponseResult<Boolean> addObjectType(@RequestBody @ApiParam(value = "对象类型") ObjectType objectType) {
+        String name;
+        String creator;
+        String remark;
+        if (objectType != null) {
+            name = objectType.getName();
+            creator = objectType.getCreator();
+            remark = objectType.getRemark();
+        } else {
             return null;
         }
-
-        boolean success = objectTypeServiceImpl.addObjectType(vo.getName(), vo.getCreator(), vo.getRemark());
+        boolean success = objectTypeService.addObjectType(name, creator, remark);
         return ResponseResult.init(success);
     }
 
-    @ApiOperation(value = "删除对象类型", response = Byte.class)
+    @ApiOperation(value = "删除对象类型", response = Boolean.class)
     @ApiResponses(
             {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.TYPE_DELETE, method = RequestMethod.POST)
-    public ResponseResult<Boolean> deleteObjectType(@RequestBody @ApiParam(value = "对象类型封装类") ObjectTypeVO vo) {
-        if(vo == null || vo.getId() == null || "".equals(vo.getId())){
+    public ResponseResult<Boolean> deleteObjectType(@RequestBody @ApiParam(value = "对象类型") ObjectType objectType) {
+        String id;
+        if (objectType != null) {
+            id = objectType.getId();
+        } else {
             return null;
         }
 
-        boolean success = objectTypeServiceImpl.deleteObjectType(vo.getId());
+        boolean success = objectTypeService.deleteObjectType(id);
         return ResponseResult.init(success);
     }
 
-    @ApiOperation(value = "修改对象类型", response = Byte.class)
+    @ApiOperation(value = "修改对象类型", response = Boolean.class)
     @ApiResponses(
             {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.TYPE_UPDATE, method = RequestMethod.POST)
-    public ResponseResult<Boolean> updateObjectType(@RequestBody @ApiParam(value = "对象类型封装类") ObjectTypeVO vo) {
-        if(vo == null || vo.getId() == null || vo.getName() == null || "".equals(vo.getId()) || "".equals(vo.getName())){
+    public ResponseResult<Boolean> updateObjectType(@RequestBody @ApiParam(value = "对象类型") ObjectType objectType) {
+        String id;
+        String name;
+        String creator;
+        String remark;
+        if (objectType != null) {
+            id = objectType.getId();
+            name = objectType.getName();
+            creator = objectType.getCreator();
+            remark = objectType.getRemark();
+        } else {
             return null;
         }
-
-        boolean success = objectTypeServiceImpl.updateObjectType(vo.getId(), vo.getName(), vo.getCreator(), vo.getRemark());
+        boolean success = objectTypeService.updateObjectType(id, name, creator, remark);
         return ResponseResult.init(success);
     }
 
-    @ApiOperation(value = "查询对象类型", response = Byte.class)
+    @ApiOperation(value = "查询对象类型", response = List.class, responseContainer = "List")
     @ApiResponses(
             {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.TYPE_SEARCH, method = RequestMethod.POST)
-    public ResponseResult<List> searchObjectType(@RequestBody @ApiParam(value = "对象类型封装类") ObjectTypeVO vo) {
-        if(vo == null || vo.getPageIndex() == 0 || vo.getPageSize() == 0){
+    public ResponseResult<List<Map<String, String>>> searchObjectType(@RequestBody @ApiParam(value = "对象类型") ObjectType objectType) {
+        String name;
+        int pageIndex;
+        int pageSize;
+        if (objectType != null) {
+            name = objectType.getName();
+            pageIndex = objectType.getPageIndex();
+            pageSize = objectType.getPageSize();
+        } else {
             return null;
         }
-
-        List<Map<String, String>> success = objectTypeServiceImpl.searchObjectType(vo.getName(), vo.getPageIndex(), vo.getPageSize());
-        return ResponseResult.init(success);
+        List<Map<String, String>> mapList = objectTypeService.searchObjectType(name, pageIndex, pageSize);
+        return ResponseResult.init(mapList);
     }
 }

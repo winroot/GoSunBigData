@@ -2,8 +2,8 @@ package com.hzgc.service.device.controller;
 
 import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
-import com.hzgc.service.device.service.DeviceServiceImpl;
-import com.hzgc.service.device.bean.DeviceData;
+import com.hzgc.service.device.bean.DeviceDataParam;
+import com.hzgc.service.device.service.DeviceService;
 import io.swagger.annotations.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,21 +22,21 @@ public class DeviceController {
     private static Logger LOG = Logger.getLogger(DeviceController.class);
 
     @Autowired
-    private DeviceServiceImpl deviceService;
+    private DeviceService deviceService;
 
     @ApiOperation(value = "设备绑定",response = Boolean.class)
     @ApiResponses({
             @ApiResponse(code = 200,message = "successful response")
     })
     @RequestMapping(value = BigDataPath.DEVICE_BIND,method = RequestMethod.POST)
-    public ResponseResult<Boolean> bindDevice(@RequestBody @ApiParam(value = "设备参数") DeviceData deviceData) {
-        String platformId = null;
-        String ipcId = null;
-        String notes = null;
-        if (null != deviceData) {
-            platformId = deviceData.getPlatformId();
-            ipcId = deviceData.getIpcID();
-            notes = deviceData.getNotes();
+    public ResponseResult<Boolean> bindDevice(@RequestBody @ApiParam(value = "设备参数") DeviceDataParam deviceDataParam) {
+        String platformId;
+        String ipcId;
+        String notes;
+        if (null != deviceDataParam) {
+            platformId = deviceDataParam.getPlatformId();
+            ipcId = deviceDataParam.getIpcID();
+            notes = deviceDataParam.getNotes();
         } else {
             return null;
         }
@@ -49,12 +49,12 @@ public class DeviceController {
             @ApiResponse(code = 200,message = "successful response")
     })
     @RequestMapping(value = BigDataPath.DEVICE_UNBIND,method = RequestMethod.POST)
-    public ResponseResult<Boolean> unbindDevice(@RequestBody @ApiParam(value = "设备参数") DeviceData deviceData) {
-        String platformId = null;
-        String ipcId = null;
-        if (null != deviceData) {
-            platformId = deviceData.getPlatformId();
-            ipcId = deviceData.getIpcID();
+    public ResponseResult<Boolean> unbindDevice(@RequestBody @ApiParam(value = "设备参数") DeviceDataParam deviceDataParam) {
+        String platformId;
+        String ipcId;
+        if (null != deviceDataParam) {
+            platformId = deviceDataParam.getPlatformId();
+            ipcId = deviceDataParam.getIpcID();
         } else {
             return null;
         }
@@ -67,12 +67,12 @@ public class DeviceController {
             @ApiResponse(code = 200,message = "successful response")
     })
     @RequestMapping(value = BigDataPath.DEVICE_RENAMENOTES,method = RequestMethod.POST)
-    public ResponseResult<Boolean> renameNotes(@RequestBody @ApiParam(value = "设备参数") DeviceData deviceData) {
-        String notes = null;
-        String ipcId = null;
-        if (null != deviceData) {
-            notes = deviceData.getNotes();
-            ipcId = deviceData.getIpcID();
+    public ResponseResult<Boolean> renameNotes(@RequestBody @ApiParam(value = "设备参数") DeviceDataParam deviceDataParam) {
+        String notes;
+        String ipcId;
+        if (null != deviceDataParam) {
+            notes = deviceDataParam.getNotes();
+            ipcId = deviceDataParam.getIpcID();
         } else {
             return null;
         }

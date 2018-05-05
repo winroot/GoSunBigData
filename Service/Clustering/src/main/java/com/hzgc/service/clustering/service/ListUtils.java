@@ -1,5 +1,6 @@
 package com.hzgc.service.clustering.service;
 
+import com.hzgc.service.clustering.bean.SortParam;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;

@@ -2,12 +2,11 @@ package com.hzgc.service.starepo.controller;
 
 import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.service.starepo.object.ObjectSearchResult;
-import com.hzgc.service.starepo.object.PSearchArgsModel;
-import com.hzgc.service.starepo.object.SearchRecordOpts;
-import com.hzgc.service.starepo.service.ObjectInfoHandlerImpl;
-import com.hzgc.service.starepo.vo.ObjectInfoHandlerVO;
+import com.hzgc.service.starepo.bean.ObjectSearchResult;
+import com.hzgc.service.starepo.bean.PSearchArgsModel;
+import com.hzgc.service.starepo.bean.SearchRecordOpts;
+import com.hzgc.service.starepo.service.ObjectInfoHandlerService;
+import com.hzgc.service.starepo.bean.ObjectInfoHandler;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -22,35 +21,35 @@ import java.util.Map;
 @RestController
 @FeignClient(name = "staRepo")
 @RequestMapping(value = BigDataPath.STAREPO, consumes = "application/json", produces = "application/json")
-@Api(value = "staRepo", tags = "静态库")
+@Api(value = "objectInfo", tags = "对象信息服务")
 public class ObjectInfoHandlerController {
 
     @Autowired
-    private ObjectInfoHandlerImpl objectInfoHandlerService;
+    private ObjectInfoHandlerService objectInfoHandlerService;
 
-    @ApiOperation(value = "添加对象信息", response = Byte.class)
+    @ApiOperation(value = "添加对象信息", response = Integer.class)
     @ApiResponses(
             {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.STAREPO_ADD, method = RequestMethod.POST)
-    public ResponseResult <Byte> addObjectInfo(@RequestBody @ApiParam(value = "对象信息封装类") ObjectInfoHandlerVO objectInfoHandlerVO) {
+    public ResponseResult <Integer> addObjectInfo(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
         String platformId;
         Map <String, Object> personObject;
-        if (objectInfoHandlerVO != null) {
-            platformId = objectInfoHandlerVO.getPlatformId();
-            personObject = objectInfoHandlerVO.getPersonObject();
+        if (objectInfoHandler != null) {
+            platformId = objectInfoHandler.getPlatformId();
+            personObject = objectInfoHandler.getPersonObject();
         } else {
             return null;
         }
-        Byte succeed = objectInfoHandlerService.addObjectInfo(platformId, personObject);
+        Integer succeed = objectInfoHandlerService.addObjectInfo(platformId, personObject);
         return ResponseResult.init(succeed);
     }
 
     @ApiOperation(value = "删除对象信息", response = Integer.class)
     @RequestMapping(value = BigDataPath.STAREPO_DELETE, method = RequestMethod.DELETE)
-    public ResponseResult <Integer> deleteObjectInfo(@RequestBody @ApiParam(value = "对象信息封装类") ObjectInfoHandlerVO objectInfoHandlerVO) {
+    public ResponseResult <Integer> deleteObjectInfo(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
         List <String> rowkeys;
-        if (objectInfoHandlerVO != null) {
-            rowkeys = objectInfoHandlerVO.getRowkeys();
+        if (objectInfoHandler != null) {
+            rowkeys = objectInfoHandler.getRowkeys();
         } else {
             return null;
         }
@@ -60,10 +59,10 @@ public class ObjectInfoHandlerController {
 
     @ApiOperation(value = "修改对象信息", response = Integer.class)
     @RequestMapping(value = BigDataPath.STAREPO_UPDATE, method = RequestMethod.POST)
-    public ResponseResult <Integer> updateObjectInfo(@RequestBody @ApiParam(value = "对象信息封装类") ObjectInfoHandlerVO objectInfoHandlerVO) {
+    public ResponseResult <Integer> updateObjectInfo(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
         Map <String, Object> personObject;
-        if (objectInfoHandlerVO != null) {
-            personObject = objectInfoHandlerVO.getPersonObject();
+        if (objectInfoHandler != null) {
+            personObject = objectInfoHandler.getPersonObject();
         } else {
             return null;
         }
@@ -73,10 +72,10 @@ public class ObjectInfoHandlerController {
 
     @ApiOperation(value = "通过rowKey查找", response = ObjectSearchResult.class)
     @RequestMapping(value = BigDataPath.STAREPO_SEARCH_BYROWKEY, method = RequestMethod.POST)
-    public ResponseResult <ObjectSearchResult> searchByRowkey(@RequestBody @ApiParam(value = "对象信息封装类") ObjectInfoHandlerVO objectInfoHandlerVO) {
+    public ResponseResult <ObjectSearchResult> searchByRowkey(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
         String rowkey;
-        if (objectInfoHandlerVO != null) {
-            rowkey = objectInfoHandlerVO.getRowkey();
+        if (objectInfoHandler != null) {
+            rowkey = objectInfoHandler.getRowkey();
         } else {
             return null;
         }
@@ -86,10 +85,10 @@ public class ObjectInfoHandlerController {
 
     @ApiOperation(value = "获得对象信息", response = ObjectSearchResult.class)
     @RequestMapping(value = BigDataPath.STAREPO_GET_OBJECTINFO, method = RequestMethod.POST)
-    public ResponseResult <ObjectSearchResult> getObjectInfo(@RequestBody @ApiParam(value = "对象信息封装类") ObjectInfoHandlerVO objectInfoHandlerVO) {
+    public ResponseResult <ObjectSearchResult> getObjectInfo(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
         PSearchArgsModel pSearchArgsModel;
-        if (objectInfoHandlerVO != null) {
-            pSearchArgsModel = objectInfoHandlerVO.getpSearchArgsModel();
+        if (objectInfoHandler != null) {
+            pSearchArgsModel = objectInfoHandler.getpSearchArgsModel();
         } else {
             return null;
         }
@@ -97,25 +96,25 @@ public class ObjectInfoHandlerController {
         return ResponseResult.init(result);
     }
 
-    @ApiOperation(value = "获得对象信息", response = byte[].class)
+    @ApiOperation(value = "获得对象信息", response = Byte.class)
     @RequestMapping(value = BigDataPath.STAREPO_GET_PHOTOBYKEY, method = RequestMethod.POST)
-    public ResponseResult <byte[]> getPhotoByKey(@RequestBody @ApiParam(value = "对象信息封装类") ObjectInfoHandlerVO objectInfoHandlerVO) {
+    public ResponseResult <Byte> getPhotoByKey(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
         String rowkey;
-        if (objectInfoHandlerVO != null) {
-            rowkey = objectInfoHandlerVO.getRowkey();
+        if (objectInfoHandler != null) {
+            rowkey = objectInfoHandler.getRowkey();
         } else {
             return null;
         }
-        byte[] photo = objectInfoHandlerService.getPhotoByKey(rowkey);
+        Byte photo = objectInfoHandlerService.getPhotoByKey(rowkey);
         return ResponseResult.init(photo);
     }
 
     @ApiOperation(value = "获得记录的对象信息", response = ObjectSearchResult.class)
     @RequestMapping(value = BigDataPath.STAREPO_GETSEARCHRESULT, method = RequestMethod.POST)
-    public ResponseResult <ObjectSearchResult> getRocordOfObjectInfo(@RequestBody @ApiParam(value = "对象信息封装类") ObjectInfoHandlerVO objectInfoHandlerVO) {
+    public ResponseResult <ObjectSearchResult> getRocordOfObjectInfo(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
         SearchRecordOpts searchRecordOpts;
-        if (objectInfoHandlerVO != null) {
-            searchRecordOpts = objectInfoHandlerVO.getSearchRecordOpts();
+        if (objectInfoHandler != null) {
+            searchRecordOpts = objectInfoHandler.getSearchRecordOpts();
         } else {
             return null;
         }
@@ -125,10 +124,10 @@ public class ObjectInfoHandlerController {
 
     @ApiOperation(value = "查询图片", response = byte[].class)
     @RequestMapping(value = BigDataPath.STAREPO_GETSEARCHPHOTO, method = RequestMethod.POST)
-    public ResponseResult <byte[]> getSearchPhoto(@RequestBody @ApiParam(value = "对象信息封装类") ObjectInfoHandlerVO objectInfoHandlerVO) {
+    public ResponseResult <byte[]> getSearchPhoto(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
         String rowkey;
-        if (objectInfoHandlerVO != null) {
-            rowkey = objectInfoHandlerVO.getRowkey();
+        if (objectInfoHandler != null) {
+            rowkey = objectInfoHandler.getRowkey();
         } else {
             return null;
         }
