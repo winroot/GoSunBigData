@@ -27,18 +27,18 @@ if [ ! -f "$SCHEMA_FILE" ]; then
 else
    touch midtable.job     ##创建midtable.job文件
    echo "type=command" >> midtable.job
-   echo "cluster_home=/opt/GoSunBigData/RealTimeFaceCompare/spark/bin" >> midtable.job
+   echo "cluster_home=/opt/RealTimeFaceCompare/spark/bin" >> midtable.job
    echo "command=sh \${cluster_home}/schema-merge-parquet-file.sh mid_table" >> midtable.job
 
    touch person_table_now.job  ##创建person_table_now.job文件
    echo "type=command" >> person_table_now.job
-   echo "cluster_home=/opt/GoSunBigData/RealTimeFaceCompare/spark/bin" >> person_table_now.job
+   echo "cluster_home=/opt/RealTimeFaceCompare/spark/bin" >> person_table_now.job
    echo "command=sh \${cluster_home}/schema-merge-parquet-file.sh person_table now" >> person_table_now.job
    echo "dependencies=midtable" >> person_table_now.job
 
    touch person_table_before.job  ##创建person_table_before.job文件
    echo "type=command" >> person_table_before.job
-   echo "cluster_home=/opt/GoSunBigData/RealTimeFaceCompare/spark/bin" >> person_table_before.job
+   echo "cluster_home=/opt/RealTimeFaceCompare/spark/bin" >> person_table_before.job
    echo "command=sh \${cluster_home}/schema-merge-parquet-file.sh person_table before" >> person_table_before.job
 
 fi
@@ -47,7 +47,7 @@ if [ ! -f "$OFFLINE_FILE" ]; then
 else
    touch start-face-offline-alarm-job.job  ##创建离线告警的job文件
    echo "type=command" >> start-face-offline-alarm-job.job
-   echo "cluster_home=//opt/GoSunBigData/RealTimeFaceCompare/spark/bin" >> start-face-offline-alarm-job.job
+   echo "cluster_home=//opt/RealTimeFaceCompare/spark/bin" >> start-face-offline-alarm-job.job
    echo "command=sh \${cluster_home}/start-face-offline-alarm-job.sh" >> start-face-offline-alarm-job.job
 fi
 

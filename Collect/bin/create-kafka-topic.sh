@@ -25,7 +25,6 @@ COMMON_DIR=$OBJECT_DIR/common                         ### common模块部署目�
 CONF_COMMON_DIR=$OBJECT_DIR/conf                      ### 配置文件目录
 CONF_FILE=$CONF_COMMON_DIR/project-conf.properties    ### 项目配置文件
 
-cd ..
 cd ../hzgc/conf
 CONF_HZGC_DIR=`pwd`                                   ### 集群配置文件目录
 
