@@ -100,9 +100,9 @@ public class PhoenixDao implements Serializable {
             List<Object[]> batchArgs = new ArrayList<>();
             Object[] objects = new Object[setValues.size()];
             for (int i = 0; i < setValues.size(); i++) {
-                objects[i+1] = setValues.get(i);
-                batchArgs.add(objects);
+                objects[i] = setValues.get(i);
             }
+            batchArgs.add(objects);
             jdbcTemplate.batchUpdate(sql,batchArgs);
         }catch (Exception e){
             e.printStackTrace();
@@ -156,7 +156,7 @@ public class PhoenixDao implements Serializable {
             try {
                 // 实例化pstm 对象，并且设置值，
                 for (int i = 0; i < setValues.size(); i++) {
-                    objects[i+1] = setValues.get(i);
+                    objects[i] = setValues.get(i);
                 }
                 batchArgs.add(objects);
                 SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql,batchArgs);
@@ -312,14 +312,4 @@ public class PhoenixDao implements Serializable {
         }
         return personSingleResult;
     }
-
-    /**
-     * 根据穿过来的rowkey 返回照片 （外） （李第亮）
-     * @param rowkey 即Hbase 数据库中的rowkey，查询记录唯一标志
-     * @return 返回查询的照片
-     */
-    public byte[] getSearchPhoto(String rowkey) {
-        return null;
-    }
-
 }
