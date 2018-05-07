@@ -280,6 +280,13 @@
 
         <!--common目录-->
         <fileSet>
+            <directory>../Common/Common-jni/target/common-jni-${project.parent.version}</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/common/jni</outputDirectory>
+        </fileSet>
+        <fileSet>
             <directory>../Common/Common-ftp/target/common-ftp-${project.parent.version}</directory>
             <includes>
                 <include>**</include>
@@ -300,13 +307,17 @@
             <outputDirectory>RealTimeFaceCompare/common/service</outputDirectory>
         </fileSet>
         <fileSet>
+            <directory>../Common/Common-udf/target/common-udf-${project.parent.version}</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/common/udf</outputDirectory>
+        </fileSet>
+        <fileSet>
             <directory>../Common/Common-util/target/common-util-${project.parent.version}</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <excludes>
-                <exclude>conf/**</exclude>
-            </excludes>
             <outputDirectory>RealTimeFaceCompare/common/util</outputDirectory>
         </fileSet>
         <!--项目公共jar包-->
@@ -328,6 +339,13 @@
         </fileSet>
         <!--Common模块jar包-->
         <fileSet>
+            <directory>../Common/Common-jni/target</directory>
+            <includes>
+                <include>common-jni-${project.parent.version}.jar</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
+        </fileSet>
+        <fileSet>
             <directory>../Common/Common-ftp/target</directory>
             <includes>
                 <include>common-ftp-${project.parent.version}.jar</include>
@@ -342,17 +360,16 @@
             <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Common/Common-util/target</directory>
+            <directory>../Common/Common-udf/target</directory>
             <includes>
-                <include>common-util-${project.parent.version}.jar</include>
+                <include>common-udf-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>
-        <!--JNI模块jar包-->
         <fileSet>
-            <directory>../JNI/target</directory>
+            <directory>../Common/Common-util/target</directory>
             <includes>
-                <include>jni-${project.parent.version}.jar</include>
+                <include>common-util-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
         </fileSet>

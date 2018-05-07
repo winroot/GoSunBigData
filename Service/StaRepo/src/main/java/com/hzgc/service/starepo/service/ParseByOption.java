@@ -1,8 +1,8 @@
 package com.hzgc.service.starepo.service;
 
+import com.hzgc.common.jni.FaceAttribute;
+import com.hzgc.common.jni.FaceFunction;
 import com.hzgc.common.service.table.column.ObjectInfoTable;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.jni.FaceFunction;
 import com.hzgc.service.starepo.bean.PSearchArgsModel;
 import com.hzgc.service.starepo.bean.StaticSortParam;
 import org.apache.log4j.Logger;

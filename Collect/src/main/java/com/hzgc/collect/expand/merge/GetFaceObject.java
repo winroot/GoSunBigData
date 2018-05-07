@@ -5,11 +5,11 @@ import com.hzgc.collect.expand.util.FTPConstants;
 import com.hzgc.common.ftp.faceobj.FaceObject;
 import com.hzgc.common.ftp.message.FtpPathMessage;
 import com.hzgc.common.ftp.FtpUtils;
+import com.hzgc.common.jni.FaceAttribute;
+import com.hzgc.common.jni.FaceFunction;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.searchtype.SearchType;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.jni.FaceFunction;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;

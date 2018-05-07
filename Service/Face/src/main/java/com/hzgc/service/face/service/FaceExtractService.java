@@ -1,16 +1,16 @@
 package com.hzgc.service.face.service;
 
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.jni.FaceFunction;
+import com.hzgc.common.jni.FaceAttribute;
+import com.hzgc.common.jni.FaceFunction;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FaceExtractImpl implements FaceExtract {
+public class FaceExtractService {
 
-    private static Logger LOG = Logger.getLogger(FaceExtractImpl.class);
+    private static Logger LOG = Logger.getLogger(FaceExtractService.class);
 
-    private FaceExtractImpl() {
+    private FaceExtractService() {
         try {
             LOG.info("Start NativeFunction init....");
             //NativeFunction.init();
@@ -21,7 +21,12 @@ public class FaceExtractImpl implements FaceExtract {
         }
     }
 
-    @Override
+    /**
+     * 特征提取
+     *
+     * @param imageBytes 图片的字节数组
+     * @return float[] 特征值:长度为512的float[]数组
+     */
     public FaceAttribute featureExtract(byte[] imageBytes) {
         if (imageBytes != null && imageBytes.length > 0) {
             return FaceFunction.featureExtract(imageBytes);

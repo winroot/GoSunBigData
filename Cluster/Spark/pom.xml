@@ -120,8 +120,8 @@
             <version>0.4.0</version>
         </dependency>
         <dependency>
-            <groupId>com.hzgc</groupId>
-            <artifactId>jni</artifactId>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>commom-jni</artifactId>
             <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
