@@ -1,6 +1,5 @@
 package com.hzgc.common.ftp.properties;
 
-
 import com.hzgc.common.util.file.ResourceFileUtil;
 import com.hzgc.common.util.io.IOUtil;
 import com.hzgc.common.util.properties.ProperHelper;

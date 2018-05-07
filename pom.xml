@@ -15,11 +15,10 @@
     <version>2.3.0</version>
     <modules>
         <module>Cluster</module>
-        <module>Service</module>
         <module>Collect</module>
         <module>Common</module>
-        <module>JNI</module>
         <module>Distribution</module>
+        <module>Service</module>
     </modules>
 
     <properties>
