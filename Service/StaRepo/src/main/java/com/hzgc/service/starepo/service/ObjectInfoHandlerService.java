@@ -36,6 +36,7 @@ public class ObjectInfoHandlerService {
         PersonObject person = PersonObject.mapToPersonObject(personObject);
         person.setPlatformid(platformId);
         LOG.info("the rowkey off this add person is: " + person.getId());
+        //数据库操作
         Integer i = phoenixDao.addObjectInfo(person);
         LOG.info("添加一条数据到静态库花费时间： " + (System.currentTimeMillis() - start));
         return i;
@@ -64,7 +65,7 @@ public class ObjectInfoHandlerService {
             LOG.info("the pass Id can not be null....");
             return 1;
         }
-
+        //数据库更新操作
         Integer i = phoenixDao.updateObjectInfo(personObject);
         LOG.info("更新rowkey为: " + thePassId + "数据花费的时间是: " + (System.currentTimeMillis() - start));
         return i;

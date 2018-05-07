@@ -1,6 +1,6 @@
 package com.hzgc.service.dynrepo.bean;
 
-import com.hzgc.jni.FaceAttribute;
+import com.hzgc.common.jni.FaceAttribute;
 
 import java.io.Serializable;
 

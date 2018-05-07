@@ -1,4 +1,4 @@
-package com.hzgc.jni;
+package com.hzgc.common.jni;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

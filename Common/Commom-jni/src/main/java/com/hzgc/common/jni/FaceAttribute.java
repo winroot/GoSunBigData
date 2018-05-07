@@ -1,6 +1,4 @@
-package com.hzgc.jni;
-
-
+package com.hzgc.common.jni;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

@@ -1,19 +1,16 @@
 package com.hzgc.service.face.controller;
 
+import com.hzgc.common.jni.FaceAttribute;
 import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
-import com.hzgc.service.face.service.FaceExtract;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.service.face.service.FaceExtractImpl;
+import com.hzgc.service.face.service.FaceExtractService;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,7 +25,7 @@ public class FaceController {
     private static Logger logger = LoggerFactory.getLogger(FaceController.class);
 
     @Autowired
-    FaceExtractImpl faceExtractService;
+    FaceExtractService faceExtractService;
 
     //特征值获取
     @ApiOperation(value = "图片的特征值提取",response =FaceAttribute.class)

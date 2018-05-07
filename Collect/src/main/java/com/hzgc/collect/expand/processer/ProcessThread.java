@@ -1,6 +1,5 @@
 package com.hzgc.collect.expand.processer;
 
-
 import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.DataProcessLogWriter;
 import com.hzgc.collect.expand.log.LogEvent;
@@ -11,9 +10,9 @@ import com.hzgc.common.ftp.Sharpness;
 import com.hzgc.common.ftp.faceobj.FaceObject;
 import com.hzgc.common.ftp.message.FtpPathMessage;
 import com.hzgc.common.ftp.properties.CollectProperties;
+import com.hzgc.common.jni.FaceAttribute;
+import com.hzgc.common.jni.FaceFunction;
 import com.hzgc.common.util.searchtype.SearchType;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.jni.FaceFunction;
 
 import java.util.concurrent.BlockingQueue;
 
