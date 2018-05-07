@@ -17,10 +17,10 @@ cd ..
 PROJECT_DIR=`pwd`                                                            ## 项目根目录
 CONF_DIR=$DEPLOY_DIR/conf                                                    ## spark模块conf目录
 LIB_DIR=$DEPLOY_DIR/lib                                                      ## spark模块jar目录
-COMMON_LIB=$PROJECT_DIR/lib                                                  ## lib目录
+COMMON_LIB_DIR=$PROJECT_DIR/lib                                                  ## lib目录
 LIB_JARS=`ls $LIB_DIR|grep .jar|awk '{print "'$LIB_DIR'/"$0}'|tr "\n" ":"`   ## jar 包位置以及第三方依赖jar包，绝对路径
 sleep 2s
-COM_LIB_JARS=`ls $COMMON_LIB|grep .jar|awk '{print "'${COMMON_LIB}'/"$0}'|tr "\n" ":"`
+COM_LIB_JARS=`ls $COMMON_LIB_DIR|grep .jar|awk '{print "'${COMMON_LIB_DIR}'/"$0}'|tr "\n" ":"`
 LOG_DIR=${DEPLOY_DIR}/logs                                                   ## log 日记目录
 LOG_FILE=${LOG_DIR}/load-parquet-files.log                                   ## log 日记文件
 SPARKJOB_PROPERTIES=${DEPLOY_DIR}/conf/sparkJob.properties
@@ -54,7 +54,7 @@ function load_parquet()
     spark-submit --class com.hzgc.cluster.loaddata.LoadParquetFile \
     --master local[*] \
     --driver-memory 4g \
-    ${COMMON_LIB}/${CLUSTER_VERSION} ${hdfsClusterName} ${hdfsPath} ${tableName}
+    ${COMMON_LIB_DIR}/${CLUSTER_VERSION} ${hdfsClusterName} ${hdfsPath} ${tableName}
     if [ "$?" -eq "0" ] ; then
         echo "******************** 更新元数据完成 ***************** "
     else

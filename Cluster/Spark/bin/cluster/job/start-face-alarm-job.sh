@@ -63,7 +63,7 @@ ELASTICSEARCH_VERSION=elasticsearch-1.0.jar
 # ROCKETMQ_COMMON_VERSION=`ls ${FTP_LIB_DIR}| grep ^rocketmq-common-[0-9].[0-9].[0-9].jar$`
 # ROCKETMQ_REMOTING_VERSION=`ls ${FTP_LIB_DIR}| grep ^rocketmq-remoting-[0-9].[0-9].[0-9].jar$`
 FASTJSON_VERSION=fastjson-1.2.29.jar
-KAFKA_CLIENTS_VERSION=kafka-clients-1.0.0.jar
+KAFKA_CLIENTS_VERSION=kafka-clients-0.8.2.1.jar
 METRICS_CORE_VERSION=metrics-core-2.2.0.jar
 
 
