@@ -8,8 +8,8 @@ import java.util.{Calendar, Date, Properties, UUID}
 
 import com.hzgc.cluster.consumer.PutDataToEs
 import com.hzgc.cluster.util.PropertiesUtils
+import com.hzgc.common.jni.ClusteringFunction
 import com.hzgc.common.service.clustering.ClusteringAttribute
-import com.hzgc.jni.ClusteringFunction
 import org.apache.log4j.Logger
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.storage.StorageLevel

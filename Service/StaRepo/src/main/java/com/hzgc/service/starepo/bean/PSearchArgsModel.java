@@ -1,7 +1,7 @@
 package com.hzgc.service.starepo.bean;
 
 
-import com.hzgc.jni.FaceAttribute;
+import com.hzgc.common.jni.FaceAttribute;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

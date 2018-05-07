@@ -1,8 +1,8 @@
 package com.hzgc.service.starepo.dao;
 
+import com.hzgc.common.jni.FaceAttribute;
 import com.hzgc.common.service.table.column.ObjectInfoTable;
 import com.hzgc.common.service.table.column.SearchRecordTable;
-import com.hzgc.jni.FaceAttribute;
 import com.hzgc.service.starepo.bean.*;
 import com.hzgc.service.starepo.service.ObjectInfoHandlerTool;
 import com.hzgc.service.starepo.service.ParseByOption;
@@ -14,8 +14,6 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

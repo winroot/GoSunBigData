@@ -1,7 +1,6 @@
-package com.hzgc.jni;
+package com.hzgc.common.jni;
 
 import java.io.Serializable;
-
 
 public class ClusteringFunction implements Serializable {
 

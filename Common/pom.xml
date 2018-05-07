@@ -16,6 +16,8 @@
         <module>Common-ftp</module>
         <module>Common-service</module>
         <module>Common-util</module>
+        <module>Common-udf</module>
+        <module>Commom-jni</module>
     </modules>
     <properties>
         <!--接管平台后添加-->
