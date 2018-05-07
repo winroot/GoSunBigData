@@ -15,7 +15,13 @@ create table objectinfo(
       person.updatetime TIMESTAMP,
       person.important integer,
       person.status integer,
-      person.location varchar);
+      person.location varchar,
+      type.name varchar,
+      type.creator varchar,
+      type.remark varchar,
+      type.addtime TIMESTAMP,
+      type.updatetime TIMESTAMP,
+      type.ignore_region integer);
 
 create table searchrecord(
       id char(50) not null primary key,
