@@ -27,8 +27,7 @@ import java.util.List;
 @Api(value = "/dynRepoSearch", tags = "以图搜图服务")
 public class CaptureSearchController {
 
-    @Autowired
-    private AttributeService attributeService;
+    private AttributeService attributeService = new AttributeService();
     @Autowired
     private CaptureHistoryService captureHistoryService;
     @Autowired

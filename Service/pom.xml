@@ -23,6 +23,12 @@
     </modules>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
         <!--spring cloud-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

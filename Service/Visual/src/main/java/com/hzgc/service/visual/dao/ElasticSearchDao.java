@@ -11,16 +11,17 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+@Repository
 public class ElasticSearchDao {
 
     private static Logger LOG = Logger.getLogger(ElasticSearchDao.class);
 
     private TransportClient esClient;
-
 
     public ElasticSearchDao(@Value("${es.cluster.name}") String clusterName,
                             @Value("${es.hosts}") String esHost,

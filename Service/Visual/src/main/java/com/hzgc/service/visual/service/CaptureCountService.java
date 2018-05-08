@@ -164,7 +164,7 @@ public class CaptureCountService {
     public List<AttributeCount> captureAttributeQuery(String startTime, String endTime, List<String> ipcIdList, SearchType type) {
         List<AttributeCount> attributeCountList = new ArrayList<>();
         if (type == SearchType.PERSON) {
-            AttributeService capturePictureSearchService = new AttributeService();
+            AttributeService attributeService = new AttributeService();
             if (ipcIdList != null && ipcIdList.size() > 0) {
                 for (String ipcId : ipcIdList) {
                     AttributeCount attributeCount = new AttributeCount();
@@ -172,7 +172,7 @@ public class CaptureCountService {
                     CaptureCount captureCount = captureCountQuery(startTime, endTime, ipcId);
                     long count = captureCount.getTotalresultcount();
                     attributeCount.setCaptureCount(count);
-                    List<Attribute> attributeList = capturePictureSearchService.getAttribute(type);
+                    List<Attribute> attributeList = attributeService.getAttribute(type);
                     for (Attribute attribute : attributeList) {
                         List<AttributeValue> values = attribute.getValues();
                         for (AttributeValue attributeValue : values) {
