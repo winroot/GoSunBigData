@@ -19,25 +19,10 @@
         <module>StaRepo</module>
         <module>Face</module>
         <module>Address</module>
+        <module>Visual</module>
     </modules>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-client</artifactId>
-            <version>${hadoop.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-common</artifactId>
-            <version>${hadoop.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-client</artifactId>
-            <version>${hbase.version}</version>
-        </dependency>
-
         <!--spring cloud-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -79,6 +64,11 @@
             <dependency>
                 <groupId>com.hzgc.common</groupId>
                 <artifactId>common-ftp</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzgc.common</groupId>
+                <artifactId>common-attribute</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>

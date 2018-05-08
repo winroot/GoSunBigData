@@ -49,19 +49,11 @@ public class BigDataPath {
     /**
      * DynRepo模块请求路径
      */
-    public static final String CAPTURECOUNT = ROOT + "/CaptureCount";
-    public static final String CAPTURECOUNT_DYNREPO = "/dynaicNumberService";
-    public static final String CAPTURECOUNT_STAREPO = "/staticNumberService";
-    public static final String CAPTURECOUNT_IPCIDS_TIME = "/timeSoltNumber";
-    public static final String CAPTURECOUNT_IPCID = "/captureCountQuery";
-    public static final String CAPTURECOUNT_IPCIDS = "/getCaptureCount";
-    public static final String CAPTURECOUNT_ATTRIBUTE = "/captureAttributeQuery";
-
-    public static final String CAPTUREPICTURESEARCH = ROOT + "/CapturePictureSearch";
-    public static final String CAPTUREPICTURESEARCH_SEARCH = "/search";
-    public static final String CAPTUREPICTURESEARCH_SEARCHRESULT = "/getSearchResult";
-    public static final String CAPTUREPICTURESEARCH_ATTRIBUTE = "/getAttribute";
-    public static final String CAPTUREPICTURESEARCH_HISTORY = "/getCaptureHistory";
+    public static final String DYNREPO = ROOT + "/dynRepoSearch";
+    public static final String DYNREPO_SEARCH = "/search";
+    public static final String DYNREPO_SEARCHRESULT = "/getSearchResult";
+    public static final String DYNREPO_ATTRIBUTE = "/getAttribute";
+    public static final String DYNREPO_HISTORY = "/getCaptureHistory";
 
     /**
      * Face模块请求路径
@@ -87,5 +79,16 @@ public class BigDataPath {
     public static final String TYPE_DELETE = "/deleteObjecttype";
     public static final String TYPE_UPDATE = "/updateObjecttype";
     public static final String TYPE_SEARCH = "/searchObjecttype";
+
+    /**
+     * visual模块请求路径
+     */
+    public static final String CAPTURECOUNT = ROOT + "/CaptureCount";
+    public static final String CAPTURECOUNT_DYNREPO = "/dynaicNumberService";
+    public static final String CAPTURECOUNT_STAREPO = "/staticNumberService";
+    public static final String CAPTURECOUNT_IPCIDS_TIME = "/timeSoltNumber";
+    public static final String CAPTURECOUNT_IPCID = "/captureCountQuery";
+    public static final String CAPTURECOUNT_IPCIDS = "/getCaptureCount";
+    public static final String CAPTURECOUNT_ATTRIBUTE = "/captureAttributeQuery";
 
 }

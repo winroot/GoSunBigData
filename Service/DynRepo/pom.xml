@@ -21,6 +21,10 @@
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-service</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-attribute</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
