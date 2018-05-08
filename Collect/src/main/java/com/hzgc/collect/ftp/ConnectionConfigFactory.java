@@ -60,7 +60,7 @@ public class ConnectionConfigFactory {
         FtpServerFactory factory = new FtpServerFactory();
         Properties props = new Properties();
         try {
-            props.load(new FileInputStream(ResourceFileUtil.loadResourceFile("users.properties")));
+            props.load(ResourceFileUtil.loadResourceInputStream("users.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }

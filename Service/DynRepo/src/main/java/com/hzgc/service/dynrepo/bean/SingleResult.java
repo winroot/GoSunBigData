@@ -1,9 +1,11 @@
 package com.hzgc.service.dynrepo.bean;
 
+import lombok.Data;
+
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
+@Data
 public class SingleResult implements Serializable {
 
     /**
@@ -32,56 +34,4 @@ public class SingleResult implements Serializable {
      * 按设备归类时的结果集
      */
     private List<GroupByIpc> picturesByIpc;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
-    }
-
-    public List<CapturedPicture> getPictures() {
-        return pictures;
-    }
-
-    public void setPictures(List<CapturedPicture> pictures) {
-        this.pictures = pictures;
-    }
-
-    public List<byte[]> getBinPicture() {
-        return binPicture;
-    }
-
-    public void setBinPicture(List<byte[]> binPicture) {
-        this.binPicture = binPicture;
-    }
-
-    public List<GroupByIpc> getPicturesByIpc() {
-        return picturesByIpc;
-    }
-
-    public void setPicturesByIpc(List<GroupByIpc> picturesByIpc) {
-        this.picturesByIpc = picturesByIpc;
-    }
-
-    @Override
-    public String toString() {
-        return "Single search id is:"
-                + id
-                + ", picture is:"
-                + (binPicture != null ? "true" : "false")
-                + ", total is:"
-                + total
-                + ", CapturePicture"
-                + Arrays.toString(pictures.toArray());
-    }
 }

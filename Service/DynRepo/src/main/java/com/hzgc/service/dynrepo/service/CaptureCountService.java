@@ -11,6 +11,7 @@ import com.hzgc.service.dynrepo.bean.TimeSlotNumber;
 import com.hzgc.service.dynrepo.bean.TotalAndTodayCount;
 import com.hzgc.service.dynrepo.dao.ElasticSearchDao;
 import com.hzgc.service.dynrepo.dao.EsSearchParam;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
@@ -30,8 +31,8 @@ import java.util.*;
  * 3、timeSoltNumber：根据入参ipcid的list、startTime和endTime去es查询到相应的值
  */
 @Service
+@Slf4j
 public class CaptureCountService {
-    private static Logger LOG = Logger.getLogger(AttributeService.class);
     @Autowired
     private ElasticSearchDao elasticSearchDao;
     /**
@@ -111,7 +112,7 @@ public class CaptureCountService {
         SearchHit[] searchHits = hits.hits();
         //若不存在符合条件的查询结果
         if (totalresultcount == 0) {
-            LOG.error("The result count is 0! Last capture time does not exist!");
+            log.error("The result count is 0! Last capture time does not exist!");
             result.setTotalresultcount(totalresultcount);
             result.setLastcapturetime("None");
         } else {
@@ -186,12 +187,12 @@ public class CaptureCountService {
                     attributeCountList.add(attributeCount);
                 }
             } else {
-                LOG.error("ipcIdList is null.");
+                log.error("ipcIdList is null.");
             }
         } else if (type == SearchType.CAR) {
-            LOG.error("No vehicle queries are currently supported");
+            log.error("No vehicle queries are currently supported");
         } else {
-            LOG.error("method AttributeService.captureAttributeQuery SearchType is error");
+            log.error("method AttributeService.captureAttributeQuery SearchType is error");
         }
         return attributeCountList;
     }

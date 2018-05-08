@@ -2,7 +2,7 @@ package com.hzgc.service.dynrepo.service;
 
 import com.hzgc.common.util.searchtype.SearchType;
 import com.hzgc.service.dynrepo.attribute.*;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,9 +12,8 @@ import java.util.List;
  * 以图搜图接口实现类，内含四个方法（外）（彭聪）
  */
 @Service
+@Slf4j
 public class AttributeService {
-
-    private static Logger LOG = Logger.getLogger(AttributeService.class);
 
     /**
      * 人/车属性查询
@@ -126,7 +125,7 @@ public class AttributeService {
         } else if (type == SearchType.CAR) {
             return new ArrayList<>();
         } else {
-            LOG.error("method AttributeService.getAttribute SearchType is error.");
+            log.error("method AttributeService.getAttribute SearchType is error.");
         }
         return attributeList;
     }

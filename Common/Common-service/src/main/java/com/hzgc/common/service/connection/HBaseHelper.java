@@ -31,8 +31,7 @@ public class HBaseHelper implements Serializable {
     private static void initHBaseConfiguration() {
         try {
             innerHBaseConf = HBaseConfiguration.create();
-            File hbaseFile = ResourceFileUtil.loadResourceFile("hbase-site.xml");
-            innerHBaseConf.addResource(hbaseFile.getPath());
+            innerHBaseConf.addResource(ResourceFileUtil.loadResourceInputStream("hbase-site.xml"));
         } catch (Exception e) {
             e.printStackTrace();
         }

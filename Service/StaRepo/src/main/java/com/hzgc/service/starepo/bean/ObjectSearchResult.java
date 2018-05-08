@@ -2,6 +2,9 @@ package com.hzgc.service.starepo.bean;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,6 +13,8 @@ import java.util.List;
  * 静态库查询的时候返回的结果
  */
 @ApiModel(value = "静态库查询的时候返回的结果")
+@Data
+@ToString
 public class ObjectSearchResult implements Serializable {
 
     /**
@@ -29,40 +34,4 @@ public class ObjectSearchResult implements Serializable {
      */
     @ApiModelProperty(value = "最终需要返回的结果，String是分别的Id")
     private List<PersonSingleResult> finalResults;
-
-    public ObjectSearchResult() {
-    }
-
-    public String getSearchTotalId() {
-        return searchTotalId;
-    }
-
-    public void setSearchTotalId(String searchTotalId) {
-        this.searchTotalId = searchTotalId;
-    }
-
-    public int getSearchStatus() {
-        return searchStatus;
-    }
-
-    public void setSearchStatus(int searchStatus) {
-        this.searchStatus = searchStatus;
-    }
-
-    public List<PersonSingleResult> getFinalResults() {
-        return finalResults;
-    }
-
-    public void setFinalResults(List<PersonSingleResult> finalResults) {
-        this.finalResults = finalResults;
-    }
-
-    @Override
-    public String toString() {
-        return "ObjectSearchResult{" +
-                "searchTotalId='" + searchTotalId + '\'' +
-                ", searchStatus=" + searchStatus +
-                ", finalResults=" + finalResults +
-                '}';
-    }
 }

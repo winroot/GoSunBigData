@@ -2,12 +2,9 @@ package com.hzgc.common.ftp.properties;
 
 import com.hzgc.common.ftp.Sharpness;
 import com.hzgc.common.util.file.ResourceFileUtil;
-import com.hzgc.common.util.io.IOUtil;
 import com.hzgc.common.util.properties.ProperHelper;
 import org.apache.log4j.Logger;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Properties;
@@ -38,11 +35,8 @@ public class CollectProperties extends ProperHelper implements Serializable {
 
     static {
         String properName = "collect.properties";
-        FileInputStream in = null;
         try {
-            File file = ResourceFileUtil.loadResourceFile(properName);
-            in = new FileInputStream(file);
-            props.load(in);
+            props.load(ResourceFileUtil.loadResourceInputStream(properName));
             setLogSize();
             setReceiveQueueCapacity();
             setReceiveLogDir();
@@ -64,8 +58,6 @@ public class CollectProperties extends ProperHelper implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
             LOG.error("Catch an unknown error, can't load the configuration file" + properName);
-        } finally {
-            IOUtil.closeStream(in);
         }
     }
 

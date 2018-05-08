@@ -240,7 +240,7 @@ class CaptureServiceHelper {
      * @param ftpUrl 带HostName的ftpUrl
      * @return 带IP的ftpUrl
      */
-    public static String getFtpUrl(String ftpUrl) {
+    static String getFtpUrl(String ftpUrl) {
 
         String hostName = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
         String ftpServerIP = environment.getProperty(hostName);
@@ -256,7 +256,7 @@ class CaptureServiceHelper {
      * @param surl 小图ftpUrl
      * @return 大图ftpUrl
      */
-    public static String surlToBurl(String surl) {
+    static String surlToBurl(String surl) {
         StringBuilder burl = new StringBuilder();
         String s1 = surl.substring(0, surl.lastIndexOf("_") + 1);
         String s2 = surl.substring(surl.lastIndexOf("."));

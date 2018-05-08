@@ -6,6 +6,7 @@ import com.hzgc.common.service.table.column.SearchRecordTable;
 import com.hzgc.service.starepo.bean.*;
 import com.hzgc.service.starepo.service.ObjectInfoHandlerTool;
 import com.hzgc.service.starepo.service.ParseByOption;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,9 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Repository
+@Slf4j
 public class PhoenixDao implements Serializable {
-
-    private static Logger LOG = Logger.getLogger(PhoenixDao.class);
 
     @Resource(name = "phoenixJdbcTemplate")
     private JdbcTemplate jdbcTemplate;
@@ -61,7 +61,7 @@ public class PhoenixDao implements Serializable {
      * @return 返回值为0，表示删除成功，返回值为1，表示删除失败
      */
     public Integer deleteObjectInfo(List<String> rowkeys) {
-        LOG.info("rowKeys: " + rowkeys);
+        log.info("rowKeys: " + rowkeys);
         // 获取table 对象，通过封装HBaseHelper 来获取
         long start = System.currentTimeMillis();
         String sql = "delete from objectinfo where " + ObjectInfoTable.ROWKEY + " = ?";
@@ -75,7 +75,7 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return 1;
         }
-        LOG.info("删除静态信息库的" + rowkeys.size() + "条数据花费时间： " + (System.currentTimeMillis() - start));
+        log.info("删除静态信息库的" + rowkeys.size() + "条数据花费时间： " + (System.currentTimeMillis() - start));
         //数据变动，更新objectinfo table 中的一条数据,表示静态库中的数据有变动
         new ObjectInfoHandlerTool().updateTotalNumOfHbase();
         return 0;
@@ -129,7 +129,7 @@ public class PhoenixDao implements Serializable {
      * @return 返回搜索所需要的结果封装成的对象，包含搜索id，成功与否标志，记录数，记录信息，照片id
      */
     public ObjectSearchResult getObjectInfo(PSearchArgsModel pSearchArgsModel) {
-        LOG.info("pSearchArgsModel: " + pSearchArgsModel);
+        log.info("pSearchArgsModel: " + pSearchArgsModel);
         long start = System.currentTimeMillis();
         // 总的结果
         ObjectSearchResult objectSearchResult = new ObjectSearchResult();
@@ -143,7 +143,7 @@ public class PhoenixDao implements Serializable {
         // 取出封装的sql 以及需要设置的值，进行sql 查询
         if (finalSqlAndValues == null) {
             objectSearchResult.setSearchStatus(1);
-            LOG.info("创建sql 失败，请检查代码");
+            log.info("创建sql 失败，请检查代码");
             return objectSearchResult;
         }
         for (Map.Entry<String, List<Object>> entry : finalSqlAndValues.entrySet()) {
@@ -250,16 +250,16 @@ public class PhoenixDao implements Serializable {
         objectSearchResult.setFinalResults(finalResults);
         objectSearchResult.setSearchStatus(0);
 
-        LOG.info("总的搜索时间是: " + (System.currentTimeMillis() - start));
+        log.info("总的搜索时间是: " + (System.currentTimeMillis() - start));
         new ObjectInfoHandlerTool().saveSearchRecord(jdbcTemplate, objectSearchResult);
         Integer pageSize = pSearchArgsModel.getPageSize();
         Integer startCount = pSearchArgsModel.getStart();
         if (startCount != null && pageSize != null) {
             new ObjectInfoHandlerTool().formatTheObjectSearchResult(objectSearchResult, startCount, pageSize);
         }
-        LOG.info("***********************");
-        LOG.info(objectSearchResult);
-        LOG.info("***********************");
+        log.info("***********************");
+        log.info(objectSearchResult.toString());
+        log.info("***********************");
         return objectSearchResult;
     }
 
@@ -285,7 +285,7 @@ public class PhoenixDao implements Serializable {
     private static ObjectSearchResult getObjectSearchResultError(String errorMsg) {
         ObjectSearchResult objectSearchResultError = new ObjectSearchResult();
         objectSearchResultError.setSearchStatus(1);
-        LOG.info(errorMsg);
+        log.info(errorMsg);
         return objectSearchResultError;
     }
 

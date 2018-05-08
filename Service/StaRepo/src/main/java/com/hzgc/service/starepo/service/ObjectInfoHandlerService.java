@@ -3,7 +3,7 @@ package com.hzgc.service.starepo.service;
 import com.hzgc.common.service.table.column.ObjectInfoTable;
 import com.hzgc.service.starepo.bean.*;
 import com.hzgc.service.starepo.dao.PhoenixDao;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +11,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ObjectInfoHandlerService {
-
-    private static Logger LOG = Logger.getLogger(ObjectInfoHandlerService.class);
 
     @Autowired
     private PhoenixDao phoenixDao;
@@ -31,14 +30,14 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示插入成功，返回值为1，表示插入失败
      */
     public Integer addObjectInfo(String platformId, Map<String, Object> personObject) {
-        LOG.info("personObject: " + personObject.entrySet().toString());
+        log.info("personObject: " + personObject.entrySet().toString());
         long start = System.currentTimeMillis();
         PersonObject person = PersonObject.mapToPersonObject(personObject);
         person.setPlatformid(platformId);
-        LOG.info("the rowkey off this add person is: " + person.getId());
+        log.info("the rowkey off this add person is: " + person.getId());
         //数据库操作
         Integer i = phoenixDao.addObjectInfo(person);
-        LOG.info("添加一条数据到静态库花费时间： " + (System.currentTimeMillis() - start));
+        log.info("添加一条数据到静态库花费时间： " + (System.currentTimeMillis() - start));
         return i;
     }
 
@@ -58,16 +57,16 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
     public Integer updateObjectInfo(Map<String, Object> personObject) {
-        LOG.info("personObject: " + personObject.entrySet().toString());
+        log.info("personObject: " + personObject.entrySet().toString());
         long start = System.currentTimeMillis();
         String thePassId = (String) personObject.get(ObjectInfoTable.ROWKEY);
         if (thePassId == null) {
-            LOG.info("the pass Id can not be null....");
+            log.info("the pass Id can not be null....");
             return 1;
         }
         //数据库更新操作
         Integer i = phoenixDao.updateObjectInfo(personObject);
-        LOG.info("更新rowkey为: " + thePassId + "数据花费的时间是: " + (System.currentTimeMillis() - start));
+        log.info("更新rowkey为: " + thePassId + "数据花费的时间是: " + (System.currentTimeMillis() - start));
         return i;
     }
 
@@ -91,7 +90,7 @@ public class ObjectInfoHandlerService {
             personSingleResults.add(personSingleResult);
             result.setFinalResults(personSingleResults);
         }
-        LOG.info("获取一条数据的时间是：" + (System.currentTimeMillis() - start));
+        log.info("获取一条数据的时间是：" + (System.currentTimeMillis() - start));
         return result;
     }
 
@@ -124,29 +123,29 @@ public class ObjectInfoHandlerService {
      * 查询照片ID（无照片，此参数为空），结果数，人员信息列表
      */
     public ObjectSearchResult getRocordOfObjectInfo(SearchRecordOpts searchRecordOpts) {
-        LOG.info("searchRecordOpts: " + searchRecordOpts);
+        log.info("searchRecordOpts: " + searchRecordOpts);
         // 传过来的参数中为空，或者子查询为空，或者子查询大小为0，都返回查询错误。
         if (searchRecordOpts == null) {
-            LOG.info("SearchRecordOpts 为空，请确认参数是否正确.");
+            log.info("SearchRecordOpts 为空，请确认参数是否正确.");
             return null;
         }
         // 总的searchId
         List<SubQueryOpts> subQueryOptsList = searchRecordOpts.getSubQueryOptsList();
         if (subQueryOptsList == null || subQueryOptsList.size() == 0) {
-            LOG.info("子查询列表为空，请确认参数是否正确.");
+            log.info("子查询列表为空，请确认参数是否正确.");
             return null;
         }
 
         SubQueryOpts subQueryOpts = subQueryOptsList.get(0);
         if (subQueryOpts == null) {
-            LOG.info("子查询对象SubQueryOpts 对象为空，请确认参数是否正确.");
+            log.info("子查询对象SubQueryOpts 对象为空，请确认参数是否正确.");
             return null;
         }
 
         // 子查询Id
         String subQueryId = subQueryOpts.getQueryId();
         if (subQueryId == null) {
-            LOG.info("子查询Id 为空");
+            log.info("子查询Id 为空");
             return null;
         }
         PersonSingleResult personSingleResult = phoenixDao.getRocordOfObjectInfo(subQueryId);
@@ -196,9 +195,9 @@ public class ObjectInfoHandlerService {
         int pageSize = searchRecordOpts.getSize();
         int start = searchRecordOpts.getStart();
         new ObjectInfoHandlerTool().formatTheObjectSearchResult(finnalObjectSearchResult, start, pageSize);
-        LOG.info("***********************");
-        LOG.info(finnalObjectSearchResult);
-        LOG.info("***********************");
+        log.info("***********************");
+        log.info(finnalObjectSearchResult.toString());
+        log.info("***********************");
         return finnalObjectSearchResult;
     }
     /**

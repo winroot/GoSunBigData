@@ -1,9 +1,11 @@
 package com.hzgc.service.dynrepo.bean;
 
 import com.hzgc.common.jni.FaceAttribute;
+import lombok.Data;
 
 import java.io.Serializable;
 
+@Data
 public class PictureData implements Serializable {
 
     /**
@@ -20,28 +22,4 @@ public class PictureData implements Serializable {
      * 人脸特征对象,包括特征值和人脸属性
      */
     private FaceAttribute faceAttr;
-
-    public String getImageID() {
-        return imageID;
-    }
-
-    public void setImageID(String imageID) {
-        this.imageID = imageID;
-    }
-
-    public byte[] getBinImage() {
-        return binImage;
-    }
-
-    public void setBinImage(byte[] binImage) {
-        this.binImage = binImage;
-    }
-
-    public FaceAttribute getFaceAttr() {
-        return faceAttr;
-    }
-
-    public void setFaceAttr(FaceAttribute faceAttr) {
-        this.faceAttr = faceAttr;
-    }
 }

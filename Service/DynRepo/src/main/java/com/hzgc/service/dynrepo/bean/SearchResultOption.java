@@ -1,9 +1,11 @@
 package com.hzgc.service.dynrepo.bean;
 
+import lombok.Data;
+
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
+@Data
 public class SearchResultOption implements Serializable {
 
     /**
@@ -30,58 +32,4 @@ public class SearchResultOption implements Serializable {
      * 查多少条
      */
     private int limit;
-
-    public String getSearchID() {
-        return searchID;
-    }
-
-    public void setSearchID(String searchID) {
-        this.searchID = searchID;
-    }
-
-    public List<SingleResultOption> getSingleResultOptions() {
-        return singleResultOptions;
-    }
-
-    public void setSingleResultOptions(List<SingleResultOption> singleResultOptions) {
-        this.singleResultOptions = singleResultOptions;
-    }
-
-    public List<SortParam> getSortParam() {
-        return sortParam;
-    }
-
-    public void setSortParam(List<SortParam> sortParam) {
-        this.sortParam = sortParam;
-    }
-
-    public int getStart() {
-        return start;
-    }
-
-    public void setStart(int start) {
-        this.start = start;
-    }
-
-    public int getLimit() {
-        return limit;
-    }
-
-    public void setLimit(int limit) {
-        this.limit = limit;
-    }
-
-    @Override
-    public String toString() {
-        return "SearchID is "
-                + searchID
-                + ", SortParam is "
-                + Arrays.toString(sortParam.toArray())
-                + ", start is "
-                + start
-                + ", limit is "
-                + limit
-                + ", SingleResultOption is "
-                + (null == singleResultOptions ? "null" : Arrays.toString(singleResultOptions.toArray()));
-    }
 }

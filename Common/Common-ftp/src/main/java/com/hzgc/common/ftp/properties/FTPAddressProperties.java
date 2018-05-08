@@ -25,11 +25,8 @@ public class FTPAddressProperties extends ProperHelper implements Serializable {
 
     static {
         String properName = "ftpAddress.properties";
-        FileInputStream in = null;
         try {
-            File file = ResourceFileUtil.loadResourceFile(properName);
-            in = new FileInputStream(file);
-            props.load(in);
+            props.load(ResourceFileUtil.loadResourceInputStream(properName));
             setIp();
             setPort();
             setUser();
@@ -39,8 +36,6 @@ public class FTPAddressProperties extends ProperHelper implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
             LOG.error("Catch an unknown error, can't load the configuration file" + properName);
-        } finally {
-            IOUtil.closeStream(in);
         }
     }
 

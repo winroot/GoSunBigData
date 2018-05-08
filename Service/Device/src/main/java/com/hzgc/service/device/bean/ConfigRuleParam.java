@@ -2,11 +2,13 @@ package com.hzgc.service.device.bean;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
 
 @ApiModel(value = "规则配置参数")
+@Data
 public class ConfigRuleParam implements Serializable {
 
     /**
@@ -32,46 +34,4 @@ public class ConfigRuleParam implements Serializable {
      */
     @ApiModelProperty("对象类型")
     private String objectType;
-
-    public String getIpcID() {
-        return ipcID;
-    }
-
-    public void setIpcID(String ipcID) {
-        this.ipcID = ipcID;
-    }
-
-    public List<String> getIpcIDs() {
-        return ipcIDs;
-    }
-
-    public void setIpcIDs(List<String> ipcIDs) {
-        this.ipcIDs = ipcIDs;
-    }
-
-    public List<WarnRule> getRules() {
-        return rules;
-    }
-
-    public void setRules(List<WarnRule> rules) {
-        this.rules = rules;
-    }
-
-    public String getObjectType() {
-        return objectType;
-    }
-
-    public void setObjectType(String objectType) {
-        this.objectType = objectType;
-    }
-
-    @Override
-    public String toString() {
-        return "ConfigRuleParam{" +
-                "ipcID='" + ipcID + '\'' +
-                ", ipcIDs=" + ipcIDs +
-                ", rules=" + rules +
-                ", objectType='" + objectType + '\'' +
-                '}';
-    }
 }

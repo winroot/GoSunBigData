@@ -31,10 +31,10 @@ public class ElasticSearchDao {
             totalBQ.must(QueryBuilders.matchPhraseQuery(DynamicTable.CLUSTERING_ID, time + "-" + clusterId));
         }
 
-        SearchRequestBuilder searchRequestBuilder = ElasticSearchHelper.getEsClient()
+        SearchRequestBuilder searchRequestBuilder = esClient
                 .prepareSearch(DynamicTable.DYNAMIC_INDEX)
                 .setTypes(DynamicTable.PERSON_INDEX_TYPE)
-                .addSort("exacttime", SortOrder.DESC)
+                .addSort(DynamicTable.TIMESTAMP, SortOrder.DESC)
                 .setFrom(start)
                 .setSize(limit)
                 .setQuery(totalBQ);

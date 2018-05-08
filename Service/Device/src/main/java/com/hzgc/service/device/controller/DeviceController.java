@@ -5,7 +5,6 @@ import com.hzgc.common.service.ResponseResult;
 import com.hzgc.service.device.bean.DeviceDataParam;
 import com.hzgc.service.device.service.DeviceService;
 import io.swagger.annotations.*;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = BigDataPath.DEVICE,consumes = "application/json",produces = "application/json")
 @Api(value = "device",tags = "设备管理")
 public class DeviceController {
-
-    private static Logger LOG = Logger.getLogger(DeviceController.class);
 
     @Autowired
     private DeviceService deviceService;

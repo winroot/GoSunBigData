@@ -1,9 +1,12 @@
 package com.hzgc.service.starepo.bean;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+@Data
 public class PrisonSearchOpts implements Serializable{
 
     /**
@@ -23,40 +26,4 @@ public class PrisonSearchOpts implements Serializable{
      * 举例：Map<location,List<id>>
      */
     private Map<String, List<String>> pkeysUpate;
-
-    public PrisonSearchOpts() {
-    }
-
-    public List<String> getPkeysCount() {
-        return pkeysCount;
-    }
-
-    public void setPkeysCount(List<String> pkeysCount) {
-        this.pkeysCount = pkeysCount;
-    }
-
-    public List<String> getPkeysReset() {
-        return pkeysReset;
-    }
-
-    public void setPkeysReset(List<String> pkeysReset) {
-        this.pkeysReset = pkeysReset;
-    }
-
-    public Map<String, List<String>> getPkeysUpate() {
-        return pkeysUpate;
-    }
-
-    public void setPkeysUpate(Map<String, List<String>> pkeysUpate) {
-        this.pkeysUpate = pkeysUpate;
-    }
-
-    @Override
-    public String toString() {
-        return "PrisonSearchOpts{" +
-                "pkeysCount=" + pkeysCount +
-                ", pkeysReset=" + pkeysReset +
-                ", pkeysUpate=" + pkeysUpate +
-                '}';
-    }
 }

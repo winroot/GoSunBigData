@@ -27,9 +27,7 @@ public class KafkaProperties extends ProperHelper implements Serializable {
         String properName = "kafka-producer.properties";
         FileInputStream in = null;
         try {
-            File file = ResourceFileUtil.loadResourceFile(properName);
-            in = new FileInputStream(file);
-            props.load(in);
+            props.load(ResourceFileUtil.loadResourceInputStream(properName));
             setBootstrapServers();
             setRequestRequiredAcks();
             setRetries();
@@ -39,8 +37,6 @@ public class KafkaProperties extends ProperHelper implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
             LOG.error("Catch an unknown error, can't load the configuration file" + properName);
-        } finally {
-            IOUtil.closeStream(in);
         }
     }
 

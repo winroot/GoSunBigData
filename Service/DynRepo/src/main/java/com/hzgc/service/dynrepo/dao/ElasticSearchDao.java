@@ -6,7 +6,6 @@ import com.hzgc.common.service.table.column.DynamicTable;
 import com.hzgc.service.dynrepo.attribute.Attribute;
 import com.hzgc.service.dynrepo.attribute.AttributeValue;
 import com.hzgc.service.dynrepo.bean.*;
-import org.apache.log4j.Logger;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
@@ -16,14 +15,11 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Repository
 public class ElasticSearchDao {
-    private static Logger LOG = Logger.getLogger(ElasticSearchDao.class);
     private TransportClient esClient;
 
 

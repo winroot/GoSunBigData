@@ -1,5 +1,7 @@
 package com.hzgc.service.dynrepo.attribute;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**

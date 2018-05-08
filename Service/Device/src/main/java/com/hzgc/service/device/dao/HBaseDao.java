@@ -1,6 +1,5 @@
 package com.hzgc.service.device.dao;
 
-import com.alibaba.fastjson.JSON;
 import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.common.service.table.column.DeviceTable;
 import com.hzgc.common.util.empty.IsEmpty;
