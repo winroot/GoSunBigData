@@ -1,10 +1,10 @@
-package com.hzgc.service.device.service;
+package com.hzgc.service.device.util;
 
 import com.alibaba.fastjson.JSON;
 
 import java.util.Map;
 
-public class JsonToMap<T> {
+public class JsonToMap {
 
     //String转换成Map
     public static<T> Map<T,Map<String,Integer>> stringToMap(String jsonString){

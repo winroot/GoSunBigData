@@ -4,9 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.hzgc.common.service.connection.HBaseHelper;
 import com.hzgc.common.service.table.column.DeviceTable;
 import com.hzgc.common.util.empty.IsEmpty;
+import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.service.device.bean.WarnRule;
-import com.hzgc.service.device.service.JsonToMap;
+import com.hzgc.service.device.util.JsonToMap;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
@@ -179,7 +180,7 @@ public class HBaseDao {
                         }
                     }
                     Put put = new Put(Bytes.toBytes(ipcID));
-                    String tempMapString = JSON.toJSONString(tempMap);
+                    String tempMapString = JSONUtil.toJson(tempMap);
                     put.addColumn(DeviceTable.CF_DEVICE, DeviceTable.WARN, Bytes.toBytes(tempMapString));
                     putList.add(put);
                     LOG.info("addRules are " + tempMapString);
@@ -302,7 +303,7 @@ public class HBaseDao {
                     }
                     //把删除后的离线告警数据存入device表中
                     Put offlinePut = new Put(DeviceTable.OFFLINERK);
-                    String offline = JSON.toJSONString(offlineMap);
+                    String offline = JSONUtil.toJson(offlineMap);
                     offlinePut.addColumn(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL, Bytes.toBytes(offline));
                     deviceTable.put(offlinePut);
                     LOG.info("delete rule is " + offline);
@@ -366,13 +367,13 @@ public class HBaseDao {
                     }
                 }
                 Put offlinePut = new Put(DeviceTable.OFFLINERK);
-                offlineString = JSON.toJSONString(offlineMap);
+                offlineString = JSONUtil.toJson(offlineMap);
                 offlinePut.addColumn(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL, Bytes.toBytes(offlineString));
                 deviceTable.put(offlinePut);
             } else {
                 //若hbase的device表中offlineWarnRowKey行键对应的数据为空，直接把offlineMap的值加入到device表
                 Put offlinePut = new Put(DeviceTable.OFFLINERK);
-                offlineString = JSON.toJSONString(offlineMap);
+                offlineString = JSONUtil.toJson(offlineMap);
                 offlinePut.addColumn(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL, Bytes.toBytes(offlineString));
                 deviceTable.put(offlinePut);
             }
@@ -430,7 +431,7 @@ public class HBaseDao {
                 }
             }
         }
-        return JSON.toJSONString(commonRule);
+        return JSONUtil.toJson(commonRule);
     }
 
     /**
