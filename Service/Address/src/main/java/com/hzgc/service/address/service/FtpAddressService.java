@@ -1,6 +1,5 @@
 package com.hzgc.service.address.service;
 
-import com.hzgc.common.ftp.properties.FTPAddressProperties;
 import com.hzgc.common.util.empty.IsEmpty;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +9,7 @@ import java.util.Properties;
 @Service
 public class FtpAddressService implements Serializable {
 
-    private static Properties proper = FTPAddressProperties.getProps();
+    private static Properties proper = FtpApplicationProperties.getProps();
 
     /**
      * 获取Ftp相关配置参数
