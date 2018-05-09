@@ -13,7 +13,6 @@ import com.hzgc.service.visual.bean.TotalAndTodayCount;
 import com.hzgc.service.visual.dao.ElasticSearchDao;
 import com.hzgc.service.visual.dao.EsSearchParam;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.log4j.Logger;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -34,7 +33,6 @@ import java.util.*;
 @Service
 @Slf4j
 public class CaptureCountService {
-    private static Logger LOG = Logger.getLogger(CaptureCountService.class);
     @Autowired
     private ElasticSearchDao elasticSearchDao;
 
