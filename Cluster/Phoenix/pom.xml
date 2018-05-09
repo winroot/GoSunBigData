@@ -12,6 +12,14 @@
     <groupId>com.hzgc.cluster</groupId>
     <artifactId>phoenix</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.phoenix</groupId>
+            <artifactId>phoenix-core</artifactId>
+            <version>4.13.1-HBase-1.2</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

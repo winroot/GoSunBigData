@@ -26,12 +26,6 @@
             <artifactId>guava</artifactId>
             <version>16.0</version>
         </dependency>
-        <!--Phoenix JDBC -->
-        <dependency>
-            <groupId>org.apache.phoenix</groupId>
-            <artifactId>phoenix-core</artifactId>
-            <version>4.13.1-HBase-1.2</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>

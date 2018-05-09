@@ -19,23 +19,14 @@
         <module>StaRepo</module>
         <module>Face</module>
         <module>Address</module>
+        <module>Visual</module>
     </modules>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-client</artifactId>
-            <version>${hadoop.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-common</artifactId>
             <version>${hadoop.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-client</artifactId>
-            <version>${hbase.version}</version>
         </dependency>
 
         <!--spring cloud-->
@@ -83,15 +74,14 @@
             </dependency>
             <dependency>
                 <groupId>com.hzgc.common</groupId>
-                <artifactId>common-service</artifactId>
+                <artifactId>common-attribute</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>1.16.18</version>
+                <groupId>com.hzgc.common</groupId>
+                <artifactId>common-service</artifactId>
+                <version>${project.parent.version}</version>
             </dependency>
-            
         </dependencies>
     </dependencyManagement>
 </project>

@@ -1,10 +1,10 @@
 package com.hzgc.service.dynrepo.dao;
 
+import com.hzgc.common.attribute.bean.Attribute;
+import com.hzgc.common.attribute.bean.Logistic;
 import com.hzgc.common.jni.FaceFunction;
 import com.hzgc.common.service.table.column.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
-import com.hzgc.service.dynrepo.attribute.Attribute;
-import com.hzgc.service.dynrepo.attribute.Logistic;
 import com.hzgc.service.dynrepo.bean.SearchOption;
 import org.apache.log4j.Logger;
 

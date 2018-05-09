@@ -1,8 +1,7 @@
 package com.hzgc.service.dynrepo.bean;
 
-
+import com.hzgc.common.attribute.bean.Attribute;
 import com.hzgc.common.util.searchtype.SearchType;
-import com.hzgc.service.dynrepo.attribute.Attribute;
 import lombok.Data;
 
 import java.io.Serializable;

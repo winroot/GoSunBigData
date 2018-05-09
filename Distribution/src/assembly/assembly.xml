@@ -187,6 +187,13 @@
             </includes>
             <outputDirectory>ClusterBuildScripts/service</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>../Cluster/Phoenix/target</directory>
+            <includes>
+                <include>phoenix-${project.parent.version}.jar</include>
+            </includes>
+            <outputDirectory>ClusterBuildScripts/lib</outputDirectory>
+        </fileSet>
         <!--Rocketmq-->
         <fileSet>
             <directory>../Cluster/Rocketmq/target/rocketmq-${project.parent.version}/bin/cluster/install</directory>

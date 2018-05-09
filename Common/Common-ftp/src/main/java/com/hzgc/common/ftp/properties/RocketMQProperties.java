@@ -22,7 +22,6 @@ public class RocketMQProperties extends ProperHelper implements Serializable {
 
     static {
         String properName = "rocketmq.properties";
-        FileInputStream in = null;
         try {
             props.load(ResourceFileUtil.loadResourceInputStream(properName));
             setAddress();
@@ -31,8 +30,6 @@ public class RocketMQProperties extends ProperHelper implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
             LOG.error("Catch an unknown error, can't load the configuration file" + properName);
-        } finally {
-            IOUtil.closeStream(in);
         }
     }
 

@@ -1,6 +1,5 @@
 package com.hzgc.service.address.service;
 
-import com.hzgc.common.ftp.properties.CollectProperties;
 import com.hzgc.common.util.zookeeper.ZookeeperClient;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +13,12 @@ import java.util.List;
 public class FtpSubscriptionService implements Serializable {
 
     private ZookeeperClient zookeeperClient;
-    private String zk_path_subscribe = CollectProperties.getZookeeperPathSubscribe();
+    private String zk_path_subscribe = FtpApplicationProperties.getZk_path_subscribe();
 
     public FtpSubscriptionService() {
-        int session_timeout = Integer.valueOf(CollectProperties.getZookeeperSessionTimeout());
-        String zk_address = CollectProperties.getZookeeperAddress();
-        boolean zk_watcher = Boolean.valueOf(CollectProperties.getZookeeperWatcher());
+        int session_timeout = Integer.valueOf(FtpApplicationProperties.getZk_session_timeout());
+        String zk_address = FtpApplicationProperties.getZk_address();
+        boolean zk_watcher = Boolean.valueOf(FtpApplicationProperties.getZk_watcher());
         zookeeperClient = new ZookeeperClient(session_timeout, zk_address, zk_path_subscribe, zk_watcher);
     }
 

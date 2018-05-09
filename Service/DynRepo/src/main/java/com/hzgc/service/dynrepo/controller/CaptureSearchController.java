@@ -1,14 +1,14 @@
 package com.hzgc.service.dynrepo.controller;
 
+import com.hzgc.common.attribute.bean.Attribute;
+import com.hzgc.common.attribute.service.AttributeService;
 import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
 import com.hzgc.common.util.searchtype.SearchType;
-import com.hzgc.service.dynrepo.attribute.Attribute;
 import com.hzgc.service.dynrepo.bean.SearchOption;
 import com.hzgc.service.dynrepo.bean.SearchResult;
 import com.hzgc.service.dynrepo.bean.SearchResultOption;
 import com.hzgc.service.dynrepo.service.CaptureHistoryService;
-import com.hzgc.service.dynrepo.service.AttributeService;
 import com.hzgc.service.dynrepo.service.CaptureSearchService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +23,11 @@ import java.util.List;
 
 @RestController
 @FeignClient(name = "dynRepo")
-@RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH, consumes = "application/json", produces = "application/json")
-@Api(value = "/capturePictureSearch", tags = "以图搜图服务")
+@RequestMapping(value = BigDataPath.DYNREPO, consumes = "application/json", produces = "application/json")
+@Api(value = "/dynRepoSearch", tags = "以图搜图服务")
 public class CaptureSearchController {
 
-    @Autowired
-    private AttributeService capturePictureSearchService;
+    private AttributeService attributeService = new AttributeService();
     @Autowired
     private CaptureHistoryService captureHistoryService;
     @Autowired
@@ -44,7 +43,7 @@ public class CaptureSearchController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
-    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_SEARCH, method = RequestMethod.POST)
+    @RequestMapping(value = BigDataPath.DYNREPO_SEARCH, method = RequestMethod.POST)
     public ResponseResult<SearchResult> searchPicture(
             @RequestBody @ApiParam(value = "以图搜图入参") SearchOption searchOption) throws SQLException {
         SearchResult searchResult;
@@ -66,7 +65,7 @@ public class CaptureSearchController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
-    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_SEARCHRESULT, method = RequestMethod.POST)
+    @RequestMapping(value = BigDataPath.DYNREPO_SEARCHRESULT, method = RequestMethod.POST)
     public ResponseResult<SearchResult> getSearchResult(
             @RequestBody @ApiParam(value = "以图搜图入参") SearchResultOption searchResultOption) {
         SearchResult searchResult;
@@ -88,12 +87,12 @@ public class CaptureSearchController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
-    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_ATTRIBUTE, method = RequestMethod.GET)
+    @RequestMapping(value = BigDataPath.DYNREPO_ATTRIBUTE, method = RequestMethod.GET)
     public ResponseResult<List<Attribute>> getAttribute(
             @RequestBody @ApiParam(value = "以图搜图入参") SearchType searchType) {
         List<Attribute> attributeList;
         if (searchType != null) {
-            attributeList = capturePictureSearchService.getAttribute(searchType);
+            attributeList = attributeService.getAttribute(searchType);
         } else {
             attributeList = null;
         }
@@ -110,7 +109,7 @@ public class CaptureSearchController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful response"),
             @ApiResponse(code = 404, message = "404")})
-    @RequestMapping(value = BigDataPath.CAPTUREPICTURESEARCH_HISTORY, method = RequestMethod.POST)
+    @RequestMapping(value = BigDataPath.DYNREPO_HISTORY, method = RequestMethod.POST)
     public ResponseResult<List<SearchResult>> getCaptureHistory(
             @RequestBody @ApiParam(value = "以图搜图入参") SearchOption searchOption) {
         List<SearchResult> searchResultList;

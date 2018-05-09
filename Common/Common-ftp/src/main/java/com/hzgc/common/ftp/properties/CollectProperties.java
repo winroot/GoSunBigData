@@ -34,7 +34,7 @@ public class CollectProperties extends ProperHelper implements Serializable {
     private static String ftpSwitch;
 
     static {
-        String properName = "collect.properties";
+        String properName = "ftpserver.properties";
         try {
             props.load(ResourceFileUtil.loadResourceInputStream(properName));
             setLogSize();
@@ -80,11 +80,11 @@ public class CollectProperties extends ProperHelper implements Serializable {
     }
 
     private static void setPort() {
-        port = verifyPort("listener-port", "2121", props, LOG);
+        port = verifyPort("listener.port", "2121", props, LOG);
     }
 
     private static void setDataPorts() {
-        dataPorts = verifyCommonValue("data-ports", "2223-2225", props, LOG);
+        dataPorts = verifyCommonValue("data.ports", "2223-2225", props, LOG);
     }
 
     private static void setImplicitSsl() {
@@ -132,15 +132,15 @@ public class CollectProperties extends ProperHelper implements Serializable {
     }
 
     private static void setZookeeperAddress() {
-        zookeeperAddress = verifyIpPlusPortList("zookeeper.address", props, LOG);
+        zookeeperAddress = verifyIpPlusPortList("zk.address", props, LOG);
     }
 
     private static void setZookeeperPathSubscribe() {
-        zookeeperPathSubscribe = verifyCommonValue("zk.path.subscribe", "/ftp_subscribe", props, LOG);;
+        zookeeperPathSubscribe = verifyCommonValue("zk.path.subscribe", "/ftp_subscribe", props, LOG);
     }
 
     private static void setZookeeperWatcher() {
-        zookeeperWatcher = verifyBooleanValue("zk.watcher", "true", props, LOG);;
+        zookeeperWatcher = verifyBooleanValue("zk.watcher", "true", props, LOG);
     }
 
     private static void setFtpSwitch() {
