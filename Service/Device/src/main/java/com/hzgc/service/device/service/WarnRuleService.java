@@ -11,8 +11,6 @@ import java.util.*;
 @Service
 public class WarnRuleService {
 
-    private static Logger LOG = Logger.getLogger(WarnRuleService.class);
-
     @Autowired
     private HBaseDao hBaseDao;
 

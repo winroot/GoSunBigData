@@ -22,19 +22,14 @@ public class RocketMQProperties extends ProperHelper implements Serializable {
 
     static {
         String properName = "rocketmq.properties";
-        FileInputStream in = null;
         try {
-            File file = ResourceFileUtil.loadResourceFile(properName);
-            in = new FileInputStream(file);
-            props.load(in);
+            props.load(ResourceFileUtil.loadResourceInputStream(properName));
             setAddress();
             setTopic();
             setGroup();
         } catch (IOException e) {
             e.printStackTrace();
             LOG.error("Catch an unknown error, can't load the configuration file" + properName);
-        } finally {
-            IOUtil.closeStream(in);
         }
     }
 

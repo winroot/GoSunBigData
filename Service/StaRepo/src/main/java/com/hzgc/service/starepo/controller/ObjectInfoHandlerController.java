@@ -88,7 +88,7 @@ public class ObjectInfoHandlerController {
     public ResponseResult <ObjectSearchResult> getObjectInfo(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
         PSearchArgsModel pSearchArgsModel;
         if (objectInfoHandler != null) {
-            pSearchArgsModel = objectInfoHandler.getpSearchArgsModel();
+            pSearchArgsModel = objectInfoHandler.getPSearchArgsModel();
         } else {
             return null;
         }

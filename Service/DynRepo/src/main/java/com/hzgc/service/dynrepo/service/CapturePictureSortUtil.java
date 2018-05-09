@@ -49,7 +49,7 @@ public class CapturePictureSortUtil {
      * @param typeArr     每个属性对应的升降序数组， true升序，false降序
      */
 
-    public static <CapturedPicture> void sort(List<CapturedPicture> list, final List<String> sortNameArr, final List<Boolean> typeArr) {
+    static <CapturedPicture> void sort(List<CapturedPicture> list, final List<String> sortNameArr, final List<Boolean> typeArr) {
         if (sortNameArr.size() != typeArr.size()) {
             throw new RuntimeException("属性数组元素个数和升降序数组元素个数不相等");
         }

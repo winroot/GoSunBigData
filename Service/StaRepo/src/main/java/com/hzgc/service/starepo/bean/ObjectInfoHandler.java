@@ -2,6 +2,7 @@ package com.hzgc.service.starepo.bean;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Map;
  * 静态库前台入参
  */
 @ApiModel(value = "对象信息封装类")
+@Data
 public class ObjectInfoHandler implements Serializable{
 
     /**
@@ -51,52 +53,4 @@ public class ObjectInfoHandler implements Serializable{
      */
     @ApiModelProperty(value = "历史查询参数")
     private SearchRecordOpts searchRecordOpts;
-
-    public String getPlatformId() {
-        return platformId;
-    }
-
-    public void setPlatformId(String platformId) {
-        this.platformId = platformId;
-    }
-
-    public Map<String, Object> getPersonObject() {
-        return personObject;
-    }
-
-    public void setPersonObject(Map<String, Object> personObject) {
-        this.personObject = personObject;
-    }
-
-    public List<String> getRowkeys() {
-        return rowkeys;
-    }
-
-    public void setRowkeys(List<String> rowkeys) {
-        this.rowkeys = rowkeys;
-    }
-
-    public PSearchArgsModel getpSearchArgsModel() {
-        return pSearchArgsModel;
-    }
-
-    public void setpSearchArgsModel(PSearchArgsModel pSearchArgsModel) {
-        this.pSearchArgsModel = pSearchArgsModel;
-    }
-
-    public String getRowkey() {
-        return rowkey;
-    }
-
-    public void setRowkey(String rowkey) {
-        this.rowkey = rowkey;
-    }
-
-    public SearchRecordOpts getSearchRecordOpts() {
-        return searchRecordOpts;
-    }
-
-    public void setSearchRecordOpts(SearchRecordOpts searchRecordOpts) {
-        this.searchRecordOpts = searchRecordOpts;
-    }
 }

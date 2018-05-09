@@ -1,10 +1,13 @@
 package com.hzgc.service.dynrepo.bean;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * 一天内的时间区间
  */
+@Data
 public class TimeInterval implements Serializable {
 
     /**
@@ -16,28 +19,4 @@ public class TimeInterval implements Serializable {
      * 结束时间，以一天内的分钟数计算
      */
     private int end;
-
-    public int getStart() {
-        return start;
-    }
-
-    public void setStart(int start) {
-        this.start = start;
-    }
-
-    public int getEnd() {
-        return end;
-    }
-
-    public void setEnd(int end) {
-        this.end = end;
-    }
-
-    @Override
-    public String toString() {
-        return "TimeInterval{" +
-                "start=" + start +
-                ", end=" + end +
-                '}';
-    }
 }

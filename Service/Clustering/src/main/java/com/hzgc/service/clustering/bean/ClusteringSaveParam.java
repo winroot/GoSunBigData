@@ -2,6 +2,10 @@ package com.hzgc.service.clustering.bean;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,6 +14,8 @@ import java.util.List;
  * 聚类信息存储前台入参
  */
 @ApiModel(value = "聚类信息存储入参")
+@ToString()
+@Data
 public class ClusteringSaveParam implements Serializable {
 
     /**
@@ -35,46 +41,4 @@ public class ClusteringSaveParam implements Serializable {
      */
     @ApiModelProperty(value = "忽略聚类")
     private String flag;
-
-    public String getClusterId() {
-        return clusterId;
-    }
-
-    public void setClusterId(String clusterId) {
-        this.clusterId = clusterId;
-    }
-
-    public List<String> getClusterIdList() {
-        return clusterIdList;
-    }
-
-    public void setClusterIdList(List<String> clusterIdList) {
-        this.clusterIdList = clusterIdList;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getFlag() {
-        return flag;
-    }
-
-    public void setFlag(String flag) {
-        this.flag = flag;
-    }
-
-    @Override
-    public String toString() {
-        return "ClusteringSaveParam{" +
-                "clusterId='" + clusterId + '\'' +
-                ", clusterIdList=" + clusterIdList +
-                ", time='" + time + '\'' +
-                ", flag='" + flag + '\'' +
-                '}';
-    }
 }

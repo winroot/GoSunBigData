@@ -6,6 +6,7 @@ import com.hzgc.service.device.bean.ConfigRuleParam;
 import com.hzgc.service.device.bean.WarnRule;
 import com.hzgc.service.device.service.WarnRuleService;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -21,9 +22,8 @@ import java.util.Map;
 @FeignClient(name = "warnRule")
 @RequestMapping(value = BigDataPath.WARNRULE,consumes = "application/json",produces = "application/json")
 @Api(value = "warnRule",tags = "告警规则")
+@Slf4j
 public class WarnRuleController {
-
-    private static Logger LOG = Logger.getLogger(WarnRuleController.class);
 
     @Autowired
     WarnRuleService warnRuleService;
@@ -40,7 +40,7 @@ public class WarnRuleController {
             ipcIDs = configRuleParam.getIpcIDs();
             rules = configRuleParam.getRules();
         } else {
-            LOG.info("configRule参数错误");
+            log.info("configRule参数错误");
             return null;
         }
         Map<String, Boolean> map = warnRuleService.configRules(ipcIDs, rules);

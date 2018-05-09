@@ -1,7 +1,10 @@
 package com.hzgc.service.device.bean;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
+@Data
 public class WarnRule implements Serializable {
 
     /**
@@ -28,36 +31,4 @@ public class WarnRule implements Serializable {
      * 警需要全天匹配。
      */
     private Integer code;
-
-    public String getObjectType() {
-        return objectType;
-    }
-
-    public void setObjectType(String objectType) {
-        this.objectType = objectType;
-    }
-
-    public Integer getThreshold() {
-        return threshold;
-    }
-
-    public void setThreshold(Integer threshold) {
-        this.threshold = threshold;
-    }
-
-    public Integer getDayThreshold() {
-        return dayThreshold;
-    }
-
-    public void setDayThreshold(Integer dayThreshold) {
-        this.dayThreshold = dayThreshold;
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
 }

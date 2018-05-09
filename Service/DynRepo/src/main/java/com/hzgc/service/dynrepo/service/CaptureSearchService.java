@@ -6,6 +6,7 @@ import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.service.dynrepo.bean.*;
 import com.hzgc.service.dynrepo.dao.HBaseDao;
 import com.hzgc.service.dynrepo.dao.SparkJDBCDao;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,8 @@ import static com.hzgc.service.dynrepo.service.CaptureServiceHelper.parseResultN
 import static com.hzgc.service.dynrepo.service.CaptureServiceHelper.parseResultOnePerson;
 
 @Service
+@Slf4j
 public class CaptureSearchService {
-    private static Logger LOG = Logger.getLogger(CaptureSearchService.class);
     @Autowired
     private SparkJDBCDao sparkJDBCDao;
     @Autowired
@@ -32,22 +33,22 @@ public class CaptureSearchService {
         ResultSet resultSet;
         long start = System.currentTimeMillis();
         if (option == null) {
-            LOG.error("Start search picture, but search option is null");
+            log.error("Start search picture, but search option is null");
             return new SearchResult();
         }
         if (option.getImages() == null && option.getImages().size() < 1) {
-            LOG.error("Start search picture, but images is null");
+            log.error("Start search picture, but images is null");
             return new SearchResult();
         }
         if (option.getThreshold() < 0.0) {
-            LOG.error("Start search picture, but threshold is null");
+            log.error("Start search picture, but threshold is null");
         }
 
-        LOG.info("Start search picture, search option is:" + JSONUtil.toJson(option));
+        log.info("Start search picture, search option is:" + JSONUtil.toJson(option));
         String searchId = UuidUtil.setUuid();
-        LOG.info("Start search picture, generate search id and search id is:[" + searchId + "]");
+        log.info("Start search picture, generate search id and search id is:[" + searchId + "]");
         resultSet = sparkJDBCDao.searchPicture(option);
-        LOG.info("Start search picture, execute query total time is:" + (System.currentTimeMillis() - start));
+        log.info("Start search picture, execute query total time is:" + (System.currentTimeMillis() - start));
         if (resultSet != null) {
             if (option.isOnePerson() || option.getImages().size() == 1) {
                 searchResult = parseResultOnePerson(resultSet, option, searchId);
@@ -58,9 +59,9 @@ public class CaptureSearchService {
             if (searchResult.getResults().size() > 0) {
                 boolean flag = hBaseDao.insertSearchRes(searchResult);
                 if (flag) {
-                    LOG.info("The search history of: [" + searchId + "] saved successful");
+                    log.info("The search history of: [" + searchId + "] saved successful");
                 } else {
-                    LOG.error("The search history of: [" + searchId + "] saved failure");
+                    log.error("The search history of: [" + searchId + "] saved failure");
                 }
                 for (SingleResult singleResult : searchResult.getResults()) {
                     singleResult.setPictures(CaptureServiceHelper.pageSplit(singleResult.getPictures(),
@@ -69,7 +70,7 @@ public class CaptureSearchService {
                 }
             }
         } else {
-            LOG.info("Query result set is null");
+            log.info("Query result set is null");
         }
         return searchResult;
     }
@@ -84,7 +85,7 @@ public class CaptureSearchService {
         SearchResult searchResult = null;
         if (resultOption.getSearchID() != null && !"".equals(resultOption.getSearchID())) {
             searchResult = hBaseDao.getSearchRes(resultOption.getSearchID());
-            LOG.info("Start query searchResult, SearchResultOption is " + JSONUtil.toJson(resultOption));
+            log.info("Start query searchResult, SearchResultOption is " + JSONUtil.toJson(resultOption));
             if (searchResult != null) {
                 switch (searchResult.getSearchType()) {
                     case DynamicTable.PERSON_TYPE:
@@ -114,7 +115,7 @@ public class CaptureSearchService {
                         }
                         break;
                     case DynamicTable.CAR_TYPE:
-                        LOG.error("No vehicle queries are currently supported");
+                        log.error("No vehicle queries are currently supported");
                         break;
                     default:
                         for (SingleResult singleResult : searchResult.getResults()) {
@@ -122,11 +123,11 @@ public class CaptureSearchService {
                         }
                 }
             } else {
-                LOG.error("Get query history failure, SearchResultOption is " + resultOption);
+                log.error("Get query history failure, SearchResultOption is " + resultOption);
             }
 
         } else {
-            LOG.info("SearchId is null");
+            log.info("SearchId is null");
         }
         return searchResult;
     }

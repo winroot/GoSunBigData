@@ -3,6 +3,7 @@ package com.hzgc.service.starepo.bean;
 import com.hzgc.common.service.table.column.ObjectInfoTable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -14,6 +15,7 @@ import java.util.UUID;
  * 静态库人员中每个人的信息
  */
 @ApiModel(value = "静态库人员中每个人的信息")
+@Data
 public class PersonObject implements Serializable{
 
     /**
@@ -123,174 +125,6 @@ public class PersonObject implements Serializable{
      */
     @ApiModelProperty(value = "地址")
     private String location;
-
-    public float getSim() {
-        return sim;
-    }
-
-    public void setSim(float sim) {
-        this.sim = sim;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPkey() {
-        return pkey;
-    }
-
-    public void setPkey(String pkey) {
-        this.pkey = pkey;
-    }
-
-    public String getPlatformid() {
-        return platformid;
-    }
-
-    public void setPlatformid(String platformid) {
-        this.platformid = platformid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getSex() {
-        return sex;
-    }
-
-    public void setSex(int sex) {
-        this.sex = sex;
-    }
-
-    public String getIdcard() {
-        return idcard;
-    }
-
-    public void setIdcard(String idcard) {
-        this.idcard = idcard;
-    }
-
-    public byte[] getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
-    }
-
-    public float[] getFeature() {
-        return feature;
-    }
-
-    public void setFeature(float[] feature) {
-        this.feature = feature;
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
-
-    public String getCphone() {
-        return cphone;
-    }
-
-    public void setCphone(String cphone) {
-        this.cphone = cphone;
-    }
-
-    public Timestamp getCreatetime() {
-        return createtime;
-    }
-
-    public void setCreatetime(Timestamp createtime) {
-        this.createtime = createtime;
-    }
-
-    public Timestamp getUpdatetime() {
-        return updatetime;
-    }
-
-    public void setUpdatetime(Timestamp updatetime) {
-        this.updatetime = updatetime;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
-    public int getImportant() {
-        return important;
-    }
-
-    public void setImportant(int important) {
-        this.important = important;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    @Override
-    public String toString() {
-        return "PersonObject{" +
-                "id='" + id + '\'' +
-                ", pkey='" + pkey + '\'' +
-                ", platformid='" + platformid + '\'' +
-                ", name='" + name + '\'' +
-                ", sex=" + sex +
-                ", idcard='" + idcard + '\'' +
-                ", photo=" + Arrays.toString(photo) +
-                ", feature=" + Arrays.toString(feature) +
-                ", creator='" + creator + '\'' +
-                ", cphone='" + cphone + '\'' +
-                ", createtime=" + createtime +
-                ", updatetime=" + updatetime +
-                ", reason='" + reason + '\'' +
-                ", tag='" + tag + '\'' +
-                ", important=" + important +
-                ", status=" + status +
-                ", sim=" + sim +
-                ", location" + location +
-                '}';
-    }
 
     public static PersonObject mapToPersonObject(Map<String, Object> person) {
         PersonObject personObject = new PersonObject();

@@ -5,6 +5,7 @@ import com.hzgc.common.service.BigDataPath;
 import com.hzgc.common.service.ResponseResult;
 import com.hzgc.service.face.service.FaceExtractService;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,8 @@ import java.io.IOException;
 @FeignClient(name = "face")
 @RequestMapping(value = BigDataPath.FACE)
 @Api(value = "/face",tags = "特征提取" )
+@Slf4j
 public class FaceController {
-
-    private static Logger logger = LoggerFactory.getLogger(FaceController.class);
 
     @Autowired
     FaceExtractService faceExtractService;
@@ -43,13 +43,13 @@ public class FaceController {
         if(null != image){
             pictureBody = image.getBytes();
         }else {
-            logger.info("file is null or content is null");
+            log.info("file is null or content is null");
         }
         //调用大数据接口，提取特征值
         try{
             faceAttribute = faceExtractService.featureExtract(pictureBody);
         }catch (Exception e){
-            logger.info("faceAttribute acquires is failed");
+            log.info("faceAttribute acquires is failed");
         }
 
         response.setBody(faceAttribute);

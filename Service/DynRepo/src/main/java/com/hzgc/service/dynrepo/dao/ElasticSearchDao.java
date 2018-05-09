@@ -5,7 +5,6 @@ import com.hzgc.common.attribute.bean.AttributeValue;
 import com.hzgc.common.service.connection.ElasticSearchHelper;
 import com.hzgc.common.service.table.column.DynamicTable;
 import com.hzgc.service.dynrepo.bean.*;
-import org.apache.log4j.Logger;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
@@ -19,7 +18,6 @@ import java.util.*;
 
 @Repository
 public class ElasticSearchDao {
-    private static Logger LOG = Logger.getLogger(ElasticSearchDao.class);
     private TransportClient esClient;
 
 

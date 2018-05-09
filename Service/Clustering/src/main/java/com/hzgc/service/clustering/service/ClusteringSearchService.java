@@ -9,7 +9,8 @@ import com.hzgc.service.clustering.bean.ClusteringInfo;
 import com.hzgc.service.clustering.bean.SortParam;
 import com.hzgc.service.clustering.dao.ElasticSearchDao;
 import com.hzgc.service.clustering.dao.HBaseDao;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,8 @@ import java.util.List;
  * 告警聚类结果查询接口实现(彭聪)
  */
 @Service
+@Slf4j
 public class ClusteringSearchService {
-
-    private static Logger LOG = Logger.getLogger(ClusteringSearchService.class);
-
     @Autowired
     private HBaseDao hBaseDao;
 
@@ -57,7 +56,7 @@ public class ClusteringSearchService {
                 clusteringInfo.setClusteringAttributeList(clusteringList.subList(start, start + limit));
             }
         } else {
-            LOG.info("start or limit out of index ");
+            log.info("start or limit out of index ");
         }
         return clusteringInfo;
     }
@@ -86,7 +85,7 @@ public class ClusteringSearchService {
                 return alarmInfoList.subList(start, start + limit);
             }
         } else {
-            LOG.info("start or limit out of index");
+            log.info("start or limit out of index");
             return null;
         }
     }
@@ -110,7 +109,7 @@ public class ClusteringSearchService {
                 alarmIdList.add(alarmTime);
             }
         } else {
-            LOG.info("no data get from es");
+            log.info("no data get from es");
         }
         return alarmIdList;
     }
@@ -133,7 +132,7 @@ public class ClusteringSearchService {
             } else if (flag.toLowerCase().equals("no")) {
                 colName = ClusteringTable.ClUSTERINGINFO_COLUMN_YES;
             } else {
-                LOG.info("flag is error, it must be yes or no");
+                log.info("flag is error, it must be yes or no");
                 return false;
             }
             List<ClusteringAttribute> clusteringAttributeList = hBaseDao.getClustering(region, time, colName);
@@ -173,7 +172,7 @@ public class ClusteringSearchService {
                 colNameSrc = ClusteringTable.ClUSTERINGINFO_COLUMN_NO;
                 colNameDes = ClusteringTable.ClUSTERINGINFO_COLUMN_YES;
             } else {
-                LOG.info("flag is error, it must be yes or no");
+                log.info("flag is error, it must be yes or no");
                 return false;
             }
             List<ClusteringAttribute> listSrc = hBaseDao.getClustering(region, time, colNameSrc);
@@ -222,7 +221,7 @@ public class ClusteringSearchService {
                 return alarmInfoList.subList(start, start + limit);
             }
         } else {
-            LOG.info("start must bigger than -1");
+            log.info("start must bigger than -1");
             return null;
         }
     }

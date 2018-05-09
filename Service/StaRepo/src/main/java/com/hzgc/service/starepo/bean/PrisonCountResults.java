@@ -1,27 +1,12 @@
 package com.hzgc.service.starepo.bean;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.List;
 
+@Data
 public class PrisonCountResults implements Serializable{
 
     private List<PrisonCountResult> results;
-
-    public PrisonCountResults() {
-    }
-
-    public List<PrisonCountResult> getResults() {
-        return results;
-    }
-
-    public void setResults(List<PrisonCountResult> results) {
-        this.results = results;
-    }
-
-    @Override
-    public String toString() {
-        return "PrisonCountResults{" +
-                "results=" + results +
-                '}';
-    }
 }

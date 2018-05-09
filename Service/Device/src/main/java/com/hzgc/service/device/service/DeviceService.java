@@ -1,14 +1,11 @@
 package com.hzgc.service.device.service;
 
 import com.hzgc.service.device.dao.HBaseDao;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DeviceService {
-
-    private static Logger LOG = Logger.getLogger(DeviceService.class);
 
     @Autowired
     private HBaseDao hBaseDao;

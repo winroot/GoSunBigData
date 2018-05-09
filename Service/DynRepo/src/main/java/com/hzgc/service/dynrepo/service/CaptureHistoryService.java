@@ -5,7 +5,7 @@ import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.dynrepo.bean.*;
 import com.hzgc.service.dynrepo.dao.ElasticSearchDao;
 import com.hzgc.service.dynrepo.dao.EsSearchParam;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -20,8 +20,8 @@ import static com.hzgc.service.dynrepo.service.CaptureServiceHelper.getFtpUrl;
 import static com.hzgc.service.dynrepo.service.CaptureServiceHelper.surlToBurl;
 
 @Service
+@Slf4j
 public class CaptureHistoryService {
-    private static Logger LOG = Logger.getLogger(CaptureHistoryService.class);
     @Autowired
     private ElasticSearchDao elasticSearchDao;
     @Autowired
@@ -30,10 +30,10 @@ public class CaptureHistoryService {
     public List<SearchResult> getCaptureHistory(SearchOption option) {
         if (option == null || option.getSearchType() == null ||
                 (option.getSortParams() != null && option.getSortParams().size() > 0)) {
-            LOG.warn("Start query capture history, search option is null");
+            log.warn("Start query capture history, search option is null");
             return new ArrayList<>();
         }
-        LOG.info("Start query capture history, search option is:" + JSONUtil.toJson(option));
+        log.info("Start query capture history, search option is:" + JSONUtil.toJson(option));
         String sortParam = EsSearchParam.DESC;
         for (SortParam s : option.getSortParams()) {
             if (s.name().equals(SortParam.TIMEDESC.toString())) {
@@ -42,18 +42,18 @@ public class CaptureHistoryService {
                 sortParam = EsSearchParam.ASC;
             }
         }
-        LOG.debug("Sort param is " + sortParam);
+        log.debug("Sort param is " + sortParam);
         if (option.getDeviceIds() != null &&
                 option.getDeviceIds().size() > 0 &&
                 option.getSortParams().get(0).name().equals(SortParam.IPC.toString())) {
-            LOG.debug("The current query needs to be grouped by ipcid");
+            log.debug("The current query needs to be grouped by ipcid");
             return getCaptureHistory(option, sortParam);
         } else if (option.getDeviceIds() != null && option.getDeviceIds().size() > 0 &&
                 !option.getSortParams().get(0).name().equals(SortParam.IPC.toString())) {
-            LOG.debug("The current query don't needs to be grouped by ipcid");
+            log.debug("The current query don't needs to be grouped by ipcid");
             return getCaptureHistory(option, option.getDeviceIds(), sortParam);
         } else {
-            LOG.debug("The current query is default");
+            log.debug("The current query is default");
             return getDefaultCaptureHistory(option, sortParam);
         }
     }

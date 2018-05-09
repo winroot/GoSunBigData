@@ -1,41 +1,14 @@
 package com.hzgc.service.starepo.bean;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Map;
 
-/**
- *
- */
+@Data
 public class PrisonCountResult implements Serializable{
 
     private String pkey;
 
     private Map<String, Integer> locationCounts;
-
-    public PrisonCountResult() {
-    }
-
-    public String getPkey() {
-        return pkey;
-    }
-
-    public void setPkey(String pkey) {
-        this.pkey = pkey;
-    }
-
-    public Map<String, Integer> getLocationCounts() {
-        return locationCounts;
-    }
-
-    public void setLocationCounts(Map<String, Integer> locationCounts) {
-        this.locationCounts = locationCounts;
-    }
-
-    @Override
-    public String toString() {
-        return "PrisonCountResult{" +
-                "pkey='" + pkey + '\'' +
-                ", locationCounts=" + locationCounts +
-                '}';
-    }
 }

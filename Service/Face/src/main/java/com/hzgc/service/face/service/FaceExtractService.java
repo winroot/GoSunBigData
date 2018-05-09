@@ -2,21 +2,21 @@ package com.hzgc.service.face.service;
 
 import com.hzgc.common.jni.FaceAttribute;
 import com.hzgc.common.jni.FaceFunction;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class FaceExtractService {
-
-    private static Logger LOG = Logger.getLogger(FaceExtractService.class);
 
     private FaceExtractService() {
         try {
-            LOG.info("Start NativeFunction init....");
+            log.info("Start NativeFunction init....");
             //NativeFunction.init();
-            LOG.info("Init NativeFunction successful!");
+            log.info("Init NativeFunction successful!");
         } catch (Exception e) {
-            LOG.error("Init NativeFunction failure!");
+            log.error("Init NativeFunction failure!");
             e.printStackTrace();
         }
     }

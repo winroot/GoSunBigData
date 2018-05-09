@@ -1,20 +1,18 @@
 package com.hzgc.service.starepo.dao;
 
 import com.hzgc.common.service.table.column.ObjectInfoTable;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 
 @Repository
+@Slf4j
 public class ObjectTypeDao {
-
-    private static Logger LOG = Logger.getLogger(ObjectTypeDao.class);
 
     @Resource(name = "phoenixJdbcTemplate")
     private JdbcTemplate jdbcTemplate;
@@ -28,9 +26,9 @@ public class ObjectTypeDao {
      * @return boolean
      */
     public boolean addObjectType(String name, String creator, String remark) {
-        LOG.info("objectType" + name);
+        log.info("objectType" + name);
         if (name == null || "".equals(name)) {
-            LOG.info("name is null");
+            log.info("name is null");
             return false;
         }
         long start = System.currentTimeMillis();
@@ -42,14 +40,14 @@ public class ObjectTypeDao {
                 + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_REMARK + ", "
                 + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_ADD_TIME
                 + ") values (?,?,?,?,?)";
-        LOG.info("sql:" + sql);
+        log.info("sql:" + sql);
         try {
             jdbcTemplate.update(sql, typeId, name, creator, remark, new java.sql.Timestamp(System.currentTimeMillis()));
         } catch (Exception e) {
-            LOG.error(e.getMessage());
+            log.error(e.getMessage());
             return false;
         }
-        LOG.info("添加一条数据到静态库花费时间： " + (System.currentTimeMillis() - start));
+        log.info("添加一条数据到静态库花费时间： " + (System.currentTimeMillis() - start));
         return true;
     }
 
@@ -60,7 +58,7 @@ public class ObjectTypeDao {
      * @return boolean
      */
     public boolean deleteObjectType(String id) {
-        LOG.info("rowkey to delete : " + id);
+        log.info("rowkey to delete : " + id);
 
         if (id == null || "".equals(id)) {
             return false;
@@ -72,7 +70,7 @@ public class ObjectTypeDao {
             SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql1, id);
             while (sqlRowSet.next()) {
                 String rowkey = sqlRowSet.getString(ObjectInfoTable.ROWKEY);
-                LOG.info("存在该类型的对象，不能删除");
+                log.info("存在该类型的对象，不能删除");
                 return false;
             }
             jdbcTemplate.update(sql2, id);
@@ -80,7 +78,7 @@ public class ObjectTypeDao {
             e.printStackTrace();
             return false;
         }
-        LOG.info("删除静态信息库的" + id + "数据花费时间： " + (System.currentTimeMillis() - start));
+        log.info("删除静态信息库的" + id + "数据花费时间： " + (System.currentTimeMillis() - start));
         return true;
     }
 
@@ -94,7 +92,7 @@ public class ObjectTypeDao {
      * @return boolean
      */
     public boolean updateObjectType(String id, String name, String creator, String remark) {
-        LOG.info("objectType" + id + " : " + name);
+        log.info("objectType" + id + " : " + name);
         if (id == null || "".equals(id)) {
             return false;
         }
@@ -111,10 +109,10 @@ public class ObjectTypeDao {
         try {
             jdbcTemplate.update(sql, id, name, creator, remark, new java.sql.Timestamp(System.currentTimeMillis()));
         } catch (Exception e) {
-            LOG.error(e.getMessage());
+            log.error(e.getMessage());
             return false;
         }
-        LOG.info("添加一条数据到静态库花费时间： " + (System.currentTimeMillis() - start));
+        log.info("添加一条数据到静态库花费时间： " + (System.currentTimeMillis() - start));
         return true;
     }
 
@@ -124,7 +122,7 @@ public class ObjectTypeDao {
      * @param name      类型名
      * @param pageIndex 页码
      * @param pageSize  每页行数
-     * @return List<Map<String, String>>
+     * @return
      */
     public List<Map<String, String>> searchObjectType(String name, int pageIndex, int pageSize) {
         if (pageIndex == 0) {
@@ -133,10 +131,8 @@ public class ObjectTypeDao {
         if (pageSize == 0) {
             pageSize = 5;
         }
-        List<Map<String, String>> result = null;
-        java.sql.Connection conn = null;
-        SqlRowSet sqlRowSet = null;
-        PreparedStatement pstm = null;
+        List<Map<String, String>> result;
+        SqlRowSet sqlRowSet;
         StringBuilder sql = new StringBuilder("select " + ObjectInfoTable.ROWKEY + ", "
                 + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_NAME + ", "
                 + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_CREATOR + ", "
@@ -145,9 +141,9 @@ public class ObjectTypeDao {
                 + " from " + ObjectInfoTable.TABLE_NAME);
         sql.append(" where " + ObjectInfoTable.ROWKEY + " > ?");
         if (name != null && !"".equals(name)) {
-            sql.append("AND " + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_NAME + " like '%" + name + "%'");
+            sql.append("AND " + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_NAME + " like '%").append(name).append("%'");
         }
-        sql.append(" LIMIT " + pageSize);
+        sql.append(" LIMIT ").append(pageSize);
         try {
             String startRow = "a";
             if (pageIndex == 1) {
@@ -162,19 +158,12 @@ public class ObjectTypeDao {
                 result = getResult(sqlRowSet);
             }
         } catch (SQLException e) {
-            LOG.error(e.getMessage());
+            log.error(e.getMessage());
             return null;
         }
         return result;
     }
 
-    /**
-     * 从ResultSet中取出数据
-     *
-     * @param sqlRowSet
-     * @return
-     * @throws SQLException
-     */
     private List<Map<String, String>> getResult(SqlRowSet sqlRowSet) throws SQLException {
         List<Map<String, String>> result = new ArrayList<>();
         while (sqlRowSet.next()) {
@@ -191,26 +180,11 @@ public class ObjectTypeDao {
         return result;
     }
 
-    /**
-     * 获取一页数据
-     *
-     * @param sql
-     * @param startRow
-     * @return
-     * @throws SQLException
-     */
+
     private SqlRowSet getDate(String sql, String startRow) throws SQLException {
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, startRow);
-        return sqlRowSet;
+        return jdbcTemplate.queryForRowSet(sql, startRow);
     }
 
-    /**
-     * 取得最后一行Rowkey
-     *
-     * @param sqlRowSet
-     * @return
-     * @throws SQLException
-     */
     private String getLastRowkey(SqlRowSet sqlRowSet) throws SQLException {
         String lastRowKey = null;
         while (sqlRowSet.next()) {

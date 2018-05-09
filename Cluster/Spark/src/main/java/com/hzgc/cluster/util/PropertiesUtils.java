@@ -25,8 +25,7 @@ public class PropertiesUtils implements Serializable {
     public static Properties getProperties() {
         Properties ps = new Properties();
         try {
-            InputStream is = new FileInputStream(ResourceFileUtil.loadResourceFile("sparkJob.properties"));
-            ps.load(is);
+            ps.load(ResourceFileUtil.loadResourceInputStream("sparkJob.properties"));
         } catch (Exception e) {
             e.printStackTrace();
         }

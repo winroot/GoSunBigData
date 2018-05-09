@@ -5,7 +5,7 @@ import com.hzgc.common.jni.FaceFunction;
 import com.hzgc.common.service.table.column.ObjectInfoTable;
 import com.hzgc.service.starepo.bean.PSearchArgsModel;
 import com.hzgc.service.starepo.bean.StaticSortParam;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,9 +14,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+@Slf4j
 public class ParseByOption {
-
-    private static Logger LOG = Logger.getLogger(PSearchArgsModel.class);
 
     public static Map<String, List<Object>> getSqlFromPSearchArgsModel(PSearchArgsModel pSearchArgsModel) {
         StringBuffer sql = new StringBuffer("");
@@ -48,7 +47,7 @@ public class ParseByOption {
                         if (count == size) {
                             featureString.append(FaceFunction.floatArray2string(faceAttribute.getFeature()));
                         } else {
-                            featureString.append(FaceFunction.floatArray2string(faceAttribute.getFeature()) + ",");
+                            featureString.append(FaceFunction.floatArray2string(faceAttribute.getFeature())).append(",");
                         }
                     }
                     count ++;
@@ -111,7 +110,7 @@ public class ParseByOption {
                 }
                 sql.append(sameSortSql(params, true));
             } else {
-                LOG.info("传入的参数有错，请确认");
+                log.info("传入的参数有错，请确认");
                 return null;
             }
         } else {
@@ -125,7 +124,7 @@ public class ParseByOption {
             }
         }
         // 进行分组
-        LOG.info(sql);
+        log.info(sql.toString());
         Map<String, List<Object>> finalReturn = new HashMap<>();
         finalReturn.put(new String(sql), setValues);
         return finalReturn;
@@ -525,7 +524,7 @@ public class ParseByOption {
             setValues.add(status);
         }
         sql.append(") values(?");
-        StringBuffer tmp = new StringBuffer("");
+        StringBuilder tmp = new StringBuilder("");
         for (int i = 0;i <= setValues.size() - 2; i++) {
             tmp.append(", ?");
         }

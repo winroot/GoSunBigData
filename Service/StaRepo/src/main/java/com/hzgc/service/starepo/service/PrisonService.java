@@ -5,7 +5,7 @@ import com.hzgc.service.starepo.bean.PrisonCountResult;
 import com.hzgc.service.starepo.bean.PrisonCountResults;
 import com.hzgc.service.starepo.bean.PrisonSearchOpts;
 import com.hzgc.service.starepo.util.PhoenixJDBCHelper;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,9 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class PrisonService {
-
-    private static Logger LOG = Logger.getLogger(PrisonService.class);
 
     /**
      * 用来更新人员位置，
@@ -26,15 +25,15 @@ public class PrisonService {
      */
     public int updateLocation(PrisonSearchOpts prisonSearchOpts){
         if (prisonSearchOpts == null) {
-            LOG.info("PrsionSearchOpts 为空，传过来的参数不能为空。");
+            log.info("PrsionSearchOpts 为空，传过来的参数不能为空。");
             return 1;
         }
         Map<String, List<String>> pkeysUpdate = prisonSearchOpts.getPkeysUpate();
         if (pkeysUpdate == null) {
-            LOG.info("更新参数为空.");
+            log.info("更新参数为空.");
             return 1;
         }
-        java.sql.Connection conn = null;
+        java.sql.Connection conn;
         PreparedStatement pstm = null;
         String sql = "upsert into " + ObjectInfoTable.TABLE_NAME + "("
                 + ObjectInfoTable.ROWKEY + ", "
@@ -65,13 +64,13 @@ public class PrisonService {
             }
             conn.setAutoCommit(true);
         } catch (SQLException e) {
-            LOG.info("Sql 插入异常......");
+            log.info("Sql 插入异常......");
             e.printStackTrace();
             return 1;
         } finally {
            PhoenixJDBCHelper.closeConnection(null, pstm);
         }
-        LOG.info(sql);
+        log.info(sql);
         return 0;
     }
 
@@ -82,15 +81,15 @@ public class PrisonService {
      */
     public int resetLocation(PrisonSearchOpts prisonSearchOpts) {
         if (prisonSearchOpts == null) {
-            LOG.info("PrsionSearchOpts 为空，传过来的参数不能为空......");
+            log.info("PrsionSearchOpts 为空，传过来的参数不能为空......");
             return 1;
         }
         List<String> pkeysReset = prisonSearchOpts.getPkeysReset();
         if (pkeysReset == null) {
-            LOG.info("重置参数为空.");
+            log.info("重置参数为空.");
             return 1;
         }
-        java.sql.Connection conn = null;
+        java.sql.Connection conn;
         PreparedStatement pstm = null;
         String sql = "upsert into " + ObjectInfoTable.TABLE_NAME + "(" + ObjectInfoTable.ROWKEY + ", " +
                 ObjectInfoTable.LOCATION + ") select id, ? from " +  ObjectInfoTable.TABLE_NAME + " where " +
@@ -110,7 +109,7 @@ public class PrisonService {
         } finally {
             PhoenixJDBCHelper.closeConnection(null, pstm);
         }
-        LOG.info(sql);
+        log.info(sql);
         return 0;
     }
 
@@ -121,37 +120,35 @@ public class PrisonService {
      */
     public PrisonCountResults countByLocation(PrisonSearchOpts prisonSearchOpts) {
         if (prisonSearchOpts == null) {
-            LOG.info("传进来的参数为空.");
+            log.info("传进来的参数为空.");
             return new PrisonCountResults();
         }
         List<String> pkeysCount = prisonSearchOpts.getPkeysCount();
         if (pkeysCount == null) {
-            LOG.info("参数列表为空.");
+            log.info("参数列表为空.");
             return new PrisonCountResults();
         }
 
         // sql 封装
-        String sql =  "select " + ObjectInfoTable.PKEY + ", " + ObjectInfoTable.LOCATION +
-                ", count(" + ObjectInfoTable.LOCATION +") as count from " + ObjectInfoTable.TABLE_NAME;
+        StringBuilder sql = new StringBuilder("select " + ObjectInfoTable.PKEY + ", " + ObjectInfoTable.LOCATION +
+                ", count(" + ObjectInfoTable.LOCATION + ") as count from " + ObjectInfoTable.TABLE_NAME);
         for (int i = 0; i < pkeysCount.size(); i++) {
             if (i == 0 && pkeysCount.size() > 1) {
-                sql += " where (" + ObjectInfoTable.PKEY + " = ? ";
-                continue;
+                sql.append(" where (" + ObjectInfoTable.PKEY + " = ? ");
             } else if(i == 0 && pkeysCount.size() == 1) {
-                sql += " where " + ObjectInfoTable.PKEY + " = ? ";
-                continue;
+                sql.append(" where " + ObjectInfoTable.PKEY + " = ? ");
             } else if (i == pkeysCount.size() - 1){
-                sql += " or " + ObjectInfoTable.PKEY + " = ? )";
+                sql.append(" or " + ObjectInfoTable.PKEY + " = ? )");
             } else {
-                sql += " or " + ObjectInfoTable.PKEY + " = ? ";
+                sql.append(" or " + ObjectInfoTable.PKEY + " = ? ");
             }
         }
-        sql += " group by " + ObjectInfoTable.PKEY + ", " + ObjectInfoTable.LOCATION;
+        sql.append(" group by " + ObjectInfoTable.PKEY + ", " + ObjectInfoTable.LOCATION);
 
-        LOG.info(sql);
+        log.info(sql.toString());
 
         //获取连接，执行查询
-        java.sql.Connection conn = null;
+        java.sql.Connection conn;
         PreparedStatement pstm = null;
         ResultSet resultSet = null;
         PrisonCountResult prisonCountResult;
@@ -161,7 +158,7 @@ public class PrisonService {
         List<String> pkeysTmp = new ArrayList<>();
         try {
             conn = PhoenixJDBCHelper.getInstance().getConnection();
-            pstm = conn.prepareStatement(sql);
+            pstm = conn.prepareStatement(sql.toString());
             for (int i = 0; i < pkeysCount.size(); i++) {
                 pstm.setString(i+1, pkeysCount.get(i));
             }
@@ -198,9 +195,9 @@ public class PrisonService {
         } finally {
             PhoenixJDBCHelper.closeConnection(null, pstm, resultSet);
         }
-        LOG.info(prisonSearchOpts);
-        LOG.info(sql);
-        LOG.info(prisonCountResults);
+        log.info(prisonSearchOpts.toString());
+        log.info(sql.toString());
+        log.info(prisonCountResults.toString());
         return prisonCountResults;
     }
 }

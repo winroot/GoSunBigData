@@ -24,17 +24,13 @@ public class ElasticSearchProperties extends ProperHelper implements Serializabl
         String properName = "common_service_es.properties";
         FileInputStream in = null;
         try {
-            File file = ResourceFileUtil.loadResourceFile(properName);
-            in = new FileInputStream(file);
-            props.load(in);
+            props.load(ResourceFileUtil.loadResourceInputStream(properName));
             setEs_cluster_name();
             setEs_hosts();
             setEs_cluster_port();
         } catch (IOException e) {
             e.printStackTrace();
             LOG.error("Catch an unknown error, can't load the configuration file" + properName);
-        } finally {
-            IOUtil.closeStream(in);
         }
     }
 
