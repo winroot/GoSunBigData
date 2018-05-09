@@ -7,7 +7,6 @@ import com.hzgc.service.device.bean.WarnRule;
 import com.hzgc.service.device.service.WarnRuleService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

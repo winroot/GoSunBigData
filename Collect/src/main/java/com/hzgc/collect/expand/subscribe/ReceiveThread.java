@@ -1,7 +1,7 @@
 package com.hzgc.collect.expand.subscribe;
 
 import com.hzgc.collect.expand.util.FTPConstants;
-import com.hzgc.common.ftp.properties.CollectProperties;
+import com.hzgc.collect.expand.util.CollectProperties;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;

@@ -1,6 +1,6 @@
 package com.hzgc.collect.expand.subscribe;
 
-import com.hzgc.common.ftp.properties.CollectProperties;
+import com.hzgc.collect.expand.util.CollectProperties;
 import com.hzgc.common.util.zookeeper.ZookeeperClient;
 import org.apache.log4j.Logger;
 

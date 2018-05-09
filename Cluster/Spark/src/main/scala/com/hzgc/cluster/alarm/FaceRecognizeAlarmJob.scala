@@ -8,10 +8,11 @@ import com.google.gson.Gson
 import com.hzgc.cluster.message.{Item, RecognizeAlarmMessage}
 import com.hzgc.cluster.util.PropertiesUtils
 import com.hzgc.cluster.warn.{DeviceUtilImpl, ObjectInfoInnerHandlerImpl}
-import com.hzgc.common.ftp.{FtpUtils, RocketMQProducer}
-import com.hzgc.common.ftp.faceobj.{FaceObject, FaceObjectDecoder}
+import com.hzgc.collect.expand.processer.{FaceObject, FaceObjectDecoder}
+import com.hzgc.collect.expand.util.{FtpUtils, RocketMQProducer}
+import com.hzgc.common.ftp.faceobj.FaceObjectDecoder
 import com.hzgc.common.jni.FaceFunction
-import com.hzgc.common.service.table.column.DeviceTable
+import com.hzgc.common.table.device.DeviceTable
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka.KafkaUtils

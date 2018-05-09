@@ -19,6 +19,10 @@
         <module>Common-service</module>
         <module>Common-udf</module>
         <module>Common-util</module>
+        <module>Common-table</module>
+        <module>Common-es</module>
+        <module>Common-hbase</module>
+        <module>Common-clustering</module>
     </modules>
     <properties>
         <tomcat.version>8.0.11</tomcat.version>

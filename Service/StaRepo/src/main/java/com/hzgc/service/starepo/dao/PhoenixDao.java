@@ -7,7 +7,6 @@ import com.hzgc.service.starepo.bean.*;
 import com.hzgc.service.starepo.service.ObjectInfoHandlerTool;
 import com.hzgc.service.starepo.service.ParseByOption;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

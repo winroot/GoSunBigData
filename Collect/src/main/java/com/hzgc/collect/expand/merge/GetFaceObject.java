@@ -2,9 +2,9 @@ package com.hzgc.collect.expand.merge;
 
 import com.hzgc.collect.expand.log.LogEvent;
 import com.hzgc.collect.expand.util.FTPConstants;
-import com.hzgc.common.ftp.faceobj.FaceObject;
-import com.hzgc.common.ftp.message.FtpPathMessage;
-import com.hzgc.common.ftp.FtpUtils;
+import com.hzgc.collect.expand.processer.FaceObject;
+import com.hzgc.collect.expand.util.FtpPathMessage;
+import com.hzgc.collect.expand.util.FtpUtils;
 import com.hzgc.common.jni.FaceAttribute;
 import com.hzgc.common.jni.FaceFunction;
 import com.hzgc.common.util.empty.IsEmpty;

@@ -7,8 +7,8 @@ import com.google.gson.Gson
 import com.hzgc.cluster.message.OffLineAlarmMessage
 import com.hzgc.cluster.util.PropertiesUtils
 import com.hzgc.cluster.warn.{DeviceUtilImpl, ObjectInfoInnerHandlerImpl}
-import com.hzgc.common.ftp.RocketMQProducer
-import com.hzgc.common.service.table.column.DeviceTable
+import com.hzgc.collect.expand.util.RocketMQProducer
+import com.hzgc.common.table.device.DeviceTable
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.JavaConverters

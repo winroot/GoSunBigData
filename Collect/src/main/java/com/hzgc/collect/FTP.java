@@ -13,7 +13,7 @@ import com.hzgc.collect.ftp.nativefs.filesystem.NativeFileSystemFactory;
 import com.hzgc.collect.ftp.ftplet.FtpException;
 import com.hzgc.collect.ftp.listener.ListenerFactory;
 import com.hzgc.collect.ftp.usermanager.PropertiesUserManagerFactory;
-import com.hzgc.common.ftp.properties.CollectProperties;
+import com.hzgc.collect.expand.util.CollectProperties;
 import com.hzgc.common.jni.NativeFunction;
 import com.hzgc.common.util.file.ResourceFileUtil;
 import org.apache.log4j.Logger;

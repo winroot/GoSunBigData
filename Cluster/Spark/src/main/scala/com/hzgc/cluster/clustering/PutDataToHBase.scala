@@ -3,9 +3,10 @@ package com.hzgc.cluster.clustering
 import java.util
 import java.util.List
 
-import com.hzgc.common.service.clustering.{AlarmInfo, ClusteringAttribute}
-import com.hzgc.common.service.table.column.ClusteringTable
-import com.hzgc.common.service.connection.HBaseHelper
+import com.hzgc.common.clustering.{AlarmInfo, ClusteringAttribute}
+import com.hzgc.common.hbase.HBaseHelper
+import com.hzgc.common.service.clustering.ClusteringAttribute
+import com.hzgc.common.table.clustering.ClusteringTable
 import com.hzgc.common.util.`object`.ObjectUtil
 import org.apache.hadoop.hbase.client.{Put, Table}
 import org.apache.hadoop.hbase.util.Bytes

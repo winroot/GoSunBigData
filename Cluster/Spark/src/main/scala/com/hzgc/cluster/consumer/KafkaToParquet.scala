@@ -5,7 +5,8 @@ import java.util.Properties
 
 import com.google.common.base.Stopwatch
 import com.hzgc.cluster.util.PropertiesUtils
-import com.hzgc.common.ftp.faceobj.{FaceObject, FaceObjectDecoder}
+import com.hzgc.collect.expand.processer.{FaceObject, FaceObjectDecoder}
+import com.hzgc.common.ftp.faceobj.FaceObjectDecoder
 import kafka.common.TopicAndPartition
 import kafka.message.MessageAndMetadata
 import kafka.serializer.StringDecoder

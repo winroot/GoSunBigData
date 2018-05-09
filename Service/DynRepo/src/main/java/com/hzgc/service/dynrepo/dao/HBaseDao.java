@@ -7,7 +7,6 @@ import com.hzgc.service.dynrepo.bean.SearchResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
