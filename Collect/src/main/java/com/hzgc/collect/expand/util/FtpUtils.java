@@ -17,6 +17,24 @@ public final class FtpUtils implements Serializable {
         return checkPort > 1024;
     }
 
+    /**
+     * @param pictureName determine the picture type based on the file name
+     * @return equals 0, it is a picture
+     * lager than 0, it is a face picture
+     */
+    public static int pickPicture(String pictureName) {
+        int picType = FTPConstants.NUM_ZERO;
+        if (null != pictureName) {
+            String tmpStr = pictureName.substring(pictureName.lastIndexOf("_") + FTPConstants.NUM_ONE, pictureName.lastIndexOf("."));
+            try {
+                picType = Integer.parseInt(tmpStr);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return picType;
+    }
+
     public static ByteArrayOutputStream inputStreamCacher(InputStream is) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] buffer = new byte[4096];
@@ -135,29 +153,18 @@ public final class FtpUtils implements Serializable {
      */
     public static String getFtpUrl(String ftpUrl) {
         String hostName = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
-        String ftpServerIP = FTPAddressProperties.getIpByHostName(hostName);
-        if (IsEmpty.strIsRight(ftpServerIP)) {
-            return ftpUrl.replace(hostName, ftpServerIP);
-        }
-        return ftpUrl;
-    }
-
-    /**
-     * @param pictureName determine the picture type based on the file name
-     * @return equals 0, it is a picture
-     * lager than 0, it is a face picture
-     */
-    public static int pickPicture(String pictureName) {
-        int picType = FTPConstants.NUM_ZERO;
-        if (null != pictureName) {
-            String tmpStr = pictureName.substring(pictureName.lastIndexOf("_") + FTPConstants.NUM_ONE, pictureName.lastIndexOf("."));
-            try {
-                picType = Integer.parseInt(tmpStr);
-            } catch (Exception e) {
-                e.printStackTrace();
+        String ftpServerIP;
+        String ftp_hostname_mapping = FtpServerProperties.getFtp_hostname_mapping();
+        String[] ftp_hostname = ftp_hostname_mapping.split(";");
+        for (String str : ftp_hostname) {
+            if (str.contains(hostName)) {
+                ftpServerIP = str.split(":")[1];
+                if (IsEmpty.strIsRight(ftpServerIP)) {
+                    return ftpUrl.replace(hostName, ftpServerIP);
+                }
             }
         }
-        return picType;
+        return ftpUrl;
     }
 
     /**

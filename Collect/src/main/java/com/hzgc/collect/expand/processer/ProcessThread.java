@@ -26,7 +26,7 @@ public class ProcessThread implements Runnable {
         LogEvent event;
         try {
             while ((event = queue.take()) != null) {
-                Sharpness sharpness = CollectProperties.getSharpness();
+                Sharpness sharpness = FtpServerProperties.getSharpness();
                 System.out.println(sharpness.getWeight());
                 System.out.println(sharpness.getHeight());
                 FaceAttribute attribute =

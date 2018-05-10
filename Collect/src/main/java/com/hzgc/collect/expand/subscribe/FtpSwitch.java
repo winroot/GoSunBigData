@@ -1,6 +1,6 @@
 package com.hzgc.collect.expand.subscribe;
 
-import com.hzgc.collect.expand.util.CollectProperties;
+import com.hzgc.collect.expand.util.FtpServerProperties;
 
 import java.io.Serializable;
 
@@ -12,7 +12,7 @@ public class FtpSwitch implements Serializable{
     private static boolean ftpSwitch;
 
     public FtpSwitch(){
-        ftpSwitch = Boolean.parseBoolean(CollectProperties.getFtpSwitch());
+        ftpSwitch = Boolean.parseBoolean(FtpServerProperties.getFtp_switch());
     }
 
     public static boolean isFtpSwitch() {

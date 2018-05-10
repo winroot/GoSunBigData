@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>Commom-jni</module>
+        <module>Common-jni</module>
         <module>Common-attribute</module>
         <module>Common-udf</module>
         <module>Common-util</module>

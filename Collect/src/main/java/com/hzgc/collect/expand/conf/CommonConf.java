@@ -1,7 +1,7 @@
 package com.hzgc.collect.expand.conf;
 
 import com.hzgc.collect.expand.util.FTPConstants;
-import com.hzgc.collect.expand.util.CollectProperties;
+import com.hzgc.collect.expand.util.FtpServerProperties;
 
 import java.io.Serializable;
 
@@ -57,15 +57,14 @@ public class CommonConf implements Serializable {
      * 默认加载类路径下的cluster-over-ftp.properties文件
      */
     public CommonConf() {
-        //HelperFactory.regist();
-        this.logSize = CollectProperties.getLogSize();
-        this.capacity = CollectProperties.getReceiveQueueCapacity();
-        this.receiveLogDir = CollectProperties.getReceiveLogDir();
-        this.processLogDir = CollectProperties.getProcessLogDir();
-        this.receiveNumber = CollectProperties.getReceiveNumber();
-        this.successLogDir = CollectProperties.getSuccessLogDir();
-        this.mergeLogDir = CollectProperties.getMergeLogDir();
-        this.mergeScanTime = CollectProperties.getMergeScanTime();
+        this.logSize = Integer.parseInt(FtpServerProperties.getLog_Size());
+        this.capacity = Integer.parseInt(FtpServerProperties.getReceive_queue_capacity());
+        this.receiveLogDir = FtpServerProperties.getReceive_log_dir();
+        this.processLogDir = FtpServerProperties.getProcess_log_dir();
+        this.receiveNumber = Integer.parseInt(FtpServerProperties.getReceive_number());
+        this.successLogDir = FtpServerProperties.getSuccess_log_dir();
+        this.mergeLogDir = FtpServerProperties.getMerge_log_dir();
+        this.mergeScanTime = Integer.parseInt(FtpServerProperties.getMerge_scan_time());
     }
 
     /**

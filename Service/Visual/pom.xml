@@ -15,10 +15,6 @@
     <dependencies>
         <dependency>
             <groupId>com.hzgc.common</groupId>
-            <artifactId>common-ftp</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.hzgc.common</groupId>
             <artifactId>common-attribute</artifactId>
         </dependency>
         <dependency>
@@ -29,7 +25,6 @@
         <dependency>
             <groupId>com.hzgc.service</groupId>
             <artifactId>util</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>

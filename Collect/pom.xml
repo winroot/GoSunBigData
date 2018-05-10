@@ -58,16 +58,21 @@
             <artifactId>mina-core</artifactId>
             <version>${mina.version}</version>
         </dependency>
-        <!--<dependency>
+        <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
             <version>${kafka.version}</version>
-        </dependency>-->
-        <!--<dependency>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.11</artifactId>
+            <version>0.8.2.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
             <version>${rocketmq.version}</version>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>net.jpountz.lz4</groupId>
             <artifactId>lz4</artifactId>
@@ -85,9 +90,13 @@
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>
-            <artifactId>common-ftp</artifactId>
+            <artifactId>common-util</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-jni</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 

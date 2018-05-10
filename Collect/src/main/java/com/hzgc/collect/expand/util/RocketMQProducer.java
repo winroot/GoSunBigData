@@ -1,6 +1,5 @@
 package com.hzgc.collect.expand.util;
 
-import com.hzgc.common.ftp.properties.RocketMQProperties;
 import com.hzgc.common.util.empty.IsEmpty;
 import org.apache.log4j.Logger;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
@@ -22,9 +21,9 @@ public class RocketMQProducer implements Serializable {
 
     private RocketMQProducer() {
         try {
-            String namesrvAddr = RocketMQProperties.getAddress();
-            topic = RocketMQProperties.getTopic();
-            String producerGroup = RocketMQProperties.getGroup();
+            String namesrvAddr = FtpServerProperties.getRocketmq_address();
+            topic = FtpServerProperties.getRocketmq_topic();
+            String producerGroup = FtpServerProperties.getRocketmq_group();
             if (IsEmpty.strIsRight(namesrvAddr) &&
                     IsEmpty.strIsRight(topic) &&
                     IsEmpty.strIsRight(producerGroup)) {
