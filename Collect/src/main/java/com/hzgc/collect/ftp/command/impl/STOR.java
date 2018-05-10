@@ -1,7 +1,6 @@
 package com.hzgc.collect.ftp.command.impl;
 
 import com.hzgc.collect.expand.log.LogEvent;
-import com.hzgc.collect.expand.util.FTPUtils;
 import com.hzgc.collect.expand.util.RocketMQProducer;
 import com.hzgc.collect.expand.subscribe.FtpSwitch;
 import com.hzgc.collect.expand.subscribe.ReceiveIpcIds;
