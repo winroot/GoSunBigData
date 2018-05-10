@@ -4,6 +4,7 @@ import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.merge.RecoverNotProData;
 import com.hzgc.collect.expand.subscribe.*;
 import com.hzgc.collect.expand.util.FTPConstants;
+import com.hzgc.collect.expand.util.FtpServerProperties;
 import com.hzgc.collect.ftp.ClusterOverFtp;
 import com.hzgc.collect.ftp.ConnectionConfigFactory;
 import com.hzgc.collect.ftp.FtpServer;
@@ -13,7 +14,6 @@ import com.hzgc.collect.ftp.nativefs.filesystem.NativeFileSystemFactory;
 import com.hzgc.collect.ftp.ftplet.FtpException;
 import com.hzgc.collect.ftp.listener.ListenerFactory;
 import com.hzgc.collect.ftp.usermanager.PropertiesUserManagerFactory;
-import com.hzgc.collect.expand.util.CollectProperties;
 import com.hzgc.common.jni.NativeFunction;
 import com.hzgc.common.util.file.ResourceFileUtil;
 import org.apache.log4j.Logger;
@@ -43,10 +43,10 @@ public class FTP extends ClusterOverFtp implements Serializable {
         //ftp capture subscription
         new FtpSwitch();
         FtpSubscriptionClient ftpSubscription = new FtpSubscriptionClient(
-                Integer.valueOf(CollectProperties.getZookeeperSessionTimeout()),
-                CollectProperties.getZookeeperAddress(),
-                CollectProperties.getZookeeperPathSubscribe(),
-                Boolean.valueOf(CollectProperties.getZookeeperWatcher()));
+                Integer.valueOf(FtpServerProperties.getZk_session_timeout()),
+                FtpServerProperties.getZk_address(),
+                FtpServerProperties.getZk_path_subscribe(),
+                Boolean.valueOf(FtpServerProperties.getZk_watcher()));
         ftpSubscription.createFtpSubscriptionZnode();
     }
 
@@ -104,7 +104,7 @@ public class FTP extends ClusterOverFtp implements Serializable {
     }
 
     public static void main(String args[]) throws Exception {
-        int detectorNum = CollectProperties.getFaceDetectorNumber();
+        int detectorNum = Integer.parseInt(FtpServerProperties.getFace_detector_number());
         LOG.info("Init face detector, number is " + detectorNum);
         for (int i = FTPConstants.NUM_ZERO; i < detectorNum; i++) {
             NativeFunction.init();

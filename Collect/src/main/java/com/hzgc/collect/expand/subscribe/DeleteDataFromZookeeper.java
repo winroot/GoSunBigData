@@ -1,6 +1,6 @@
 package com.hzgc.collect.expand.subscribe;
 
-import com.hzgc.collect.expand.util.CollectProperties;
+import com.hzgc.collect.expand.util.FtpServerProperties;
 import com.hzgc.common.util.zookeeper.ZookeeperClient;
 import org.apache.log4j.Logger;
 
@@ -20,10 +20,10 @@ public class DeleteDataFromZookeeper extends ZookeeperClient {
 
     private static void deleteData(String path) {
         DeleteDataFromZookeeper delete = new DeleteDataFromZookeeper(
-                Integer.valueOf(CollectProperties.getZookeeperSessionTimeout()),
-                CollectProperties.getZookeeperAddress(),
+                Integer.parseInt(FtpServerProperties.getZk_session_timeout()),
+                FtpServerProperties.getZk_address(),
                 path,
-                Boolean.valueOf(CollectProperties.getZookeeperWatcher()));
+                Boolean.valueOf(FtpServerProperties.getZk_watcher()));
         List<String> children = delete.getChildren();
         if (!children.isEmpty()) {
             for (String childrenPath : children) {
@@ -34,7 +34,7 @@ public class DeleteDataFromZookeeper extends ZookeeperClient {
     }
 
     public static void main(String[] args) {
-        deleteData(CollectProperties.getZookeeperPathSubscribe());
+        deleteData(FtpServerProperties.getZk_path_subscribe());
     }
 
 }
