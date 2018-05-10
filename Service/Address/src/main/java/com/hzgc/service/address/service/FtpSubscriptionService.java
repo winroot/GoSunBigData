@@ -16,7 +16,7 @@ public class FtpSubscriptionService implements Serializable {
     private String zk_path_subscribe = FtpApplicationProperties.getZk_path_subscribe();
 
     public FtpSubscriptionService() {
-        int session_timeout = Integer.valueOf(FtpApplicationProperties.getZk_session_timeout());
+        int session_timeout = Integer.parseInt(FtpApplicationProperties.getZk_session_timeout());
         String zk_address = FtpApplicationProperties.getZk_address();
         boolean zk_watcher = Boolean.valueOf(FtpApplicationProperties.getZk_watcher());
         zookeeperClient = new ZookeeperClient(session_timeout, zk_address, zk_path_subscribe, zk_watcher);

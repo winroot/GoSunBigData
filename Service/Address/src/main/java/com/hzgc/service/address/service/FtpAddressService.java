@@ -29,7 +29,16 @@ public class FtpAddressService implements Serializable {
     public String getIPAddress(String hostname) {
         String ftpIpAddress = "";
         if (IsEmpty.strIsRight(hostname)) {
-            ftpIpAddress = proper.getProperty(hostname);
+            String ftp_hostname_mapping = FtpApplicationProperties.getFtp_hostname_mapping();
+            String[] ftp_hostname = ftp_hostname_mapping.split(";");
+            for (String str : ftp_hostname) {
+                if (str.contains(hostname)) {
+                    ftpIpAddress = str.split(":")[1];
+                    if (IsEmpty.strIsRight(ftpIpAddress)){
+                        return ftpIpAddress;
+                    }
+                }
+            }
         }
         return ftpIpAddress;
     }
