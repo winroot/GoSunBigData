@@ -24,7 +24,6 @@
         <dependency>
             <groupId>com.hzgc.service</groupId>
             <artifactId>util</artifactId>
-            <version>2.3.0</version>
         </dependency>
     </dependencies>
 

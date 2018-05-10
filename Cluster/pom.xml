@@ -34,7 +34,7 @@
             </dependency>
             <dependency>
                 <groupId>com.hzgc.common</groupId>
-                <artifactId>commom-jni</artifactId>
+                <artifactId>common-jni</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
