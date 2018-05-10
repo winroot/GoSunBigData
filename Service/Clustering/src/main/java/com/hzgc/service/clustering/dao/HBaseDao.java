@@ -1,9 +1,9 @@
 package com.hzgc.service.clustering.dao;
 
-import com.hzgc.common.service.clustering.AlarmInfo;
-import com.hzgc.common.service.clustering.ClusteringAttribute;
-import com.hzgc.common.service.connection.HBaseHelper;
-import com.hzgc.common.service.table.column.ClusteringTable;
+import com.hzgc.common.clustering.AlarmInfo;
+import com.hzgc.common.clustering.ClusteringAttribute;
+import com.hzgc.common.hbase.HBaseHelper;
+import com.hzgc.common.table.clustering.ClusteringTable;
 import com.hzgc.common.util.object.ObjectUtil;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;

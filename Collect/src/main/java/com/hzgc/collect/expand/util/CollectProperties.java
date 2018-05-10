@@ -80,7 +80,7 @@ public class CollectProperties extends ProperHelper implements Serializable {
     }
 
     private static void setPort() {
-        port = verifyPort("listener.port", "2121", props, LOG);
+        port = verifyPort("listener.port", props, LOG);
     }
 
     private static void setDataPorts() {

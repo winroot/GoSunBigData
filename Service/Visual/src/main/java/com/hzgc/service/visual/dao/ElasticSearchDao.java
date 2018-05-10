@@ -1,9 +1,9 @@
 package com.hzgc.service.visual.dao;
 
 import com.hzgc.common.attribute.bean.Attribute;
-import com.hzgc.common.service.connection.ElasticSearchHelper;
-import com.hzgc.common.service.table.column.DynamicShowTable;
-import com.hzgc.common.service.table.column.DynamicTable;
+import com.hzgc.common.es.ElasticSearchHelper;
+import com.hzgc.common.table.dynrepo.DynamicShowTable;
+import com.hzgc.common.table.dynrepo.DynamicTable;
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;

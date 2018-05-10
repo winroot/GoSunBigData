@@ -13,7 +13,7 @@ public class ProducerKafka implements Serializable {
     private static Logger LOG = Logger.getLogger(ProducerKafka.class);
 
     public static ProducerKafka instance;
-    private static KafkaProducer<String, FaceObject> kafkaProducer;
+    private static KafkaProducer<String, String> kafkaProducer;
 
     private ProducerKafka() {
         kafkaProducer = new KafkaProducer<>(KafkaProperties.getProps());
@@ -22,7 +22,7 @@ public class ProducerKafka implements Serializable {
 
     public void sendKafkaMessage(final String topic,
                                   final String key,
-                                  final FaceObject value,
+                                  final String value,
                                   final Callback callBack) {
         kafkaProducer.send(new ProducerRecord<>(topic, key, value), callBack);
     }

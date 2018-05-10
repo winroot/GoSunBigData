@@ -1,12 +1,12 @@
 package com.hzgc.service.starepo.controller;
 
-import com.hzgc.common.service.BigDataPath;
-import com.hzgc.common.service.ResponseResult;
 import com.hzgc.service.starepo.bean.ObjectSearchResult;
 import com.hzgc.service.starepo.bean.PSearchArgsModel;
 import com.hzgc.service.starepo.bean.SearchRecordOpts;
 import com.hzgc.service.starepo.service.ObjectInfoHandlerService;
 import com.hzgc.service.starepo.bean.ObjectInfoHandler;
+import com.hzgc.service.util.response.ResponseResult;
+import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -31,7 +31,7 @@ public class ObjectInfoHandlerController {
     @ApiResponses(
             {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.STAREPO_ADD, method = RequestMethod.POST)
-    public ResponseResult <Integer> addObjectInfo(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
+    public ResponseResult<Integer> addObjectInfo(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
         String platformId;
         Map <String, Object> personObject;
         if (objectInfoHandler != null) {

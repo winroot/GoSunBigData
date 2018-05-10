@@ -19,7 +19,6 @@
         <module>Common</module>
         <module>Distribution</module>
         <module>Service</module>
-        <module>Common/Common-hbase</module>
     </modules>
 
     <properties>
@@ -39,6 +38,7 @@
         <rocketmq.version>4.2.0</rocketmq.version>
         <zkclient.version>0.10</zkclient.version>
         <scala.version>2.11.8</scala.version>
+        <hive.version>2.3.0</hive.version>
     </properties>
 
 
@@ -64,6 +64,26 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>2.2.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-common</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hbase</groupId>
+                <artifactId>hbase-client</artifactId>
+                <version>${hbase.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

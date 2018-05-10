@@ -57,25 +57,23 @@ public class ProperHelper {
      * 验证配置文件中，IP属性字段是否为正确格式。
      * 验证逻辑为：判断该值是否为空、是否为IP的格式；若key对应的属性值未设置（为空），则设为默认值。
      *
-     * @param ipKey 配置文件中，IP属性字段的Key
      * @param props 不同的ProperHelper类中传进来的配置文件变量props
      * @param log   不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的IP属性字段值
      */
-    protected static String verifyIp(String ipKey, Properties props, Logger log) {
-        return verifyIpOrPlusPort(ipKey, patternIp(), props, log);
+    protected static String verifyIp(Properties props, Logger log) {
+        return verifyIpOrPlusPort("ip", patternIp(), props, log);
     }
 
     /**
      * 验证配置文件中，IP：PORT属性字段是否为正确格式。
      *
-     * @param ipKey 配置文件中，IP：PORT属性字段的Key
      * @param props 不同的ProperHelper类中传进来的配置文件变量props
      * @param log   不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的IP：PORT属性字段值
      */
-    protected static String verifyIpPlusPort(String ipKey, Properties props, Logger log) {
-        return verifyIpOrPlusPort(ipKey, patternIpPlusPort(), props, log);
+    protected static String verifyIpPlusPort(Properties props, Logger log) {
+        return verifyIpOrPlusPort("address", patternIpPlusPort(), props, log);
     }
 
     /**
@@ -204,12 +202,11 @@ public class ProperHelper {
      * 验证逻辑：判断该值是否为空、是否大于1024、是否为整数。若为空，设定为默认值。
      *
      * @param portKey     配置文件中，port属性字段的Key
-     * @param portDefault 配置文件中，port属性字段的默认值
      * @param props       不同的ProperHelper类中传进来的配置文件变量props
      * @param log         不同的ProperHelper类中传进来的日志变量log
      * @return 验证格式正确后的Port属性字段值
      */
-    protected static String verifyPort(String portKey, String portDefault, Properties props, Logger log) {
+    protected static String verifyPort(String portKey, Properties props, Logger log) {
         String returnPort = null;
         try {
             if (props.containsKey(portKey)) {
@@ -217,15 +214,15 @@ public class ProperHelper {
 
                 //若端口号未设置，设置为默认值
                 if (isValueEmpty) {
-                    returnPort = portDefault;
-                    log.warn("The value of " + portKey + " haven't been set, set it to \"" + portDefault + "\"");
+                    returnPort = "2121";
+                    log.warn("The value of " + portKey + " haven't been set, set it to \"" + "2121" + "\"");
                 } else {
                     //键值存在，才能getProperty取到值。
                     String portValue = props.getProperty(portKey);
                     //若端口号为空
                     if (portValue == null || Objects.equals(portValue, "")) {
-                        returnPort = portDefault;
-                        log.warn("The value of " + portKey + " haven't been set, set it to \"" + portDefault + "\"");
+                        returnPort = "2121";
+                        log.warn("The value of " + portKey + " haven't been set, set it to \"" + "2121" + "\"");
                     }
                     //若端口号非整数，报错
                     else if (!isValueInteger(portValue)) {

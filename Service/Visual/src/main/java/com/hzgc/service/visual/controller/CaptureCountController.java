@@ -1,8 +1,8 @@
 package com.hzgc.service.visual.controller;
 
-import com.hzgc.common.service.BigDataPath;
-import com.hzgc.common.service.ResponseResult;
 import com.hzgc.common.util.searchtype.SearchType;
+import com.hzgc.service.util.response.ResponseResult;
+import com.hzgc.service.util.rest.BigDataPath;
 import com.hzgc.service.visual.bean.AttributeCount;
 import com.hzgc.service.visual.bean.CaptureCount;
 import com.hzgc.service.visual.bean.CaptureCountParam;

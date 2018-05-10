@@ -48,11 +48,11 @@ public class FTPAddressProperties extends ProperHelper implements Serializable {
      * set方法。验证配置文件中的值是否为符合条件的格式。
      */
     private static void setIp() {
-        ip = ProperHelper.verifyIp("ip", props, LOG);
+        ip = ProperHelper.verifyIp(props, LOG);
     }
 
     private static void setPort() {
-        port = ProperHelper.verifyPort("port", "2121", props, LOG);
+        port = ProperHelper.verifyPort("port", props, LOG);
     }
 
     private static void setUser() {

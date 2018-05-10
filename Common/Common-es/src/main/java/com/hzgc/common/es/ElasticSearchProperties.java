@@ -1,7 +1,6 @@
 package com.hzgc.common.es;
 
 import com.hzgc.common.util.file.ResourceFileUtil;
-import com.hzgc.common.util.io.IOUtil;
 import com.hzgc.common.util.properties.ProperHelper;
 import org.apache.log4j.Logger;
 
@@ -38,11 +37,11 @@ public class ElasticSearchProperties extends ProperHelper implements Serializabl
     }
 
     private static void setEs_hosts() {
-        ElasticSearchProperties.es_hosts = ProperHelper.verifyIp("es.hosts", props, LOG);
+        ElasticSearchProperties.es_hosts = ProperHelper.verifyIp(props, LOG);
     }
 
     private static void setEs_cluster_port() {
-        ElasticSearchProperties.es_cluster_port = ProperHelper.verifyPort("es.cluster.port", "9300", props, LOG);
+        ElasticSearchProperties.es_cluster_port = ProperHelper.verifyPort("es.cluster.port", props, LOG);
     }
 
     public static Properties getProps() {

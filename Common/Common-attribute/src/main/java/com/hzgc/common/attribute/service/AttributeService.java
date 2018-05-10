@@ -6,7 +6,6 @@ import com.hzgc.common.attribute.bean.Logistic;
 import com.hzgc.common.util.searchtype.SearchType;
 import com.hzgc.common.attribute.enumclass.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.List;
 /**
  * 人/车属性查询
  */
-@Service
 @Slf4j
 public class AttributeService {
 

@@ -1,7 +1,12 @@
 package com.hzgc.common.hbase;
 
+import com.hzgc.common.util.empty.IsEmpty;
+import com.hzgc.common.util.file.ResourceFileUtil;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.log4j.Logger;
 

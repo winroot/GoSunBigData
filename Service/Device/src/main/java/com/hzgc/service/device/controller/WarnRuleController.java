@@ -1,10 +1,10 @@
 package com.hzgc.service.device.controller;
 
-import com.hzgc.common.service.BigDataPath;
-import com.hzgc.common.service.ResponseResult;
 import com.hzgc.service.device.bean.ConfigRuleParam;
 import com.hzgc.service.device.bean.WarnRule;
 import com.hzgc.service.device.service.WarnRuleService;
+import com.hzgc.service.util.response.ResponseResult;
+import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,12 +1,12 @@
 package com.hzgc.service.clustering.controller;
 
-import com.hzgc.common.service.BigDataPath;
-import com.hzgc.common.service.ResponseResult;
-import com.hzgc.common.service.clustering.AlarmInfo;
+import com.hzgc.common.clustering.AlarmInfo;
 import com.hzgc.service.clustering.bean.ClusteringSaveParam;
 import com.hzgc.service.clustering.bean.ClusteringSearchParam;
 import com.hzgc.service.clustering.bean.ClusteringInfo;
 import com.hzgc.service.clustering.service.ClusteringSearchService;
+import com.hzgc.service.util.response.ResponseResult;
+import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;

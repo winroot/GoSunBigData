@@ -2,14 +2,14 @@ package com.hzgc.service.dynrepo.controller;
 
 import com.hzgc.common.attribute.bean.Attribute;
 import com.hzgc.common.attribute.service.AttributeService;
-import com.hzgc.common.service.BigDataPath;
-import com.hzgc.common.service.ResponseResult;
 import com.hzgc.common.util.searchtype.SearchType;
 import com.hzgc.service.dynrepo.bean.SearchOption;
 import com.hzgc.service.dynrepo.bean.SearchResult;
 import com.hzgc.service.dynrepo.bean.SearchResultOption;
 import com.hzgc.service.dynrepo.service.CaptureHistoryService;
 import com.hzgc.service.dynrepo.service.CaptureSearchService;
+import com.hzgc.service.util.response.ResponseResult;
+import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -27,7 +27,8 @@ import java.util.List;
 @Api(value = "/dynRepoSearch", tags = "以图搜图服务")
 public class CaptureSearchController {
 
-    private AttributeService attributeService = new AttributeService();
+    @Autowired
+    private AttributeService attributeService;
     @Autowired
     private CaptureHistoryService captureHistoryService;
     @Autowired

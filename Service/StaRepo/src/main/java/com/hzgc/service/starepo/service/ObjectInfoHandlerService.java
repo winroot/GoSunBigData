@@ -1,6 +1,6 @@
 package com.hzgc.service.starepo.service;
 
-import com.hzgc.common.service.table.column.ObjectInfoTable;
+import com.hzgc.common.table.starepo.ObjectInfoTable;
 import com.hzgc.service.starepo.bean.*;
 import com.hzgc.service.starepo.dao.PhoenixDao;
 import lombok.extern.slf4j.Slf4j;

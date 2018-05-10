@@ -20,16 +20,10 @@
         <module>Face</module>
         <module>Address</module>
         <module>Visual</module>
-        <module>Common</module>
+        <module>Util</module>
     </modules>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-common</artifactId>
-            <version>${hadoop.version}</version>
-        </dependency>
-
         <!--spring cloud-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -80,8 +74,38 @@
             </dependency>
             <dependency>
                 <groupId>com.hzgc.common</groupId>
-                <artifactId>common-service</artifactId>
+                <artifactId>common-util</artifactId>
                 <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzgc.common</groupId>
+                <artifactId>common-clustering</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzgc.common</groupId>
+                <artifactId>common-hbase</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzgc.common</groupId>
+                <artifactId>common-table</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzgc.common</groupId>
+                <artifactId>common-es</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>2.2.2</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>2.2.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

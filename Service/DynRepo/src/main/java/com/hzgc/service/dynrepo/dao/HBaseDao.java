@@ -1,7 +1,7 @@
 package com.hzgc.service.dynrepo.dao;
 
-import com.hzgc.common.service.connection.HBaseHelper;
-import com.hzgc.common.service.table.column.DynamicTable;
+import com.hzgc.common.hbase.HBaseHelper;
+import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.service.dynrepo.bean.SearchResult;
 import lombok.extern.slf4j.Slf4j;

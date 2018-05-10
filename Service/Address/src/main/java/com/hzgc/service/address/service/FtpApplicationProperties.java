@@ -61,7 +61,7 @@ public class FtpApplicationProperties extends ProperHelper implements Serializab
     }
 
     private static void setIp() {
-        ip = ProperHelper.verifyIp("ip", props, LOG);
+        ip = ProperHelper.verifyIp(props, LOG);
     }
 
     private static void setHostname() {
@@ -69,7 +69,7 @@ public class FtpApplicationProperties extends ProperHelper implements Serializab
     }
 
     private static void setPort() {
-        port = ProperHelper.verifyPort("port", "2121", props, LOG);
+        port = ProperHelper.verifyPort("port", props, LOG);
     }
 
     private static void setUser() {

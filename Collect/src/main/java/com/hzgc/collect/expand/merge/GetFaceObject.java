@@ -39,7 +39,16 @@ class GetFaceObject implements Serializable {
                 String date = ftpPathMessage.getDate();
                 SearchType type = SearchType.PERSON;
                 String startTime = sdf.format(new Date());
-                faceObject = new FaceObject(ipcId, timeStamp, type, date, timeSlot, faceAttribute, startTime);
+                faceObject = new FaceObject(ipcId,
+                        timeStamp,
+                        type,
+                        date,
+                        timeSlot,
+                        faceAttribute,
+                        startTime,
+                        null,
+                        null,
+                        null);
             }
         }
         return faceObject;

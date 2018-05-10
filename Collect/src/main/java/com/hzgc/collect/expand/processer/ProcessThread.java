@@ -3,13 +3,10 @@ package com.hzgc.collect.expand.processer;
 import com.hzgc.collect.expand.conf.CommonConf;
 import com.hzgc.collect.expand.log.DataProcessLogWriter;
 import com.hzgc.collect.expand.log.LogEvent;
-import com.hzgc.collect.expand.util.KafkaProperties;
-import com.hzgc.collect.expand.util.ProducerKafka;
-import com.hzgc.collect.expand.util.FtpUtils;
-import com.hzgc.collect.expand.util.FtpPathMessage;
-import com.hzgc.collect.expand.util.CollectProperties;
+import com.hzgc.collect.expand.util.*;
 import com.hzgc.common.jni.FaceAttribute;
 import com.hzgc.common.jni.FaceFunction;
+import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.searchtype.SearchType;
 
 import java.util.concurrent.BlockingQueue;
@@ -34,21 +31,25 @@ public class ProcessThread implements Runnable {
                 System.out.println(sharpness.getHeight());
                 FaceAttribute attribute =
                         FaceFunction.featureExtract(event.getAbsolutePath(), sharpness.getWeight(), sharpness.getHeight());
-                FtpPathMessage message = FtpUtils.getFtpPathMessage(event.getRelativePath());
+                FtpUrlMessage message = FtpUtils.getFtpUrlMessage(event.getFtpPath());
                 if (attribute.getFeature() != null) {
-                    FaceObject faceObject = new FaceObject(message.getIpcid()
-                            , message.getTimeStamp()
-                            , SearchType.PERSON
-                            , message.getDate()
-                            , message.getTimeslot()
-                            , attribute
-                            , event.getTimeStamp() + "");
+                    String burl = FtpUtils.surlToBurl(event.getFtpPath());
+                    FaceObject faceObject = new FaceObject(message.getIpcid(),
+                            message.getTimeStamp(),
+                            SearchType.PERSON,
+                            message.getDate(),
+                            message.getTimeslot(),
+                            attribute,
+                            event.getTimeStamp() + "",
+                            event.getFtpPath(),
+                            FtpUtils.surlToBurl(event.getFtpPath()),
+                            message.getHostname());
                     ProcessCallBack callBack = new ProcessCallBack(event.getFtpPath(),
                             System.currentTimeMillis());
                     ProducerKafka.getInstance().sendKafkaMessage(
                             KafkaProperties.getTopicFeature(),
                             event.getFtpPath(),
-                            faceObject,
+                            JSONUtil.toJson(faceObject),
                             callBack);
                     writer.countCheckAndWrite(event);
                 } else {

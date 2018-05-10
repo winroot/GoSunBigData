@@ -1,8 +1,8 @@
 package com.hzgc.service.visual;
 
-import com.hzgc.common.service.connection.ElasticSearchHelper;
-import com.hzgc.common.service.connection.HBaseHelper;
-import com.hzgc.common.service.table.column.DynamicTable;
+import com.hzgc.common.es.ElasticSearchHelper;
+import com.hzgc.common.hbase.HBaseHelper;
+import com.hzgc.common.table.dynrepo.DynamicTable;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
