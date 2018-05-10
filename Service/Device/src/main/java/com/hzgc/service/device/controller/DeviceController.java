@@ -1,9 +1,9 @@
 package com.hzgc.service.device.controller;
 
-import com.hzgc.common.service.BigDataPath;
-import com.hzgc.common.service.ResponseResult;
 import com.hzgc.service.device.bean.DeviceDataParam;
 import com.hzgc.service.device.service.DeviceService;
+import com.hzgc.service.util.response.ResponseResult;
+import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;

@@ -1,7 +1,7 @@
 package com.hzgc.service.clustering.dao;
 
-import com.hzgc.common.service.connection.ElasticSearchHelper;
-import com.hzgc.common.service.table.column.DynamicTable;
+import com.hzgc.common.es.ElasticSearchHelper;
+import com.hzgc.common.table.dynrepo.DynamicTable;
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.client.transport.TransportClient;

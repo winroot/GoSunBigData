@@ -1,9 +1,9 @@
 package com.hzgc.service.face.controller;
 
 import com.hzgc.common.jni.FaceAttribute;
-import com.hzgc.common.service.BigDataPath;
-import com.hzgc.common.service.ResponseResult;
 import com.hzgc.service.face.service.FaceExtractService;
+import com.hzgc.service.util.response.ResponseResult;
+import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.hzgc.service.starepo.service;
 
-import com.hzgc.common.service.connection.HBaseHelper;
-import com.hzgc.common.service.table.column.ObjectInfoTable;
-import com.hzgc.common.service.table.column.SearchRecordTable;
+import com.hzgc.common.hbase.HBaseHelper;
+import com.hzgc.common.table.dynrepo.SearchRecordTable;
+import com.hzgc.common.table.starepo.ObjectInfoTable;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.service.starepo.bean.*;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,7 @@ public class ObjectInfoHandlerTool {
                     } else {
                         id = personSingleResult.getSearchRowkey();
                     }
-                    jdbcTemplate.update(sql,id,ObjectUtil.objectToByte(personSingleResult),new Timestamp(System.currentTimeMillis()));
+                    jdbcTemplate.update(sql,id, ObjectUtil.objectToByte(personSingleResult),new Timestamp(System.currentTimeMillis()));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

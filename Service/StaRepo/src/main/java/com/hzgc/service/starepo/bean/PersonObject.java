@@ -1,6 +1,6 @@
 package com.hzgc.service.starepo.bean;
 
-import com.hzgc.common.service.table.column.ObjectInfoTable;
+import com.hzgc.common.table.starepo.ObjectInfoTable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

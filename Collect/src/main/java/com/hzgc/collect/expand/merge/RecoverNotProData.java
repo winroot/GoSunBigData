@@ -70,7 +70,7 @@ public class RecoverNotProData {
                         if (faceObject != null) {
                             //发送Kafka后,将日志写到process中
                             MergeSendCallback mergeSendCallback = new MergeSendCallback(ftpUrl);
-                            producerKafka.sendKafkaMessage(feature, ftpUrl, faceObject, mergeSendCallback);
+                            producerKafka.sendKafkaMessage(feature, ftpUrl, JSONUtil.toJson(faceObject), mergeSendCallback);
                             mergeUtil.writeMergeFile(event, processFile);
                         }
                         rowCount++;

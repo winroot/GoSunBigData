@@ -1,7 +1,7 @@
 package com.hzgc.service.address.controller;
 
-import com.hzgc.common.service.BigDataPath;
 import com.hzgc.service.address.service.FtpSubscriptionService;
+import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

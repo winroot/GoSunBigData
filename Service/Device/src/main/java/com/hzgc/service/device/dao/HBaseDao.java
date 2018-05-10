@@ -1,7 +1,7 @@
 package com.hzgc.service.device.dao;
 
-import com.hzgc.common.service.connection.HBaseHelper;
-import com.hzgc.common.service.table.column.DeviceTable;
+import com.hzgc.common.hbase.HBaseHelper;
+import com.hzgc.common.table.device.DeviceTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.object.ObjectUtil;

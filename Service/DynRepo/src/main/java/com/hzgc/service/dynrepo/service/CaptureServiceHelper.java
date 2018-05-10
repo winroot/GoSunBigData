@@ -1,6 +1,6 @@
 package com.hzgc.service.dynrepo.service;
 
-import com.hzgc.common.service.table.column.DynamicTable;
+import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.service.dynrepo.bean.*;
 import org.springframework.beans.factory.annotation.Autowired;

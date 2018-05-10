@@ -2,7 +2,7 @@ package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.jni.FaceAttribute;
 import com.hzgc.common.jni.FaceFunction;
-import com.hzgc.common.service.table.column.ObjectInfoTable;
+import com.hzgc.common.table.starepo.ObjectInfoTable;
 import com.hzgc.service.starepo.bean.PSearchArgsModel;
 import com.hzgc.service.starepo.bean.StaticSortParam;
 import lombok.extern.slf4j.Slf4j;

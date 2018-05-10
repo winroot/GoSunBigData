@@ -1,9 +1,9 @@
 package com.hzgc.service.clustering.service;
 
-import com.hzgc.common.service.clustering.AlarmInfo;
-import com.hzgc.common.service.clustering.ClusteringAttribute;
-import com.hzgc.common.service.table.column.ClusteringTable;
-import com.hzgc.common.service.table.column.DynamicTable;
+import com.hzgc.common.clustering.AlarmInfo;
+import com.hzgc.common.clustering.ClusteringAttribute;
+import com.hzgc.common.table.clustering.ClusteringTable;
+import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.service.clustering.bean.ClusteringInfo;
 import com.hzgc.service.clustering.bean.SortParam;

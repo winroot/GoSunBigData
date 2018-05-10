@@ -34,7 +34,7 @@ public class RocketMQProperties extends ProperHelper implements Serializable {
      * set方法。验证配置文件中的值是否为符合条件的格式。
      */
     private static void setAddress() {
-        address = verifyIpPlusPort("address", props, LOG);
+        address = verifyIpPlusPort(props, LOG);
     }
 
     private static void setTopic() {

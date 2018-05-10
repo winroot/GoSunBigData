@@ -1,8 +1,5 @@
 package com.hzgc.collect.expand.util;
 
-import com.hzgc.common.ftp.message.FtpPathMessage;
-import com.hzgc.common.ftp.message.FtpUrlMessage;
-import com.hzgc.common.ftp.properties.FTPAddressProperties;
 import com.hzgc.common.util.empty.IsEmpty;
 import org.apache.log4j.Logger;
 
@@ -105,7 +102,7 @@ public final class FtpUtils implements Serializable {
             message.setTimeStamp(pathMessage.getTimeStamp());
             message.setDate(pathMessage.getDate());
             message.setTimeslot(pathMessage.getTimeslot());
-            message.setIp(ip);
+            message.setHostname(ip);
             message.setPort(port);
             message.setFilePath(filePath);
         }
