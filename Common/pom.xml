@@ -22,7 +22,5 @@
         <module>Common-hbase</module>
         <module>Common-clustering</module>
     </modules>
-    <properties>
-    </properties>
 
 </project>
