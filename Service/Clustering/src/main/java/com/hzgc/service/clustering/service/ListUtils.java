@@ -2,7 +2,6 @@ package com.hzgc.service.clustering.service;
 
 import com.hzgc.service.clustering.bean.SortParam;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.text.NumberFormat;

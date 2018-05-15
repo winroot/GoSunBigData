@@ -2,16 +2,38 @@ package com.hzgc.cluster.spark.spark.consumer;
 
 import com.hzgc.common.es.ElasticSearchHelper;
 import com.hzgc.common.table.dynrepo.DynamicTable;
+import com.hzgc.common.util.file.ResourceFileUtil;
 import com.hzgc.jni.FaceAttribute;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.update.UpdateResponse;
+import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.rest.RestStatus;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class PutDataToEs implements Serializable {
+
+    private String es_cluster;
+    private String es_hosts;
+    private Integer es_port;
+    private TransportClient esClient;
+
+    private PutDataToEs(){
+        Properties properties = new Properties();
+        try {
+            properties.load(ResourceFileUtil.loadResourceInputStream("sparkJob.properties"));
+            es_cluster = properties.getProperty("es.cluster.name");
+            es_hosts = properties.getProperty("es.hosts");
+            es_port = Integer.parseInt(properties.getProperty("es.cluster.port"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        esClient = ElasticSearchHelper.getEsClient(es_cluster, es_hosts, es_port);
+    }
 
     private static PutDataToEs instance = null;
 
@@ -57,7 +79,7 @@ public class PutDataToEs implements Serializable {
         map.put(DynamicTable.IPCID, ipcid);
         map.put(DynamicTable.TIMESLOT, timeslot);
         if (ftpurl != null) {
-            indexResponse = ElasticSearchHelper.getEsClient().prepareIndex(DynamicTable.DYNAMIC_INDEX,
+            indexResponse = esClient.prepareIndex(DynamicTable.DYNAMIC_INDEX,
                     DynamicTable.PERSON_INDEX_TYPE, ftpurl).setSource(map).get();
         }
         if (indexResponse.getVersion() == 1) {
@@ -74,7 +96,7 @@ public class PutDataToEs implements Serializable {
         map.put(DynamicTable.ALARM_TIME, alarmTime);
         map.put(DynamicTable.CLUSTERING_ID, cluserId);
         if (ftpurl != null) {
-            updateResponse = ElasticSearchHelper.getEsClient().prepareUpdate(DynamicTable.DYNAMIC_INDEX,
+            updateResponse = esClient.prepareUpdate(DynamicTable.DYNAMIC_INDEX,
                     DynamicTable.PERSON_INDEX_TYPE, ftpurl).setDoc(map).get();
         }
         if (updateResponse.status().getStatus() == 200) {

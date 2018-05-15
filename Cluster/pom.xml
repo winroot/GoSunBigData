@@ -24,9 +24,9 @@
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.hzgc.common</groupId>
-                <artifactId>common-jni</artifactId>
-                <version>${project.parent.version}</version>
+                <groupId>com.hzgc</groupId>
+                <artifactId>jni</artifactId>
+                <version>${jni.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hzgc.common</groupId>

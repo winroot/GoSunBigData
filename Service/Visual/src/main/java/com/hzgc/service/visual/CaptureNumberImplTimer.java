@@ -14,6 +14,7 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHits;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -26,6 +27,14 @@ public class CaptureNumberImplTimer {
 
     public static void main(String[] args) {
         indexTable();
+    }
+
+    private static TransportClient esClient;
+
+    public CaptureNumberImplTimer(@Value("${es.cluster.name}") String clusterName,
+                                  @Value("${es.hosts}") String esHost,
+                                  @Value("${es.cluster.port}") String esPort) {
+        esClient = ElasticSearchHelper.getEsClient(clusterName, esHost, Integer.parseInt(esPort));
     }
 
     /**
@@ -42,14 +51,13 @@ public class CaptureNumberImplTimer {
         String startTime = lessOneHourStr.split(":")[0] + ":00:00";
         String index = DynamicTable.DYNAMIC_INDEX;
         String type = DynamicTable.PERSON_INDEX_TYPE;
-        TransportClient client = ElasticSearchHelper.getEsClient();
         if (lists != null && lists.size() > 0) {
             for (String list : lists) {
                 //查询动态库中数据
                 BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
                 boolQueryBuilder.must(QueryBuilders.matchPhraseQuery(DynamicTable.IPCID, list));
                 boolQueryBuilder.must(QueryBuilders.rangeQuery(DynamicTable.TIMESTAMP).gte(startTime).lte(endTime));
-                SearchRequestBuilder searchRequestBuilder = client.prepareSearch(index)
+                SearchRequestBuilder searchRequestBuilder = esClient.prepareSearch(index)
                         .setTypes(type)
                         .setQuery(boolQueryBuilder);
                 SearchResponse searchResponse = searchRequestBuilder.get();
@@ -60,7 +68,7 @@ public class CaptureNumberImplTimer {
                 map.put("ipcid", list);
                 map.put("time", startTime);
                 map.put("count", number);
-                IndexResponse indexResponse = ElasticSearchHelper.getEsClient()
+                IndexResponse indexResponse = esClient
                         .prepareIndex("dynamicshow", "person")
                         .setSource(map)
                         .get();

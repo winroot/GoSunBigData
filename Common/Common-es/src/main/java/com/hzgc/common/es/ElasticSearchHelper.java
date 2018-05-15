@@ -17,21 +17,6 @@ public class ElasticSearchHelper implements Serializable{
     private static TransportClient client = null;
 
     /**
-     * 通过配置文件来初始化ES客户端
-     *
-     * @return ES客户端
-     */
-    public static TransportClient getEsClient(){
-        if (null == client){
-            String es_cluster = ElasticSearchProperties.getEs_cluster_name();
-            String es_hosts = ElasticSearchProperties.getEs_hosts().trim();
-            Integer es_port = Integer.parseInt(ElasticSearchProperties.getEs_cluster_port());
-            initElasticSearchClient(es_cluster, es_hosts, es_port);
-        }
-        return client;
-    }
-
-    /**
      * 通过指定参数获取ES客户端
      *
      * @param clusterName 集群名称
