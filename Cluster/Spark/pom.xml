@@ -20,6 +20,11 @@
             <artifactId>elasticsearch</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.hzgc</groupId>
+            <artifactId>jni</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
         </dependency>
@@ -102,10 +107,6 @@
         <dependency>
             <groupId>amplab</groupId>
             <artifactId>spark-indexedrdd</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.hzgc.common</groupId>
-            <artifactId>common-jni</artifactId>
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>

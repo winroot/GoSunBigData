@@ -16,7 +16,6 @@
     <modules>
         <module>Cluster</module>
         <module>Common</module>
-        <module>Collect</module>
         <module>Service</module>
         <module>Distribution</module>
     </modules>

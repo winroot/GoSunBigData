@@ -14,8 +14,23 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.hzgc</groupId>
+            <artifactId>jni</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-attribute</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -28,10 +43,6 @@
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>
-            <artifactId>common-jni</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.hzgc.common</groupId>
             <artifactId>common-table</artifactId>
         </dependency>
         <dependency>
@@ -41,6 +52,16 @@
         <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-hbase</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

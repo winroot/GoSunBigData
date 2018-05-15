@@ -1,7 +1,7 @@
 package com.hzgc.service.face.service;
 
-import com.hzgc.common.jni.FaceAttribute;
-import com.hzgc.common.jni.FaceFunction;
+import com.hzgc.jni.FaceAttribute;
+import com.hzgc.jni.FaceFunction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

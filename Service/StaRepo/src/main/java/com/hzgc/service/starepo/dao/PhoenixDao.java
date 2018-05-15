@@ -1,8 +1,8 @@
 package com.hzgc.service.starepo.dao;
 
-import com.hzgc.common.jni.FaceAttribute;
 import com.hzgc.common.table.dynrepo.SearchRecordTable;
 import com.hzgc.common.table.starepo.ObjectInfoTable;
+import com.hzgc.jni.FaceAttribute;
 import com.hzgc.service.starepo.bean.*;
 import com.hzgc.service.starepo.service.ObjectInfoHandlerTool;
 import com.hzgc.service.starepo.service.ParseByOption;
