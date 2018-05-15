@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################################################
 ## Copyright:   HZGOSUN Tech. Co, BigData
-## Filename:    create-static-repos.sh
+## Filename:    create-static-table.sh
 ## Description: 静态库建表：objectinfo、srecord
 ## Author:      lidiliang
 ## Created:     2017-08-03
@@ -12,29 +12,16 @@
 #                              定义变量                               #
 #---------------------------------------------------------------------#
 cd `dirname $0`
-BIN_DIR=`pwd`    ### bin目录
+BIN_DIR=`pwd`                           ### bin
 cd ..
-DEPLOY_DIR=`pwd`             ### starepo 根目录
-CONF_DIR=$DEPLOY_DIR/conf    ### starepo 配置文件
-LIB_DIR=$DEPLOY_DIR/lib      ### starepo Jar包目录
-LIB_JARS=`ls $LIB_DIR|grep .jar| grep -v elasticsearch-1.0.jar \
-| grep -v avro-ipc-1.7.7-tests.jar | grep -v avro-ipc-1.7.7.jar | grep -v spark-network-common_2.10-1.5.1.jar | \
-awk '{print "'$LIB_DIR'/"$0}'|tr "\n" ":"`   ## jar包位置以及第三方依赖jar包，绝对路径
-LOG_DIR=${DEPLOY_DIR}/logs                       ## log 日记目录
-LOG_FILE=${LOG_DIR}/create-table.log       ##  log 日记文件
+PHONIX_DIR=`pwd`                        ### phonix
+cd ..
+CLUSTER_DIR=`pwd`                       ### cluster
+cd ..
+OBJECT_DIR=`pwd`                        ### RealTimeFaceCompare
 
-cd ..
-cd ..
-declare -r BIGDATA_SERVICE_DIR=`pwd`
-declare -r COMMMON_DIR=${BIGDATA_SERVICE_DIR}/common
-declare -r FTP_DIR=${BIGDATA_SERVICE_DIR}/ftp
-declare -r SERVICE=${BIGDATA_SERVICE_DIR}/service
-declare -r CLUSTER_DIR=${BIGDATA_SERVICE_DIR}/spark
-OBJECT_LIB_DIR=${BIGDATA_SERVICE_DIR}/lib
-
-cd -
-OBJECT_JARS=`ls ${OBJECT_LIB_DIR} | grep .jar | awk '{print "'${OBJECT_LIB_DIR}'/"$0}'|tr "\n" ":"`
-LIB_JARS=${LIB_JARS}${OBJECT_JARS}
+LOG_DIR=${PHONIX_DIR}/log              ### 集群Log日志
+LOG_FILE=${LOG_DIR}/create-static-table.log
 
 ## bigdata cluster path
 BIGDATA_CLUSTER_PATH=/opt/hzgc/bigdata
@@ -44,28 +31,17 @@ PHOENIX_PATH=${BIGDATA_CLUSTER_PATH}/Phoenix/phoenix
 HADOOP_PATH=${BIGDATA_CLUSTER_PATH}/Hadoop/hadoop
 ## hdfs udf  path
 HDFS_UDF_PATH=/user/phoenix/udf/facecomp
+
+UDF_VERSION=`ls ${PHONIX_DIR}/lib | grep ^phonix-udf-[0-9].[0-9].[0-9].jar$`
 ## hdfs udf Absolute path
 HDFS_UDF_ABSOLUTE_PATH=hdfs://hzgc/${HDFS_UDF_PATH}/${UDF_VERSION}
-## udf jar version
-UDF_VERSION=`ls ${BIGDATA_SERVICE_DIR}/lib | grep ^common-udf-[0-9].[0-9].[0-9].jar$`
 
 source /opt/hzgc/env_bigdata.sh
 
+if [ ! -d $LOG_DIR ]; then
+    mkdir $LOG_DIR;
+fi
 
-#####################################################################
-# 函数名: create_hbase_table
-# 描述: 建立一张小写名字命名的表格objectinfo
-# 参数: N/A
-# 返回值: N/A
-# 其他: N/A
-#####################################################################
-function create_hbase_table()
-{
-    if [ ! -d $LOG_DIR ]; then
-        mkdir $LOG_DIR;
-    fi
-    java -classpath $CONF_DIR:$LIB_JARS com.hzgc.service.staticrepo.tablecreate.CreateStaticRepoTable   | tee -a  ${LOG_FILE}
-}
 
 #####################################################################
 # 函数名: create_static_repo
@@ -77,7 +53,7 @@ function create_hbase_table()
 function create_static_repo() {
     ## 创建person_table
     source /opt/hzgc/env_bigdata.sh
-    ${PHOENIX_PATH}/bin/psql.py  ${DEPLOY_DIR}/conf/sql/staticrepo.sql
+    ${PHOENIX_PATH}/bin/psql.py  ${PHONIX_DIR}/conf/staticrepo.sql
 
     if [ $? == 0 ];then
             echo "===================================="
@@ -130,7 +106,7 @@ function create_phoenix_udf() {
         echo "=================================="
         echo "${HDFS_UDF_PATH}/${UDF_VERSION}不存在,正在上传"
         echo "=================================="
-        ${HADOOP_PATH}/bin/hdfs dfs -put ${BIGDATA_SERVICE_DIR}/lib/${UDF_VERSION} ${HDFS_UDF_PATH}
+        ${HADOOP_PATH}/bin/hdfs dfs -put ${PHONIX_DIR}/lib/${UDF_VERSION} ${HDFS_UDF_PATH}
         if [ $? == 0 ];then
             echo "===================================="
             echo "上传udf函数成功......"
@@ -143,10 +119,8 @@ function create_phoenix_udf() {
     fi
 
     ## 在hive中添加并注册udf函数
-    ${PHOENIX_PATH}/bin/psql.py ${DEPLOY_DIR}/conf/sql/phoenix-udf.sql
-
+    ${PHOENIX_PATH}/bin/psql.py ${CONF_CLUSTER_DIR}/sql/phoenix-udf.sql
 }
-
 
 #####################################################################
 # 函数名: main
@@ -158,12 +132,9 @@ function create_phoenix_udf() {
 function main()
 {
     create_phoenix_udf
-    create_hbase_table
     create_static_repo
 }
 
 ## 脚本主要业务入口
 main
-
-
 

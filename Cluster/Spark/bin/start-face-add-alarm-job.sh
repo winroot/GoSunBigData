@@ -15,17 +15,23 @@ cd `dirname $0`
 ## bin目录
 BIN_DIR=`pwd`   
 cd ..
-CLUSTER_DIR=`pwd`                           ##spark模块目录
+SPARK_DIR=`pwd`                           ## spark模块目录
 cd ..
-DEPLOY_DIR=`pwd`
+CLUSTER_DIR=`pwd`                           ## cluster 模块目录
+# DEPLOY_DIR=`pwd`
+cd ..
+OBJRCT_DIR=`pwd`                            ## Real 根目录
 ######## cluster目录 ########
 CLUSTER_CONF_DIR=${CLUSTER_DIR}/conf
 CLUSTER_LIB_DIR=${CLUSTER_DIR}/lib
-CLUSTER_LOG_DIR=${CLUSTER_DIR}/logs
-LOG_FILE=${CLUSTER_LOG_DIR}/sparkFaceAddAlarmJob.log
+######## spark目录 ########
+SPARK_CONF_DIR=${SPARK_DIR}/conf
+SPARK_LIB_DIR=${SPARK_DIR}/lib
+SPARK_LOG_DIR=${SPARK_DIR}/logs
+LOG_FILE=${SPARK_LOG_DIR}/sparkFaceAddAlarmJob.log
 ######## common目录 ########
-COMMON_CONF_DIR=${DEPLOY_DIR}/common/conf
-COMMON_LIB_DIR=${DEPLOY_DIR}/lib
+COMMON_CONF_DIR=${OBJRCT_DIR}/common/conf
+# COMMON_LIB_DIR=${DEPLOY_DIR}/lib
 ######## ftp目录 #########
 FTP_CONF_DIR=${DEPLOY_DIR}/ftp/conf
 FTP_LIB_DIR=${DEPLOY_DIR}/ftp/lib
