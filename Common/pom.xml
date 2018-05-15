@@ -13,16 +13,14 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>Common-util</module>
         <module>Common-jni</module>
         <module>Common-attribute</module>
         <module>Common-udf</module>
-        <module>Common-util</module>
         <module>Common-table</module>
         <module>Common-es</module>
         <module>Common-hbase</module>
         <module>Common-clustering</module>
     </modules>
-    <properties>
-    </properties>
 
 </project>

@@ -89,6 +89,11 @@
             <version>${zookeeper.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-util</artifactId>
             <version>${project.parent.version}</version>

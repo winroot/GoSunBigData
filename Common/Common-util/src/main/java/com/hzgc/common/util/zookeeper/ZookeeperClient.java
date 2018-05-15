@@ -42,11 +42,13 @@ public class ZookeeperClient implements Serializable {
             zooKeeper = new ZooKeeper(connectAddr, sessionTimeout, new Watcher() {
                 @Override
                 public void process(WatchedEvent watchedEvent) {
-                    // 获取事件的状态
+                    // 获取连接状态
                     Event.KeeperState keeperState = watchedEvent.getState();
+                    // 获取事件类型
                     Event.EventType eventType = watchedEvent.getType();
-                    // 如果是建立连接
+                    // 如果连接成功
                     if (Event.KeeperState.SyncConnected == keeperState) {
+                        // 如果没有任何节点，表示创建连接成功(客户端与服务器端创建连接成功后没有任何节点信息)
                         if (Event.EventType.None == eventType) {
                             // 如果建立连接成功，则发送信号量，让后续阻塞程序向下执行
                             connectedSemaphore.countDown();

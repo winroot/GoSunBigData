@@ -8,16 +8,26 @@
     <fileSets>
         <!--项目bin目录-->
         <fileSet>
-            <directory>${project.basedir}/bin</directory>
+            <directory>${project.basedir}/bin/cluster/job</directory>
             <fileMode>0755</fileMode>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>bin</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/bin/cluster/service</directory>
+            <includes>
+                <include>**</include>
+            </includes>
             <outputDirectory>bin</outputDirectory>
         </fileSet>
         <!--项目resources目录-->
         <fileSet>
             <directory>${project.basedir}/src/main/resources</directory>
             <includes>
-               <include>**</include>
-           </includes>
+                <include>**</include>
+            </includes>
             <outputDirectory>conf</outputDirectory>
         </fileSet>
     </fileSets>

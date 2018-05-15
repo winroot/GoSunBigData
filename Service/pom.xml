@@ -12,6 +12,7 @@
     <artifactId>service</artifactId>
     <packaging>pom</packaging>
     <modules>
+        <module>Util</module>
         <module>Clustering</module>
         <module>Device</module>
         <module>Alarm</module>
@@ -20,7 +21,6 @@
         <module>Face</module>
         <module>Address</module>
         <module>Visual</module>
-        <module>Util</module>
     </modules>
 
     <dependencies>
