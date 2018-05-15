@@ -40,4 +40,34 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <resources>
+            <resource>
+                <targetPath>${project.build.directory}/classes/META-INF/spring</targetPath>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <classifier>spring</classifier>
+                    <mainClass>com.hzgc.service.visual.VisualApplication</mainClass>
+                </configuration>
+                <!--<executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal> 可以把依赖的包都打包到生成的Jar包中
+                        </goals>
+                    </execution>
+                </executions>-->
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
