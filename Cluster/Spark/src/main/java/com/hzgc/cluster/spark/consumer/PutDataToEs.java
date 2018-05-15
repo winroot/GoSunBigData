@@ -1,8 +1,8 @@
 package com.hzgc.cluster.spark.consumer;
 
 import com.hzgc.common.es.ElasticSearchHelper;
-import com.hzgc.common.jni.FaceAttribute;
 import com.hzgc.common.table.dynrepo.DynamicTable;
+import com.hzgc.jni.FaceAttribute;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.rest.RestStatus;

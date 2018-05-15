@@ -10,8 +10,8 @@ import com.hzgc.cluster.spark.message.{Item, RecognizeAlarmMessage}
 import com.hzgc.cluster.spark.rocmq.RocketMQProducer
 import com.hzgc.cluster.spark.starepo.ObjectInfoInnerHandlerImpl
 import com.hzgc.cluster.spark.util.{FaceObjectUtil, PropertiesUtils}
-import com.hzgc.common.jni.FaceFunction
 import com.hzgc.common.table.device.DeviceTable
+import com.hzgc.jni.FaceFunction
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka.KafkaUtils

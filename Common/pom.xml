@@ -14,7 +14,6 @@
 
     <modules>
         <module>Common-util</module>
-        <module>Common-jni</module>
         <module>Common-attribute</module>
         <module>Common-udf</module>
         <module>Common-table</module>

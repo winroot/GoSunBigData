@@ -1,6 +1,6 @@
 package com.hzgc.service.face.controller;
 
-import com.hzgc.common.jni.FaceAttribute;
+import com.hzgc.jni.FaceAttribute;
 import com.hzgc.service.face.service.FaceExtractService;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;

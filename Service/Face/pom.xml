@@ -14,10 +14,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.hzgc.common</groupId>
-            <artifactId>common-jni</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -25,6 +21,11 @@
         <dependency>
             <groupId>com.hzgc.service</groupId>
             <artifactId>util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc</groupId>
+            <artifactId>jni</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 

@@ -1,7 +1,7 @@
 package com.hzgc.cluster.spark.consumer;
 
-import com.hzgc.common.jni.FaceAttribute;
 import com.hzgc.common.util.searchtype.SearchType;
+import com.hzgc.jni.FaceAttribute;
 
 import java.io.Serializable;
 
