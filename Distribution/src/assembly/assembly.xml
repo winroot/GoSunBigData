@@ -27,16 +27,16 @@
 
         <!--集群搭建一键配置文件-->
         <fileSet>
-            <directory>../Cluster/conf</directory>
+            <directory>../Distribution/src/resources</directory>
             <includes>
-                <include>**</include>
+                <include>cluster_conf.properties</include>
             </includes>
             <outputDirectory>ClusterBuildScripts/conf</outputDirectory>
         </fileSet>
 
         <!--集群搭建tool目录-->
         <fileSet>
-            <directory>../Cluster/Environment/target/environment-${project.parent.version}/bin/cluster/install</directory>
+            <directory>../Cluster/Environment/bin/cluster/install</directory>
             <includes>
                 <include>xcall</include>
                 <include>xsync</include>
@@ -48,14 +48,14 @@
 
         <!--Azkaban-->
         <fileSet>
-            <directory>../Cluster/Azkaban/target/azkaban-${project.parent.version}/bin/cluster/install</directory>
+            <directory>../Cluster/Azkaban/bin/cluster/install</directory>
             <includes>
                 <include>**</include>
             </includes>
             <outputDirectory>ClusterBuildScripts/install</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Cluster/Azkaban/target/azkaban-${project.parent.version}/bin/cluster/service</directory>
+            <directory>../Cluster/Azkaban/bin/cluster/service</directory>
             <includes>
                 <include>**</include>
             </includes>
@@ -63,7 +63,7 @@
         </fileSet>
         <!--Environment-->
         <fileSet>
-            <directory>../Cluster/Environment/target/environment-${project.parent.version}/bin/cluster/install</directory>
+            <directory>../Cluster/Environment/bin/cluster/install</directory>
             <includes>
                 <include>**</include>
             </includes>
@@ -76,7 +76,7 @@
             <outputDirectory>ClusterBuildScripts/install</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Cluster/Environment/target/environment-${project.parent.version}/bin/cluster/service</directory>
+            <directory>../Cluster/Environment/bin/cluster/service</directory>
             <includes>
                 <include>**</include>
             </includes>
@@ -84,14 +84,14 @@
         </fileSet>
         <!--ES-->
         <fileSet>
-            <directory>../Cluster/ES/target/es-${project.parent.version}/bin/cluster/install</directory>
+            <directory>../Cluster/ES/bin/cluster/install</directory>
             <includes>
                 <include>**</include>
             </includes>
             <outputDirectory>ClusterBuildScripts/install</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Cluster/ES/target/es-${project.parent.version}/bin/cluster/service</directory>
+            <directory>../Cluster/ES/bin/cluster/service</directory>
             <includes>
                 <include>**</include>
             </includes>
@@ -99,14 +99,14 @@
         </fileSet>
         <!--Hadoop-->
         <fileSet>
-            <directory>../Cluster/Hadoop/target/hadoop-${project.parent.version}/bin/cluster/install</directory>
+            <directory>../Cluster/Hadoop/bin/cluster/install</directory>
             <includes>
                 <include>**</include>
             </includes>
             <outputDirectory>ClusterBuildScripts/install</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Cluster/Hadoop/target/hadoop-${project.parent.version}/bin/cluster/service</directory>
+            <directory>../Cluster/Hadoop/bin/cluster/service</directory>
             <includes>
                 <include>**</include>
             </includes>
@@ -114,14 +114,14 @@
         </fileSet>
         <!--HAProxy-->
         <fileSet>
-            <directory>../Cluster/HAProxy/target/haproxy-${project.parent.version}/bin/cluster/install</directory>
+            <directory>../Cluster/HAProxy/bin/cluster/install</directory>
             <includes>
                 <include>**</include>
             </includes>
             <outputDirectory>ClusterBuildScripts/install</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Cluster/HAProxy/target/haproxy-${project.parent.version}/bin/cluster/service</directory>
+            <directory>../Cluster/HAProxy/bin/cluster/service</directory>
             <includes>
                 <include>**</include>
             </includes>
@@ -129,14 +129,14 @@
         </fileSet>
         <!--HBase-->
         <fileSet>
-            <directory>../Cluster/HBase/target/hbase-${project.parent.version}/bin/cluster/install</directory>
+            <directory>../Cluster/HBase/bin/cluster/install</directory>
             <includes>
                 <include>**</include>
             </includes>
             <outputDirectory>ClusterBuildScripts/install</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Cluster/HBase/target/hbase-${project.parent.version}/bin/cluster/service</directory>
+            <directory>../Cluster/HBase/bin/cluster/service</directory>
             <includes>
                 <include>**</include>
             </includes>
@@ -144,14 +144,14 @@
         </fileSet>
         <!--Hive-->
         <fileSet>
-            <directory>../Cluster/Hive/target/hive-${project.parent.version}/bin/cluster/install</directory>
+            <directory>../Cluster/Hive/bin/cluster/install</directory>
             <includes>
                 <include>**</include>
             </includes>
             <outputDirectory>ClusterBuildScripts/install</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Cluster/Hive/target/hive-${project.parent.version}/bin/cluster/service</directory>
+            <directory>../Cluster/Hive/bin/cluster/service</directory>
             <includes>
                 <include>**</include>
             </includes>
@@ -159,14 +159,14 @@
         </fileSet>
         <!--Kafka-->
         <fileSet>
-            <directory>../Cluster/Kafka/target/kafka-${project.parent.version}/bin/cluster/install</directory>
+            <directory>../Cluster/Kafka/bin/cluster/install</directory>
             <includes>
                 <include>**</include>
             </includes>
             <outputDirectory>ClusterBuildScripts/install</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Cluster/Kafka/target/kafka-${project.parent.version}/bin/cluster/service</directory>
+            <directory>../Cluster/Kafka/bin/cluster/service</directory>
             <includes>
                 <include>**</include>
             </includes>
@@ -174,36 +174,36 @@
         </fileSet>
         <!--Phoenix-->
         <fileSet>
-            <directory>../Cluster/Phoenix/target/phoenix-${project.parent.version}/bin/cluster/install</directory>
+            <directory>../Cluster/Phoenix/bin/cluster/install</directory>
             <includes>
                 <include>**</include>
             </includes>
             <outputDirectory>ClusterBuildScripts/install</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Cluster/Phoenix/target/phoenix-${project.parent.version}/bin/cluster/service</directory>
+            <directory>../Cluster/Phoenix/bin/cluster/service</directory>
             <includes>
                 <include>**</include>
             </includes>
             <outputDirectory>ClusterBuildScripts/service</outputDirectory>
         </fileSet>
-        <fileSet>
+        <!--<fileSet>
             <directory>../Cluster/Phoenix/target</directory>
             <includes>
                 <include>phoenix-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>ClusterBuildScripts/lib</outputDirectory>
-        </fileSet>
+        </fileSet>-->
         <!--Rocketmq-->
         <fileSet>
-            <directory>../Cluster/Rocketmq/target/rocketmq-${project.parent.version}/bin/cluster/install</directory>
+            <directory>../Cluster/Rocketmq/bin/cluster/install</directory>
             <includes>
                 <include>**</include>
             </includes>
             <outputDirectory>ClusterBuildScripts/install</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Cluster/Rocketmq/target/rocketmq-${project.parent.version}/bin/cluster/service</directory>
+            <directory>../Cluster/Rocketmq/bin/cluster/service</directory>
             <includes>
                 <include>**</include>
             </includes>
@@ -226,14 +226,14 @@
         </fileSet>
         <!--Zookeeper-->
         <fileSet>
-            <directory>../Cluster/Zookeeper/target/zookeeper-${project.parent.version}/bin/cluster/install</directory>
+            <directory>../Cluster/Zookeeper/bin/cluster/install</directory>
             <includes>
                 <include>**</include>
             </includes>
             <outputDirectory>ClusterBuildScripts/install</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Cluster/Zookeeper/target/zookeeper-${project.parent.version}/bin/cluster/service</directory>
+            <directory>../Cluster/Zookeeper/bin/cluster/service</directory>
             <includes>
                 <include>**</include>
             </includes>
@@ -257,15 +257,13 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare/conf</outputDirectory>
         </fileSet>
+
         <!--spark目录-->
         <fileSet>
             <directory>../Cluster/Spark/target/spark-${project.parent.version}</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <excludes>
-                <exclude>bin/cluster/**</exclude>
-            </excludes>
             <outputDirectory>RealTimeFaceCompare/spark</outputDirectory>
         </fileSet>
 
@@ -277,210 +275,127 @@
             </includes>
             <outputDirectory>RealTimeFaceCompare/ftp</outputDirectory>
         </fileSet>
-        <fileSet>
-            <directory>../Common/Common-ftp/target/common-ftp-${project.parent.version}</directory>
-            <includes>
-                <include>conf/**</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/ftp</outputDirectory>
-        </fileSet>
 
-        <!--common目录-->
-        <fileSet>
-            <directory>../Common/Common-jni/target/common-jni-${project.parent.version}</directory>
-            <includes>
-                <include>**</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/common/jni</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Common/Common-ftp/target/common-ftp-${project.parent.version}</directory>
-            <includes>
-                <include>**</include>
-            </includes>
-            <excludes>
-                <exclude>conf/**</exclude>
-            </excludes>
-            <outputDirectory>RealTimeFaceCompare/common/ftp</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Common/Common-service/target/common-service-${project.parent.version}</directory>
-            <includes>
-                <include>**</include>
-            </includes>
-            <excludes>
-                <exclude>conf/**</exclude>
-            </excludes>
-            <outputDirectory>RealTimeFaceCompare/common/service</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Common/Common-udf/target/common-udf-${project.parent.version}</directory>
-            <includes>
-                <include>**</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/common/udf</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Common/Common-util/target/common-util-${project.parent.version}</directory>
-            <includes>
-                <include>**</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/common/util</outputDirectory>
-        </fileSet>
-        <!--项目公共jar包-->
-        <!--Cluster模块jar包-->
-        <fileSet>
-            <directory>../Cluster/Spark/target</directory>
-            <includes>
-                <include>spark-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
-        <!--Collect模块jar包-->
-        <fileSet>
-            <directory>../Collect/target</directory>
-            <includes>
-                <include>collect-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
-        <!--Common模块jar包-->
-        <fileSet>
-            <directory>../Common/Common-jni/target</directory>
-            <includes>
-                <include>common-jni-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Common/Common-ftp/target</directory>
-            <includes>
-                <include>common-ftp-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Common/Common-service/target</directory>
-            <includes>
-                <include>common-service-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Common/Common-udf/target</directory>
-            <includes>
-                <include>common-udf-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Common/Common-util/target</directory>
-            <includes>
-                <include>common-util-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
-        <!--Service模块jar包-->
+        <!--Service目录-->
+        <!--Address目录-->
         <fileSet>
             <directory>../Service/Address/target</directory>
             <includes>
-                <include>address-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Service/Alarm/target</directory>
-            <includes>
-                <include>alarm-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Service/Clustering/target</directory>
-            <includes>
-                <include>clustering-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Service/Device/target</directory>
-            <includes>
-                <include>device-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Service/DynRepo/target</directory>
-            <includes>
-                <include>dynrepo-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Service/Face/target</directory>
-            <includes>
-                <include>face-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Service/StaRepo/target</directory>
-            <includes>
-                <include>starepo-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/lib</outputDirectory>
-        </fileSet>
-
-        <!--service目录-->
-        <fileSet>
-            <directory>../Common/Common-service/target/common-service-${project.parent.version}</directory>
-            <includes>
-                <include>conf/**</include>
-            </includes>
-            <outputDirectory>RealTimeFaceCompare/service</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>../Service/Address/target/address-${project.parent.version}</directory>
-            <includes>
-                <include>**</include>
+                <include>address-${project.parent.version}-spring.jar</include>
             </includes>
             <outputDirectory>RealTimeFaceCompare/service/address</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Service/Clustering/target/clustering-${project.parent.version}</directory>
+            <directory>../Service/Address/src/main/resources</directory>
             <includes>
                 <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/address/conf</outputDirectory>
+        </fileSet>
+        <!--Alarm目录-->
+        <fileSet>
+            <directory>../Service/Alarm/target</directory>
+            <includes>
+                <include>alarm-${project.parent.version}-spring.jar</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/alarm</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Service/Alarm/src/main/resources</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/alarm/conf</outputDirectory>
+        </fileSet>
+        <!--Clustering目录-->
+        <fileSet>
+            <directory>../Service/Clustering/target</directory>
+            <includes>
+                <include>clustering-${project.parent.version}-spring.jar</include>
             </includes>
             <outputDirectory>RealTimeFaceCompare/service/clustering</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Service/Device/target/device-${project.parent.version}</directory>
+            <directory>../Service/Clustering/src/main/resources</directory>
             <includes>
                 <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/clustering/conf</outputDirectory>
+        </fileSet>
+        <!--Device目录-->
+        <fileSet>
+            <directory>../Service/Device/target</directory>
+            <includes>
+                <include>device-${project.parent.version}-spring.jar</include>
             </includes>
             <outputDirectory>RealTimeFaceCompare/service/device</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Service/DynRepo/target/dynrepo-${project.parent.version}</directory>
+            <directory>../Service/Device/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/service/dynrepo</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/service/device/conf</outputDirectory>
+        </fileSet>
+        <!--DynRepo目录-->
+        <fileSet>
+            <directory>../Service/DynRepo/target</directory>
+            <includes>
+                <include>dynRepo-${project.parent.version}-spring.jar</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/dynRepo</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Service/Face/target/face-${project.parent.version}</directory>
+            <directory>../Service/DynRepo/src/main/resources</directory>
             <includes>
                 <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/dynRepo/conf</outputDirectory>
+        </fileSet>
+        <!--Face目录-->
+        <fileSet>
+            <directory>../Service/Face/target</directory>
+            <includes>
+                <include>face-${project.parent.version}-spring.jar</include>
             </includes>
             <outputDirectory>RealTimeFaceCompare/service/face</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Service/StaRepo/target/starepo-${project.parent.version}</directory>
+            <directory>../Service/Face/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>RealTimeFaceCompare/service/starepo</outputDirectory>
+            <outputDirectory>RealTimeFaceCompare/service/face/conf</outputDirectory>
         </fileSet>
-
+        <!--StaRepo目录-->
+        <fileSet>
+            <directory>../Service/StaRepo/target</directory>
+            <includes>
+                <include>staRepo-${project.parent.version}-spring.jar</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/staRepo</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Service/StaRepo/src/main/resources</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/staRepo/conf</outputDirectory>
+        </fileSet>
+        <!--Visual目录-->
+        <fileSet>
+            <directory>../Service/Visual/target</directory>
+            <includes>
+                <include>visual-${project.parent.version}-spring.jar</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/visual</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Service/Visual/src/main/resources</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>RealTimeFaceCompare/service/visual/conf</outputDirectory>
+        </fileSet>
     </fileSets>
 </assembly>
