@@ -3,22 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>hzgc</artifactId>
+        <artifactId>cluster</artifactId>
         <groupId>com.hzgc</groupId>
         <version>2.3.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>common</artifactId>
-    <packaging>pom</packaging>
+    <groupId>com.hzgc.cluster</groupId>
+    <artifactId>phoenix-udf</artifactId>
 
-    <modules>
-        <module>Common-util</module>
-        <module>Common-attribute</module>
-        <module>Common-table</module>
-        <module>Common-es</module>
-        <module>Common-hbase</module>
-        <module>Common-clustering</module>
-    </modules>
-
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.phoenix</groupId>
+            <artifactId>phoenix-core</artifactId>
+            <version>4.13.1-HBase-1.2</version>
+        </dependency>
+    </dependencies>
 </project>

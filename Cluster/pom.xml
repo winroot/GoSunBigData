@@ -12,18 +12,9 @@
     <artifactId>cluster</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>Kafka</module>
-        <module>HBase</module>
-        <module>ES</module>
-        <module>Phoenix</module>
         <module>Spark</module>
-        <module>Hive</module>
-        <module>Azkaban</module>
-        <module>Hadoop</module>
-        <module>HAProxy</module>
-        <module>Zookeeper</module>
-        <module>Environment</module>
-        <module>RocketMQ</module>
+        <module>Phoenix-udf</module>
+        <module>Spark-udf</module>
     </modules>
     <dependencyManagement>
         <dependencies>
