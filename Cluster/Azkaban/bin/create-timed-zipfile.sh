@@ -160,19 +160,19 @@ function create_zip()
     case $1 in
     [nN][uU][lL][lL] )
         echo "type=command" > ${SCHEMA_MERGE_MID_TABLE_JOB}
-        echo "CLUSTER_BIN_DIR=/opt/RealTimeCompare/cluster/spark/bin" >> ${SCHEMA_MERGE_MID_TABLE_JOB}
+        echo "CLUSTER_BIN_DIR=${OBJECT_DIR}/cluster/spark/bin" >> ${SCHEMA_MERGE_MID_TABLE_JOB}
         echo 'command=sh ${CLUSTER_BIN_DIR}/schema-merge-parquet-file.sh mid_table' >> ${SCHEMA_MERGE_MID_TABLE_JOB};;
     [nN][oO][wW] )
         echo "type=command" > ${SCHEMA_MERGE_PERSON_TABLE_JOB}
-        echo "CLUSTER_BIN_DIR=/opt/RealTimeCompare/cluster/spark/bin" >> ${SCHEMA_MERGE_PERSON_TABLE_JOB}
+        echo "CLUSTER_BIN_DIR=${OBJECT_DIR}/cluster/spark/bin" >> ${SCHEMA_MERGE_PERSON_TABLE_JOB}
         echo 'command=sh ${CLUSTER_BIN_DIR}/schema-merge-parquet-file.sh person_table now ' >> ${SCHEMA_MERGE_PERSON_TABLE_JOB};;
     [bB][eE][fF][oO][rR][eE] )
         echo "type=command" > ${SCHEMA_MERGE_PERSON_TABLE_BEFORE_JOB}
-        echo "CLUSTER_BIN_DIR=/opt/RealTimeCompare/cluster/spark/bin person_table before" >> ${SCHEMA_MERGE_PERSON_TABLE_BEFORE_JOB}
+        echo "CLUSTER_BIN_DIR=${OBJECT_DIR}/cluster/spark/bin person_table before" >> ${SCHEMA_MERGE_PERSON_TABLE_BEFORE_JOB}
         echo 'command=sh ${CLUSTER_BIN_DIR}/schema-merge-parquet-file.sh person_table before' >> ${SCHEMA_MERGE_PERSON_TABLE_BEFORE_JOB};;
     [oO][fF][fF][lL][iI][nN][eE] )
         echo "type=command" > ${START_FACE_OFFLINE_ALARM_JOB}
-        echo "CLUSTER_BIN_DIR=/opt/RealTimeCompare/cluster/spark/bin" >> ${START_FACE_OFFLINE_ALARM_JOB}
+        echo "CLUSTER_BIN_DIR=${OBJECT_DIR}/cluster/spark/bin" >> ${START_FACE_OFFLINE_ALARM_JOB}
         echo 'command=sh ${CLUSTER_BIN_DIR}/start-face-offline-alarm-job.sh' >> ${START_FACE_OFFLINE_ALARM_JOB};;
     *)
         echo "输入参数有误，请检视！！"
