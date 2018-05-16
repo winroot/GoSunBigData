@@ -2,7 +2,7 @@
 ################################################################################
 ## Copyright:   HZGOSUN Tech. Co, BigData
 ## Filename:    config-spring-cloud
-## Description: 启动 spring cloud
+## Description: 配置 spring cloud
 ## Author:      wujiaqi
 ## Created:     2018-5-5
 ################################################################################
@@ -37,7 +37,7 @@ fi
 
 #####################################################################
 # 函数名: config_spring_cloud_starepo
-# 描述: 分发并配置每个节点下的service/starepo/conf/starepoApplication.properties
+# 描述: 配置service/starepo/conf/starepoApplication.properties
 # 参数: N/A
 # 返回值: N/A
 # 其他: N/A
@@ -57,12 +57,33 @@ function config_spring_cloud_starepo()
         sed -i '1,$d' ${PROPERTIES_DIR}
     fi
 
-    DEFAULTZONE=${grep "eureka.client.serviceUrl.defaultZone" ${CONF_DIR}}
-    echo ${DEFAULTZONE} >> ${PROPERTIES_DIR}
-    STAREPO_SERVER_PORT=${grep "starepo.server.port" ${CONF_DIR}}
-    echo ${STAREPO_SERVER_PORT} >> ${PROPERTIES_DIR}
-    STAREPO_APPLICATION_NAME=${grep "starepo.spring.application.name" ${CONF_DIR}}
-    echo ${STAREPO_APPLICATION_NAME} >> ${PROPERTIES_DIR}
+    DEFAULTZONE=${grep "eureka.client.serviceUrl.defaultZone" ${CONF_DIR} | cut -d '=' -f2}
+    echo "eureka.client.serviceUrl.defaultZone=${DEFAULTZONE}" >> ${PROPERTIES_DIR}
+
+    STAREPO_SERVER_PORT=${grep "starepo.server.port" ${CONF_DIR} | cut -d '=' -f2}
+    echo "server.port=" >> ${PROPERTIES_DIR}
+
+    STAREPO_APPLICATION_NAME=${grep "starepo.spring.application.name" ${CONF_DIR} | cut -d '=' -f2}
+    echo "spring.application.name=${STAREPO_APPLICATION_NAME}" >> ${PROPERTIES_DIR}
+
+    value1=${grep "phoenix.enable" ${CONF_DIR} | cut -d '=' -f2}
+    echo "phoenix.enable=${value1}" >> ${PROPERTIES_DIR}
+
+    value2=${grep "phoenix.url" ${CONF_DIR} | cut -d '=' -f2}
+    echo "phoenix.url=${value2}" >> ${PROPERTIES_DIR}
+
+    value3=${grep "phoenix.type" ${CONF_DIR} | cut -d '=' -f2}
+    echo "phoenix.type=${value3}" >> ${PROPERTIES_DIR}
+
+    value4=${grep "phoenix.driver-class-name" ${CONF_DIR} | cut -d '=' -f2}
+    echo "phoenix.driver-class-name=${value4}" >> ${PROPERTIES_DIR}
+
+    value5=${grep "phoenix.default-auto-commit" ${CONF_DIR} | cut -d '=' -f2}
+    echo "phoenix.default-auto-commit=${value5}" >> ${PROPERTIES_DIR}
+
+    echo "table.name=objectinfo" >> ${PROPERTIES_DIR}
+    echo "table.colfams=person" >> ${PROPERTIES_DIR}
+    echo "table.maxversion=1" >> ${PROPERTIES_DIR}
 
     echo "配置starepoApplication.properties完毕......"  | tee  -a  $LOG_FILE
 
@@ -70,7 +91,7 @@ function config_spring_cloud_starepo()
 
 #####################################################################
  # 函数名: config_spring_cloud_face
- # 描述: 分发并配置每个节点下的service/face/conf/faceApplication.properties
+ # 描述: 配置service/face/conf/faceApplication.properties
  # 参数: N/A
  # 返回值: N/A
  # 其他: N/A
@@ -90,19 +111,19 @@ function config_spring_cloud_starepo()
          sed -i '1,$d' ${PROPERTIES_DIR}
      fi
 
-     DEFAULTZONE=${grep "eureka.client.serviceUrl.defaultZone" ${CONF_DIR}}
-     echo ${DEFAULTZONE} >> ${PROPERTIES_DIR}
-     FACE_SERVER_PORT=${grep "face.server.port" ${CONF_DIR}}
-     echo ${FACE_SERVER_PORT} >> ${PROPERTIES_DIR}
-     FACE_APPLICATION_NAME=${grep "face.spring.application.name" ${CONF_DIR}}
-     echo ${FACE_APPLICATION_NAME} >> ${PROPERTIES_DIR}
+     DEFAULTZONE=${grep "eureka.client.serviceUrl.defaultZone" ${CONF_DIR} | cut -d '=' -f2}
+     echo "eureka.client.serviceUrl.defaultZone=${DEFAULTZONE}" >> ${PROPERTIES_DIR}
+     FACE_SERVER_PORT=${grep "face.server.port" ${CONF_DIR} | cut -d '=' -f2}
+     echo "server.port=${FACE_SERVER_PORT}" >> ${PROPERTIES_DIR}
+     FACE_APPLICATION_NAME=${grep "face.spring.application.name" ${CONF_DIR} | cut -d '=' -f2}
+     echo "spring.application.name=${FACE_APPLICATION_NAME}" >> ${PROPERTIES_DIR}
 
      echo "配置faceApplication.properties完毕......"  | tee  -a  $LOG_FILE
  }
 
  #####################################################################
   # 函数名: config_spring_cloud_dynrepo
-  # 描述: 分发并配置每个节点下的service/dynrepo/conf/faceApplication.properties
+  # 描述: 配置service/dynrepo/conf/faceApplication.properties
   # 参数: N/A
   # 返回值: N/A
   # 其他: N/A
@@ -122,19 +143,33 @@ function config_spring_cloud_starepo()
           sed -i '1,$d' ${PROPERTIES_DIR}
       fi
 
-      DEFAULTZONE=${grep "eureka.client.serviceUrl.defaultZone" ${CONF_DIR}}
-      echo ${DEFAULTZONE} >> ${PROPERTIES_DIR}
-      DYNREPO_SERVER_PORT=${grep "dynrepo.server.port" ${CONF_DIR}}
-      echo ${DYNREPO_SERVER_PORT} >> ${PROPERTIES_DIR}
-      DYNREPO_APPLICATION_NAME=${grep "dynrepo.spring.application.name" ${CONF_DIR}}
-      echo ${DYNREPO_APPLICATION_NAME} >> ${PROPERTIES_DIR}
+      DEFAULTZONE=${grep "eureka.client.serviceUrl.defaultZone" ${CONF_DIR} | cut -d '=' -f2}
+      echo "eureka.client.serviceUrl.defaultZone=${DEFAULTZONE}" >> ${PROPERTIES_DIR}
+      DYNREPO_SERVER_PORT=${grep "dynrepo.server.port" ${CONF_DIR} | cut -d '=' -f2}
+      echo "server.port=${DYNREPO_SERVER_PORT}" >> ${PROPERTIES_DIR}
+      DYNREPO_APPLICATION_NAME=${grep "dynrepo.spring.application.name" ${CONF_DIR} | cut -d '=' -f2}
+      echo "spring.application.name=${DYNREPO_APPLICATION_NAME}" >> ${PROPERTIES_DIR}
 
+      value1=${grep "es.cluster.name" ${CONF_DIR} | cut -d '=' -f2}
+      echo "es.cluster.name=${value1}" >> ${PROPERTIES_DIR}
+
+      value2=${grep "es.hosts" ${CONF_DIR} | cut -d '=' -f2}
+      echo "es.hosts=${value2}" >> ${PROPERTIES_DIR}
+
+      value3=${grep "es.cluster.port" ${CONF_DIR} | cut -d '=' -f2}
+      echo "es.cluster.port=${value3}" >> ${PROPERTIES_DIR}
+
+      value4=${grep "hive.jdbc.driver" ${CONF_DIR} | cut -d '=' -f2}
+      echo "es.cluster.port=${value3}" >> ${PROPERTIES_DIR}
+
+      value5=${grep "hive.jdbc.url" ${CONF_DIR} | cut -d '=' -f2}
+      echo "es.cluster.port=${value3}" >> ${PROPERTIES_DIR}
       echo "配置dynrepoApplication.properties完毕......"  | tee  -a  $LOG_FILE
   }
 
  #####################################################################
   # 函数名: config_spring_cloud_device
-  # 描述: 分发并配置每个节点下的service/device/conf/deviceApplication.properties
+  # 描述: 配置service/device/conf/deviceApplication.properties
   # 参数: N/A
   # 返回值: N/A
   # 其他: N/A
@@ -154,19 +189,19 @@ function config_spring_cloud_starepo()
           sed -i '1,$d' ${PROPERTIES_DIR}
       fi
 
-      DEFAULTZONE=${grep "eureka.client.serviceUrl.defaultZone" ${CONF_DIR}}
-      echo ${DEFAULTZONE} >> ${PROPERTIES_DIR}
-      DEVICE_SERVER_PORT=${grep "device.server.port" ${CONF_DIR}}
-      echo ${DEVICE_SERVER_PORT} >> ${PROPERTIES_DIR}
-      DEVICE_APPLICATION_NAME=${grep "device.spring.application.name" ${CONF_DIR}}
-      echo ${DEVICE_APPLICATION_NAME} >> ${PROPERTIES_DIR}
+      DEFAULTZONE=${grep "eureka.client.serviceUrl.defaultZone" ${CONF_DIR} | cut -d '=' -f2}
+      echo "eureka.client.serviceUrl.defaultZone=${DEFAULTZONE}" >> ${PROPERTIES_DIR}
+      DEVICE_SERVER_PORT=${grep "device.server.port" ${CONF_DIR} | cut -d '=' -f2}
+      echo "server.port=${DEVICE_SERVER_PORT}" >> ${PROPERTIES_DIR}
+      DEVICE_APPLICATION_NAME=${grep "device.spring.application.name" ${CONF_DIR} | cut -d '=' -f2}
+      echo "spring.application.name=${DEVICE_APPLICATION_NAME}" >> ${PROPERTIES_DIR}
 
       echo "配置deviceApplication.properties完毕......"  | tee  -a  $LOG_FILE
   }
 
    #####################################################################
     # 函数名: config_spring_cloud_clustering
-    # 描述: 分发并配置每个节点下的service/clustering/conf/clusteringApplication.properties
+    # 描述: 配置service/clustering/conf/clusteringApplication.properties
     # 参数: N/A
     # 返回值: N/A
     # 其他: N/A
@@ -186,19 +221,27 @@ function config_spring_cloud_starepo()
             sed -i '1,$d' ${PROPERTIES_DIR}
         fi
 
-        DEFAULTZONE=${grep "eureka.client.serviceUrl.defaultZone" ${CONF_DIR}}
-        echo ${DEFAULTZONE} >> ${PROPERTIES_DIR}
-        CLUSTERING_SERVER_PORT=${grep "clustering.server.port" ${CONF_DIR}}
-        echo ${CLUSTERING_SERVER_PORT} >> ${PROPERTIES_DIR}
-        CLUSTERING_APPLICATION_NAME=${grep "clustering.spring.application.name" ${CONF_DIR}}
-        echo ${CLUSTERING_APPLICATION_NAME} >> ${PROPERTIES_DIR}
+        DEFAULTZONE=${grep "eureka.client.serviceUrl.defaultZone" ${CONF_DIR} | cut -d '=' -f2}
+        echo "eureka.client.serviceUrl.defaultZone=${DEFAULTZONE}" >> ${PROPERTIES_DIR}
+        CLUSTERING_SERVER_PORT=${grep "clustering.server.port" ${CONF_DIR} | cut -d '=' -f2}
+        echo "server.port=${CLUSTERING_SERVER_PORT}" >> ${PROPERTIES_DIR}
+        CLUSTERING_APPLICATION_NAME=${grep "clustering.spring.application.name" ${CONF_DIR} | cut -d '=' -f2}
+        echo "spring.application.name=${CLUSTERING_APPLICATION_NAME}" >> ${PROPERTIES_DIR}
+
+        value1=${grep "es.hosts" ${CONF_DIR} | cut -d '=' -f2}
+        echo "es.hosts=${value1}" >> ${PROPERTIES_DIR}
+
+        value2=${grep "es.cluster.port" ${CONF_DIR} | cut -d '=' -f2}
+        echo "es.cluster.port=${value2}" >> ${PROPERTIES_DIR}
+
+        echo "es.cluster.name=hbase2es-cluster" >> ${PROPERTIES_DIR}
 
         echo "配置clusteringApplication.properties完毕......"  | tee  -a  $LOG_FILE
     }
 
    #####################################################################
     # 函数名: config_spring_cloud_address
-    # 描述: 分发并配置每个节点下的service/address/conf/addressApplication.properties
+    # 描述: 配置service/address/conf/addressApplication.properties
     # 参数: N/A
     # 返回值: N/A
     # 其他: N/A
@@ -209,23 +252,97 @@ function config_spring_cloud_starepo()
         echo ""  | tee -a $LOG_FILE
         echo "**********************************************" | tee -a $LOG_FILE
         echo "" | tee -a $LOG_FILE
-        echo "配置addressApplication.properties......"  | tee  -a  $LOG_FILE
+        echo "配置ftpApplication.properties......"  | tee  -a  $LOG_FILE
 
-        PROPERTIES_DIR=${SERVICE_DIR}/address/conf/addressApplication.properties
+        PROPERTIES_DIR=${SERVICE_DIR}/address/conf/ftpApplication.properties
 
-        # 删除原本addressApplication.properties内容（从第一行开始的行）
+        # 删除原本ftpApplication.properties内容（从第一行开始的行）
         if [ -f "${PROPERTIES_DIR}" ]; then
             sed -i '1,$d' ${PROPERTIES_DIR}
         fi
 
-        DEFAULTZONE=${grep "eureka.client.serviceUrl.defaultZone" ${CONF_DIR}}
-        echo ${DEFAULTZONE} >> ${PROPERTIES_DIR}
-        ADDRESS_SERVER_PORT=${grep "address.server.port" ${CONF_DIR}}
-        echo ${ADDRESS_SERVER_PORT} >> ${PROPERTIES_DIR}
-        ADDRESS_APPLICATION_NAME=${grep "address.spring.application.name" ${CONF_DIR}}
-        echo ${ADDRESS_APPLICATION_NAME} >> ${PROPERTIES_DIR}
+        DEFAULTZONE=${grep "eureka.client.serviceUrl.defaultZone" ${CONF_DIR} | cut -d '=' -f2}
+        echo "eureka.client.serviceUrl.defaultZone=${DEFAULTZONE}" >> ${PROPERTIES_DIR}
+        ADDRESS_SERVER_PORT=${grep "address.server.port" ${CONF_DIR} | cut -d '=' -f2}
+        echo "server.port=${ADDRESS_SERVER_PORT}" >> ${PROPERTIES_DIR}
+        ADDRESS_APPLICATION_NAME=${grep "address.spring.application.name" ${CONF_DIR} | cut -d '=' -f2}
+        echo "spring.application.name=${ADDRESS_APPLICATION_NAME}" >> ${PROPERTIES_DIR}
 
-        echo "配置addressApplication.properties完毕......"  | tee  -a  $LOG_FILE
+        value1=${grep "ftp.proxy.ip" ${CONF_DIR} | cut -d '=' -f2}
+        echo "ip=${value1}" >> ${PROPERTIES_DIR}
+
+        value2=${grep "ftp.proxy.hostnam" ${CONF_DIR} | cut -d '=' -f2}
+        echo "hostname=${value2}" >> ${PROPERTIES_DIR}
+
+        # value3=${grep "ftp.proxy.port" ${CONF_DIR} | cut -d '=' -f2}
+        echo "user=admin" >> ${PROPERTIES_DIR}
+
+        value4=${grep "ftp.username" ${CONF_DIR} | cut -d '=' -f2}
+        echo "password=${value4}" >> ${PROPERTIES_DIR}
+
+        value5=${grep "ftp.password" ${CONF_DIR} | cut -d '=' -f2}
+        echo "pathRule=${value5}" >> ${PROPERTIES_DIR}
+
+        value6=${grep "ftp.pathRule" ${CONF_DIR} | cut -d '=' -f2}
+        echo "es.hosts=${value6}" >> ${PROPERTIES_DIR}
+
+        value7=${grep "ftp.hostname.mapping" ${CONF_DIR} | cut -d '=' -f2}
+        echo "es.hosts=${value7}" >> ${PROPERTIES_DIR}
+
+        value8=${grep "zk.session.timeout" ${CONF_DIR} | cut -d '=' -f2}
+        echo "es.hosts=${value8}" >> ${PROPERTIES_DIR}
+
+        value9=${grep "zk.address" ${CONF_DIR} | cut -d '=' -f2}
+        echo "es.hosts=${value9}" >> ${PROPERTIES_DIR}
+
+        value10=${grep "zk.path.subscribe" ${CONF_DIR} | cut -d '=' -f2}
+        echo "zk.session.timeout=${value10}" >> ${PROPERTIES_DIR}
+
+        value11=${grep "zk.watcher" ${CONF_DIR} | cut -d '=' -f2}
+        echo "zk.address=${value11}" >> ${PROPERTIES_DIR}
+
+        echo "配置ftpApplication.properties完毕......"  | tee  -a  $LOG_FILE
+    }
+
+   #####################################################################
+    # 函数名: config_spring_cloud_visual
+    # 描述: 配置service/visual/conf/visualApplication.properties
+    # 参数: N/A
+    # 返回值: N/A
+    # 其他: N/A
+    #####################################################################
+    function config_spring_cloud_visual()
+    {
+
+        echo ""  | tee -a $LOG_FILE
+        echo "**********************************************" | tee -a $LOG_FILE
+        echo "" | tee -a $LOG_FILE
+        echo "配置visualApplication.properties......"  | tee  -a  $LOG_FILE
+
+        PROPERTIES_DIR=${SERVICE_DIR}/visual/conf/visualApplication.properties
+
+        # 删除原本visualApplication.properties内容（从第一行开始的行）
+        if [ -f "${PROPERTIES_DIR}" ]; then
+            sed -i '1,$d' ${PROPERTIES_DIR}
+        fi
+
+        DEFAULTZONE=${grep "eureka.client.serviceUrl.defaultZone" ${CONF_DIR} | cut -d '=' -f2}
+        echo "eureka.client.serviceUrl.defaultZone=${DEFAULTZONE}" >> ${PROPERTIES_DIR}
+        VISUAL_SERVER_PORT=${grep "visual.server.port" ${CONF_DIR} | cut -d '=' -f2}
+        echo "server.port=${VISUAL_SERVER_PORT}" >> ${PROPERTIES_DIR}
+        VISUAL_APPLICATION_NAME=${grep "visual.spring.application.name" ${CONF_DIR} | cut -d '=' -f2}
+        echo "spring.application.name=${VISUAL_APPLICATION_NAME}" >> ${PROPERTIES_DIR}
+
+        value1=${grep "es.cluster.name" ${CONF_DIR} | cut -d '=' -f2}
+        echo "es.cluster.name=${value1}" >> ${PROPERTIES_DIR}
+
+        value2=${grep "es.hosts" ${CONF_DIR} | cut -d '=' -f2}
+        echo "es.hosts=${value2}" >> ${PROPERTIES_DIR}
+
+        value3=${grep "es.cluster.port" ${CONF_DIR} | cut -d '=' -f2}
+        echo "es.cluster.port=${value3}" >> ${PROPERTIES_DIR}
+
+        echo "配置visualApplication.properties完毕......"  | tee  -a  $LOG_FILE
     }
 
 
@@ -244,6 +361,7 @@ function main()
     config_spring_cloud_device
     config_spring_cloud_clustering
     config_spring_cloud_address
+    config_spring_cloud_visual
 }
 
 
