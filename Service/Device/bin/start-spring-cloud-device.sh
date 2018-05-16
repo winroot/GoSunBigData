@@ -27,10 +27,8 @@ CONF_SERVICE_DIR=$SERVICE_DIR/conf             ### service 配置文件
 
 cd ..
 OBJECT_DIR=`pwd`                               ### RealTimeFaceCompare 目录
-CONF_DIR=${OBJECT_DIR}/conf/project-conf.properties
-OBJECT_LIB_DIR=${OBJECT_DIR}/lib               ### lib
-OBJECT_JARS=`ls ${OBJECT_LIB_DIR} | grep .jar | awk '{print "'${OBJECT_LIB_DIR}'/"$0}'|tr "\n" ":"`
-LIB_DEVICE=`ls ${DEVICE_DIR}| grep ^device-[0-9].[0-9].[0-9].jar$`
+
+JAR_DEVICE=`ls ${DEVICE_DIR}| grep ^device-[0-9].[0-9].[0-9].jar$`
 
 if [ ! -d $LOG_DIR ]; then
     mkdir $LOG_DIR;
@@ -48,16 +46,12 @@ fi
 #####################################################################
 function start_spring_cloud()
 {
-    LIB_JARS=`ls $LIB_DEVICE_DIR|grep .jar | grep -v avro-ipc-1.7.7-tests.jar \
-    | grep -v avro-ipc-1.7.7.jar | grep -v spark-network-common_2.10-1.5.1.jar | \
-    awk '{print "'$LIB_DEVICE_DIR'/"$0}'|tr "\n" ":"`   ## jar包位置以及第三方依赖jar包，绝对路径
 
-    LIB_JARS=${LIB_JARS}${OBJECT_JARS}
     if [ ! -d $LOG_DIR ]; then
         mkdir $LOG_DIR;
     fi
     # java -classpath $CONF_DEVICE_DIR:$LIB_JARS com.hzgc.service.device.DeviceApplication  | tee -a  ${LOG_FILE}
-    java -Xbootclasspath/a:$LIB_JARS -jar ${LIB_DEVICE} | tee -a  ${LOG_FILE}
+    java -jar ${JAR_DEVICE} | tee -a  ${LOG_FILE}
 }
 
 #####################################################################
@@ -70,8 +64,15 @@ function start_spring_cloud()
 function update_properties()
 {
     cd ${DEVICE_DIR}
-    jar uf ${LIB_DEVICE} conf/deviceApplication.properties
-    jar uf ${LIB_DEVICE} ${CONF_DEVICE_DIR}/hbase-site.xml
+    cp conf/deviceApplication.properties ./
+    jar uf ${JAR_DEVICE} deviceApplication.properties
+    rm -f deviceApplication.properties
+
+    cp conf/*-site.xml ./
+    jar uf ${JAR_DEVICE} hbase-site.xml
+    jar uf ${JAR_DEVICE} core-site.xml
+    jar uf ${JAR_DEVICE} hdfs-site.xml
+    rm -f *-site.xml
 }
 
 
