@@ -20,10 +20,12 @@ CONF_SPARK_DIR=$SPARK_DIR/conf                       ### 配置文件目录
 LOG_DIR=$SPARK_DIR/logs                              ### log日志目录
 LOG_FILE=$LOG_DIR/config-cluster.log                  ### log日志目录
 cd ..
-OBJECT_DIR=`pwd`                                      ### 项目根目录 
+CLUSTER_DIR=`pwd`                                     ### cluster 模块目录
+cd ..
+OBJECT_DIR=`pwd`                                      ### 项目根目录
 
 CLUSTER_BUILD_DIR=$OBJECT_DIR/common                   ### common 目录
-CONF_CLUSTER_DIR=$OBJECT_DIR/conf                      ### 配置文件目录
+CONF_CLUSTER_DIR=$CLUSTER_BUILD_DIR/conf               ### 配置文件目录
 CONF_FILE=$CONF_CLUSTER_DIR/project-conf.properties    ### 项目配置文件
 
 ## 安装的根目录，所有bigdata 相关的根目录
@@ -45,7 +47,7 @@ mkdir -p $LOG_DIR
 
 #####################################################################
 # 函数名: move_xml
-# 描述: 配置Hbase服务，移动所需文件到cluster/conf下
+# 描述: 配置Hbase服务，移动所需文件到cluster/spark/conf下
 # 参数: N/A
 # 返回值: N/A
 # 其他: N/A
@@ -61,13 +63,13 @@ function move_xml()
     cp ${HADOOP_HOME}/etc/hadoop/core-site.xml ${CONF_SPARK_DIR}
     cp ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml ${CONF_SPARK_DIR}
     cp ${HIVE_HOME}/conf/hive-site.xml ${CONF_SPARK_DIR}
-    
+
     echo "copy完毕......"  | tee  -a  $LOG_FILE
 }
 
 #####################################################################
 # 函数名: config_sparkJob
-# 描述: 配置文件：cluster/conf/sparkJob.properties
+# 描述: 配置文件：cluster/spark/conf/sparkJob.properties
 # 参数: N/A
 # 返回值: N/A
 # 其他: N/A
@@ -77,7 +79,7 @@ function config_sparkJob()
     echo ""  | tee -a $LOG_FILE
     echo "**********************************************" | tee -a $LOG_FILE
     echo "" | tee -a $LOG_FILE
-    echo "配置cluster/conf/sparkJob 文件......"  | tee  -a  $LOG_FILE
+    echo "配置cluster/spark/conf/sparkJob 文件......"  | tee  -a  $LOG_FILE
 
     ### 从project-conf.properties读取sparkJob所需配置IP
     # 根据字段kafka，查找配置文件中，Kafka的安装节点所在IP端口号的值，这些值以分号分割

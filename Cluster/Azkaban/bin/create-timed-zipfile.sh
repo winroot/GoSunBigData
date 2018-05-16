@@ -16,16 +16,18 @@
 cd `dirname $0`
 BIN_DIR=`pwd`                                          ### bin目录：脚本所在目录
 cd ..
+AZKABAN_DIR='pwd'                                          ### azkaban 模块目录
+cd ..
+CLUSTER_DIR=`pwd`                                      ### cluster 模块目录
+cd ..
 OBJECT_DIR=`pwd`                                       ### 项目根目录
-CONF_CLUSTER_DIR=$OBJECT_DIR/conf                     ### 配置文件目录
-LOG_DIR=$OBJECT_DIR/logs                              ### log日志目录
+LOG_DIR=$AZKABAN_DIR/logs                              ### log日志目录
 LOG_FILE=$LOG_DIR/timed_task.log                       ### log日志目录
-# cd ..
-# OBJECT_DIR=`pwd`                                     ### 项目根目录
-CLUSTER_DIR=${OBJECT_DIR}/spark                        ### spark模块目录
-CLUSTER_BIN_DIR=${CLUSTER_DIR}/bin                     ### spark模块的bin目录
 
-AZKABAN_DIR=${OBJECT_DIR}/Azkaban                      ### 定时任务压缩包存放目录
+SPARK_DIR=${CLUSTER_DIR}/spark                        ### spark模块目录
+SPARK_BIN_DIR=${SPARK_DIR}/bin                     ### spark模块的bin目录
+
+# AZKABAN_DIR=${OBJECT_DIR}/Azkaban                      ### 定时任务压缩包存放目录
 
 SCHEMA_MERGE_PARQUET_SH=${CLUSTER_BIN_DIR}/schema-merge-parquet-file.sh
 
@@ -158,19 +160,19 @@ function create_zip()
     case $1 in
     [nN][uU][lL][lL] )
         echo "type=command" > ${SCHEMA_MERGE_MID_TABLE_JOB}
-        echo "CLUSTER_BIN_DIR=/opt/RealTimeCompare/spark/bin" >> ${SCHEMA_MERGE_MID_TABLE_JOB}
+        echo "CLUSTER_BIN_DIR=/opt/RealTimeCompare/cluster/spark/bin" >> ${SCHEMA_MERGE_MID_TABLE_JOB}
         echo 'command=sh ${CLUSTER_BIN_DIR}/schema-merge-parquet-file.sh mid_table' >> ${SCHEMA_MERGE_MID_TABLE_JOB};;
     [nN][oO][wW] )
         echo "type=command" > ${SCHEMA_MERGE_PERSON_TABLE_JOB}
-        echo "CLUSTER_BIN_DIR=/opt/RealTimeCompare/spark/bin" >> ${SCHEMA_MERGE_PERSON_TABLE_JOB}
+        echo "CLUSTER_BIN_DIR=/opt/RealTimeCompare/cluster/spark/bin" >> ${SCHEMA_MERGE_PERSON_TABLE_JOB}
         echo 'command=sh ${CLUSTER_BIN_DIR}/schema-merge-parquet-file.sh person_table now ' >> ${SCHEMA_MERGE_PERSON_TABLE_JOB};;
     [bB][eE][fF][oO][rR][eE] )
         echo "type=command" > ${SCHEMA_MERGE_PERSON_TABLE_BEFORE_JOB}
-        echo "CLUSTER_BIN_DIR=/opt/RealTimeCompare/spark/bin person_table before" >> ${SCHEMA_MERGE_PERSON_TABLE_BEFORE_JOB}
+        echo "CLUSTER_BIN_DIR=/opt/RealTimeCompare/cluster/spark/bin person_table before" >> ${SCHEMA_MERGE_PERSON_TABLE_BEFORE_JOB}
         echo 'command=sh ${CLUSTER_BIN_DIR}/schema-merge-parquet-file.sh person_table before' >> ${SCHEMA_MERGE_PERSON_TABLE_BEFORE_JOB};;
     [oO][fF][fF][lL][iI][nN][eE] )
         echo "type=command" > ${START_FACE_OFFLINE_ALARM_JOB}
-        echo "CLUSTER_BIN_DIR=/opt/RealTimeCompare/spark/bin" >> ${START_FACE_OFFLINE_ALARM_JOB}
+        echo "CLUSTER_BIN_DIR=/opt/RealTimeCompare/cluster/spark/bin" >> ${START_FACE_OFFLINE_ALARM_JOB}
         echo 'command=sh ${CLUSTER_BIN_DIR}/start-face-offline-alarm-job.sh' >> ${START_FACE_OFFLINE_ALARM_JOB};;
     *)
         echo "输入参数有误，请检视！！"
