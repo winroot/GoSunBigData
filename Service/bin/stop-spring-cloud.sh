@@ -34,191 +34,6 @@ fi
 #                              定义函数                                #
 #---------------------------------------------------------------------#
 
-#####################################################################
-# 函数名:stop_spring_cloud_for_starepo
-# 描述: 停止spring cloud
-# 参数: N/A
-# 返回值: N/A
-# 其他: N/A
-#####################################################################
-function stop_spring_cloud_for_starepo ()
-{
-    echo ""  | tee -a $LOG_FILE
-    echo "****************************************************"  | tee -a $LOG_FILE
-    echo "spring cloud procceding......................." | tee  -a $LOG_FILE
-    ## 获取spring cloud 的 pid
-    # spring_pid=$(lsof  -i | grep 20881  | awk  '{print $2}' | uniq)
-    spring_pid=$(ps -ef | grep "com.hzgc.service.starepo.StaRepoApplication" | awk '{print $2}' | uniq)
-    echo "spring's pid is: ${spring_pid}"  | tee -a $LOG_FILE
-    if [ -n "${spring_pid}" ];then
-        echo "spring cloud process is exit,exit with 0,kill spring cloud now " | tee -a $LOG_FILE
-        kill -9 ${spring_pid}
-        sleep 5s
-        spring_pid=$(ps -ef | grep "com.hzgc.service.starepo.StaRepoApplication" | awk '{print $2}' | uniq)
-        if [ -n "${spring_pid}" ];then
-            echo "stop spring cloud failure, retry it again."  | tee -a  $LOG_FILE
-        else
-            echo "stop spring cloud sucessed, just to start spring cloud."  | tee -a  $LOG_FILE
-        fi
-    else
-        echo "spring cloud process is not exit, just to start spring cloud."   | tee -a $LOG_FILE
-    fi
-}
-
-#####################################################################
-# 函数名:stop_spring_cloud_for_face
-# 描述: 停止spring cloud
-# 参数: N/A
-# 返回值: N/A
-# 其他: N/A
-#####################################################################
-function stop_spring_cloud_for_face ()
-{
-    echo ""  | tee -a $LOG_FILE
-    echo "****************************************************"  | tee -a $LOG_FILE
-    echo "spring cloud procceding......................." | tee  -a $LOG_FILE
-    ## 获取spring cloud 的 pid
-    # spring_pid=$(lsof  -i | grep 20881  | awk  '{print $2}' | uniq)
-    spring_pid=$(ps -ef | grep "com.hzgc.service.face.FaceApplication" | awk '{print $2}' | uniq)
-    echo "spring's pid is: ${spring_pid}"  | tee -a $LOG_FILE
-    if [ -n "${spring_pid}" ];then
-        echo "spring cloud process is exit,exit with 0,kill spring cloud now " | tee -a $LOG_FILE
-        kill -9 ${spring_pid}
-        sleep 5s
-        spring_pid=$(ps -ef | grep "com.hzgc.service.face.FaceApplication" | awk '{print $2}' | uniq)
-        if [ -n "${spring_pid}" ];then
-            echo "stop spring cloud failure, retry it again."  | tee -a  $LOG_FILE
-        else
-            echo "stop spring cloud sucessed, just to start spring cloud."  | tee -a  $LOG_FILE
-        fi
-    else
-        echo "spring cloud process is not exit, just to start spring cloud."   | tee -a $LOG_FILE
-    fi
-}
-
-#####################################################################
-# 函数名:stop_spring_cloud_for_dynrepo
-# 描述: 停止spring cloud
-# 参数: N/A
-# 返回值: N/A
-# 其他: N/A
-#####################################################################
-function stop_spring_cloud_for_dynrepo ()
-{
-    echo ""  | tee -a $LOG_FILE
-    echo "****************************************************"  | tee -a $LOG_FILE
-    echo "spring cloud procceding......................." | tee  -a $LOG_FILE
-    ## 获取spring cloud 的 pid
-    # spring_pid=$(lsof  -i | grep 20881  | awk  '{print $2}' | uniq)
-    spring_pid=$(ps -ef | grep "com.hzgc.service.dynrepo.DynrepoApplication" | awk '{print $2}' | uniq)
-    echo "spring's pid is: ${spring_pid}"  | tee -a $LOG_FILE
-    if [ -n "${spring_pid}" ];then
-        echo "spring cloud process is exit,exit with 0,kill spring cloud now " | tee -a $LOG_FILE
-        kill -9 ${spring_pid}
-        sleep 5s
-        spring_pid=$(ps -ef | grep "com.hzgc.service.dynrepo.DynrepoApplication" | awk '{print $2}' | uniq)
-        if [ -n "${spring_pid}" ];then
-            echo "stop spring cloud failure, retry it again."  | tee -a  $LOG_FILE
-        else
-            echo "stop spring cloud sucessed, just to start spring cloud."  | tee -a  $LOG_FILE
-        fi
-    else
-        echo "spring cloud process is not exit, just to start spring cloud."   | tee -a $LOG_FILE
-    fi
-}
-
-#####################################################################
-# 函数名:stop_spring_cloud_for_device
-# 描述: 停止spring cloud
-# 参数: N/A
-# 返回值: N/A
-# 其他: N/A
-#####################################################################
-function stop_spring_cloud_for_device ()
-{
-    echo ""  | tee -a $LOG_FILE
-    echo "****************************************************"  | tee -a $LOG_FILE
-    echo "spring cloud procceding......................." | tee  -a $LOG_FILE
-    ## 获取spring cloud 的 pid
-    # spring_pid=$(lsof  -i | grep 20881  | awk  '{print $2}' | uniq)
-    spring_pid=$(ps -ef | grep "com.hzgc.service.device.DeviceApplication" | awk '{print $2}' | uniq)
-    echo "spring's pid is: ${spring_pid}"  | tee -a $LOG_FILE
-    if [ -n "${spring_pid}" ];then
-        echo "spring cloud process is exit,exit with 0,kill spring cloud now " | tee -a $LOG_FILE
-        kill -9 ${spring_pid}
-        sleep 5s
-        spring_pid=$(ps -ef | grep "com.hzgc.service.device.DeviceApplication" | awk '{print $2}' | uniq)
-        if [ -n "${spring_pid}" ];then
-            echo "stop spring cloud failure, retry it again."  | tee -a  $LOG_FILE
-        else
-            echo "stop spring cloud sucessed, just to start spring cloud."  | tee -a  $LOG_FILE
-        fi
-    else
-        echo "spring cloud process is not exit, just to start spring cloud."   | tee -a $LOG_FILE
-    fi
-}
-
-#####################################################################
-# 函数名:stop_spring_cloud_for_clustering
-# 描述: 停止spring cloud
-# 参数: N/A
-# 返回值: N/A
-# 其他: N/A
-#####################################################################
-function stop_spring_cloud_for_clustering ()
-{
-    echo ""  | tee -a $LOG_FILE
-    echo "****************************************************"  | tee -a $LOG_FILE
-    echo "spring cloud procceding......................." | tee  -a $LOG_FILE
-    ## 获取spring cloud 的 pid
-    # spring_pid=$(lsof  -i | grep 20881  | awk  '{print $2}' | uniq)
-    spring_pid=$(ps -ef | grep "com.hzgc.service.clustering.ClusteringApplication" | awk '{print $2}' | uniq)
-    echo "spring's pid is: ${spring_pid}"  | tee -a $LOG_FILE
-    if [ -n "${spring_pid}" ];then
-        echo "spring cloud process is exit,exit with 0,kill spring cloud now " | tee -a $LOG_FILE
-        kill -9 ${spring_pid}
-        sleep 5s
-        spring_pid=$(ps -ef | grep "com.hzgc.service.clustering.ClusteringApplication" | awk '{print $2}' | uniq)
-        if [ -n "${spring_pid}" ];then
-            echo "stop spring cloud failure, retry it again."  | tee -a  $LOG_FILE
-        else
-            echo "stop spring cloud sucessed, just to start spring cloud."  | tee -a  $LOG_FILE
-        fi
-    else
-        echo "spring cloud process is not exit, just to start spring cloud."   | tee -a $LOG_FILE
-    fi
-}
-
-#####################################################################
-# 函数名:stop_spring_cloud_for_address
-# 描述: 停止spring cloud
-# 参数: N/A
-# 返回值: N/A
-# 其他: N/A
-#####################################################################
-function stop_spring_cloud_for_address ()
-{
-    echo ""  | tee -a $LOG_FILE
-    echo "****************************************************"  | tee -a $LOG_FILE
-    echo "spring cloud procceding......................." | tee  -a $LOG_FILE
-    ## 获取spring cloud 的 pid
-    # spring_pid=$(lsof  -i | grep 20881  | awk  '{print $2}' | uniq)
-    spring_pid=$(ps -ef | grep "com.hzgc.service.address.FtpApplication" | awk '{print $2}' | uniq)
-    echo "spring's pid is: ${spring_pid}"  | tee -a $LOG_FILE
-    if [ -n "${spring_pid}" ];then
-        echo "spring cloud process is exit,exit with 0,kill spring cloud now " | tee -a $LOG_FILE
-        kill -9 ${spring_pid}
-        sleep 5s
-        spring_pid=$(ps -ef | grep "com.hzgc.service.address.FtpApplication" | awk '{print $2}' | uniq)
-        if [ -n "${spring_pid}" ];then
-            echo "stop spring cloud failure, retry it again."  | tee -a  $LOG_FILE
-        else
-            echo "stop spring cloud sucessed, just to start spring cloud."  | tee -a  $LOG_FILE
-        fi
-    else
-        echo "spring cloud process is not exit, just to start spring cloud."   | tee -a $LOG_FILE
-    fi
-}
 
 #####################################################################
 # 函数名: stop_check_spring_cloud
@@ -232,13 +47,13 @@ function stop_check_spring_cloud()
     echo ""  | tee -a $LOG_FILE
     echo "****************************************************"  | tee -a $LOG_FILE
     echo " start stop check_spring_cloud ......................." | tee  -a $LOG_FILE
-    check_spring_pid=$(ps -ef | grep start-check-spring-cloud.sh |grep -v grep | awk  '{print $2}' | uniq)
+    check_spring_pid=$(ps -ef | grep check-spring-cloud.sh |grep -v grep | awk  '{print $2}' | uniq)
     echo "check_spring_cloud's pid is: ${check_spring_pid}"  | tee -a $LOG_FILE
     if [ -n "${check_spring_pid}" ];then
         echo "check_spring_cloud is exit,exit with 0,kill check_spring_cloud now " | tee -a $LOG_FILE
         kill -9 ${check_spring_pid}
         sleep 5s
-        check_spring_pid_restart=$(ps -ef | grep start-check-spring-cloud.sh |grep -v grep | awk  '{print $2}' | uniq)
+        check_spring_pid_restart=$(ps -ef | grep check-spring-cloud.sh |grep -v grep | awk  '{print $2}' | uniq)
         if [ -n "${check_spring_pid_restart}" ];then
             stop_check_dubbo=1
             echo "stop check_spring_cloud failure, retry it again."  | tee -a  $LOG_FILE
@@ -253,6 +68,54 @@ function stop_check_spring_cloud()
 }
 
 #####################################################################
+# 函数名: stop
+# 描述: 脚本主要业务入口
+# 参数: N/A
+# 返回值: N/A
+# 其他: N/A
+#####################################################################
+
+function stop()
+{
+     case $class in
+         [sS][tT][aA][rR][eE][pP][oO] )
+             sh ${SERVICE_DIR}/starepo/bin/stop-spring-cloud-starepo.sh;;
+         [fF][aA][cC][eE] )
+             sh ${SERVICE_DIR}/face/bin/stop-spring-cloud-face.sh;;
+         [dD][yY][nN][rR][eE][pP][oO] )
+             sh ${SERVICE_DIR}/dynrepo/bin/stop-spring-cloud-dynrepo.sh;;
+         [dD][eE][vV][iI][cC][eE] )
+             sh ${SERVICE_DIR}/device/bin/stop-spring-cloud-device.sh;;
+         [cC][lL][uU][sS][tT][eE][rR][iI][nN][gG] )
+             sh ${SERVICE_DIR}/clustering/bin/stop-spring-cloud-clustering.sh;;
+         [aA][dD][dD][rR][eE][sS][sS] )
+             sh ${SERVICE_DIR}/address/bin/stop-spring-cloud-address.sh;;
+         [vV][iI][sS][uU][aA][lL] )
+             sh ${SERVICE_DIR}/visual/bin/stop-spring-cloud-address.sh;;
+     esac
+}
+
+#####################################################################
+# 函数名: stop_all
+# 描述: 停止所有Application
+# 参数: N/A
+# 返回值: N/A
+# 其他: N/A
+#####################################################################
+function stop_all()
+{
+    SPRING_CLASS=$(grep spring_cloud_service_classes ${CONF_FILE}|cut -d '=' -f2)
+    spring_arr=(${SPRING_CLASS//;/ })
+    for spring_class in ${spring_arr[@]}
+    do
+        echo "停止${spring_class}................."  | tee  -a  $LOG_FILE
+        class=${spring_class}
+        stop
+    done
+    stop_check_spring_cloud
+}
+
+#####################################################################
 # 函数名: main
 # 描述: 脚本主要业务入口
 # 参数: N/A
@@ -261,12 +124,7 @@ function stop_check_spring_cloud()
 #####################################################################
 function main()
 {
-    stop_spring_cloud_for_starepo
-    stop_spring_cloud_for_face
-    stop_spring_cloud_for_dynrepo
-    stop_spring_cloud_for_device
-    stop_spring_cloud_for_clustering
-    stop_spring_cloud_for_address
+    stop_all
 }
 
 #---------------------------------------------------------------------#
@@ -278,7 +136,6 @@ echo ""  | tee  -a  $LOG_FILE
 echo ""  | tee  -a  $LOG_FILE
 echo "==================================================="  | tee -a $LOG_FILE
 echo "$(date "+%Y-%m-%d  %H:%M:%S")"                       | tee  -a  $LOG_FILE
-echo "开始配置service中的conf文件"                       | tee  -a  $LOG_FILE
 main
 
 set +x

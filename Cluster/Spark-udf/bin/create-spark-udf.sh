@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################################################
 ## Copyright:    HZGOSUN Tech. Co, BigData
-## Filename:     add-spark-udf.sh
+## Filename:     create-spark-udf.sh
 ## Description:  向hive中添加并注册udf函数
 ## Author:       qiaokaifeng
 ## Created:      2017-11-28
@@ -13,19 +13,19 @@
 #---------------------------------------------------------------------#
 
 cd `dirname $0`
-## bin目录
-BIN_DIR=`pwd`
-# cd ..
-# DEPLOY_DIR=`pwd`
 cd ..
-PROJECT_DIR=`pwd`                        ## 项目根目录
-COMMON_LIB=$PROJECT_DIR/lib       ## common模块lib目录
+SPARK_DIR= `pwd`                         ### spark 目录
+cd ..
+CLUSTER_DIR=`pwd`                        ### 集群根目录
+cd ..
+OBJECT_DIR=`pwd`                         ### Real根目录
 ## log 日记目录
-LOG_DIR=${PROJECT_DIR}/logs
+LOG_DIR=${SPARK_DIR}/logs
 ##  log 日记文件
 LOG_FILE=${LOG_DIR}/add-udf.log
+
 ## udf jar version
-UDF_VERSION=`ls ${PROJECT_DIR}/lib | grep ^common-udf-[0-9].[0-9].[0-9].jar$`
+UDF_VERSION=`ls ${SPARK_DIR}/lib | grep ^spark-udf-[0-9].[0-9].[0-9].jar$`
 ## bigdata cluster path
 BIGDATA_CLUSTER_PATH=/opt/hzgc/bigdata
 ## bigdata hadoop path
@@ -35,7 +35,7 @@ HIVE_PATH=${BIGDATA_CLUSTER_PATH}/Hive/hive
 ## udf function name
 UDF_FUNCTION_NAME=compare
 ## udf class path
-UDF_CLASS_PATH=com.hzgc.udf.spark.UDFArrayCompare
+UDF_CLASS_PATH=com.hzgc.cluster.spark.udf.spark.UDFArrayCompare
 ## hdfs udf  path
 HDFS_UDF_PATH=/user/hive/udf
 ## hdfs udf Absolute path
@@ -73,7 +73,7 @@ else
 	echo "=================================="
 	echo "${HDFS_UDF_PATH}/${UDF_VERSION}不存在,正在上传"
 	echo "=================================="
-    ${HADOOP_PATH}/bin/hdfs dfs -put ${COMMON_LIB}/${UDF_VERSION} ${HDFS_UDF_PATH}
+    ${HADOOP_PATH}/bin/hdfs dfs -put ${SPARK_DIR}/lib/${UDF_VERSION} ${HDFS_UDF_PATH}
 	if [ $? == 0 ];then
 		echo "===================================="
 		echo "上传udf函数成功......"

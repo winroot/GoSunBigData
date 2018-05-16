@@ -18,22 +18,23 @@
 #---------------------------------------------------------------------#
 source /etc/profile
 cd `dirname $0`
-BIN_DIR=`pwd`    ### bin目录
+BIN_DIR=`pwd`                                          ### bin目录
+cd ..
+SPARK_DIR=`pwd`                                        ### spark 目录
 cd ..
 DEPLOY_DIR=`pwd`
-CONF_DIR=$DEPLOY_DIR/conf    ### 项目根目录                      ## log 日记目录
-LOG_DIR=$DEPLOY_DIR/logs
+CONF_DIR=$SPARK_DIR/conf                          ### cluster 目录
+LOG_DIR=$SPARK_DIR/logs                         ## log 日记目录
 LOG_FILE=${LOG_DIR}/schema-merge-parquet-file.log        ##  log 日记文件
 
 cd ..
 declare -r BIGDATA_SERVICE_DIR=`pwd`                     ##RealTimeFaceCompare 目录
 declare -r COMMMON_DIR=${BIGDATA_SERVICE_DIR}/common
-declare -r FTP_DIR=${BIGDATA_SERVICE_DIR}/ftp
 declare -r SERVICE=${BIGDATA_SERVICE_DIR}/service
 declare -r CLUSTER_DIR=${BIGDATA_SERVICE_DIR}/cluster
 
-CLUSTER_VERSION=`ls ${BIGDATA_SERVICE_DIR}/lib| grep ^spark-[0-9].[0-9].[0-9].jar$`
-SPARKJOB_PROPERTIES=${CONF_DIR}/sparkJob.properties
+CLUSTER_VERSION=`ls ${SPARK_DIR}/lib| grep ^spark-[0-9].[0-9].[0-9].jar$`
+SPARKJOB_PROPERTIES=${SPARK_DIR}/conf/sparkJob.properties
 
 hdfsClusterName=$(grep job.smallfile.merge.hdfs.name  ${SPARKJOB_PROPERTIES} | awk -F "=" '{print $2}')
 tmpTableHdfsPath=$(grep job.smallfile.merge.mid_table.hdfs_path  ${SPARKJOB_PROPERTIES} | awk -F "=" '{print $2}')
@@ -71,12 +72,12 @@ function merge_parquet()
         spark-submit --class com.hzgc.cluster.smallfile.MergeParquetFileV1 \
         --master local[*] \
         --driver-memory 4g \
-        ${BIGDATA_SERVICE_DIR}/lib/${CLUSTER_VERSION} ${hdfsClusterName} ${tmpTableHdfsPath} ${hisTableHdfsPath} ${tableName} ${dateString}
+        ${SPARK_DIR}/lib/${CLUSTER_VERSION} ${hdfsClusterName} ${tmpTableHdfsPath} ${hisTableHdfsPath} ${tableName} ${dateString}
     else
         spark-submit --class com.hzgc.cluster.smallfile.MergeParquetFileV2 \
         --master local[*] \
         --driver-memory 4g \
-        ${BIGDATA_SERVICE_DIR}/lib/${CLUSTER_VERSION} ${hdfsClusterName} ${tmpTableHdfsPath} ${hisTableHdfsPath} ${tableName} ${dateString}
+        ${SPARK_DIR}/lib/${CLUSTER_VERSION} ${hdfsClusterName} ${tmpTableHdfsPath} ${hisTableHdfsPath} ${tableName} ${dateString}
     fi
     if [ $? -eq 0 ];thenhad
         echo "==================================================="  | tee -a ${LOG_FILE}

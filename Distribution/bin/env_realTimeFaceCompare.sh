@@ -7,15 +7,19 @@ INSTALL_HOME=/opt/RealTimeFaceCompare
 
 #cluster home
 export CLUSTER_HOME=${INSTALL_HOME}/cluster
-export PATH=$PATH:$CLUSTER_HOME/bin
+export PATH=$PATH:$CLUSTER_HOME/azkaban/bin
+export PATH=$PATH:$CLUSTER_HOME/es/bin
+export PATH=$PATH:$CLUSTER_HOME/hbase/bin
+export PATH=$PATH:$CLUSTER_HOME/phonix/bin
+export PATH=$PATH:$CLUSTER_HOME/spark/bin
 
 #common home
 export COMMON_HOME=${INSTALL_HOME}/common
 export PATH=$PATH:$COMMON_HOME/bin
 
 #ftp home
-export FTP_HOME=${INSTALL_HOME}/ftp
-export PATH=$PATH:$FTP_HOME/bin
+# export FTP_HOME=${INSTALL_HOME}/ftp
+# export PATH=$PATH:$FTP_HOME/bin
 
 #service home
 export SERVICE_HOME=${INSTALL_HOME}/service
