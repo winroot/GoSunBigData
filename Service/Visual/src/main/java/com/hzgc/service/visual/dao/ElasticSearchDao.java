@@ -46,13 +46,12 @@ public class ElasticSearchDao {
             }
             totalBQ.must(ipcBQ);
         }
-        TransportClient client = ElasticSearchHelper.getEsClient();
-        SearchResponse searchResponse0 = client.prepareSearch(index)
+        SearchResponse searchResponse0 = esClient.prepareSearch(index)
                 .setTypes(type)
                 .setSize(1)
                 .get();
         responsesArray[0] = searchResponse0;
-        SearchResponse searchResponse1 = client.prepareSearch(index)
+        SearchResponse searchResponse1 = esClient.prepareSearch(index)
                 .setTypes(type)
                 .setQuery(totalBQ)
                 .setSize(1)

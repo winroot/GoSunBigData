@@ -1,23 +1,49 @@
 package com.hzgc.service.address.service;
 
 import com.hzgc.common.util.empty.IsEmpty;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class FtpAddressService implements Serializable {
 
-    private static Properties proper = FtpApplicationProperties.getProps();
+    /**
+     * ftp 相关配置
+     */
+    @Value("${ftp.proxy.ip}")
+    private static String ftp_proxy_ip;
+    @Value("${ftp.proxy.hostname}")
+    private static String ftp_proxy_hostname;
+    @Value("${ftp.proxy.port}")
+    private static String ftp_proxy_port;
+    @Value("${ftp.username}")
+    private static String ftp_username;
+    @Value("${ftp.password}")
+    private static String ftp_password;
+    @Value("${ftp.pathRule}")
+    private static String ftp_pathRule;
+    @Value("${ftp.hostname.mapping}")
+    private static String ftp_hostname_mapping;
 
     /**
      * 获取Ftp相关配置参数
      *
      * @return ftp相关配置参数
      */
-    public Properties getProperties() {
-        return proper;
+    public Map<String, String> getProperties() {
+        Map<String, String> map = new HashMap<>();
+        map.put("ip",ftp_proxy_ip);
+        //map.put("hostname", ftp_proxy_hostname);
+        map.put("port", ftp_proxy_port);
+        //map.put("username", ftp_username);
+        //map.put("password", ftp_password);
+        map.put("pathRule", ftp_pathRule);
+        //map.put("hostname.mapping", ftp_hostname_mapping);
+        return map;
     }
 
     /**
@@ -29,7 +55,6 @@ public class FtpAddressService implements Serializable {
     public String getIPAddress(String hostname) {
         String ftpIpAddress = "";
         if (IsEmpty.strIsRight(hostname)) {
-            String ftp_hostname_mapping = FtpApplicationProperties.getFtp_hostname_mapping();
             String[] ftp_hostname = ftp_hostname_mapping.split(";");
             for (String str : ftp_hostname) {
                 if (str.contains(hostname)) {

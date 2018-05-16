@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
 import java.util.Properties;
 
 @RestController
@@ -26,12 +27,12 @@ public class FtpAddressController {
      *
      * @return ftp相关配置参数
      */
-    @ApiOperation(value = "ftp配置信息查询", response = Properties.class, responseContainer = "List")
+    @ApiOperation(value = "ftp配置信息查询", response = Map.class, responseContainer = "List")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.FTP_GET_PROPERTIES, method = RequestMethod.GET)
-    public ResponseResult<Properties> getFtpAddress() {
-        Properties properties = ftpAddressService.getProperties();
-        return ResponseResult.init(properties);
+    public ResponseResult<Map> getFtpAddress() {
+        Map map = ftpAddressService.getProperties();
+        return ResponseResult.init(map);
     }
 
     /**

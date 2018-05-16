@@ -66,7 +66,7 @@
     </dependencies>
 
     <build>
-        <resources>
+        <!--<resources>
             <resource>
                 <targetPath>${project.build.directory}/classes/META-INF/spring</targetPath>
                 <directory>src/main/resources</directory>
@@ -75,7 +75,7 @@
                     <exclude>**</exclude>
                 </excludes>
             </resource>
-        </resources>
+        </resources>-->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
