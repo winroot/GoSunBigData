@@ -2,7 +2,7 @@
 ################################################################################
 ## Copyright:   HZGOSUN Tech. Co, BigData
 ## Filename:    config-spring-cloud
-## Description: 启动 spring cloud
+## Description: 配置 spring cloud
 ## Author:      wujiaqi
 ## Created:     2018-5-5
 ################################################################################
@@ -159,6 +159,11 @@ function config_spring_cloud_starepo()
       value3=${grep "es.cluster.port" ${CONF_DIR} | cut -d '=' -f2}
       echo "es.cluster.port=${value3}" >> ${PROPERTIES_DIR}
 
+      value4=${grep "hive.jdbc.driver" ${CONF_DIR} | cut -d '=' -f2}
+      echo "es.cluster.port=${value3}" >> ${PROPERTIES_DIR}
+
+      value5=${grep "hive.jdbc.url" ${CONF_DIR} | cut -d '=' -f2}
+      echo "es.cluster.port=${value3}" >> ${PROPERTIES_DIR}
       echo "配置dynrepoApplication.properties完毕......"  | tee  -a  $LOG_FILE
   }
 
@@ -263,44 +268,38 @@ function config_spring_cloud_starepo()
         ADDRESS_APPLICATION_NAME=${grep "address.spring.application.name" ${CONF_DIR} | cut -d '=' -f2}
         echo "spring.application.name=${ADDRESS_APPLICATION_NAME}" >> ${PROPERTIES_DIR}
 
-        value1=${grep "^ip=" ${CONF_DIR} | cut -d '=' -f2}
+        value1=${grep "ftp.proxy.ip" ${CONF_DIR} | cut -d '=' -f2}
         echo "ip=${value1}" >> ${PROPERTIES_DIR}
 
-        value2=${grep "^hostname=" ${CONF_DIR} | cut -d '=' -f2}
+        value2=${grep "ftp.proxy.hostnam" ${CONF_DIR} | cut -d '=' -f2}
         echo "hostname=${value2}" >> ${PROPERTIES_DIR}
 
-        # value3=${grep "^port=" ${CONF_DIR} | cut -d '=' -f2}
+        # value3=${grep "ftp.proxy.port" ${CONF_DIR} | cut -d '=' -f2}
         echo "user=admin" >> ${PROPERTIES_DIR}
 
-        value4=${grep "^password=" ${CONF_DIR} | cut -d '=' -f2}
+        value4=${grep "ftp.username" ${CONF_DIR} | cut -d '=' -f2}
         echo "password=${value4}" >> ${PROPERTIES_DIR}
 
-        value5=${grep "^pathRule=" ${CONF_DIR} | cut -d '=' -f2}
+        value5=${grep "ftp.password" ${CONF_DIR} | cut -d '=' -f2}
         echo "pathRule=${value5}" >> ${PROPERTIES_DIR}
 
-        value6=${grep "es.hosts" ${CONF_DIR} | cut -d '=' -f2}
+        value6=${grep "ftp.pathRule" ${CONF_DIR} | cut -d '=' -f2}
         echo "es.hosts=${value6}" >> ${PROPERTIES_DIR}
 
-        value7=${grep "es.hosts" ${CONF_DIR} | cut -d '=' -f2}
+        value7=${grep "ftp.hostname.mapping" ${CONF_DIR} | cut -d '=' -f2}
         echo "es.hosts=${value7}" >> ${PROPERTIES_DIR}
 
-        value8=${grep "es.hosts" ${CONF_DIR} | cut -d '=' -f2}
+        value8=${grep "zk.session.timeout" ${CONF_DIR} | cut -d '=' -f2}
         echo "es.hosts=${value8}" >> ${PROPERTIES_DIR}
 
-        value9=${grep "es.hosts" ${CONF_DIR} | cut -d '=' -f2}
+        value9=${grep "zk.address" ${CONF_DIR} | cut -d '=' -f2}
         echo "es.hosts=${value9}" >> ${PROPERTIES_DIR}
 
-        value10=${grep "zk.session.timeout" ${CONF_DIR} | cut -d '=' -f2}
+        value10=${grep "zk.path.subscribe" ${CONF_DIR} | cut -d '=' -f2}
         echo "zk.session.timeout=${value10}" >> ${PROPERTIES_DIR}
 
-        value11=${grep "zk.address" ${CONF_DIR} | cut -d '=' -f2}
+        value11=${grep "zk.watcher" ${CONF_DIR} | cut -d '=' -f2}
         echo "zk.address=${value11}" >> ${PROPERTIES_DIR}
-
-        value12=${grep "zk.path.subscribe" ${CONF_DIR} | cut -d '=' -f2}
-        echo "zk.path.subscribe=${value12}" >> ${PROPERTIES_DIR}
-
-        value13=${grep "zk.watcher" ${CONF_DIR} | cut -d '=' -f2}
-        echo "zk.watcher=${value13}" >> ${PROPERTIES_DIR}
 
         echo "配置ftpApplication.properties完毕......"  | tee  -a  $LOG_FILE
     }

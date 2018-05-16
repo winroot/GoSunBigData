@@ -166,8 +166,8 @@ func send_to_all()
 function main()
 {
     move_xml
-    config_es
-    config_jdbc
+    # config_es
+    # config_jdbc
     sh ${BIN_DIR}/config-spring-cloud.sh
     send_to_all
 }
