@@ -58,28 +58,28 @@ function config_spring_cloud_starepo()
         sed -i '1,$d' ${PROPERTIES_DIR}
     fi
 
-    DEFAULTZONE=${grep "eureka_client_serviceUrl_defaultZone" ${CONF_FILE} | cut -d '=' -f2}
+    DEFAULTZONE=`grep "eureka_client_serviceUrl_defaultZone" ${CONF_FILE} | cut -d '=' -f2`
     echo "eureka.client.serviceUrl.defaultZone=${DEFAULTZONE}" >> ${PROPERTIES_DIR}
 
-    # STAREPO_SERVER_PORT=${grep "starepo.server.port" ${CONF_FILE} | cut -d '=' -f2}
+    # STAREPO_SERVER_PORT=`grep "starepo.server.port" ${CONF_FILE} | cut -d '=' -f2`
     echo "server.port=7776" >> ${PROPERTIES_DIR}
 
-    # STAREPO_APPLICATION_NAME=${grep "starepo.spring.application.name" ${CONF_FILE} | cut -d '=' -f2}
+    # STAREPO_APPLICATION_NAME=`grep "starepo.spring.application.name" ${CONF_FILE} | cut -d '=' -f2`
     echo "spring.application.name=staRepo" >> ${PROPERTIES_DIR}
 
-    value1=${grep "phoenix_enable" ${CONF_FILE} | cut -d '=' -f2}
+    value1=`grep "phoenix_enable" ${CONF_FILE} | cut -d '=' -f2`
     echo "phoenix.enable=${value1}" >> ${PROPERTIES_DIR}
 
-    value2=${grep "phoenix_url" ${CONF_FILE} | cut -d '=' -f2}
+    value2=`grep "phoenix_url" ${CONF_FILE} | cut -d '=' -f2`
     echo "phoenix.url=${value2}" >> ${PROPERTIES_DIR}
 
-    value3=${grep "phoenix_type" ${CONF_FILE} | cut -d '=' -f2}
+    value3=`grep "phoenix_type" ${CONF_FILE} | cut -d '=' -f2`
     echo "phoenix.type=${value3}" >> ${PROPERTIES_DIR}
 
-    value4=${grep "phoenix_driver-class-name" ${CONF_FILE} | cut -d '=' -f2}
+    value4=`grep "phoenix_driver-class-name" ${CONF_FILE} | cut -d '=' -f2`
     echo "phoenix.driver-class-name=${value4}" >> ${PROPERTIES_DIR}
 
-    value5=${grep "phoenix_default-auto-commit" ${CONF_FILE} | cut -d '=' -f2}
+    value5=`grep "phoenix_default-auto-commit" ${CONF_FILE} | cut -d '=' -f2`
     echo "phoenix.default-auto-commit=${value5}" >> ${PROPERTIES_DIR}
 
     echo "table.name=objectinfo" >> ${PROPERTIES_DIR}
@@ -112,11 +112,11 @@ function config_spring_cloud_starepo()
          sed -i '1,$d' ${PROPERTIES_DIR}
      fi
 
-     DEFAULTZONE=${grep "eureka_client_serviceUrl_defaultZone" ${CONF_FILE} | cut -d '=' -f2}
+     DEFAULTZONE=`grep "eureka_client_serviceUrl_defaultZone" ${CONF_FILE} | cut -d '=' -f2`
      echo "eureka.client.serviceUrl.defaultZone=${DEFAULTZONE}" >> ${PROPERTIES_DIR}
-     # FACE_SERVER_PORT=${grep "face.server.port" ${CONF_FILE} | cut -d '=' -f2}
+     # FACE_SERVER_PORT=`grep "face.server.port" ${CONF_FILE} | cut -d '=' -f2`
      echo "server.port=7775" >> ${PROPERTIES_DIR}
-     # FACE_APPLICATION_NAME=${grep "face.spring.application.name" ${CONF_FILE} | cut -d '=' -f2}
+     # FACE_APPLICATION_NAME=`grep "face.spring.application.name" ${CONF_FILE} | cut -d '=' -f2`
      echo "spring.application.name=face" >> ${PROPERTIES_DIR}
 
      echo "配置faceApplication.properties完毕......"  | tee  -a  $LOG_FILE
@@ -144,26 +144,26 @@ function config_spring_cloud_starepo()
           sed -i '1,$d' ${PROPERTIES_DIR}
       fi
 
-      DEFAULTZONE=${grep "eureka_client_serviceUrl_defaultZone" ${CONF_FILE} | cut -d '=' -f2}
+      DEFAULTZONE=`grep "eureka_client_serviceUrl_defaultZone" ${CONF_FILE} | cut -d '=' -f2`
       echo "eureka.client.serviceUrl.defaultZone=${DEFAULTZONE}" >> ${PROPERTIES_DIR}
-      # DYNREPO_SERVER_PORT=${grep "dynrepo.server.port" ${CONF_FILE} | cut -d '=' -f2}
+      # DYNREPO_SERVER_PORT=`grep "dynrepo.server.port" ${CONF_FILE} | cut -d '=' -f2`
       echo "server.port=7774" >> ${PROPERTIES_DIR}
-      # DYNREPO_APPLICATION_NAME=${grep "dynrepo.spring.application.name" ${CONF_FILE} | cut -d '=' -f2}
+      # DYNREPO_APPLICATION_NAME=`grep "dynrepo.spring.application.name" ${CONF_FILE} | cut -d '=' -f2`
       echo "spring.application.name=dynRepo" >> ${PROPERTIES_DIR}
 
-      value1=${grep "es_cluster_name" ${CONF_FILE} | cut -d '=' -f2}
+      value1=`grep "es_cluster_name" ${CONF_FILE} | cut -d '=' -f2`
       echo "es.cluster.name=${value1}" >> ${PROPERTIES_DIR}
 
-      value2=${grep "es_hosts" ${CONF_FILE} | cut -d '=' -f2}
+      value2=`grep "es_hosts" ${CONF_FILE} | cut -d '=' -f2`
       echo "es.hosts=${value2}" >> ${PROPERTIES_DIR}
 
-      value3=${grep "es_cluster_port" ${CONF_FILE} | cut -d '=' -f2}
+      value3=`grep "es_cluster_port" ${CONF_FILE} | cut -d '=' -f2`
       echo "es.cluster.port=${value3}" >> ${PROPERTIES_DIR}
 
-      value4=${grep "hive_jdbc_driver" ${CONF_FILE} | cut -d '=' -f2}
+      value4=`grep "hive_jdbc_driver" ${CONF_FILE} | cut -d '=' -f2`
       echo "hive.jdbc.driver=${value3}" >> ${PROPERTIES_DIR}
 
-      value5=${grep "hive_jdbc_url" ${CONF_FILE} | cut -d '=' -f2}
+      value5=`grep "hive_jdbc_url" ${CONF_FILE} | cut -d '=' -f2`
       echo "hive.jdbc.url=${value3}" >> ${PROPERTIES_DIR}
       echo "配置dynrepoApplication.properties完毕......"  | tee  -a  $LOG_FILE
   }
@@ -190,11 +190,11 @@ function config_spring_cloud_starepo()
           sed -i '1,$d' ${PROPERTIES_DIR}
       fi
 
-      DEFAULTZONE=${grep "eureka_client_serviceUrl_defaultZone" ${CONF_FILE} | cut -d '=' -f2}
+      DEFAULTZONE=`grep "eureka_client_serviceUrl_defaultZone" ${CONF_FILE} | cut -d '=' -f2`
       echo "eureka.client.serviceUrl.defaultZone=${DEFAULTZONE}" >> ${PROPERTIES_DIR}
-      # DEVICE_SERVER_PORT=${grep "device.server.port" ${CONF_FILE} | cut -d '=' -f2}
+      # DEVICE_SERVER_PORT=`grep "device.server.port" ${CONF_FILE} | cut -d '=' -f2`
       echo "server.port=7773" >> ${PROPERTIES_DIR}
-      # DEVICE_APPLICATION_NAME=${grep "device.spring.application.name" ${CONF_FILE} | cut -d '=' -f2}
+      # DEVICE_APPLICATION_NAME=`grep "device.spring.application.name" ${CONF_FILE} | cut -d '=' -f2`
       echo "spring.application.name=device" >> ${PROPERTIES_DIR}
 
       echo "配置deviceApplication.properties完毕......"  | tee  -a  $LOG_FILE
@@ -222,20 +222,20 @@ function config_spring_cloud_starepo()
             sed -i '1,$d' ${PROPERTIES_DIR}
         fi
 
-        DEFAULTZONE=${grep "eureka_client_serviceUrl_defaultZone" ${CONF_FILE} | cut -d '=' -f2}
+        DEFAULTZONE=`grep "eureka_client_serviceUrl_defaultZone" ${CONF_FILE} | cut -d '=' -f2`
         echo "eureka.client.serviceUrl.defaultZone=${DEFAULTZONE}" >> ${PROPERTIES_DIR}
-        # CLUSTERING_SERVER_PORT=${grep "clustering.server.port" ${CONF_FILE} | cut -d '=' -f2}
+        # CLUSTERING_SERVER_PORT=`grep "clustering.server.port" ${CONF_FILE} | cut -d '=' -f2`
         echo "server.port=7772" >> ${PROPERTIES_DIR}
-        # CLUSTERING_APPLICATION_NAME=${grep "clustering.spring.application.name" ${CONF_FILE} | cut -d '=' -f2}
+        # CLUSTERING_APPLICATION_NAME=`grep "clustering.spring.application.name" ${CONF_FILE} | cut -d '=' -f2`
         echo "spring.application.name=clustering" >> ${PROPERTIES_DIR}
 
-        value1=${grep "es_hosts" ${CONF_FILE} | cut -d '=' -f2}
+        value1=`grep "es_hosts" ${CONF_FILE} | cut -d '=' -f2`
         echo "es.hosts=${value1}" >> ${PROPERTIES_DIR}
 
-        value2=${grep "es_cluster_port" ${CONF_FILE} | cut -d '=' -f2}
+        value2=`grep "es_cluster_port" ${CONF_FILE} | cut -d '=' -f2`
         echo "es.cluster.port=${value2}" >> ${PROPERTIES_DIR}
 
-        value3=${grep "es_cluster_name" ${CONF_FILE} | cut -d '=' -f2}
+        value3=`grep "es_cluster_name" ${CONF_FILE} | cut -d '=' -f2`
         echo "es.cluster.name=${value3}" >> ${PROPERTIES_DIR}
 
         echo "配置clusteringApplication.properties完毕......"  | tee  -a  $LOG_FILE
@@ -263,44 +263,44 @@ function config_spring_cloud_starepo()
             sed -i '1,$d' ${PROPERTIES_DIR}
         fi
 
-        DEFAULTZONE=${grep "eureka_client_serviceUrl_defaultZone" ${CONF_FILE} | cut -d '=' -f2}
+        DEFAULTZONE=`grep "eureka_client_serviceUrl_defaultZone" ${CONF_FILE} | cut -d '=' -f2`
         echo "eureka.client.serviceUrl.defaultZone=${DEFAULTZONE}" >> ${PROPERTIES_DIR}
-        # ADDRESS_SERVER_PORT=${grep "address.server.port" ${CONF_FILE} | cut -d '=' -f2}
+        # ADDRESS_SERVER_PORT=`grep "address.server.port" ${CONF_FILE} | cut -d '=' -f2`
         echo "server.port=7770" >> ${PROPERTIES_DIR}
-        # ADDRESS_APPLICATION_NAME=${grep "address.spring.application.name" ${CONF_FILE} | cut -d '=' -f2}
+        # ADDRESS_APPLICATION_NAME=`grep "address.spring.application.name" ${CONF_FILE} | cut -d '=' -f2`
         echo "spring.application.name=ftp" >> ${PROPERTIES_DIR}
 
-        value1=${grep "ftp_proxy_ip" ${CONF_FILE} | cut -d '=' -f2}
+        value1=`grep "ftp_proxy_ip" ${CONF_FILE} | cut -d '=' -f2`
         echo "ip=${value1}" >> ${PROPERTIES_DIR}
 
-        value2=${grep "ftp_proxy_hostname" ${CONF_FILE} | cut -d '=' -f2}
+        value2=`grep "ftp_proxy_hostname" ${CONF_FILE} | cut -d '=' -f2`
         echo "hostname=${value2}" >> ${PROPERTIES_DIR}
 
-        value3=${grep "ftp_proxy_port" ${CONF_FILE} | cut -d '=' -f2}
+        value3=`grep "ftp_proxy_port" ${CONF_FILE} | cut -d '=' -f2`
         echo "ftp.proxy.port=${value3}" >> ${PROPERTIES_DIR}
 
-        # value4=${grep "ftp.username" ${CONF_FILE} | cut -d '=' -f2}
+        # value4=`grep "ftp.username" ${CONF_FILE} | cut -d '=' -f2`
         echo "ftp.username=admin" >> ${PROPERTIES_DIR}
 
-        # value5=${grep "ftp.password" ${CONF_FILE} | cut -d '=' -f2}
+        # value5=`grep "ftp.password" ${CONF_FILE} | cut -d '=' -f2`
         echo "ftp.password=123456" >> ${PROPERTIES_DIR}
 
-        # value6=${grep "ftp.pathRule" ${CONF_FILE} | cut -d '=' -f2}
+        # value6=`grep "ftp.pathRule" ${CONF_FILE} | cut -d '=' -f2`
         echo "ftp.pathRule=%f/%Y/%m/%d/%H" >> ${PROPERTIES_DIR}
 
-        value7=${grep "ftp_hostname_mapping" ${CONF_FILE} | cut -d '=' -f2}
+        value7=`grep "ftp_hostname_mapping" ${CONF_FILE} | cut -d '=' -f2`
         echo "ftp.hostname.mapping=${value7}" >> ${PROPERTIES_DIR}
 
-        value8=${grep "zk_session_timeout" ${CONF_FILE} | cut -d '=' -f2}
+        value8=`grep "zk_session_timeout" ${CONF_FILE} | cut -d '=' -f2`
         echo "zk.session.timeout=${value8}" >> ${PROPERTIES_DIR}
 
-        value9=${grep "zk_address" ${CONF_FILE} | cut -d '=' -f2}
+        value9=`grep "zk_address" ${CONF_FILE} | cut -d '=' -f2`
         echo "zk.address=${value9}" >> ${PROPERTIES_DIR}
 
-        value10=${grep "zk_path_subscribe" ${CONF_FILE} | cut -d '=' -f2}
+        value10=`grep "zk_path_subscribe" ${CONF_FILE} | cut -d '=' -f2`
         echo "zk.path.subscribe=${value10}" >> ${PROPERTIES_DIR}
 
-        value11=${grep "zk_watcher" ${CONF_FILE} | cut -d '=' -f2}
+        value11=`grep "zk_watcher" ${CONF_FILE} | cut -d '=' -f2`
         echo "zk.watcher=${value11}" >> ${PROPERTIES_DIR}
 
         echo "配置ftpApplication.properties完毕......"  | tee  -a  $LOG_FILE
@@ -328,20 +328,20 @@ function config_spring_cloud_starepo()
             sed -i '1,$d' ${PROPERTIES_DIR}
         fi
 
-        DEFAULTZONE=${grep "eureka_client_serviceUrl_defaultZone" ${CONF_FILE} | cut -d '=' -f2}
+        DEFAULTZONE=`grep "eureka_client_serviceUrl_defaultZone" ${CONF_FILE} | cut -d '=' -f2`
         echo "eureka.client.serviceUrl.defaultZone=${DEFAULTZONE}" >> ${PROPERTIES_DIR}
-        # VISUAL_SERVER_PORT=${grep "visual.server.port" ${CONF_FILE} | cut -d '=' -f2}
+        # VISUAL_SERVER_PORT=`grep "visual.server.port" ${CONF_FILE} | cut -d '=' -f2`
         echo "server.port=7778" >> ${PROPERTIES_DIR}
-        # VISUAL_APPLICATION_NAME=${grep "visual.spring.application.name" ${CONF_FILE} | cut -d '=' -f2}
+        # VISUAL_APPLICATION_NAME=`grep "visual.spring.application.name" ${CONF_FILE} | cut -d '=' -f2`
         echo "spring.application.name=visual" >> ${PROPERTIES_DIR}
 
-        value1=${grep "es_cluster_name" ${CONF_FILE} | cut -d '=' -f2}
+        value1=`grep "es_cluster_name" ${CONF_FILE} | cut -d '=' -f2`
         echo "es.cluster.name=${value1}" >> ${PROPERTIES_DIR}
 
-        value2=${grep "es_hosts" ${CONF_FILE} | cut -d '=' -f2}
+        value2=`grep "es_hosts" ${CONF_FILE} | cut -d '=' -f2`
         echo "es.hosts=${value2}" >> ${PROPERTIES_DIR}
 
-        value3=${grep "es_cluster_port" ${CONF_FILE} | cut -d '=' -f2}
+        value3=`grep "es_cluster_port" ${CONF_FILE} | cut -d '=' -f2`
         echo "es.cluster.port=${value3}" >> ${PROPERTIES_DIR}
 
         echo "配置visualApplication.properties完毕......"  | tee  -a  $LOG_FILE
