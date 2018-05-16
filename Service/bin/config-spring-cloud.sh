@@ -347,6 +347,34 @@ function config_spring_cloud_starepo()
 
 
 #####################################################################
+# 函数名: config
+# 描述: 脚本主要业务入口
+# 参数: N/A
+# 返回值: N/A
+# 其他: N/A
+#####################################################################
+
+function config()
+{
+     case $class in
+         [sS][tT][aA][rR][eE][pP][oO] )
+             config_spring_cloud_starepo;;
+         [fF][aA][cC][eE] )
+             config_spring_cloud_face;;
+         [dD][yY][nN][rR][eE][pP][oO] )
+             config_spring_cloud_dynrepo;;
+         [dD][eE][vV][iI][cC][eE] )
+             config_spring_cloud_device;;
+         [cC][lL][uU][sS][tT][eE][rR][iI][nN][gG] )
+             config_spring_cloud_clustering;;
+         [aA][dD][dD][rR][eE][sS][sS] )
+             config_spring_cloud_address;;
+         [vV][iI][sS][uU][aA][lL] )
+             config_spring_cloud_visual;;
+     esac
+}
+
+#####################################################################
 # 函数名: main
 # 描述: 脚本主要业务入口
 # 参数: N/A
@@ -355,13 +383,15 @@ function config_spring_cloud_starepo()
 #####################################################################
 function main()
 {
-    config_spring_cloud_starepo
-    config_spring_cloud_face
-    config_spring_cloud_dynrepo
-    config_spring_cloud_device
-    config_spring_cloud_clustering
-    config_spring_cloud_address
-    config_spring_cloud_visual
+    SPRING_CLASS=$(grep spring_cloud_service_classes ${CONF_FILE}|cut -d '=' -f2)
+    spring_arr=(${SPRING_CLASS//;/ })
+    for spring_class in ${spring_arr[@]}
+    do
+        echo "停止${spring_class}................."  | tee  -a  $LOG_FILE
+        class=${spring_class}
+        config
+    done
+    stop_check_spring_cloud
 }
 
 
