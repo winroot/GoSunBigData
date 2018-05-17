@@ -39,37 +39,6 @@ mkdir -p $SPARKLOG_DIR
 mkdir -p $SERVICE_LOG_DIR
 
 
-#####################################################################
-# 函数名: config_common_ftp
-# 描述: 配置common/conf/ftp-hostnames.properties的地址
-# 参数: N/A
-# 返回值: N/A
-# 其他: N/A
-#####################################################################
-function config_common_ftp()
-{
-    echo ""  | tee -a $LOG_FILE
-    echo "**********************************************" | tee -a $LOG_FILE
-    echo "" | tee -a $LOG_FILE
-    echo "配置conf/ftp-hostnames.properties......"  | tee  -a  $LOG_FILE
-	
-	# 删除原本ftp-hostnames.properties内容（从第一行开始的行）
-	sed -i '1,$d' ${CONF_OBJECT_DIR}/ftp-hostnames.properties
-	
-    ### 从project-conf.properties读取ftp所需配置IP
-    # 根据字段ftp_servicenode，查找配置文件中，ftp的服务节点主机名，这些值以分号分割
-    cd ${OBJECT_DIR}
-    FTP_HOSTS=$(grep ftp_servicenode ${CONF_FILE}|cut -d '=' -f2)
-    # 将这些分号分割的ip用放入数组，将数组每行添加到dubbo-hostnames.properties文件末尾
-    ftp_arr=(${FTP_HOSTS//;/ })
-    ftppro=''    
-    for ftp_host in ${ftp_arr[@]}
-    do
-        echo "${ftp_host}" >> ${CONF_OBJECT_DIR}/ftp-hostnames.properties
-    done
-    
-    echo "配置完毕......"  | tee  -a  $LOG_FILE
-}
 
 #####################################################################
 # 函数名: distribute_common
