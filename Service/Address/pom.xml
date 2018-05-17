@@ -11,6 +11,7 @@
 
     <groupId>com.hzgc.service</groupId>
     <artifactId>address</artifactId>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -50,16 +51,15 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <classifier>spring</classifier>
                     <mainClass>com.hzgc.service.address.FtpApplication</mainClass>
                 </configuration>
-                <!--<executions>
+                <executions>
                     <execution>
                         <goals>
-                            <goal>repackage</goal> 可以把依赖的包都打包到生成的Jar包中
+                            <goal>repackage</goal>
                         </goals>
                     </execution>
-                </executions>-->
+                </executions>
             </plugin>
         </plugins>
     </build>

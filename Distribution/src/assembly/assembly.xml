@@ -119,7 +119,7 @@
         <fileSet>
             <directory>../Service/Address/target</directory>
             <includes>
-                <include>address-${project.parent.version}-spring.jar</include>
+                <include>address-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>service/address</outputDirectory>
         </fileSet>
@@ -134,7 +134,7 @@
         <fileSet>
             <directory>../Service/Alarm/target</directory>
             <includes>
-                <include>alarm-${project.parent.version}-spring.jar</include>
+                <include>alarm-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>service/alarm</outputDirectory>
         </fileSet>
@@ -149,7 +149,7 @@
         <fileSet>
             <directory>../Service/Clustering/target</directory>
             <includes>
-                <include>clustering-${project.parent.version}-spring.jar</include>
+                <include>clustering-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>service/clustering</outputDirectory>
         </fileSet>
@@ -164,7 +164,7 @@
         <fileSet>
             <directory>../Service/Device/target</directory>
             <includes>
-                <include>device-${project.parent.version}-spring.jar</include>
+                <include>device-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>service/device</outputDirectory>
         </fileSet>
@@ -194,7 +194,7 @@
         <fileSet>
             <directory>../Service/Face/target</directory>
             <includes>
-                <include>face-${project.parent.version}-spring.jar</include>
+                <include>face-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>service/face</outputDirectory>
         </fileSet>
@@ -224,7 +224,7 @@
         <fileSet>
             <directory>../Service/Visual/target</directory>
             <includes>
-                <include>visual-${project.parent.version}-spring.jar</include>
+                <include>visual-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>service/visual</outputDirectory>
         </fileSet>
