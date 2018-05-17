@@ -1,5 +1,6 @@
 package com.hzgc.service.face.controller;
 
+import com.hzgc.service.face.bean.PictureData;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.service.face.service.FaceExtractService;
 import com.hzgc.service.util.response.ResponseResult;
@@ -26,31 +27,34 @@ public class FaceController {
     FaceExtractService faceExtractService;
 
     //特征值获取
-    @ApiOperation(value = "图片的特征值提取",response =FaceAttribute.class)
+    @ApiOperation(value = "图片的特征值提取",response = ResponseResult.class,responseContainer = "List")
     @ApiImplicitParam(name = "image",value = "图片",required =  true,dataType = "file", paramType = "form")
 
     @ApiResponses(
             {@ApiResponse(code = 200,message = "successful response")})
     @RequestMapping(value = BigDataPath.FEATURE_EXTRACT,method = RequestMethod.POST)
-    public ResponseResult<FaceAttribute> featureExtract(@ApiParam(name = "image",value = "图片",required = true) MultipartFile image) throws IOException {
-        ResponseResult<FaceAttribute> response = ResponseResult.ok();
+    public ResponseResult<PictureData> featureExtract(@ApiParam(name = "image",value = "图片",required = true) MultipartFile image) throws IOException {
+        ResponseResult<PictureData> response = ResponseResult.ok();
+        PictureData pictureData = new PictureData();
         byte[] pictureBody = null;
         FaceAttribute faceAttribute = null;
 
         //非空判断
         if(null != image){
             pictureBody = image.getBytes();
+            pictureData.setImageData(pictureBody);
         }else {
             log.info("file is null or content is null");
         }
         //调用大数据接口，提取特征值
         try{
             faceAttribute = faceExtractService.featureExtract(pictureBody);
+            pictureData.setFeature(faceAttribute);
         }catch (Exception e){
             log.info("faceAttribute acquires is failed");
         }
 
-        response.setBody(faceAttribute);
+        response.setBody(pictureData);
         return response;
     }
 }

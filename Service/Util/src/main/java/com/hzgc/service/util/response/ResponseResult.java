@@ -1,7 +1,7 @@
 package com.hzgc.service.util.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hzgc.service.util.error.RestErrorTranslator;
-import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -26,13 +26,13 @@ public class ResponseResult<T> implements Serializable {
     private static final String DEFAULT_MESSAGE = "OK";
     static final int OK = 0;
 
-    @ApiModelProperty("head")
+    @JsonProperty("resthead")
     private Head head;
 
-    @ApiModelProperty("body")
+    @JsonProperty("restbody")
     private T body;
 
-    @ApiModelProperty("extend")
+    @JsonProperty("extend")
     private Map<String, Object> extend;
 
     private ResponseResult() {
