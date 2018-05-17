@@ -59,18 +59,25 @@
 
         <!--phoenix-udf目录-->
         <fileSet>
-            <directory>../Cluster/Phoenix-udf/target/</directory>
-            <includes>
-                <include>phoenix-udf-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>cluster/phoenix/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
             <directory>../Cluster/Phoenix-udf/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
             <outputDirectory>cluster/phoenix/bin</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Cluster/Phoenix-udf/conf</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>cluster/phoenix/conf</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Cluster/Phoenix-udf/target/</directory>
+            <includes>
+                <include>phoenix-udf-${project.parent.version}.jar</include>
+            </includes>
+            <outputDirectory>cluster/phoenix/lib</outputDirectory>
         </fileSet>
 
         <!--es目录-->
@@ -89,6 +96,13 @@
                 <include>**</include>
             </includes>
             <outputDirectory>cluster/hbase/bin</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Cluster/HBase/conf</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>cluster/hbase/conf</outputDirectory>
         </fileSet>
 
         <!--azkaban-->
@@ -165,7 +179,7 @@
         <fileSet>
             <directory>../Service/DynRepo/target</directory>
             <includes>
-                <include>dynRepo-${project.parent.version}.jar</include>
+                <include>dynrepo-${project.parent.version}-spring.jar</include>
             </includes>
             <outputDirectory>service/dynRepo</outputDirectory>
         </fileSet>
@@ -195,7 +209,7 @@
         <fileSet>
             <directory>../Service/StaRepo/target</directory>
             <includes>
-                <include>staRepo-${project.parent.version}.jar</include>
+                <include>starepo-${project.parent.version}-spring.jar</include>
             </includes>
             <outputDirectory>service/staRepo</outputDirectory>
         </fileSet>

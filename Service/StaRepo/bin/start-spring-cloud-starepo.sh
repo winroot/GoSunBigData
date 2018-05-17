@@ -27,10 +27,8 @@ CONF_SERVICE_DIR=$SERVICE_DIR/conf              ### service 配置文件
 
 cd ..
 OBJECT_DIR=`pwd`                                ### RealTimeFaceCompare 目录
-CONF_DIR=${OBJECT_DIR}/conf/project-conf.properties
-OBJECT_LIB_DIR=${OBJECT_DIR}/lib                ### lib
-OBJECT_JARS=`ls ${OBJECT_LIB_DIR} | grep .jar | awk '{print "'${OBJECT_LIB_DIR}'/"$0}'|tr "\n" ":"`
-LIB_STAREPO=`ls ${STAREPO_DIR}| grep ^starepo-[0-9].[0-9].[0-9].jar$`
+
+JAR_STAREPO=`ls ${STAREPO_DIR}| grep ^starepo-[0-9].[0-9].[0-9].jar$`
 
 if [ ! -d $LOG_DIR ]; then
     mkdir $LOG_DIR;
@@ -48,16 +46,11 @@ fi
 #####################################################################
 function start_spring_cloud()
 {
-    LIB_JARS=`ls $LIB_STAREPO_DIR|grep .jar | grep -v avro-ipc-1.7.7-tests.jar \
-    | grep -v avro-ipc-1.7.7.jar | grep -v spark-network-common_2.10-1.5.1.jar | \
-    awk '{print "'$LIB_STAREPO_DIR'/"$0}'|tr "\n" ":"`   ## jar包位置以及第三方依赖jar包，绝对路径
-
-    LIB_JARS=${LIB_JARS}${OBJECT_JARS}
     if [ ! -d $LOG_DIR ]; then
         mkdir $LOG_DIR;
     fi
     # java -classpath $CONF_STAREPO_DIR:$LIB_JARS com.hzgc.service.starepo.StaRepoApplication  | tee -a  ${LOG_FILE}
-    java -Xbootclasspath/a:$LIB_JARS -jar ${LIB_STAREPO} | tee -a  ${LOG_FILE}
+    java -jar ${JAR_STAREPO} | tee -a  ${LOG_FILE}
 }
 
 #####################################################################
@@ -85,10 +78,10 @@ function update_properties()
     # old_name=`grep spring.application.name ${PROPERTIES_DIR}`
     # sed -i "s#^${old_name}#spring.application.name={STAREPO_APPLICATION_NAME}#g" ${PROPERTIES_DIR}
 
-    ## 更新jar包中的配置文件
     cd ${STAREPO_DIR}
-    jar uf ${LIB_STAREPO} conf/starepoApplication.properties
-    # rm -f ${PROPERTIES_DIR}
+    cp conf/starepoApplication.properties ./
+    jar uf ${JAR_STAREPO} starepoApplication.properties
+    rm -f starepoApplication.properties
 }
 
 #####################################################################

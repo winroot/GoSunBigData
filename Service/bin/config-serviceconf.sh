@@ -80,7 +80,7 @@ function config_es()
     # 配置es.hosts：
     # 从project-conf.properties读取es所需配置IP
     # 根据字段es，查找配置文件，这些值以分号分割
-    ES_IP=$(grep es_servicenode ${CONF_DIR} | cut -d '=' -f2)
+    ES_IP=$(grep es_service_node ${CONF_DIR} | cut -d '=' -f2)
     # 将这些分号分割的ip用放入数组
     es_arr=(${ES_IP//;/ })
     espro=''    
@@ -109,7 +109,7 @@ function config_jdbc()
     echo "" | tee -a $LOG_FILE
     echo "配置jdbc相关参数......"  | tee  -a  $LOG_FILE
     ##jdbc节点IP
-    JDBC_IPS=$(grep jdbc_servicenode ${CONF_DIR} | cut -d '=' -f2)
+    JDBC_IPS=$(grep jdbc_service_node ${CONF_DIR} | cut -d '=' -f2)
     jdbc_arr=(${JDBC_IPS//;/ })
     jdbc_ips=''    
     for jdbc_ip in ${jdbc_arr[@]}
@@ -145,7 +145,7 @@ func send_to_all()
     echo "" | tee -a $LOG_FILE
     echo "分发service................."  | tee  -a  $LOG_FILE
     ## 获取dubbo节点IP
-    SPRING_HOSTS=$(grep spring_cloud_servicenode ${CONF_DIR} | cut -d '=' -f2)
+    SPRING_HOSTS=$(grep spring_cloud_service_node ${CONF_DIR} | cut -d '=' -f2)
     spring_arr=(${SPRING_HOSTS//;/ })
     for spring_host in ${spring_arr[@]}
     do
