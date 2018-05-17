@@ -7,8 +7,8 @@ import com.google.gson.Gson
 import com.hzgc.cluster.spark.spark.device.DeviceUtilImpl
 import com.hzgc.cluster.spark.spark.message.AddAlarmMessage
 import com.hzgc.cluster.spark.spark.rocmq.RocketMQProducer
-import com.hzgc.cluster.spark.spark.starepo.ObjectInfoInnerHandlerImpl
-import com.hzgc.cluster.spark.spark.util.{FaceObjectUtil, PropertiesUtils}
+import com.hzgc.cluster.spark.spark.starepo.StaticRepoUtil
+import com.hzgc.cluster.spark.spark.util.{FaceObjectUtil, PropertiesUtil}
 import com.hzgc.common.table.device.DeviceTable
 import com.hzgc.jni.FaceFunction
 import kafka.serializer.StringDecoder
@@ -30,7 +30,7 @@ object FaceAddAlarmJob {
 
   def main(args: Array[String]): Unit = {
     val deviceUtilI = new DeviceUtilImpl()
-    val properties = PropertiesUtils.getProperties
+    val properties = PropertiesUtil.getProperties
     val appName = properties.getProperty("job.addAlarm.appName")
     val timeInterval = Durations.seconds(properties.getProperty("job.addAlarm.timeInterval").toLong)
     val conf = new SparkConf()
@@ -54,7 +54,7 @@ object FaceAddAlarmJob {
       .filter(obj => obj._2.getAttribute.getFeature != null && obj._2.getAttribute.getFeature.length == 512)
       .map(obj => {
       val totalList = JavaConverters.
-        asScalaBufferConverter(ObjectInfoInnerHandlerImpl.getInstance().getTotalList).asScala
+        asScalaBufferConverter(StaticRepoUtil.getInstance().getTotalList).asScala
       val faceObj = obj._2
       val ipcID = faceObj.getIpcId
       val platID = deviceUtilI.getplatfromID(ipcID)

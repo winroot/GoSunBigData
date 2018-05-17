@@ -8,8 +8,8 @@ import com.google.gson.Gson
 import com.hzgc.cluster.spark.spark.device.DeviceUtilImpl
 import com.hzgc.cluster.spark.spark.message.{Item, RecognizeAlarmMessage}
 import com.hzgc.cluster.spark.spark.rocmq.RocketMQProducer
-import com.hzgc.cluster.spark.spark.starepo.ObjectInfoInnerHandlerImpl
-import com.hzgc.cluster.spark.spark.util.{FaceObjectUtil, PropertiesUtils}
+import com.hzgc.cluster.spark.spark.starepo.StaticRepoUtil
+import com.hzgc.cluster.spark.spark.util.{FaceObjectUtil, PropertiesUtil}
 import com.hzgc.common.table.device.DeviceTable
 import com.hzgc.jni.FaceFunction
 import kafka.serializer.StringDecoder
@@ -32,7 +32,7 @@ object FaceRecognizeAlarmJob {
 
   def main(args: Array[String]): Unit = {
     val deviceUtilI = new DeviceUtilImpl()
-    val properties = PropertiesUtils.getProperties
+    val properties = PropertiesUtil.getProperties
     val appName = properties.getProperty("job.recognizeAlarm.appName")
     val mqTopic = properties.getProperty("rocketmq.topic.name")
     val nameServer = properties.getProperty("rocketmq.nameserver")
@@ -57,7 +57,7 @@ object FaceRecognizeAlarmJob {
       .filter(obj => obj._2.getAttribute.getFeature != null && obj._2.getAttribute.getFeature.length == 512)
       .map(message => {
         val totalList = JavaConverters.
-          asScalaBufferConverter(ObjectInfoInnerHandlerImpl.getInstance().getTotalList).asScala
+          asScalaBufferConverter(StaticRepoUtil.getInstance().getTotalList).asScala
         val faceObj = message._2
         val ipcID = faceObj.getIpcId
         val platID = deviceUtilI.getplatfromID(ipcID)
@@ -96,7 +96,7 @@ object FaceRecognizeAlarmJob {
             })
           }
         }
-        ObjectInfoInnerHandlerImpl.getInstance().updateObjectInfoTime(updateTimeList)
+        StaticRepoUtil.getInstance().updateObjectInfoTime(updateTimeList)
         (message._2, ipcID, platID, finalResult)
       }).filter(record => record._4.nonEmpty)
 

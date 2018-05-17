@@ -19,8 +19,6 @@ import java.util.List;
 @Repository
 public class ElasticSearchDao {
 
-    private static Logger LOG = Logger.getLogger(ElasticSearchDao.class);
-
     private TransportClient esClient;
 
     public ElasticSearchDao(@Value("${es.cluster.name}") String clusterName,
@@ -32,31 +30,21 @@ public class ElasticSearchDao {
     public synchronized SearchResponse[] dynamicNumberService(List<String> ipcId) {
         String index = DynamicTable.DYNAMIC_INDEX;
         String type = DynamicTable.PERSON_INDEX_TYPE;
-        BoolQueryBuilder totalBQ = QueryBuilders.boolQuery();
         SearchResponse[] responsesArray = new SearchResponse[2];
+        // 统计所有抓拍总数
+        SearchResponse responseV1 = esClient.prepareSearch(index).setTypes(type)
+                .setQuery(QueryBuilders.matchAllQuery()).setSize(1).get();
+
+        // 查询今天抓拍的数量
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long a = System.currentTimeMillis();
-        String endTime = format.format(a);
-        String startTime = endTime.substring(0, endTime.indexOf(" ")) + " 00:00:00";
-        totalBQ.must(QueryBuilders.rangeQuery(DynamicTable.TIMESTAMP).gte(startTime).lte(endTime));
-        BoolQueryBuilder ipcBQ = QueryBuilders.boolQuery();
-        if (ipcId != null) {
-            for (String ipcid : ipcId) {
-                ipcBQ.should(QueryBuilders.matchPhraseQuery(DynamicTable.IPCID, ipcid));
-            }
-            totalBQ.must(ipcBQ);
-        }
-        SearchResponse searchResponse0 = esClient.prepareSearch(index)
-                .setTypes(type)
+        String endTime = format.format(System.currentTimeMillis());
+        SearchResponse responseV2 = esClient.prepareSearch(index).setQuery(QueryBuilders
+                .matchPhraseQuery(DynamicTable.DATE,
+                        endTime.substring(0, endTime.indexOf(" "))))
                 .setSize(1)
                 .get();
-        responsesArray[0] = searchResponse0;
-        SearchResponse searchResponse1 = esClient.prepareSearch(index)
-                .setTypes(type)
-                .setQuery(totalBQ)
-                .setSize(1)
-                .get();
-        responsesArray[1] = searchResponse1;
+        responsesArray[0] = responseV1;
+        responsesArray[1] = responseV2;
         return responsesArray;
     }
 

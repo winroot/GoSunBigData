@@ -4,23 +4,24 @@ import java.sql.Timestamp
 import java.util.Properties
 
 import com.google.common.base.Stopwatch
-import com.hzgc.cluster.spark.spark.util.{FaceObjectUtil, PropertiesUtils}
+import com.hzgc.cluster.spark.spark.util.{FaceObjectUtil, PropertiesUtil}
 import kafka.common.TopicAndPartition
 import kafka.message.MessageAndMetadata
 import kafka.serializer.StringDecoder
-import kafka.utils.ZkUtils
 import org.I0Itec.zkclient.ZkClient
+import org.I0Itec.zkclient.exception.ZkNoNodeException
 import org.apache.log4j.Logger
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.streaming.{Duration, Durations, StreamingContext}
 import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.streaming.kafka.{HasOffsetRanges, KafkaUtils}
+import org.apache.zookeeper.data.Stat
 
 object KafkaToParquet {
 
   val LOG: Logger = Logger.getLogger(KafkaToParquet.getClass)
-  val properties: Properties = PropertiesUtils.getProperties
+  val properties: Properties = PropertiesUtil.getProperties
 
   case class Picture(ftpurl: String, //图片搜索地址
                      //feature：图片特征值 ipcid：设备id  timeslot：时间段
@@ -115,7 +116,18 @@ object KafkaToParquet {
   private def readOffsets(zkClient: ZkClient, zkHosts: String, zkPath: String, topic: String): Option[Map[TopicAndPartition, Long]] = {
     LOG.info("Reading offsets from Zookeeper")
     val stopwatch = new Stopwatch()
-    val (offsetsRangesStrOpt, _) = ZkUtils.readDataMaybeNull(zkClient, zkPath)
+    val (offsetsRangesStrOpt, _) = {
+      val stat: Stat = new Stat()
+      val dataAndStat = try {
+        (Some[String](zkClient.readData(zkPath, stat)), stat)
+      } catch {
+        case e: ZkNoNodeException =>
+          (None, stat)
+        case e2: Throwable => throw e2
+      }
+      dataAndStat
+    }
+
     offsetsRangesStrOpt match {
       case Some(offsetsRangesStr) =>
         LOG.info(s"Read offset ranges: $offsetsRangesStr")
@@ -140,7 +152,7 @@ object KafkaToParquet {
     val offsetsRangesStr = offsetsRanges.map(offsetRange => s"${offsetRange.partition}:${offsetRange.fromOffset}")
       .mkString(",")
     LOG.info("chandan Writing offsets to Zookeeper zkClient=" + zkClient + "  zkHosts=" + zkHosts + "zkPath=" + zkPath + "  offsetsRangesStr:" + offsetsRangesStr)
-    ZkUtils.updatePersistentPath(zkClient, zkPath, offsetsRangesStr)
+    zkClient.writeData(zkPath, offsetsRangesStr)
     LOG.info("Done updating offsets in Zookeeper. Took " + stopwatch)
   }
 }

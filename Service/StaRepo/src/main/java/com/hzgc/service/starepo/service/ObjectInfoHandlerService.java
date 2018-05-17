@@ -1,6 +1,7 @@
 package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.table.starepo.ObjectInfoTable;
+import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.starepo.bean.*;
 import com.hzgc.service.starepo.dao.PhoenixDao;
 import lombok.extern.slf4j.Slf4j;
@@ -10,12 +11,16 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.hzgc.service.starepo.service.StaticProtocol.*;
+
 @Service
 @Slf4j
 public class ObjectInfoHandlerService {
 
     @Autowired
     private PhoenixDao phoenixDao;
+    @Autowired
+    private StaticRepoProducer staticProducer;
 
     public ObjectInfoHandlerService() {
     }
@@ -38,6 +43,13 @@ public class ObjectInfoHandlerService {
         //数据库操作
         Integer i = phoenixDao.addObjectInfo(person);
         log.info("添加一条数据到静态库花费时间： " + (System.currentTimeMillis() - start));
+        if (personObject.get(ObjectInfoTable.FEATURE) != null) {
+            StaticRepoObject object = new StaticRepoObject();
+            object.setFeature((float[]) personObject.get(ObjectInfoTable.FEATURE));
+            object.setPkey(person.getPkey());
+            object.setRowkey(person.getId());
+            staticProducer.sendKafkaMessage(INNERTOPIC, ADD, JSONUtil.toJson(object));
+        }
         return i;
     }
 
@@ -47,7 +59,9 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示删除成功，返回值为1，表示删除失败
      */
     public int deleteObjectInfo(List<String> rowkeys) {
-
+        for (String rowkey : rowkeys) {
+            staticProducer.sendKafkaMessage(INNERTOPIC, DELETE, rowkey);
+        }
         return phoenixDao.deleteObjectInfo(rowkeys);
     }
 
@@ -67,6 +81,13 @@ public class ObjectInfoHandlerService {
         //数据库更新操作
         Integer i = phoenixDao.updateObjectInfo(personObject);
         log.info("更新rowkey为: " + thePassId + "数据花费的时间是: " + (System.currentTimeMillis() - start));
+        if (personObject.get(ObjectInfoTable.FEATURE) != null) {
+            StaticRepoObject object = new StaticRepoObject();
+            object.setFeature((float[]) personObject.get(ObjectInfoTable.FEATURE));
+            object.setPkey((String)personObject.get(ObjectInfoTable.PKEY));
+            object.setRowkey((String)personObject.get(ObjectInfoTable.ROWKEY));
+            staticProducer.sendKafkaMessage(INNERTOPIC, UPDATE, JSONUtil.toJson(object));
+        }
         return i;
     }
 
@@ -208,4 +229,42 @@ public class ObjectInfoHandlerService {
     public byte[] getSearchPhoto(String rowkey) {
         return null;
     }
+}
+
+class StaticRepoObject {
+    private float[] feature;
+    private String pkey;
+    private String rowkey;
+
+    float[] getFeature() {
+        return feature;
+    }
+
+    public void setFeature(float[] feature) {
+        this.feature = feature;
+    }
+
+    String getPkey() {
+        return pkey;
+    }
+
+    public void setPkey(String pkey) {
+        this.pkey = pkey;
+    }
+
+    String getRowkey() {
+        return rowkey;
+    }
+
+    public void setRowkey(String rowkey) {
+        this.rowkey = rowkey;
+    }
+}
+
+
+class StaticProtocol {
+    static String INNERTOPIC = "staticrepo";
+    static final String DELETE = "DELETE";
+    static final String ADD = "ADD";
+    static final String UPDATE = "UPDATE";
 }

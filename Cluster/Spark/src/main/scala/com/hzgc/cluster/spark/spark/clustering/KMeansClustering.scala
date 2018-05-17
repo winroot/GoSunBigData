@@ -6,7 +6,7 @@ import java.util
 import java.util.{Calendar, Date, Properties, UUID}
 
 import com.hzgc.cluster.spark.spark.consumer.PutDataToEs
-import com.hzgc.cluster.spark.spark.util.{FtpDownloadUtils, PropertiesUtils}
+import com.hzgc.cluster.spark.spark.util.{FtpDownloadUtils, PropertiesUtil}
 import com.hzgc.common.clustering.ClusteringAttribute
 import edu.berkeley.cs.amplab.spark.indexedrdd.IndexedRDD
 import edu.berkeley.cs.amplab.spark.indexedrdd.IndexedRDD._
@@ -31,7 +31,7 @@ object KMeansClustering {
   def main(args: Array[String]) {
     val driverClass = "com.mysql.jdbc.Driver"
     val sqlProper = new Properties()
-    val properties = PropertiesUtils.getProperties
+    val properties = PropertiesUtil.getProperties
     val clusterNum = properties.getProperty("job.clustering.cluster.number")
     val ftpAccount = properties.getProperty("ftp.account")
     val ftpPassrod = properties.getProperty("ftp.password")

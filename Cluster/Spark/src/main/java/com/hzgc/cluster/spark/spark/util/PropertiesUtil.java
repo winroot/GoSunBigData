@@ -9,7 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class PropertiesUtils implements Serializable {
+public class PropertiesUtil implements Serializable {
 
     public static Integer getSimilarity(Map<String, Integer> map) {
         for (String key : map.keySet()) {

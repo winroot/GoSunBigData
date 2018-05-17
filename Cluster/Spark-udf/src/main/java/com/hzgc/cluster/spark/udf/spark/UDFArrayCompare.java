@@ -1,4 +1,4 @@
-package com.hzgc.cluster.spark.spark.udf.spark;
+package com.hzgc.cluster.spark.udf.spark;
 
 import org.apache.hadoop.hive.ql.exec.UDFArgumentException;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
