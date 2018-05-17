@@ -59,18 +59,25 @@
 
         <!--phoenix-udf目录-->
         <fileSet>
-            <directory>../Cluster/Phoenix-udf/target/</directory>
-            <includes>
-                <include>phoenix-udf-${project.parent.version}.jar</include>
-            </includes>
-            <outputDirectory>cluster/phoenix/lib</outputDirectory>
-        </fileSet>
-        <fileSet>
             <directory>../Cluster/Phoenix-udf/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
             <outputDirectory>cluster/phoenix/bin</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Cluster/Phoenix-udf/conf</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>cluster/phoenix/conf</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Cluster/Phoenix-udf/target/</directory>
+            <includes>
+                <include>phoenix-udf-${project.parent.version}.jar</include>
+            </includes>
+            <outputDirectory>cluster/phoenix/lib</outputDirectory>
         </fileSet>
 
         <!--es目录-->
@@ -90,6 +97,13 @@
             </includes>
             <outputDirectory>cluster/hbase/bin</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>../Cluster/HBase/conf</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>cluster/hbase/conf</outputDirectory>
+        </fileSet>
 
         <!--azkaban-->
         <fileSet>
@@ -105,7 +119,7 @@
         <fileSet>
             <directory>../Service/Address/target</directory>
             <includes>
-                <include>address-${project.parent.version}-spring.jar</include>
+                <include>address-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>service/address</outputDirectory>
         </fileSet>
@@ -120,7 +134,7 @@
         <fileSet>
             <directory>../Service/Alarm/target</directory>
             <includes>
-                <include>alarm-${project.parent.version}-spring.jar</include>
+                <include>alarm-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>service/alarm</outputDirectory>
         </fileSet>
@@ -135,7 +149,7 @@
         <fileSet>
             <directory>../Service/Clustering/target</directory>
             <includes>
-                <include>clustering-${project.parent.version}-spring.jar</include>
+                <include>clustering-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>service/clustering</outputDirectory>
         </fileSet>
@@ -150,7 +164,7 @@
         <fileSet>
             <directory>../Service/Device/target</directory>
             <includes>
-                <include>device-${project.parent.version}-spring.jar</include>
+                <include>device-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>service/device</outputDirectory>
         </fileSet>
@@ -165,7 +179,7 @@
         <fileSet>
             <directory>../Service/DynRepo/target</directory>
             <includes>
-                <include>dynRepo-${project.parent.version}-spring.jar</include>
+                <include>dynrepo-${project.parent.version}-spring.jar</include>
             </includes>
             <outputDirectory>service/dynRepo</outputDirectory>
         </fileSet>
@@ -180,7 +194,7 @@
         <fileSet>
             <directory>../Service/Face/target</directory>
             <includes>
-                <include>face-${project.parent.version}-spring.jar</include>
+                <include>face-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>service/face</outputDirectory>
         </fileSet>
@@ -195,7 +209,7 @@
         <fileSet>
             <directory>../Service/StaRepo/target</directory>
             <includes>
-                <include>staRepo-${project.parent.version}-spring.jar</include>
+                <include>starepo-${project.parent.version}-spring.jar</include>
             </includes>
             <outputDirectory>service/staRepo</outputDirectory>
         </fileSet>
@@ -210,7 +224,7 @@
         <fileSet>
             <directory>../Service/Visual/target</directory>
             <includes>
-                <include>visual-${project.parent.version}-spring.jar</include>
+                <include>visual-${project.parent.version}.jar</include>
             </includes>
             <outputDirectory>service/visual</outputDirectory>
         </fileSet>

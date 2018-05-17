@@ -27,10 +27,8 @@ CONF_SERVICE_DIR=$SERVICE_DIR/conf             ### service 配置文件
 
 cd ..
 OBJECT_DIR=`pwd`                               ### RealTimeFaceCompare 目录
-CONF_DIR=${OBJECT_DIR}/conf/project-conf.properties
-OBJECT_LIB_DIR=${OBJECT_DIR}/lib               ### lib
-OBJECT_JARS=`ls ${OBJECT_LIB_DIR} | grep .jar | awk '{print "'${OBJECT_LIB_DIR}'/"$0}'|tr "\n" ":"`
-LIB_ADDRESS=`ls ${ADDRESS_DIR}| grep ^address-[0-9].[0-9].[0-9].jar$`
+
+JARS_ADDRESS=`ls ${ADDRESS_DIR}| grep ^address-[0-9].[0-9].[0-9].jar$`
 
 if [ ! -d $LOG_DIR ]; then
     mkdir $LOG_DIR;
@@ -48,16 +46,11 @@ fi
 #####################################################################
 function start_spring_cloud()
 {
-    LIB_JARS=`ls $LIB_ADDRESS_DIR|grep .jar | grep -v avro-ipc-1.7.7-tests.jar \
-    | grep -v avro-ipc-1.7.7.jar | grep -v spark-network-common_2.10-1.5.1.jar | \
-    awk '{print "'$LIB_ADDRESS_DIR'/"$0}'|tr "\n" ":"`   ## jar包位置以及第三方依赖jar包，绝对路径
-
-    LIB_JARS=${LIB_JARS}${OBJECT_JARS}
     if [ ! -d $LOG_DIR ]; then
         mkdir $LOG_DIR;
     fi
     # java -classpath $CONF_ADDRESS_DIR:$LIB_JARS com.hzgc.service.address.FtpApplication  | tee -a  ${LOG_FILE}
-    java -Xbootclasspath/a:$LIB_JARS -jar ${LIB_ADDRESS} | tee -a  ${LOG_FILE}
+    java -jar ${JARS_ADDRESS} | tee -a  ${LOG_FILE}
 }
 
 #####################################################################
@@ -69,10 +62,16 @@ function start_spring_cloud()
 #####################################################################
 function update_properties()
 {
-    cd ${LIB_ADDRESS}
-    jar xf ${ADDRESS_DIR} conf/addressApplication.properties
-    jar uf ${ADDRESS_DIR} ${CONF_ADDRESS_DIR}/hbase-site.xml
-    rm -f ${PROPERTIES_DIR}
+    cd ${ADDRESS_DIR}
+    cp conf/ftpApplication.properties ./
+    jar uf ${JARS_ADDRESS} ftpApplication.properties
+    rm -f ftpApplication.properties
+
+    # cp conf/*-site.xml ./
+    # jar uf ${JARS_ADDRESS} hbase-site.xml
+    # jar uf ${JARS_ADDRESS} core-site.xml
+    # jar uf ${JARS_ADDRESS} hdfs-site.xml
+    # rm -f *-site.xml
 }
 
 

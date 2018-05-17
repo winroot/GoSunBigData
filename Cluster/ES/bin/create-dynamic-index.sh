@@ -38,7 +38,7 @@ function index_es_dynamic()
 
         ### 替换index-dynamic.sh中的节点名，共三处
         # 要替换的节点名，如s106
-        ES_IP=$(grep es_servicenode ${CONF_FILE} | cut -d '=' -f2)
+        ES_IP=$(grep es_service_node ${CONF_FILE} | cut -d '=' -f2)
         ES_Host=$(cat /etc/hosts|grep "$ES_IP" | awk '{print $2}')
 
         ## 第一处
@@ -101,7 +101,7 @@ function index_es_dynamic_show()
 
         ### 替换index-dynamicshow.sh中的节点名，共三处
         # 要替换的节点名，如s106
-        ES_IP=$(grep es_servicenode ${CONF_FILE} | cut -d '=' -f2)
+        ES_IP=$(grep es_service_node ${CONF_FILE} | cut -d '=' -f2)
         ES_Host=$(cat /etc/hosts|grep "$ES_IP" | awk '{print $2}')
 
         ## 第一处
