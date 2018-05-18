@@ -21,7 +21,7 @@
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>D:\\%d{yyyy-MM-dd}.faceinfo.%i.log</FileNamePattern>
+            <FileNamePattern>conf:\\face\\%d{yyyy-MM-dd}.face.%i.log</FileNamePattern>
             <!--日志文件保留天数-->
             <MaxHistory>10</MaxHistory>
         <!-- 除按日志记录之外，还配置了日志文件不能超过2M，若超过2M，日志文件会以索引0开始，
@@ -52,7 +52,7 @@
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>D:\\%d{yyyy-MM-dd}.faceerror.log</FileNamePattern>
+            <FileNamePattern>conf\\face\\%d{yyyy-MM-dd}.error.log</FileNamePattern>
             <!--日志文件保留天数<MaxHistory>10</MaxHistory>-->
             <!-- 除按日志记录之外，还配置了日志文件不能超过2M，若超过2M，日志文件会以索引0开始，
                 命名日志文件，例如log-error-2013-12-21.0.log

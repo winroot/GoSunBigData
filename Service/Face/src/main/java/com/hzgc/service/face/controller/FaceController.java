@@ -1,6 +1,5 @@
 package com.hzgc.service.face.controller;
 
-import com.hzgc.service.face.bean.PictureData;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.service.face.service.FaceExtractService;
 import com.hzgc.service.util.response.ResponseResult;
@@ -8,7 +7,6 @@ import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@FeignClient(name = "face")
 @RequestMapping(value = BigDataPath.FACE)
 @Api(value = "/face",tags = "特征提取" )
 @Slf4j
@@ -44,17 +41,23 @@ public class FaceController {
             pictureBody = image.getBytes();
             pictureData.setImageData(pictureBody);
         }else {
-            log.info("file is null or content is null");
+            log.info("image is null");
+            return null;
         }
         //调用大数据接口，提取特征值
         try{
             faceAttribute = faceExtractService.featureExtract(pictureBody);
-            pictureData.setFeature(faceAttribute);
+            if (null != faceAttribute){
+                pictureData.setFeature(faceAttribute);
+            }else {
+            log.info("faceAttribute is null");
+            }
         }catch (Exception e){
             log.info("faceAttribute acquires is failed");
+            e.printStackTrace();
         }
-
         response.setBody(pictureData);
+        log.info("特征值提取成功");
         return response;
     }
 }

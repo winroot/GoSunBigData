@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@FeignClient(name = "ftp")
 @RequestMapping(value = BigDataPath.FTP_SUBSCRIPTION, consumes = "application/json", produces = "application/json")
 @Api(value = "/ftpSubscription", tags = "人脸抓拍订阅功能")
 public class FtpSubscriptionController {

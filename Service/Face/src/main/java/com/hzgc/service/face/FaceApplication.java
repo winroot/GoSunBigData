@@ -8,7 +8,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableEurekaClient
-@PropertySource("faceApplication.properties")
+@PropertySource("application.properties")
 @EnableSwagger2
 public class FaceApplication {
 

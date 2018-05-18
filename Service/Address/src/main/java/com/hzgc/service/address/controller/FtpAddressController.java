@@ -5,16 +5,13 @@ import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
-import java.util.Properties;
 
 @RestController
-@FeignClient(name = "ftp")
 @RequestMapping(value = BigDataPath.FTP, consumes = "application/json", produces = "application/json")
 @Api(value = "/ftp", tags = "ftp地址服务")
 public class FtpAddressController {

@@ -5,6 +5,7 @@ import com.hzgc.jni.FaceFunction;
 import com.hzgc.jni.NativeFunction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Service
 @Slf4j
@@ -13,7 +14,7 @@ public class FaceExtractService {
     private FaceExtractService() {
         try {
             log.info("Start NativeFunction init....");
-            NativeFunction.init();
+//            NativeFunction.init();
             log.info("Init NativeFunction successful!");
         } catch (Exception e) {
             log.error("Init NativeFunction failure!");
