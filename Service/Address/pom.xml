@@ -36,16 +36,6 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <targetPath>${project.build.directory}/classes/META-INF/spring</targetPath>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-                <excludes>
-                    <exclude>**</exclude>
-                </excludes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

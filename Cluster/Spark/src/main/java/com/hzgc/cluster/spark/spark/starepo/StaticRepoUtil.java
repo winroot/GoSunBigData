@@ -25,7 +25,7 @@ class StaticRepoThread implements Runnable {
         this.handler = handler;
         Properties properties = new Properties();
         properties.put("bootstrap.servers", proper.getProperty("kafka.metadata.broker.list"));
-        properties.put("group.id", UuidUtil.setUuid());
+        properties.put("group.id", UuidUtil.getUuid());
         properties.put("enable.auto.commit", "true");
         properties.put("auto.commit.interval.ms", "1000");
         properties.put("session.timeout.ms", "30000");
