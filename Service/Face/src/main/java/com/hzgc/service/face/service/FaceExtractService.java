@@ -14,7 +14,7 @@ public class FaceExtractService {
     private FaceExtractService() {
         try {
             log.info("Start NativeFunction init....");
-//            NativeFunction.init();
+            NativeFunction.init();
             log.info("Init NativeFunction successful!");
         } catch (Exception e) {
             log.error("Init NativeFunction failure!");

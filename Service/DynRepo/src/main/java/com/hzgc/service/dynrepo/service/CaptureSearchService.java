@@ -44,7 +44,7 @@ public class CaptureSearchService {
         }
 
         log.info("Start search picture, search option is:" + JSONUtil.toJson(option));
-        String searchId = UuidUtil.setUuid();
+        String searchId = UuidUtil.getUuid();
         log.info("Start search picture, generate search id and search id is:[" + searchId + "]");
         resultSet = sparkJDBCDao.searchPicture(option);
         log.info("Start search picture, execute query total time is:" + (System.currentTimeMillis() - start));

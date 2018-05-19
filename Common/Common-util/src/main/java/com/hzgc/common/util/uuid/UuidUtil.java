@@ -5,17 +5,9 @@ import java.util.UUID;
 
 public class UuidUtil implements Serializable {
 
-    private String uuid;
-
-    public static String setUuid() {
+    public static String getUuid() {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
-    public String getUuid() {
-        return uuid;
-    }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
 }

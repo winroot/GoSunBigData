@@ -1,5 +1,6 @@
 package com.hzgc.service.face.controller;
 
+import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.PictureData;
 import com.hzgc.service.face.service.FaceExtractService;
@@ -57,6 +58,7 @@ public class FaceController {
             log.info("faceAttribute acquires is failed");
             e.printStackTrace();
         }
+        pictureData.setImageID(UuidUtil.getUuid());
         response.setBody(pictureData);
         log.info("特征值提取成功");
         return response;
