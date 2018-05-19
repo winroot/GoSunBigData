@@ -30,11 +30,13 @@ public class ElasticSearchDao {
 
     public SearchResponse getCaptureHistory(SearchOption option, String sortParam) {
         BoolQueryBuilder queryBuilder = createBoolQueryBuilder(option);
+
         SearchRequestBuilder requestBuilder = createSearchRequestBuilder()
                 .setQuery(queryBuilder)
                 .setFrom(option.getStart())
                 .setSize(option.getLimit())
-                .addSort(DynamicTable.TIMESTAMP, SortOrder.fromString(sortParam));
+                .addSort(DynamicTable.TIMESTAMP,
+                        Objects.equals(sortParam, EsSearchParam.DESC) ? SortOrder.DESC : SortOrder.ASC);
         return requestBuilder.get();
     }
 
@@ -45,7 +47,8 @@ public class ElasticSearchDao {
                 .setQuery(queryBuilder)
                 .setFrom(option.getStart())
                 .setSize(option.getLimit())
-                .addSort(DynamicTable.TIMESTAMP, SortOrder.fromString(sortParam));
+                .addSort(DynamicTable.TIMESTAMP,
+                        Objects.equals(sortParam, EsSearchParam.DESC) ? SortOrder.DESC : SortOrder.ASC);
         return requestBuilder.get();
     }
 
@@ -56,7 +59,8 @@ public class ElasticSearchDao {
                 .setQuery(queryBuilder)
                 .setFrom(option.getStart())
                 .setSize(option.getLimit())
-                .addSort(DynamicTable.TIMESTAMP, SortOrder.fromString(sortParam));
+                .addSort(DynamicTable.TIMESTAMP,
+                        Objects.equals(sortParam, EsSearchParam.DESC) ? SortOrder.DESC : SortOrder.ASC);
         return requestBuilder.get();
     }
 
