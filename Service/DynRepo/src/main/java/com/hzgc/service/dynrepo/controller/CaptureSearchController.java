@@ -2,10 +2,7 @@ package com.hzgc.service.dynrepo.controller;
 
 import com.hzgc.common.attribute.bean.Attribute;
 import com.hzgc.common.attribute.service.AttributeService;
-import com.hzgc.service.dynrepo.bean.SearchHisotry;
-import com.hzgc.service.dynrepo.bean.SearchOption;
-import com.hzgc.service.dynrepo.bean.SearchResult;
-import com.hzgc.service.dynrepo.bean.SearchResultOption;
+import com.hzgc.service.dynrepo.bean.*;
 import com.hzgc.service.dynrepo.service.CaptureHistoryService;
 import com.hzgc.service.dynrepo.service.CaptureSearchService;
 import com.hzgc.service.util.response.ResponseResult;
@@ -140,9 +137,9 @@ public class CaptureSearchController {
     @ApiOperation(value = "抓拍历史记录查询", response = SearchResult.class, responseContainer = "List")
     @RequestMapping(value = BigDataPath.DYNREPO_HISTORY, method = RequestMethod.GET)
     @SuppressWarnings("unused")
-    public ResponseResult<List<SearchResult>> getCaptureHistory(
+    public ResponseResult<List<SingleCaptureResult>> getCaptureHistory(
             @RequestBody @ApiParam(value = "以图搜图入参") SearchOption searchOption) {
-        List<SearchResult> searchResultList;
+        List<SingleCaptureResult> searchResultList;
         if (searchOption != null) {
             searchResultList = captureHistoryService.getCaptureHistory(searchOption);
         } else {

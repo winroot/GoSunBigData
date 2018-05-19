@@ -30,7 +30,7 @@ public class CaptureHistoryService {
     @SuppressWarnings("unused")
     private CaptureServiceHelper captureServiceHelper;
 
-    public List<SearchResult> getCaptureHistory(SearchOption option) {
+    public List<SingleCaptureResult> getCaptureHistory(SearchOption option) {
         if (option == null ||
                 (option.getSort() != null && option.getSort().size() > 0)) {
             log.warn("Start query capture history, search option is null");
@@ -63,9 +63,7 @@ public class CaptureHistoryService {
         }
     }
 
-    private List<SearchResult> getDefaultCaptureHistory(SearchOption option, String sortParam) {
-        List<SearchResult> resultList = new ArrayList<>();
-        SearchResult result = new SearchResult();
+    private List<SingleCaptureResult> getDefaultCaptureHistory(SearchOption option, String sortParam) {
         List<SingleCaptureResult> results = new ArrayList<>();
         SingleCaptureResult singleResult = new SingleCaptureResult();
         SearchResponse searchResponse = elasticSearchDao.getCaptureHistory(option, sortParam);
@@ -91,16 +89,12 @@ public class CaptureHistoryService {
         singleResult.setTotal(totallCount);
         singleResult.setPictures(persons);
         results.add(singleResult);
-        result.setSingleResults(results);
-        resultList.add(result);
-        return resultList;
+        return results;
     }
 
-    private List<SearchResult> getCaptureHistory(SearchOption option, String sortParam) {
-        List<SearchResult> resultList = new ArrayList<>();
+    private List<SingleCaptureResult> getCaptureHistory(SearchOption option, String sortParam) {
+        List<SingleCaptureResult> results = new ArrayList<>();
         for (String ipcId : option.getDeviceIds()) {
-            SearchResult result = new SearchResult();
-            List<SingleCaptureResult> results = new ArrayList<>();
             SingleCaptureResult singleResult = new SingleCaptureResult();
             List<CapturedPicture> capturedPictureList = new ArrayList<>();
             List<GroupByIpc> picturesByIpc = new ArrayList<>();
@@ -137,15 +131,11 @@ public class CaptureHistoryService {
             singleResult.setDevicePictures(picturesByIpc);
             singleResult.setPictures(capturedPictureList);
             results.add(singleResult);
-            result.setSingleResults(results);
-            resultList.add(result);
         }
-        return resultList;
+        return results;
     }
 
-    private List<SearchResult> getCaptureHistory(SearchOption option, List<String> deviceIds, String sortParam) {
-        List<SearchResult> resultList = new ArrayList<>();
-        SearchResult result = new SearchResult();
+    private List<SingleCaptureResult> getCaptureHistory(SearchOption option, List<String> deviceIds, String sortParam) {
         List<SingleCaptureResult> results = new ArrayList<>();
         SingleCaptureResult singleResult = new SingleCaptureResult();
         List<CapturedPicture> captureList = new ArrayList<>();
@@ -171,8 +161,6 @@ public class CaptureHistoryService {
         singleResult.setTotal((int) searchHits.getTotalHits());
         singleResult.setPictures(captureList);
         results.add(singleResult);
-        result.setSingleResults(results);
-        resultList.add(result);
-        return resultList;
+        return results;
     }
 }
