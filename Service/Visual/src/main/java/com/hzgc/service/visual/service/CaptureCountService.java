@@ -5,7 +5,6 @@ import com.hzgc.common.attribute.bean.AttributeValue;
 import com.hzgc.common.attribute.service.AttributeService;
 import com.hzgc.common.table.dynrepo.DynamicShowTable;
 import com.hzgc.common.table.dynrepo.DynamicTable;
-import com.hzgc.common.util.searchtype.SearchType;
 import com.hzgc.service.visual.bean.AttributeCount;
 import com.hzgc.service.visual.bean.CaptureCount;
 import com.hzgc.service.visual.bean.TimeSlotNumber;
@@ -159,12 +158,10 @@ public class CaptureCountService {
      * @param startTime 开始时间
      * @param endTime   结束时间
      * @param ipcIdList 单个或某组设备ID
-     * @param type      统计类型
      * @return 单个或某组设备中某种属性在抓拍图片中的数量
      */
-    public List<AttributeCount> captureAttributeQuery(String startTime, String endTime, List<String> ipcIdList, SearchType type) {
+    public List<AttributeCount> captureAttributeQuery(String startTime, String endTime, List<String> ipcIdList) {
         List<AttributeCount> attributeCountList = new ArrayList<>();
-        if (type == SearchType.PERSON) {
             AttributeService attributeService = new AttributeService();
             if (ipcIdList != null && ipcIdList.size() > 0) {
                 for (String ipcId : ipcIdList) {
@@ -173,7 +170,7 @@ public class CaptureCountService {
                     CaptureCount captureCount = captureCountQuery(startTime, endTime, ipcId);
                     long count = captureCount.getTotalresultcount();
                     attributeCount.setCaptureCount(count);
-                    List<Attribute> attributeList = attributeService.getAttribute(type);
+                    List<Attribute> attributeList = attributeService.getAttribute();
                     for (Attribute attribute : attributeList) {
                         List<AttributeValue> values = attribute.getValues();
                         for (AttributeValue attributeValue : values) {
@@ -190,11 +187,6 @@ public class CaptureCountService {
             } else {
                 log.error("ipcIdList is null.");
             }
-        } else if (type == SearchType.CAR) {
-            log.error("No vehicle queries are currently supported");
-        } else {
-            log.error("method AttributeService.captureAttributeQuery SearchType is error");
-        }
         return attributeCountList;
     }
 

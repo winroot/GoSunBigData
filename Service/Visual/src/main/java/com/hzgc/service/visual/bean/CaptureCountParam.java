@@ -1,6 +1,5 @@
 package com.hzgc.service.visual.bean;
 
-import com.hzgc.common.util.searchtype.SearchType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -28,12 +27,6 @@ public class CaptureCountParam implements Serializable {
     private List<String> ipcIdList;
 
     /**
-     * 平台ID
-     */
-    @ApiModelProperty(value = "平台ID")
-    private String platformId;
-
-    /**
      * 起始时间
      */
     @ApiModelProperty(value = "起始时间")
@@ -44,10 +37,4 @@ public class CaptureCountParam implements Serializable {
      */
     @ApiModelProperty(value = "结束时间")
     private String endTime;
-
-    /**
-     * 搜索类型（人/车）
-     */
-    @ApiModelProperty(value = "搜索类型")
-    private SearchType type;
 }

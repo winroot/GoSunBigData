@@ -32,8 +32,8 @@ public class ElasticSearchDao {
         BoolQueryBuilder queryBuilder = createBoolQueryBuilder(option);
         SearchRequestBuilder requestBuilder = createSearchRequestBuilder()
                 .setQuery(queryBuilder)
-                .setFrom(option.getOffset())
-                .setSize(option.getCount())
+                .setFrom(option.getStart())
+                .setSize(option.getLimit())
                 .addSort(DynamicTable.TIMESTAMP, SortOrder.fromString(sortParam));
         return requestBuilder.get();
     }
@@ -43,8 +43,8 @@ public class ElasticSearchDao {
         setDeviceIdList(queryBuilder, ipcList);
         SearchRequestBuilder requestBuilder = createSearchRequestBuilder()
                 .setQuery(queryBuilder)
-                .setFrom(option.getOffset())
-                .setSize(option.getCount())
+                .setFrom(option.getStart())
+                .setSize(option.getLimit())
                 .addSort(DynamicTable.TIMESTAMP, SortOrder.fromString(sortParam));
         return requestBuilder.get();
     }
@@ -54,8 +54,8 @@ public class ElasticSearchDao {
         setDeviceId(queryBuilder, ipc);
         SearchRequestBuilder requestBuilder = createSearchRequestBuilder()
                 .setQuery(queryBuilder)
-                .setFrom(option.getOffset())
-                .setSize(option.getCount())
+                .setFrom(option.getStart())
+                .setSize(option.getLimit())
                 .addSort(DynamicTable.TIMESTAMP, SortOrder.fromString(sortParam));
         return requestBuilder.get();
     }
@@ -74,13 +74,13 @@ public class ElasticSearchDao {
         }
 
         // 开始时间和结束时间存在的时候的处理
-        if (option.getStartDate() != null && option.getEndDate() != null &&
-                !option.getStartDate().equals("") && !option.getEndDate().equals("")) {
-            setStartEndTime(totalBQ, option.getStartDate(), option.getEndDate());
+        if (option.getStartTime() != null && option.getEndTime() != null &&
+                !option.getStartTime().equals("") && !option.getEndTime().equals("")) {
+            setStartEndTime(totalBQ, option.getStartTime(), option.getEndTime());
         }
 
-        if (option.getIntervals() != null && option.getIntervals().size() > 0) {
-            setTimeInterval(totalBQ, option.getIntervals());
+        if (option.getPeriodTimes() != null && option.getPeriodTimes().size() > 0) {
+            setTimeInterval(totalBQ, option.getPeriodTimes());
         }
         return totalBQ;
     }

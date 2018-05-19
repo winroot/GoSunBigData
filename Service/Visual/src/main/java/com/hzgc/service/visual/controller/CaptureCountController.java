@@ -1,6 +1,5 @@
 package com.hzgc.service.visual.controller;
 
-import com.hzgc.common.util.searchtype.SearchType;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
 import com.hzgc.service.visual.bean.AttributeCount;
@@ -153,16 +152,14 @@ public class CaptureCountController {
         String startTime;
         String endTime;
         List<String> ipcIdList;
-        SearchType type;
         if (captureCountParam != null) {
             startTime = captureCountParam.getStartTime();
             endTime = captureCountParam.getEndTime();
             ipcIdList = captureCountParam.getIpcIdList();
-            type = captureCountParam.getType();
         } else {
             return null;
         }
-        List<AttributeCount> attributeCountList = captureCountService.captureAttributeQuery(startTime, endTime, ipcIdList, type);
+        List<AttributeCount> attributeCountList = captureCountService.captureAttributeQuery(startTime, endTime, ipcIdList);
         return ResponseResult.init(attributeCountList);
     }
 }

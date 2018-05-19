@@ -1,6 +1,5 @@
 package com.hzgc.cluster.spark.spark.consumer;
 
-import com.hzgc.common.util.searchtype.SearchType;
 import com.hzgc.jni.FaceAttribute;
 
 import java.io.Serializable;
@@ -12,9 +11,6 @@ public class FaceObject implements Serializable {
 
     //时间戳（格式：2017-01-01 00：00：00）
     private String timeStamp;
-
-    //文件类型(区分人/车)
-    private SearchType type;
 
     //日期（格式：2017-01-01）
     private String date;
@@ -47,14 +43,6 @@ public class FaceObject implements Serializable {
 
     public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
-    }
-
-    public SearchType getType() {
-        return type;
-    }
-
-    public void setType(SearchType type) {
-        this.type = type;
     }
 
     public String getDate() {

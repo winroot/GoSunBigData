@@ -3,7 +3,6 @@ package com.hzgc.common.attribute.service;
 import com.hzgc.common.attribute.bean.Attribute;
 import com.hzgc.common.attribute.bean.AttributeValue;
 import com.hzgc.common.attribute.bean.Logistic;
-import com.hzgc.common.util.searchtype.SearchType;
 import com.hzgc.common.attribute.enumclass.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,12 +18,10 @@ public class AttributeService {
     /**
      * 人/车属性查询
      *
-     * @param type 图片类型（人、车）
      * @return 属性对象列表
      */
-    public List<Attribute> getAttribute(SearchType type) {
+    public List<Attribute> getAttribute() {
         List<Attribute> attributeList = new ArrayList<>();
-        if (type == SearchType.PERSON) {
             Attribute hairColor = new Attribute();
             hairColor.setIdentify(HairColor.class.getSimpleName());
             hairColor.setDesc("发色");
@@ -123,11 +120,6 @@ public class AttributeService {
             eyeglasses.setValues(eyeglassesValueList);
             attributeList.add(eyeglasses);
 
-        } else if (type == SearchType.CAR) {
-            return new ArrayList<>();
-        } else {
-            log.error("method AttributeService.getAttribute SearchType is error.");
-        }
         return attributeList;
     }
 }

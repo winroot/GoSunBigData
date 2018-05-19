@@ -11,43 +11,27 @@ import java.util.Map;
 @Data
 public class CapturedPicture implements Serializable {
 
-    /**
-     * 小图url
-     */
+    //小图url
     private String surl;
 
-    /**
-     * 大图url
-     */
+    //大图url
     private String burl;
 
-    /**
-     * 捕获照片的设备 id
-     */
-    private String ipcId;
+    //捕获照片的设备 id
+    private String deviceId;
 
-    /**
-     * 图片的描述信息
-     */
+
+    private String deviceName;
+
+    //图片的描述信息
     private String description;
 
-    /**
-     * 图片的相似度
-     */
+    //图片的相似度
     private Float similarity;
 
-    /**
-     * 图片的附加信息，扩展预留
-     */
+    //图片的附加信息，扩展预留
     private Map<String, Object> extend;
 
-    /**
-     * 时间戳
-     */
-    private String timeStamp;
-
-    /**
-     * 车牌，当 SearchType 为 CAR 时有用，需要支持模糊搜索
-     */
-    private String plateNumber;
+    //时间戳
+    private String time;
 }

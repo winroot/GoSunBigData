@@ -3,8 +3,10 @@ package com.hzgc.service.dynrepo.service;
 import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.service.dynrepo.bean.*;
+import com.hzgc.service.dynrepo.bean.platform.DeviceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,10 +23,16 @@ import static java.util.stream.Collectors.toList;
 /**
  * 动态库实现类
  */
+@Component
 class CaptureServiceHelper {
 
     @Autowired
-    private static Environment environment;
+    @SuppressWarnings("unused")
+    private Environment environment;
+
+    @Autowired
+    @SuppressWarnings("unused")
+    private DeviceQueryService queryService;
 
     /**
      * 通过排序参数进行排序
@@ -32,8 +40,9 @@ class CaptureServiceHelper {
      * @param result 查询结果
      * @param option 查询结果的查询参数
      */
-    static void sortByParamsAndPageSplit(SearchResult result, SearchResultOption option) {
-        List<SortParam> paramList = option.getSortParam();
+    void sortByParamsAndPageSplit(SearchResult result, SearchResultOption option) {
+        List<Integer> paramListInt = option.getSortParam();
+        List<SortParam> paramList = paramListInt.stream().map(param -> SortParam.values()[param]).collect(toList());
         List<Boolean> isAscArr = new ArrayList<>();
         List<String> sortNameArr = new ArrayList<>();
         for (SortParam aParamList : paramList) {
@@ -58,15 +67,15 @@ class CaptureServiceHelper {
         }
         if (paramList.contains(SortParam.IPC)) {
             groupByIpc(result);
-            for (SingleResult singleResult : result.getResults()) {
-                for (GroupByIpc groupByIpc : singleResult.getPicturesByIpc()) {
+            for (SingleCaptureResult singleResult : result.getSingleResults()) {
+                for (GroupByIpc groupByIpc : singleResult.getDevicePictures()) {
                     CapturePictureSortUtil.sort(groupByIpc.getPictures(), sortNameArr, isAscArr);
                     groupByIpc.setPictures(pageSplit(groupByIpc.getPictures(), option));
                 }
                 singleResult.setPictures(null);
             }
         } else {
-            for (SingleResult singleResult : result.getResults()) {
+            for (SingleCaptureResult singleResult : result.getSingleResults()) {
                 CapturePictureSortUtil.sort(singleResult.getPictures(), sortNameArr, isAscArr);
                 singleResult.setPictures(pageSplit(singleResult.getPictures(), option));
             }
@@ -78,19 +87,19 @@ class CaptureServiceHelper {
      *
      * @param result 历史查询结果
      */
-    private static void groupByIpc(SearchResult result) {
-        for (SingleResult singleResult : result.getResults()) {
+    private void groupByIpc(SearchResult result) {
+        for (SingleCaptureResult singleResult : result.getSingleResults()) {
             List<GroupByIpc> list = new ArrayList<>();
             Map<String, List<CapturedPicture>> map =
-                    singleResult.getPictures().stream().collect(Collectors.groupingBy(CapturedPicture::getIpcId));
+                    singleResult.getPictures().stream().collect(Collectors.groupingBy(CapturedPicture::getDeviceId));
             for (String key : map.keySet()) {
                 GroupByIpc groupByIpc = new GroupByIpc();
-                groupByIpc.setIpc(key);
+                groupByIpc.setDeviceId(key);
                 groupByIpc.setPictures(map.get(key));
                 groupByIpc.setTotal(map.get(key).size());
                 list.add(groupByIpc);
             }
-            singleResult.setPicturesByIpc(list);
+            singleResult.setDevicePictures(list);
         }
     }
 
@@ -98,10 +107,10 @@ class CaptureServiceHelper {
      * 对图片对象列表进行分页返回
      *
      * @param capturedPictures 待分页的图片对象列表
-     * @param option 查询结果的查询参数
+     * @param option           查询结果的查询参数
      * @return 返回分页查询结果
      */
-    static List<CapturedPicture> pageSplit(List<CapturedPicture> capturedPictures, SearchResultOption option) {
+    List<CapturedPicture> pageSplit(List<CapturedPicture> capturedPictures, SearchResultOption option) {
         int offset = option.getStart();
         int count = option.getLimit();
         List<CapturedPicture> subCapturePictureList;
@@ -113,10 +122,11 @@ class CaptureServiceHelper {
             //结束行大于总数，则返回起始行开始的后续所有数据
             subCapturePictureList = capturedPictures.subList(offset, totalPicture);
         }
+//        addDeviceName(subCapturePictureList);
         return subCapturePictureList;
     }
 
-    static List<CapturedPicture> pageSplit(List<CapturedPicture> capturedPictures, int offset, int count) {
+    List<CapturedPicture> pageSplit(List<CapturedPicture> capturedPictures, int offset, int count) {
         List<CapturedPicture> subCapturePictureList;
         int totalPicture = capturedPictures.size();
         if (offset >= 0 && totalPicture > (offset + count - 1) && count > 0) {
@@ -126,11 +136,27 @@ class CaptureServiceHelper {
             //结束行大于总数，则返回起始行开始的后续所有数据
             subCapturePictureList = capturedPictures.subList(offset, totalPicture);
         }
+//        addDeviceName(subCapturePictureList);
         return subCapturePictureList;
     }
 
-    static SearchResult parseResultOnePerson(ResultSet resultSet, SearchOption option, String searchId) {
-        SingleResult singleResult = new SingleResult();
+    void addDeviceName(List<CapturedPicture> capturedPictureList) {
+        if (capturedPictureList != null && capturedPictureList.size() > 0) {
+            List<String> ipcList = new ArrayList<>();
+            for (CapturedPicture picture : capturedPictureList) {
+                ipcList.add(picture.getDeviceId());
+            }
+            Map<String, DeviceDTO> ipcMapping = queryService.getDeviceInfoByBatch(ipcList);
+            for (CapturedPicture picture : capturedPictureList) {
+                if (ipcMapping.containsKey(picture.getDeviceId())) {
+                    picture.setDeviceName(ipcMapping.get(picture.getDeviceId()).getName());
+                }
+            }
+        }
+    }
+
+    SearchResult parseResultOnePerson(ResultSet resultSet, SearchOption option, String searchId) {
+        SingleSearchResult singleSearchResult = new SingleSearchResult();
         SearchResult searchResult = new SearchResult();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<CapturedPicture> capturedPictureList = new ArrayList<>();
@@ -150,31 +176,36 @@ class CaptureServiceHelper {
                 CapturedPicture capturedPicture = new CapturedPicture();
                 capturedPicture.setSurl(getFtpUrl(surl));
                 capturedPicture.setBurl(getFtpUrl(burl));
-                capturedPicture.setIpcId(ipcid);
-                capturedPicture.setTimeStamp(format.format(timestamp));
+                capturedPicture.setDeviceId(ipcid);
+                capturedPicture.setTime(format.format(timestamp));
                 capturedPicture.setSimilarity(similaritys);
                 capturedPictureList.add(capturedPicture);
             }
-            singleResult.
-                    setBinPicture(option.getImages().stream().map(PictureData::getBinImage).collect(toList()));
-            singleResult.setId(searchId + "-0");
-            singleResult.setPictures(capturedPictureList);
-            singleResult.setTotal(capturedPictureList.size());
+            addDeviceName(capturedPictureList);
+            List<String> imageIdList = new ArrayList<>();
+            for (int i = 0; i < option.getImages().size(); i++) {
+                imageIdList.add(option.getImages().get(i).getImageID());
+            }
+            singleSearchResult.
+                    setImageNames(imageIdList);
+            singleSearchResult.setSearchId(searchId);
+            singleSearchResult.setPictures(capturedPictureList);
+            singleSearchResult.setTotal(capturedPictureList.size());
             searchResult.setSearchId(searchId);
-            List<SingleResult> singleList = new ArrayList<>();
-            singleList.add(singleResult);
-            searchResult.setResults(singleList);
+            List<SingleSearchResult> singleList = new ArrayList<>();
+            singleList.add(singleSearchResult);
+            searchResult.setSingleResults(singleList);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return searchResult;
     }
 
-    static SearchResult parseResultNotOnePerson(ResultSet resultSet, SearchOption option, String searchId) {
+    SearchResult parseResultNotOnePerson(ResultSet resultSet, SearchOption option, String searchId) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Map<String, List<CapturedPicture>> mapSet = new HashMap<>();
         SearchResult searchResult = new SearchResult();
-        List<SingleResult> singleResultList = new ArrayList<>();
+        List<SingleSearchResult> singleResultList = new ArrayList<>();
         try {
             while (resultSet.next()) {
                 //小图ftpurl
@@ -193,8 +224,8 @@ class CaptureServiceHelper {
                 CapturedPicture capturedPicture = new CapturedPicture();
                 capturedPicture.setSurl(getFtpUrl(surl));
                 capturedPicture.setBurl(getFtpUrl(burl));
-                capturedPicture.setIpcId(ipcid);
-                capturedPicture.setTimeStamp(format.format(timestamp));
+                capturedPicture.setDeviceId(ipcid);
+                capturedPicture.setTime(format.format(timestamp));
                 capturedPicture.setSimilarity(similaritys);
                 if (mapSet.containsKey(id)) {
                     mapSet.get(id).add(capturedPicture);
@@ -206,28 +237,22 @@ class CaptureServiceHelper {
             }
             searchResult.setSearchId(searchId);
             for (int i = 0; i < option.getImages().size(); i++) {
-                SingleResult singleResult = new SingleResult();
-                String temp = i + "";
-                if (mapSet.containsKey(temp)) {
-                    singleResult.setPictures(mapSet.get(temp));
-                    singleResult.setTotal(mapSet.get(temp).size());
-                    List<byte[]> list = new ArrayList<>();
-                    list.add(option.getImages().get(i).getBinImage());
-                    singleResult.setBinPicture(list);
-                    singleResult.setId(searchId + "-" + i);
-                    singleResultList.add(singleResult);
-                } else {
-                    List<byte[]> list = new ArrayList<>();
-                    list.add(option.getImages().get(i).getBinImage());
-                    singleResult.setBinPicture(list);
-                    singleResult.setTotal(0);
-                    singleResult.setPictures(new ArrayList<>());
-                    singleResult.setId(searchId + i);
-                    singleResultList.add(singleResult);
+                SingleSearchResult singleSearchResult = new SingleSearchResult();
+                String picId = option.getImages().get(i).getImageID();
+                if (mapSet.containsKey(picId)) {
+                    addDeviceName(mapSet.get(picId));
+                    singleSearchResult.setPictures(mapSet.get(picId));
+                    singleSearchResult.setTotal(mapSet.get(picId).size());
+                    List<String> list = new ArrayList<>();
+                    list.add(picId);
+                    singleSearchResult.setImageNames(list);
+                    singleSearchResult.setSearchId(picId);
+                    singleResultList.add(singleSearchResult);
                 }
 
+
             }
-            searchResult.setResults(singleResultList);
+            searchResult.setSingleResults(singleResultList);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -240,7 +265,7 @@ class CaptureServiceHelper {
      * @param ftpUrl 带HostName的ftpUrl
      * @return 带IP的ftpUrl
      */
-    static String getFtpUrl(String ftpUrl) {
+    String getFtpUrl(String ftpUrl) {
 
         String hostName = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
         String ftpServerIP = environment.getProperty(hostName);
@@ -256,7 +281,7 @@ class CaptureServiceHelper {
      * @param surl 小图ftpUrl
      * @return 大图ftpUrl
      */
-    static String surlToBurl(String surl) {
+    String surlToBurl(String surl) {
         StringBuilder burl = new StringBuilder();
         String s1 = surl.substring(0, surl.lastIndexOf("_") + 1);
         String s2 = surl.substring(surl.lastIndexOf("."));

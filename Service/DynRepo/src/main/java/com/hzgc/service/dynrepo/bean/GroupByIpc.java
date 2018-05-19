@@ -8,18 +8,14 @@ import java.util.List;
 @Data
 public class GroupByIpc implements Serializable {
 
-    /**
-     * ipcID
-     */
-    private String ipc;
+    //ipcID
+    private String deviceId;
 
-    /**
-     * 抓拍图片
-     */
+    private String deviceName;
+
+    //抓拍图片
     private List<CapturedPicture> pictures;
 
-    /**
-     * 当前设备图片总计
-     */
+    //当前设备图片总计
     private int total;
 }

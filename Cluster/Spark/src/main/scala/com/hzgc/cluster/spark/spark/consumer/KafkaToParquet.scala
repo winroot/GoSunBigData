@@ -27,7 +27,7 @@ object KafkaToParquet {
                      //feature：图片特征值 ipcid：设备id  timeslot：时间段
                      feature: Array[Float], ipcid: String, timeslot: Int,
                      //timestamp:时间戳 pictype：图片类型 date：时间
-                     exacttime: Timestamp, searchtype: String, date: String,
+                     exacttime: Timestamp, date: String,
                      //人脸属性：眼镜、性别、头发颜色
                      eyeglasses: Int, gender: Int, haircolor: Int,
                      //人脸属性：发型、帽子、胡子、领带
@@ -74,7 +74,7 @@ object KafkaToParquet {
     val messages = createCustomDirectKafkaStream(ssc, kafkaParams, zkHosts, zKPaths, topics)
     val kafkaDF = messages.map(data => (data._1, FaceObjectUtil.jsonToObject(data._2))).map(faceobject => {
       (Picture(faceobject._1, faceobject._2.getAttribute.getFeature, faceobject._2.getIpcId,
-        faceobject._2.getTimeSlot.toInt, Timestamp.valueOf(faceobject._2.getTimeStamp), faceobject._2.getType.name(),
+        faceobject._2.getTimeSlot.toInt, Timestamp.valueOf(faceobject._2.getTimeStamp),
         faceobject._2.getDate, faceobject._2.getAttribute.getEyeglasses, faceobject._2.getAttribute.getGender,
         faceobject._2.getAttribute.getHairColor, faceobject._2.getAttribute.getHairStyle, faceobject._2.getAttribute.getHat,
         faceobject._2.getAttribute.getHuzi, faceobject._2.getAttribute.getTie, faceobject._2.getAttribute.getSharpness), faceobject._1, faceobject._2)

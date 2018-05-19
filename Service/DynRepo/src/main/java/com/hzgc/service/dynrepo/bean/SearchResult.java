@@ -16,11 +16,6 @@ public class SearchResult implements Serializable {
     /**
      * 子结果集集合
      */
-    private List<SingleResult> results;
-
-    /**
-     * 搜索类型
-     */
-    private String searchType;
+    private List<SingleSearchResult> singleResults;
 }
 

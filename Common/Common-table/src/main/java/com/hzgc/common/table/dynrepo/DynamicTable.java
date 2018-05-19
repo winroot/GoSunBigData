@@ -11,12 +11,12 @@ public class DynamicTable implements Serializable {
     public static final String TABLE_SEARCHRES = "searchRes";
     //searchRes表列簇
     public static final byte[] SEARCHRES_COLUMNFAMILY = "i".getBytes();
-    //只有人脸图
-    public static final String PERSON_TYPE = "PERSON";
-    //只有车辆图
-    public static final String CAR_TYPE = "CAR";
     //查询信息
     public static final byte[] SEARCHRES_COLUMN_SEARCHMESSAGE = "m".getBytes();
+    //查询时间
+    public static final byte[] SEARCHRES_COLUM_SEARCHTIME = "time".getBytes();
+    //搜索原图
+    public static final byte[] SEARCHRES_COLUM_PICTURE = "pic".getBytes();
     //es索引
     public static final String DYNAMIC_INDEX = "dynamic";
     //es类型
@@ -29,8 +29,7 @@ public class DynamicTable implements Serializable {
     public static final String TIMESLOT = "timeslot";
     //时间戳 数据格式 xxxx-xx-xx xx:xx:xx(年-月-日 时:分:秒)
     public static final String TIMESTAMP = "exacttime";
-    //图片类型
-    public static final String SEARCHTYPE = "searchtype";
+
     //日期 分区字段 数据格式 xxxx-xx-xx(年-月-日)
     public static final String DATE = "date";
     //人脸属性-是否戴眼镜

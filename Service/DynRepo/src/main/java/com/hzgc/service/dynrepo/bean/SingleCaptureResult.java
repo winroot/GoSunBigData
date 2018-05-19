@@ -6,21 +6,12 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class SingleResult implements Serializable {
+public class SingleCaptureResult implements Serializable {
 
-    /**
-     * 查询子ID
-     */
-    private String id;
+    //原图片ID
+    private List<String> imageNames;
 
-    /**
-     * 图片二进制数据
-     */
-    private List<byte[]> binPicture;
-
-    /**
-     * 单一结果的结果总数
-     */
+    //单一结果的结果总数
     private int total;
 
     /**
@@ -30,8 +21,6 @@ public class SingleResult implements Serializable {
      */
     private List<CapturedPicture> pictures;
 
-    /**
-     * 按设备归类时的结果集
-     */
-    private List<GroupByIpc> picturesByIpc;
+    //按设备归类时的结果集
+    private List<GroupByIpc> devicePictures;
 }

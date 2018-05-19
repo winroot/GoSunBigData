@@ -2,7 +2,7 @@ package com.hzgc.service.dynrepo.controller;
 
 import com.hzgc.common.attribute.bean.Attribute;
 import com.hzgc.common.attribute.service.AttributeService;
-import com.hzgc.common.util.searchtype.SearchType;
+import com.hzgc.service.dynrepo.bean.SearchHisotry;
 import com.hzgc.service.dynrepo.bean.SearchOption;
 import com.hzgc.service.dynrepo.bean.SearchResult;
 import com.hzgc.service.dynrepo.bean.SearchResultOption;
@@ -11,26 +11,29 @@ import com.hzgc.service.dynrepo.service.CaptureSearchService;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
+import io.swagger.models.HttpMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
 
 @RestController
 @FeignClient(name = "dynRepo")
-@RequestMapping(value = BigDataPath.DYNREPO, consumes = "application/json", produces = "application/json")
+@RequestMapping(value = BigDataPath.DYNREPO)
 @Api(value = "/dynRepoSearch", tags = "以图搜图服务")
+@SuppressWarnings("unused")
 public class CaptureSearchController {
 
-    private AttributeService attributeService = new AttributeService();
     @Autowired
+    @SuppressWarnings("unused")
+    private AttributeService attributeService;
+    @Autowired
+    @SuppressWarnings("unused")
     private CaptureHistoryService captureHistoryService;
     @Autowired
+    @SuppressWarnings("unused")
     private CaptureSearchService captureSearchService;
 
     /**
@@ -39,11 +42,9 @@ public class CaptureSearchController {
      * @param searchOption 以图搜图入参
      * @return SearchResult
      */
-    @ApiOperation(value = "以图搜图", response = SearchResult.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
+    @ApiOperation(value = "以图搜图", response = SearchResult.class)
     @RequestMapping(value = BigDataPath.DYNREPO_SEARCH, method = RequestMethod.POST)
+    @SuppressWarnings("unused")
     public ResponseResult<SearchResult> searchPicture(
             @RequestBody @ApiParam(value = "以图搜图入参") SearchOption searchOption) throws SQLException {
         SearchResult searchResult;
@@ -56,18 +57,29 @@ public class CaptureSearchController {
     }
 
     /**
+     * 获取搜索原图
+     *
+     * @param image_name 原图ID
+     * @return 图片二进制
+     */
+    @ApiOperation(value = "获取原图", response = byte[].class, httpMethod = "GET")
+    @ApiImplicitParam(name = "image_name", value = "原图ID", paramType = "query")
+    public ResponseResult<byte[]> getSearchPicture(String image_name) {
+        return ResponseResult.init(captureSearchService.getSearchPicture(image_name));
+    }
+
+    /**
      * 历史搜索记录查询
      *
      * @param searchResultOption 以图搜图入参
      * @return SearchResult
      */
-    @ApiOperation(value = "历史搜索记录查询", response = SearchResult.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
+    @ApiOperation(value = "历史搜索记录查询", response = SearchResult.class)
     @RequestMapping(value = BigDataPath.DYNREPO_SEARCHRESULT, method = RequestMethod.POST)
+    @ApiImplicitParam(name = "searchResultOption", value = "以图搜图入参", paramType = "body")
+    @SuppressWarnings("unused")
     public ResponseResult<SearchResult> getSearchResult(
-            @RequestBody @ApiParam(value = "以图搜图入参") SearchResultOption searchResultOption) {
+            @RequestBody SearchResultOption searchResultOption) {
         SearchResult searchResult;
         if (searchResultOption != null) {
             searchResult = captureSearchService.getSearchResult(searchResultOption);
@@ -78,24 +90,44 @@ public class CaptureSearchController {
     }
 
     /**
+     * 查询搜索记录
+     *
+     * @param start_time 历史记录起始时间
+     * @param end_time   历史记录结束时间
+     * @param sort       排序参数
+     * @param start      起始位置
+     * @param limit      返回条数
+     * @return 返回查询结果
+     */
+    @ApiOperation(value = "查询搜索记录", response = SearchHisotry.class, responseContainer = "List")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "start_time", value = "起始时间", paramType = "query"),
+            @ApiImplicitParam(name = "end_time", value = "结束时间", paramType = "query"),
+            @ApiImplicitParam(name = "sort", value = "排序参数", paramType = "query"),
+            @ApiImplicitParam(name = "start", value = "起始位置", paramType = "query"),
+            @ApiImplicitParam(name = "limit", value = "返回条数", paramType = "query")
+    })
+    @SuppressWarnings("unused")
+    public ResponseResult<List<SearchHisotry>> getSearchHistory(
+            String start_time,
+            String end_time,
+            String sort,
+            int start,
+            int limit) {
+        return ResponseResult.init(captureSearchService.getSearchHistory(start_time, end_time, sort, start, limit));
+    }
+
+    /**
      * 人/车属性查询
      *
-     * @param searchType 以图搜图入参
      * @return List<Attribute>
      */
     @ApiOperation(value = "属性特征查询", response = Attribute.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
     @RequestMapping(value = BigDataPath.DYNREPO_ATTRIBUTE, method = RequestMethod.GET)
-    public ResponseResult<List<Attribute>> getAttribute(
-            @RequestBody @ApiParam(value = "以图搜图入参") SearchType searchType) {
+    @SuppressWarnings("unused")
+    public ResponseResult<List<Attribute>> getAttribute() {
         List<Attribute> attributeList;
-        if (searchType != null) {
-            attributeList = attributeService.getAttribute(searchType);
-        } else {
-            attributeList = null;
-        }
+        attributeList = attributeService.getAttribute();
         return ResponseResult.init(attributeList);
     }
 
@@ -106,10 +138,8 @@ public class CaptureSearchController {
      * @return List<SearchResult>
      */
     @ApiOperation(value = "抓拍历史记录查询", response = SearchResult.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
-    @RequestMapping(value = BigDataPath.DYNREPO_HISTORY, method = RequestMethod.POST)
+    @RequestMapping(value = BigDataPath.DYNREPO_HISTORY, method = RequestMethod.GET)
+    @SuppressWarnings("unused")
     public ResponseResult<List<SearchResult>> getCaptureHistory(
             @RequestBody @ApiParam(value = "以图搜图入参") SearchOption searchOption) {
         List<SearchResult> searchResultList;

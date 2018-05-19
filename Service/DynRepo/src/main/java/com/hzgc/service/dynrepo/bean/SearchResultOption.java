@@ -11,7 +11,7 @@ public class SearchResultOption implements Serializable {
     /**
      * 查询总ID
      */
-    private String searchID;
+    private String searchId;
 
     /**
      * 针对每个子ID查询的参数
@@ -21,7 +21,7 @@ public class SearchResultOption implements Serializable {
     /**
      * 总的排序参数
      */
-    private List<SortParam> sortParam;
+    private List<Integer> sortParam;
 
     /**
      * 查询起始位置
