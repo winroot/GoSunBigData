@@ -135,10 +135,11 @@ public class CaptureSearchController {
      * @return List<SearchResult>
      */
     @ApiOperation(value = "抓拍历史记录查询", response = SearchResult.class, responseContainer = "List")
-    @RequestMapping(value = BigDataPath.DYNREPO_HISTORY, method = RequestMethod.GET)
+    @ApiImplicitParam(name = "searchOption", value = "pp", paramType = "body")
+    @RequestMapping(value = BigDataPath.DYNREPO_HISTORY, method = RequestMethod.POST)
     @SuppressWarnings("unused")
     public ResponseResult<List<SingleCaptureResult>> getCaptureHistory(
-            @RequestBody @ApiParam(value = "以图搜图入参") SearchOption searchOption) {
+            @RequestBody @ApiParam(value = "以图搜图入参") CaptureOption searchOption) {
         List<SingleCaptureResult> searchResultList;
         if (searchOption != null) {
             searchResultList = captureHistoryService.getCaptureHistory(searchOption);

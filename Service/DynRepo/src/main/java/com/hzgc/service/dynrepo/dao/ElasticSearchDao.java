@@ -8,6 +8,7 @@ import com.hzgc.service.dynrepo.bean.*;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.cluster.node.DiscoveryNode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortOrder;
@@ -25,10 +26,13 @@ public class ElasticSearchDao {
                             @Value("${es.hosts}") String esHost,
                             @Value("${es.cluster.port}") String esPort) {
         this.esClient = ElasticSearchHelper.getEsClient(clusterName, esHost, Integer.parseInt(esPort));
+        for (DiscoveryNode node: esClient.listedNodes()) {
+            System.out.println(node.getAddress().getAddress());
+        }
     }
 
 
-    public SearchResponse getCaptureHistory(SearchOption option, String sortParam) {
+    public SearchResponse getCaptureHistory(CaptureOption option, String sortParam) {
         BoolQueryBuilder queryBuilder = createBoolQueryBuilder(option);
 
         SearchRequestBuilder requestBuilder = createSearchRequestBuilder()
@@ -40,7 +44,7 @@ public class ElasticSearchDao {
         return requestBuilder.get();
     }
 
-    public SearchResponse getCaptureHistory(SearchOption option, List<String> ipcList, String sortParam) {
+    public SearchResponse getCaptureHistory(CaptureOption option, List<String> ipcList, String sortParam) {
         BoolQueryBuilder queryBuilder = createBoolQueryBuilder(option);
         setDeviceIdList(queryBuilder, ipcList);
         SearchRequestBuilder requestBuilder = createSearchRequestBuilder()
@@ -52,7 +56,7 @@ public class ElasticSearchDao {
         return requestBuilder.get();
     }
 
-    public SearchResponse getCaptureHistory(SearchOption option, String ipc, String sortParam) {
+    public SearchResponse getCaptureHistory(CaptureOption option, String ipc, String sortParam) {
         BoolQueryBuilder queryBuilder = createBoolQueryBuilder(option);
         setDeviceId(queryBuilder, ipc);
         SearchRequestBuilder requestBuilder = createSearchRequestBuilder()
@@ -69,7 +73,7 @@ public class ElasticSearchDao {
                 .setTypes(DynamicTable.PERSON_INDEX_TYPE);
     }
 
-    private BoolQueryBuilder createBoolQueryBuilder(SearchOption option) {
+    private BoolQueryBuilder createBoolQueryBuilder(CaptureOption option) {
         // 最终封装成的boolQueryBuilder 对象。
         BoolQueryBuilder totalBQ = QueryBuilders.boolQuery();
         //筛选人脸属性
@@ -81,10 +85,6 @@ public class ElasticSearchDao {
         if (option.getStartTime() != null && option.getEndTime() != null &&
                 !option.getStartTime().equals("") && !option.getEndTime().equals("")) {
             setStartEndTime(totalBQ, option.getStartTime(), option.getEndTime());
-        }
-
-        if (option.getPeriodTimes() != null && option.getPeriodTimes().size() > 0) {
-            setTimeInterval(totalBQ, option.getPeriodTimes());
         }
         return totalBQ;
     }

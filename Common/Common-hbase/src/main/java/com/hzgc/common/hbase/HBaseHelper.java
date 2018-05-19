@@ -79,7 +79,7 @@ public class HBaseHelper implements Serializable {
      */
     public static Connection getHBaseConnection() {
         if (null == innerHBaseConnection || innerHBaseConnection.isClosed()) {
-            LOG.info("The HBaseConnection is null or closed, recreate connection");
+            LOG.info("The HBaseConnection is null or closed, create connection");
             initHBaseConnection();
         }
         return innerHBaseConnection;

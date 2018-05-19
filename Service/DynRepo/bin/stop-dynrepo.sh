@@ -5,7 +5,7 @@
 ## Author:      yansen
 ## Created:     2018-05-19
 ################################################################################
-set -x
+#set -x
 
 cd `dirname $0`
 BIN_DIR=`pwd`    ##bin目录地址
@@ -32,8 +32,14 @@ cd ..
 #####################################################################
 function stop_springCloud()
 {
-  	##杀掉进程
-	kill -9 ${FACE_JAR_PID}
+    DYNREPO_PID=`jps | grep ${DYNREPO_JAR_NAME} | awk '{print $1}'`
+    if [ -n "${DYNREPO_PID}" ];then
+        echo "dynrepo service is exist, exit with 0, kill service now"
+        kill -9 ${DYNREPO_PID}
+        echo "stop service successfull"
+    else
+        echo "dynrepo service is not start"
+    fi 
 }
 
 

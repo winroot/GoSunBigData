@@ -30,9 +30,8 @@ public class CaptureHistoryService {
     @SuppressWarnings("unused")
     private CaptureServiceHelper captureServiceHelper;
 
-    public List<SingleCaptureResult> getCaptureHistory(SearchOption option) {
-        if (option == null ||
-                (option.getSort() != null && option.getSort().size() > 0)) {
+    public List<SingleCaptureResult> getCaptureHistory(CaptureOption option) {
+        if (option == null) {
             log.warn("Start query capture history, search option is null");
             return new ArrayList<>();
         }
@@ -63,7 +62,7 @@ public class CaptureHistoryService {
         }
     }
 
-    private List<SingleCaptureResult> getDefaultCaptureHistory(SearchOption option, String sortParam) {
+    private List<SingleCaptureResult> getDefaultCaptureHistory(CaptureOption option, String sortParam) {
         List<SingleCaptureResult> results = new ArrayList<>();
         SingleCaptureResult singleResult = new SingleCaptureResult();
         SearchResponse searchResponse = elasticSearchDao.getCaptureHistory(option, sortParam);
@@ -92,7 +91,7 @@ public class CaptureHistoryService {
         return results;
     }
 
-    private List<SingleCaptureResult> getCaptureHistory(SearchOption option, String sortParam) {
+    private List<SingleCaptureResult> getCaptureHistory(CaptureOption option, String sortParam) {
         List<SingleCaptureResult> results = new ArrayList<>();
         for (String ipcId : option.getDeviceIds()) {
             SingleCaptureResult singleResult = new SingleCaptureResult();
@@ -130,7 +129,7 @@ public class CaptureHistoryService {
         return results;
     }
 
-    private List<SingleCaptureResult> getCaptureHistory(SearchOption option, List<String> deviceIds, String sortParam) {
+    private List<SingleCaptureResult> getCaptureHistory(CaptureOption option, List<String> deviceIds, String sortParam) {
         List<SingleCaptureResult> results = new ArrayList<>();
         SingleCaptureResult singleResult = new SingleCaptureResult();
         List<CapturedPicture> captureList = new ArrayList<>();

@@ -141,18 +141,18 @@ class CaptureServiceHelper {
     }
 
     void addDeviceName(List<CapturedPicture> capturedPictureList) {
-        if (capturedPictureList != null && capturedPictureList.size() > 0) {
-            List<String> ipcList = new ArrayList<>();
-            for (CapturedPicture picture : capturedPictureList) {
-                ipcList.add(picture.getDeviceId());
-            }
-            Map<String, DeviceDTO> ipcMapping = queryService.getDeviceInfoByBatch(ipcList);
-            for (CapturedPicture picture : capturedPictureList) {
-                if (ipcMapping.containsKey(picture.getDeviceId())) {
-                    picture.setDeviceName(ipcMapping.get(picture.getDeviceId()).getName());
-                }
-            }
-        }
+//        if (capturedPictureList != null && capturedPictureList.size() > 0) {
+//            List<String> ipcList = new ArrayList<>();
+//            for (CapturedPicture picture : capturedPictureList) {
+//                ipcList.add(picture.getDeviceId());
+//            }
+//            Map<String, DeviceDTO> ipcMapping = queryService.getDeviceInfoByBatch(ipcList);
+//            for (CapturedPicture picture : capturedPictureList) {
+//                if (ipcMapping.containsKey(picture.getDeviceId())) {
+//                    picture.setDeviceName(ipcMapping.get(picture.getDeviceId()).getName());
+//                }
+//            }
+//        }
     }
 
     SearchResult parseResultOnePerson(ResultSet resultSet, SearchOption option, String searchId) {

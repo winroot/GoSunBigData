@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hzgc.common.attribute.bean.Attribute;
 import com.hzgc.jni.PictureData;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,9 +13,8 @@ import java.util.List;
  * 搜索选项
  */
 @Data
-public class SearchOption implements Serializable {
-    //搜索的设备范围
-    private List<String> deviceIds;
+public class SearchOption extends CaptureOption implements Serializable {
+
 
     //待查询图片对象列表
     private List<PictureData> images;
@@ -25,14 +25,6 @@ public class SearchOption implements Serializable {
     //阈值
     private float similarity;
 
-
-
-    //开始日期,格式：xxxx-xx-xx xx:xx:xx
-    private String startTime;
-
-    //截止日期,格式：xxxx-xx-xx xx:xx:xx
-    private String endTime;
-
     //搜索的时间区间，为空或者没有传入这个参数时候搜索整天
     private List<TimeInterval> periodTimes;
 
@@ -41,16 +33,4 @@ public class SearchOption implements Serializable {
      */
     @JsonIgnore
     private boolean isClean;
-
-     //参数筛选选项
-    private List<Attribute> attributes;
-
-    //排序参数
-    private List<Integer> sort;
-
-    //分页查询开始行
-    private int start;
-
-    //查询条数
-    private int limit;
 }

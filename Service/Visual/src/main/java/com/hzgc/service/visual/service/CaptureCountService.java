@@ -33,6 +33,7 @@ import java.util.*;
 @Slf4j
 public class CaptureCountService {
     @Autowired
+    @SuppressWarnings("unused")
     private ElasticSearchDao elasticSearchDao;
 
     /**
@@ -125,7 +126,7 @@ public class CaptureCountService {
              */
 
             //获取最后一次抓拍时间
-            String lastcapturetime = (String) searchHits[0].getSourceAsMap().get(DynamicTable.TIMESTAMP);
+            String lastcapturetime = (String) searchHits[0].getSource().get(DynamicTable.TIMESTAMP);
 
             /*
               返回值为：设备抓拍张数、设备最后一次抓拍时间。
