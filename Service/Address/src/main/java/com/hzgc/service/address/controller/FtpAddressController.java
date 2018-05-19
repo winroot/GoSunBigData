@@ -5,14 +5,12 @@ import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = BigDataPath.FTP, consumes = "application/json", produces = "application/json")
+@RequestMapping(value = BigDataPath.FTP)
 @Api(value = "/ftp", tags = "ftp地址服务")
 public class FtpAddressController {
 
@@ -26,6 +24,7 @@ public class FtpAddressController {
      */
     @ApiOperation(value = "ftp配置信息查询", response = Map.class, responseContainer = "List")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "successful response")})
+    @ResponseBody
     @RequestMapping(value = BigDataPath.FTP_GET_PROPERTIES, method = RequestMethod.GET)
     public ResponseResult<Map> getFtpAddress() {
         Map map = ftpAddressService.getProperties();
@@ -39,7 +38,7 @@ public class FtpAddressController {
      * @return IP地址
      */
     @ApiOperation(value = "ftp配置信息查询", response = String.class, responseContainer = "List")
-    @ApiImplicitParam(name = "hostname", value = "主机名", required = true, dataType = "String", paramType = "form")
+    @ApiImplicitParam(name = "hostname", value = "主机名", required = true, dataType = "String",paramType = "query")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.FTP_GET_IP, method = RequestMethod.GET)
     public ResponseResult<String> getIPAddress(@ApiParam(value = "聚类信息查询入参") String hostname) {
