@@ -67,7 +67,7 @@ class CaptureServiceHelper {
         }
         if (paramList.contains(SortParam.IPC)) {
             groupByIpc(result);
-            for (SingleCaptureResult singleResult : result.getSingleResults()) {
+            for (SingleSearchResult singleResult : result.getSingleResults()) {
                 for (GroupByIpc groupByIpc : singleResult.getDevicePictures()) {
                     CapturePictureSortUtil.sort(groupByIpc.getPictures(), sortNameArr, isAscArr);
                     groupByIpc.setPictures(pageSplit(groupByIpc.getPictures(), option));
@@ -75,7 +75,7 @@ class CaptureServiceHelper {
                 singleResult.setPictures(null);
             }
         } else {
-            for (SingleCaptureResult singleResult : result.getSingleResults()) {
+            for (SingleSearchResult singleResult : result.getSingleResults()) {
                 CapturePictureSortUtil.sort(singleResult.getPictures(), sortNameArr, isAscArr);
                 singleResult.setPictures(pageSplit(singleResult.getPictures(), option));
             }
@@ -88,7 +88,7 @@ class CaptureServiceHelper {
      * @param result 历史查询结果
      */
     private void groupByIpc(SearchResult result) {
-        for (SingleCaptureResult singleResult : result.getSingleResults()) {
+        for (SingleSearchResult singleResult : result.getSingleResults()) {
             List<GroupByIpc> list = new ArrayList<>();
             Map<String, List<CapturedPicture>> map =
                     singleResult.getPictures().stream().collect(Collectors.groupingBy(CapturedPicture::getDeviceId));

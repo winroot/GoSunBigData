@@ -97,16 +97,11 @@ public class CaptureHistoryService {
         for (String ipcId : option.getDeviceIds()) {
             SingleCaptureResult singleResult = new SingleCaptureResult();
             List<CapturedPicture> capturedPictureList = new ArrayList<>();
-            List<GroupByIpc> picturesByIpc = new ArrayList<>();
-            GroupByIpc groupByIpc = new GroupByIpc();
-
             SearchResponse searchResponse = elasticSearchDao.getCaptureHistory(option, ipcId, sortParam);
             SearchHits searchHits = searchResponse.getHits();
 
             SearchHit[] hits = searchHits.getHits();
             CapturedPicture capturePicture;
-            groupByIpc.setDeviceId(ipcId);
-            picturesByIpc.add(groupByIpc);
             if (hits.length > 0) {
                 for (SearchHit hit : hits) {
                     capturePicture = new CapturedPicture();
@@ -128,7 +123,7 @@ public class CaptureHistoryService {
             }
             captureServiceHelper.addDeviceName(capturedPictureList);
             singleResult.setTotal((int) searchHits.getTotalHits());
-            singleResult.setDevicePictures(picturesByIpc);
+            singleResult.setDeviceId(ipcId);
             singleResult.setPictures(capturedPictureList);
             results.add(singleResult);
         }

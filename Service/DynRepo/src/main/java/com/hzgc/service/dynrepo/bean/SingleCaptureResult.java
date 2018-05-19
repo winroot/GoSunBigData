@@ -10,6 +10,5 @@ public class SingleCaptureResult implements Serializable {
     private String deviceId;
     private String deviceName;
     private int total;
-    private List<CapturedPicture> pictures;
-    private List<GroupByIpc> devicePictures;
+    public List<CapturedPicture> pictures;
 }

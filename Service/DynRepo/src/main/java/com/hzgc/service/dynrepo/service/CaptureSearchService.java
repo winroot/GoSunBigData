@@ -66,7 +66,7 @@ public class CaptureSearchService {
                 } else {
                     log.error("The search history of: [" + searchId + "] saved failure");
                 }
-                for (SingleCaptureResult singleResult : searchResult.getSingleResults()) {
+                for (SingleSearchResult singleResult : searchResult.getSingleResults()) {
                     singleResult.setPictures(captureServiceHelper.pageSplit(singleResult.getPictures(),
                             option.getStart(),
                             option.getLimit()));
