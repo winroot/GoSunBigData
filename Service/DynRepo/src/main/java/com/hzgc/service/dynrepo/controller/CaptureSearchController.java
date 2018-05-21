@@ -61,6 +61,7 @@ public class CaptureSearchController {
      */
     @ApiOperation(value = "获取原图", response = byte[].class, httpMethod = "GET")
     @ApiImplicitParam(name = "image_name", value = "原图ID", paramType = "query")
+    @RequestMapping(value = BigDataPath.DYNREPO_GETPICTURE, method = RequestMethod.GET)
     public ResponseResult<byte[]> getSearchPicture(String image_name) {
         return ResponseResult.init(captureSearchService.getSearchPicture(image_name));
     }
@@ -115,27 +116,13 @@ public class CaptureSearchController {
     }
 
     /**
-     * 人/车属性查询
-     *
-     * @return List<Attribute>
-     */
-    @ApiOperation(value = "属性特征查询", response = Attribute.class, responseContainer = "List")
-    @RequestMapping(value = BigDataPath.DYNREPO_ATTRIBUTE, method = RequestMethod.GET)
-    @SuppressWarnings("unused")
-    public ResponseResult<List<Attribute>> getAttribute() {
-        List<Attribute> attributeList;
-        attributeList = attributeService.getAttribute();
-        return ResponseResult.init(attributeList);
-    }
-
-    /**
      * 抓拍历史记录查询
      *
      * @param searchOption 以图搜图入参
      * @return List<SearchResult>
      */
     @ApiOperation(value = "抓拍历史记录查询", response = SearchResult.class, responseContainer = "List")
-    @ApiImplicitParam(name = "searchOption", value = "pp", paramType = "body")
+    @ApiImplicitParam(name = "searchOption", value = "抓拍记录查询参数", paramType = "body")
     @RequestMapping(value = BigDataPath.DYNREPO_HISTORY, method = RequestMethod.POST)
     @SuppressWarnings("unused")
     public ResponseResult<List<SingleCaptureResult>> getCaptureHistory(

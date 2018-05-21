@@ -122,7 +122,7 @@ class CaptureServiceHelper {
             //结束行大于总数，则返回起始行开始的后续所有数据
             subCapturePictureList = capturedPictures.subList(offset, totalPicture);
         }
-//        addDeviceName(subCapturePictureList);
+        addDeviceName(subCapturePictureList);
         return subCapturePictureList;
     }
 
@@ -136,23 +136,25 @@ class CaptureServiceHelper {
             //结束行大于总数，则返回起始行开始的后续所有数据
             subCapturePictureList = capturedPictures.subList(offset, totalPicture);
         }
-//        addDeviceName(subCapturePictureList);
+        addDeviceName(subCapturePictureList);
         return subCapturePictureList;
     }
 
     void addDeviceName(List<CapturedPicture> capturedPictureList) {
-//        if (capturedPictureList != null && capturedPictureList.size() > 0) {
-//            List<String> ipcList = new ArrayList<>();
-//            for (CapturedPicture picture : capturedPictureList) {
-//                ipcList.add(picture.getDeviceId());
-//            }
-//            Map<String, DeviceDTO> ipcMapping = queryService.getDeviceInfoByBatch(ipcList);
-//            for (CapturedPicture picture : capturedPictureList) {
-//                if (ipcMapping.containsKey(picture.getDeviceId())) {
-//                    picture.setDeviceName(ipcMapping.get(picture.getDeviceId()).getName());
-//                }
-//            }
-//        }
+        if (environment.getProperty("call.external.service", boolean.class)) {
+            if (capturedPictureList != null && capturedPictureList.size() > 0) {
+                List<String> ipcList = new ArrayList<>();
+                for (CapturedPicture picture : capturedPictureList) {
+                    ipcList.add(picture.getDeviceId());
+                }
+                Map<String, DeviceDTO> ipcMapping = queryService.getDeviceInfoByBatch(ipcList);
+                for (CapturedPicture picture : capturedPictureList) {
+                    if (ipcMapping.containsKey(picture.getDeviceId())) {
+                        picture.setDeviceName(ipcMapping.get(picture.getDeviceId()).getName());
+                    }
+                }
+            }
+        }
     }
 
     SearchResult parseResultOnePerson(ResultSet resultSet, SearchOption option, String searchId) {
