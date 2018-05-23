@@ -1,37 +1,29 @@
 package com.hzgc.cluster.spark.spark.consumer;
 
+import com.hzgc.cluster.spark.spark.util.PropertiesUtil;
 import com.hzgc.common.es.ElasticSearchHelper;
 import com.hzgc.common.table.dynrepo.DynamicTable;
-import com.hzgc.common.util.file.ResourceFileUtil;
 import com.hzgc.jni.FaceAttribute;
+import org.apache.log4j.Logger;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.rest.RestStatus;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 public class PutDataToEs implements Serializable {
-
-    private String es_cluster;
-    private String es_hosts;
-    private Integer es_port;
+    private static Logger LOG = Logger.getLogger(PutDataToEs.class);
     private TransportClient esClient;
 
-    private PutDataToEs(){
-        Properties properties = new Properties();
-        try {
-            properties.load(ResourceFileUtil.loadResourceInputStream("sparkJob.properties"));
-            es_cluster = properties.getProperty("es.cluster.name");
-            es_hosts = properties.getProperty("es.hosts");
-            es_port = Integer.parseInt(properties.getProperty("es.cluster.port"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private PutDataToEs() {
+        Properties properties = PropertiesUtil.getProperties();
+        String es_cluster = properties.getProperty("es.cluster.name");
+        String es_hosts = properties.getProperty("es.hosts");
+        Integer es_port = Integer.parseInt(properties.getProperty("es.cluster.port"));
         esClient = ElasticSearchHelper.getEsClient(es_cluster, es_hosts, es_port);
     }
 
@@ -51,7 +43,7 @@ public class PutDataToEs implements Serializable {
     public int putDataToEs(String ftpurl, FaceObject faceObject) {
         String timestamp = faceObject.getTimeStamp();
         String ipcid = faceObject.getIpcId();
-        String timeslot = faceObject.getTimeSlot();
+        int timeslot = faceObject.getTimeSlot();
         String date = faceObject.getDate();
         IndexResponse indexResponse = new IndexResponse();
         Map<String, Object> map = new HashMap<>();
@@ -77,12 +69,16 @@ public class PutDataToEs implements Serializable {
         map.put(DynamicTable.IPCID, ipcid);
         map.put(DynamicTable.TIMESLOT, timeslot);
         if (ftpurl != null) {
+            System.out.println("Start index");
             indexResponse = esClient.prepareIndex(DynamicTable.DYNAMIC_INDEX,
                     DynamicTable.PERSON_INDEX_TYPE, ftpurl).setSource(map).get();
+            System.out.println("Stop index");
         }
         if (indexResponse.getVersion() == 1) {
+            System.out.println("code 1");
             return 1;
         } else {
+            System.out.println("code 2");
             return 0;
         }
     }

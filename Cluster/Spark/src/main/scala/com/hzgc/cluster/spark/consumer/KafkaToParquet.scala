@@ -1,20 +1,21 @@
 package com.hzgc.cluster.spark.spark.consumer
 import java.sql.Timestamp
 import java.util.Properties
+
 import com.google.common.base.Stopwatch
+import com.google.gson.Gson
 import com.hzgc.cluster.spark.spark.util.{FaceObjectUtil, PropertiesUtil}
 import kafka.common.TopicAndPartition
 import kafka.message.MessageAndMetadata
 import kafka.serializer.StringDecoder
+import kafka.utils.ZkUtils
 import org.I0Itec.zkclient.ZkClient
-import org.I0Itec.zkclient.exception.ZkNoNodeException
 import org.apache.log4j.Logger
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.streaming.{Duration, Durations, StreamingContext}
 import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.streaming.kafka.{HasOffsetRanges, KafkaUtils}
-import org.apache.zookeeper.data.Stat
 object KafkaToParquet {
   val LOG: Logger = Logger.getLogger(KafkaToParquet.getClass)
   val properties: Properties = PropertiesUtil.getProperties
@@ -104,19 +105,10 @@ object KafkaToParquet {
     kafkaStream
   }
   private def readOffsets(zkClient: ZkClient, zkHosts: String, zkPath: String, topic: String): Option[Map[TopicAndPartition, Long]] = {
+    LOG.info("=========================== Read Offsets =============================")
     LOG.info("Reading offsets from Zookeeper")
     val stopwatch = new Stopwatch()
-    val (offsetsRangesStrOpt, _) = {
-      val stat: Stat = new Stat()
-      val dataAndStat = try {
-        (Some[String](zkClient.readData(zkPath, stat)), stat)
-      } catch {
-        case e: ZkNoNodeException =>
-          (None, stat)
-        case e2: Throwable => throw e2
-      }
-      dataAndStat
-    }
+    val (offsetsRangesStrOpt, _) = ZkUtils.readDataMaybeNull(zkClient, zkPath)
     offsetsRangesStrOpt match {
       case Some(offsetsRangesStr) =>
         LOG.info(s"Read offset ranges: $offsetsRangesStr")
@@ -129,10 +121,12 @@ object KafkaToParquet {
         Some(offsets)
       case None =>
         LOG.info("No offsets found in Zookeeper. Took " + stopwatch)
+        LOG.info("==================================================================")
         None
     }
   }
   private def saveOffsets(zkClient: ZkClient, zkHosts: String, zkPath: String, rdd: RDD[_]): Unit = {
+    LOG.info("==========================Save Offsets============================")
     LOG.info("Saving offsets to Zookeeper")
     val stopwatch = new Stopwatch()
     val offsetsRanges = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
@@ -140,7 +134,8 @@ object KafkaToParquet {
     val offsetsRangesStr = offsetsRanges.map(offsetRange => s"${offsetRange.partition}:${offsetRange.fromOffset}")
       .mkString(",")
     LOG.info("chandan Writing offsets to Zookeeper zkClient=" + zkClient + " zkHosts=" + zkHosts + "zkPath=" + zkPath + " offsetsRangesStr:" + offsetsRangesStr)
-    zkClient.writeData(zkPath, offsetsRangesStr)
+    ZkUtils.updatePersistentPath(zkClient, zkPath, offsetsRangesStr)
     LOG.info("Done updating offsets in Zookeeper. Took " + stopwatch)
+    LOG.info("==================================================================")
   }
 }

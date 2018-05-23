@@ -16,7 +16,7 @@ public class FaceObject implements Serializable {
     private String date;
 
     //时间段（格式：0000）(小时+分钟)
-    private String timeSlot;
+    private int timeSlot;
 
     //人脸属性对象
     private FaceAttribute attribute;
@@ -51,14 +51,6 @@ public class FaceObject implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getTimeSlot() {
-        return timeSlot;
-    }
-
-    public void setTimeSlot(String timeSlot) {
-        this.timeSlot = timeSlot;
     }
 
     public FaceAttribute getAttribute() {
@@ -99,5 +91,13 @@ public class FaceObject implements Serializable {
 
     public void setHostname(String hostname) {
         this.hostname = hostname;
+    }
+
+    public int getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(int timeSlot) {
+        this.timeSlot = timeSlot;
     }
 }
