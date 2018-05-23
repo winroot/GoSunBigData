@@ -1,4 +1,4 @@
-package com.hzgc.cluster.spark.spark.smallfile
+package com.hzgc.cluster.spark.smallfile
 
 import java.io.File
 

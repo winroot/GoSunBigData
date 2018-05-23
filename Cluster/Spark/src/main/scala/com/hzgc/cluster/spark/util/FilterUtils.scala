@@ -1,4 +1,4 @@
-package com.hzgc.cluster.spark.spark.util
+package com.hzgc.cluster.spark.util
 
 /**
   * 自定义过滤函数（刘善彬 To 内）

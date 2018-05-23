@@ -39,6 +39,9 @@ public class ElasticSearchHelper implements Serializable{
      * @param esPort 集群端口号
      */
     private static void initElasticSearchClient(String clusterName, String esHost, int esPort) {
+        LOG.info("===================================================================");
+        LOG.info("Start init elasticSearch client, clusterName is:"
+                + clusterName + ", ip address is:" + esHost +", es port is:" + esPort);
         // 初始化配置文件
         Settings settings = Settings
                 .builder()
@@ -55,5 +58,6 @@ public class ElasticSearchHelper implements Serializable{
                 e.printStackTrace();
             }
         }
+        LOG.info("===================================================================");
     }
 }

@@ -1,4 +1,4 @@
-package com.hzgc.cluster.spark.spark.message;
+package com.hzgc.cluster.spark.message;
 
 import java.io.Serializable;
 

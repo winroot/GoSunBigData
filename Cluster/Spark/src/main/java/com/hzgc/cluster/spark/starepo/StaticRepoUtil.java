@@ -1,6 +1,6 @@
-package com.hzgc.cluster.spark.spark.starepo;
+package com.hzgc.cluster.spark.starepo;
 
-import com.hzgc.cluster.spark.spark.util.PropertiesUtil;
+import com.hzgc.cluster.spark.util.PropertiesUtil;
 import com.hzgc.common.table.starepo.ObjectInfoTable;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;

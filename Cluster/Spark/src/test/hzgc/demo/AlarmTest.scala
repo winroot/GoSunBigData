@@ -1,6 +1,6 @@
 package demo
 
-import com.hzgc.cluster.spark.spark.util.PropertiesUtil
+import com.hzgc.cluster.spark.util.PropertiesUtil
 import com.hzgc.ftpserver.producer.{FaceObject, FaceObjectDecoder}
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf

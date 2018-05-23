@@ -2,6 +2,7 @@ package com.hzgc.service.dynrepo.dao;
 
 import com.hzgc.common.hbase.HBaseHelper;
 import com.hzgc.common.table.dynrepo.DynamicTable;
+import com.hzgc.common.table.seachres.SearchResultTable;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.service.dynrepo.bean.SearchCollection;
 import com.hzgc.service.dynrepo.bean.SearchHisotry;
@@ -35,7 +36,7 @@ public class HBaseDao {
      * @return 返回是否插入成功
      */
     public boolean insertSearchRes(SearchCollection collection) {
-        Table searchRes = HBaseHelper.getTable(DynamicTable.TABLE_SEARCHRES);
+        Table searchRes = HBaseHelper.getTable(SearchResultTable.TABLE_SEARCHRES);
         List<Put> putList = new ArrayList<>();
         long start = System.currentTimeMillis();
         SimpleDateFormat dateFormat = new SimpleDateFormat(EsSearchParam.TIMEFORMAT_YMDHMS);
@@ -44,17 +45,17 @@ public class HBaseDao {
             Put put = new Put(Bytes.toBytes(collection.getSearchResult().getSearchId()));
             put.setDurability(Durability.SYNC_WAL);
             byte[] searchMessage = ObjectUtil.objectToByte(collection);
-            put.addColumn(DynamicTable.SEARCHRES_COLUMNFAMILY,
-                    DynamicTable.SEARCHRES_COLUMN_SEARCHMESSAGE, searchMessage);
-            put.addColumn(DynamicTable.SEARCHRES_COLUMNFAMILY,
-                    DynamicTable.SEARCHRES_COLUM_SEARCHTIME, Bytes.toBytes(searchTime));
+            put.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY,
+                    SearchResultTable.SEARCHRES_COLUMN_SEARCHMESSAGE, searchMessage);
+            put.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY,
+                    SearchResultTable.SEARCHRES_COLUM_SEARCHTIME, Bytes.toBytes(searchTime));
             putList.add(put);
             for (int i = 0; i < collection.getSearchOption().getImages().size(); i++) {
-                put.addColumn(DynamicTable.SEARCHRES_COLUMNFAMILY,
+                put.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY,
                         Bytes.toBytes(i+ ""), collection.getSearchOption().getImages().get(i).getImageData());
                 Put putimage = new Put(Bytes.toBytes(collection.getSearchOption().getImages().get(i).getImageID()));
-                putimage.addColumn(DynamicTable.SEARCHRES_COLUMNFAMILY,
-                        DynamicTable.SEARCHRES_COLUM_PICTURE,
+                putimage.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY,
+                        SearchResultTable.SEARCHRES_COLUM_PICTURE,
                         collection.getSearchOption().getImages().get(i).getImageData());
                 putList.add(putimage);
             }
@@ -84,18 +85,18 @@ public class HBaseDao {
         Result result = null;
         SearchCollection searchCollection;
         SearchResult searchResult;
-        Table searchResTable = HBaseHelper.getTable(DynamicTable.TABLE_SEARCHRES);
+        Table searchResTable = HBaseHelper.getTable(SearchResultTable.TABLE_SEARCHRES);
         Get get = new Get(Bytes.toBytes(searchId));
-        get.addColumn(DynamicTable.SEARCHRES_COLUMNFAMILY,
-                DynamicTable.SEARCHRES_COLUMN_SEARCHMESSAGE);
+        get.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY,
+                SearchResultTable.SEARCHRES_COLUMN_SEARCHMESSAGE);
         try {
             if (searchResTable != null) {
                 result = searchResTable.get(get);
             }
             if (result != null) {
                 byte[] searchMessage =
-                        result.getValue(DynamicTable.SEARCHRES_COLUMNFAMILY,
-                                DynamicTable.SEARCHRES_COLUMN_SEARCHMESSAGE);
+                        result.getValue(SearchResultTable.SEARCHRES_COLUMNFAMILY,
+                                SearchResultTable.SEARCHRES_COLUMN_SEARCHMESSAGE);
                 searchCollection = ((SearchCollection) ObjectUtil.byteToObject(searchMessage));
                 searchResult = searchCollection.getSearchResult();
                 if (searchResult != null) {
@@ -124,10 +125,10 @@ public class HBaseDao {
     public byte[] getSearchPicture(String image_name) {
         Table table = HBaseHelper.getTable(image_name);
         Get get = new Get(Bytes.toBytes(image_name));
-        get.addColumn(DynamicTable.SEARCHRES_COLUMNFAMILY, DynamicTable.SEARCHRES_COLUM_PICTURE);
+        get.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY, SearchResultTable.SEARCHRES_COLUM_PICTURE);
         try {
             Result picBin = table.get(get);
-            return picBin.getValue(DynamicTable.SEARCHRES_COLUMNFAMILY, DynamicTable.SEARCHRES_COLUM_PICTURE);
+            return picBin.getValue(SearchResultTable.SEARCHRES_COLUMNFAMILY, SearchResultTable.SEARCHRES_COLUM_PICTURE);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -148,21 +149,21 @@ public class HBaseDao {
      */
     public List<SearchHisotry> getSearchHistory(String start_time, String end_time, String sort, int start, int limit) {
         FilterList filterList = new FilterList();
-        Filter stimeFilter = new SingleColumnValueFilter(DynamicTable.SEARCHRES_COLUMNFAMILY,
-                DynamicTable.SEARCHRES_COLUM_SEARCHTIME,
+        Filter stimeFilter = new SingleColumnValueFilter(SearchResultTable.SEARCHRES_COLUMNFAMILY,
+                SearchResultTable.SEARCHRES_COLUM_SEARCHTIME,
                 CompareFilter.CompareOp.GREATER_OR_EQUAL,
                 Bytes.toBytes(start_time));
-        Filter etimeFilter = new SingleColumnValueFilter(DynamicTable.SEARCHRES_COLUMNFAMILY,
-                DynamicTable.SEARCHRES_COLUM_SEARCHTIME,
+        Filter etimeFilter = new SingleColumnValueFilter(SearchResultTable.SEARCHRES_COLUMNFAMILY,
+                SearchResultTable.SEARCHRES_COLUM_SEARCHTIME,
                 CompareFilter.CompareOp.LESS_OR_EQUAL,
                 Bytes.toBytes(end_time));
         filterList.addFilter(stimeFilter);
         filterList.addFilter(etimeFilter);
         Scan scan = new Scan();
         scan.setFilter(filterList);
-        scan.addColumn(DynamicTable.SEARCHRES_COLUMNFAMILY, DynamicTable.SEARCHRES_COLUM_SEARCHTIME);
-        scan.addColumn(DynamicTable.SEARCHRES_COLUMNFAMILY, DynamicTable.SEARCHRES_COLUMN_SEARCHMESSAGE);
-        Table table = HBaseHelper.getTable(DynamicTable.TABLE_SEARCHRES);
+        scan.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY, SearchResultTable.SEARCHRES_COLUM_SEARCHTIME);
+        scan.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY, SearchResultTable.SEARCHRES_COLUMN_SEARCHMESSAGE);
+        Table table = HBaseHelper.getTable(SearchResultTable.TABLE_SEARCHRES);
         List<SearchHisotry> searchHisotryList = new ArrayList<>();
         try {
             if (table != null) {
@@ -171,9 +172,9 @@ public class HBaseDao {
                     SearchHisotry searchHisotry = new SearchHisotry();
                     for (Cell cell : r.listCells()) {
                         String qualifier = new String(CellUtil.cloneQualifier(cell));
-                        if (qualifier.equals(new String(DynamicTable.SEARCHRES_COLUM_SEARCHTIME))) {
+                        if (qualifier.equals(new String(SearchResultTable.SEARCHRES_COLUM_SEARCHTIME))) {
                             searchHisotry.setSearchTime(new String(CellUtil.cloneValue(cell)));
-                        } else if (qualifier.equals(new String(DynamicTable.SEARCHRES_COLUMN_SEARCHMESSAGE))) {
+                        } else if (qualifier.equals(new String(SearchResultTable.SEARCHRES_COLUMN_SEARCHMESSAGE))) {
                             SearchCollection collection =
                                     (SearchCollection) ObjectUtil.byteToObject(CellUtil.cloneValue(cell));
                             searchHisotry.setAttributes(collection.getSearchOption().getAttributes());

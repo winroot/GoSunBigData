@@ -1,4 +1,4 @@
-package com.hzgc.cluster.spark.spark.device;
+package com.hzgc.cluster.spark.device;
 
 import com.hzgc.common.hbase.HBaseHelper;
 import com.hzgc.common.table.device.DeviceTable;

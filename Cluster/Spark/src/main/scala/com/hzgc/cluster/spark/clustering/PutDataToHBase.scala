@@ -1,4 +1,4 @@
-package com.hzgc.cluster.spark.spark.clustering
+package com.hzgc.cluster.spark.clustering
 
 import java.util
 import java.util.List

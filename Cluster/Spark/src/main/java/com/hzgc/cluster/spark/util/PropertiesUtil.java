@@ -1,4 +1,4 @@
-package com.hzgc.cluster.spark.spark.util;
+package com.hzgc.cluster.spark.util;
 
 import com.hzgc.common.util.file.ResourceFileUtil;
 import com.hzgc.common.util.empty.IsEmpty;

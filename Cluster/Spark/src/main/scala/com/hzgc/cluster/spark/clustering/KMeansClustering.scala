@@ -1,12 +1,14 @@
-package com.hzgc.cluster.spark.spark.clustering
+package com.hzgc.cluster.spark.clustering
 
 import java.sql.{Blob, Connection, DriverManager, PreparedStatement, Timestamp}
 import java.text.SimpleDateFormat
 import java.util
 import java.util.{Calendar, Date, Properties, UUID}
 
+import com.hzgc.cluster.spark.consumer.PutDataToEs
 import com.hzgc.cluster.spark.spark.consumer.PutDataToEs
 import com.hzgc.cluster.spark.spark.util.{FtpDownloadUtils, PropertiesUtil}
+import com.hzgc.cluster.spark.util.{FtpDownloadUtils, PropertiesUtil}
 import com.hzgc.common.clustering.ClusteringAttribute
 import edu.berkeley.cs.amplab.spark.indexedrdd.IndexedRDD
 import edu.berkeley.cs.amplab.spark.indexedrdd.IndexedRDD._

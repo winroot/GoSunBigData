@@ -1,16 +1,15 @@
-package com.hzgc.cluster.spark.spark.alarm
+package com.hzgc.cluster.spark.alarm
 
 import java.text.SimpleDateFormat
 import java.util.Date
 
 import com.google.gson.Gson
-import com.hzgc.cluster.spark.spark.device.DeviceUtilImpl
-import com.hzgc.cluster.spark.spark.message.OffLineAlarmMessage
-import com.hzgc.cluster.spark.spark.rocmq.RocketMQProducer
-import com.hzgc.cluster.spark.spark.starepo.StaticRepoUtil
-import com.hzgc.cluster.spark.spark.util.PropertiesUtil
+import com.hzgc.cluster.spark.device.DeviceUtilImpl
+import com.hzgc.cluster.spark.message.OffLineAlarmMessage
+import com.hzgc.cluster.spark.rocmq.RocketMQProducer
+import com.hzgc.cluster.spark.starepo.StaticRepoUtil
+import com.hzgc.cluster.spark.util.PropertiesUtil
 import com.hzgc.common.table.device.DeviceTable
-import org.apache.spark.streaming.{Duration, Durations, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.JavaConverters

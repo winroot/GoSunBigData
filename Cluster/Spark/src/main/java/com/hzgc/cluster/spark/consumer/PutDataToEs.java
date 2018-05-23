@@ -1,6 +1,6 @@
-package com.hzgc.cluster.spark.spark.consumer;
+package com.hzgc.cluster.spark.consumer;
 
-import com.hzgc.cluster.spark.spark.util.PropertiesUtil;
+import com.hzgc.cluster.spark.util.PropertiesUtil;
 import com.hzgc.common.es.ElasticSearchHelper;
 import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.jni.FaceAttribute;

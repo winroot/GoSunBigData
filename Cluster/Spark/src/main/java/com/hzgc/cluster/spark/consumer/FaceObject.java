@@ -1,4 +1,4 @@
-package com.hzgc.cluster.spark.spark.consumer;
+package com.hzgc.cluster.spark.consumer;
 
 import com.hzgc.jni.FaceAttribute;
 

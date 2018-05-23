@@ -1,6 +1,6 @@
-package com.hzgc.cluster.spark.spark.starepo;
+package com.hzgc.cluster.spark.starepo;
 
-import com.hzgc.cluster.spark.spark.util.PropertiesUtil;
+import com.hzgc.cluster.spark.util.PropertiesUtil;
 
 import java.sql.*;
 

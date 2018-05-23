@@ -1,4 +1,4 @@
-package com.hzgc.cluster.spark.spark.loaddata
+package com.hzgc.cluster.spark.loaddata
 
 import java.io.File
 import java.util

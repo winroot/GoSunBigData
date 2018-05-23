@@ -1,4 +1,4 @@
-package com.hzgc.cluster.spark.spark.rocmq;
+package com.hzgc.cluster.spark.rocmq;
 
 import com.hzgc.common.util.empty.IsEmpty;
 import org.apache.log4j.Logger;

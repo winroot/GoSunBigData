@@ -1,15 +1,15 @@
-package com.hzgc.cluster.spark.spark.alarm
+package com.hzgc.cluster.spark.alarm
 
 import java.text.SimpleDateFormat
 import java.util
 import java.util.Date
 
 import com.google.gson.Gson
-import com.hzgc.cluster.spark.spark.device.DeviceUtilImpl
-import com.hzgc.cluster.spark.spark.message.{Item, RecognizeAlarmMessage}
-import com.hzgc.cluster.spark.spark.rocmq.RocketMQProducer
-import com.hzgc.cluster.spark.spark.starepo.StaticRepoUtil
-import com.hzgc.cluster.spark.spark.util.{FaceObjectUtil, PropertiesUtil}
+import com.hzgc.cluster.spark.device.DeviceUtilImpl
+import com.hzgc.cluster.spark.message.{Item, RecognizeAlarmMessage}
+import com.hzgc.cluster.spark.rocmq.RocketMQProducer
+import com.hzgc.cluster.spark.starepo.StaticRepoUtil
+import com.hzgc.cluster.spark.util.{FaceObjectUtil, PropertiesUtil}
 import com.hzgc.common.table.device.DeviceTable
 import com.hzgc.jni.FaceFunction
 import kafka.serializer.StringDecoder
