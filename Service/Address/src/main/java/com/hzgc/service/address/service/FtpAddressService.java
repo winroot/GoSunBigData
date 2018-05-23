@@ -1,7 +1,7 @@
 package com.hzgc.service.address.service;
 
-import com.hzgc.common.util.empty.IsEmpty;
-import org.springframework.beans.factory.annotation.Value;
+import com.hzgc.collect.zk.register.RegisterWatcher;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -10,24 +10,9 @@ import java.util.Map;
 
 @Service
 public class FtpAddressService implements Serializable {
-
-    /**
-     * ftp 相关配置
-     */
-    @Value("${ftp.proxy.ip}")
-    private String ftp_proxy_ip;
-    @Value("${ftp.proxy.hostname}")
-    private String ftp_proxy_hostname;
-    @Value("${ftp.proxy.port}")
-    private String ftp_proxy_port;
-    @Value("${ftp.username}")
-    private String ftp_username;
-    @Value("${ftp.password}")
-    private String ftp_password;
-    @Value("${ftp.pathRule}")
-    private String ftp_pathRule;
-    @Value("${ftp.hostname.mapping}")
-    private String ftp_hostname_mapping;
+    @Autowired
+    @SuppressWarnings("unused")
+    RegisterWatcher registerWatcher;
 
     /**
      * 获取Ftp相关配置参数
@@ -36,13 +21,13 @@ public class FtpAddressService implements Serializable {
      */
     public Map<String, String> getProperties() {
         Map<String, String> map = new HashMap<>();
-        map.put("ip",ftp_proxy_ip);
-        map.put("hostname", ftp_proxy_hostname);
-        map.put("port", ftp_proxy_port);
-        map.put("username", ftp_username);
-        map.put("password", ftp_password);
-        map.put("pathRule", ftp_pathRule);
-        map.put("hostname.mapping", ftp_hostname_mapping);
+        for (String key : registerWatcher.getRegisterInfo().getProxyInfo().keySet()) {
+            map.put("ip", key);
+            map.put("port", registerWatcher.getRegisterInfo().getProxyInfo().get(key));
+        }
+        map.put("username", registerWatcher.getRegisterInfo().getFtpAccountName());
+        map.put("password", registerWatcher.getRegisterInfo().getFtpPassword());
+        map.put("pathRule", registerWatcher.getRegisterInfo().getPathRule());
         return map;
     }
 
@@ -53,19 +38,7 @@ public class FtpAddressService implements Serializable {
      * @return IP地址
      */
     public String getIPAddress(String hostname) {
-        String ftpIpAddress = "";
-        if (IsEmpty.strIsRight(hostname)) {
-            String[] ftp_hostname = ftp_hostname_mapping.split(";");
-            for (String str : ftp_hostname) {
-                if (str.contains(hostname)) {
-                    ftpIpAddress = str.split(":")[1];
-                    if (IsEmpty.strIsRight(ftpIpAddress)){
-                        return ftpIpAddress;
-                    }
-                }
-            }
-        }
-        return ftpIpAddress;
+        return registerWatcher.getRegisterInfo().getHostNameMapping().get(hostname);
     }
 }
 

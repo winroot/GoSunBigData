@@ -33,6 +33,11 @@
             <groupId>com.hzgc.service</groupId>
             <artifactId>util</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.hzgc.collect</groupId>
+            <artifactId>collect-zookeeper</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>

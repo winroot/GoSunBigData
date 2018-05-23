@@ -10,6 +10,7 @@ import com.hzgc.cluster.spark.spark.rocmq.RocketMQProducer
 import com.hzgc.cluster.spark.spark.starepo.StaticRepoUtil
 import com.hzgc.cluster.spark.spark.util.PropertiesUtil
 import com.hzgc.common.table.device.DeviceTable
+import org.apache.spark.streaming.{Duration, Durations, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.JavaConverters

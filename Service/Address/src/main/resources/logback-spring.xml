@@ -5,7 +5,7 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ssw:SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
             <charset>utf-8</charset>
         </encoder>
         <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
@@ -20,7 +20,7 @@
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>D:\\%d{yyyy-MM-dd}.addressinfo.%i.log</FileNamePattern>
+            <FileNamePattern>log/%d{yyyy-MM-dd}.address.%i.log</FileNamePattern>
             <!--日志文件保留天数-->
             <MaxHistory>10</MaxHistory>
             <!-- 除按日志记录之外，还配置了日志文件不能超过2M，若超过2M，日志文件会以索引0开始，
@@ -51,7 +51,7 @@
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>D:\\%d{yyyy-MM-dd}.addresserror.log</FileNamePattern>
+            <FileNamePattern>log/%d{yyyy-MM-dd}.addressError.log</FileNamePattern>
             <!--日志文件保留天数<MaxHistory>10</MaxHistory>-->
             <!-- 除按日志记录之外，还配置了日志文件不能超过2M，若超过2M，日志文件会以索引0开始，
                 命名日志文件，例如log-error-2013-12-21.0.log

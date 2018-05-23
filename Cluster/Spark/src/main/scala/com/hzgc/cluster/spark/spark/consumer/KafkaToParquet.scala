@@ -1,8 +1,6 @@
 package com.hzgc.cluster.spark.spark.consumer
-
 import java.sql.Timestamp
 import java.util.Properties
-
 import com.google.common.base.Stopwatch
 import com.hzgc.cluster.spark.spark.util.{FaceObjectUtil, PropertiesUtil}
 import kafka.common.TopicAndPartition
@@ -17,14 +15,11 @@ import org.apache.spark.streaming.{Duration, Durations, StreamingContext}
 import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.streaming.kafka.{HasOffsetRanges, KafkaUtils}
 import org.apache.zookeeper.data.Stat
-
 object KafkaToParquet {
-
   val LOG: Logger = Logger.getLogger(KafkaToParquet.getClass)
   val properties: Properties = PropertiesUtil.getProperties
-
   case class Picture(ftpurl: String, //图片搜索地址
-                     //feature：图片特征值 ipcid：设备id  timeslot：时间段
+                     //feature：图片特征值 ipcid：设备id timeslot：时间段
                      feature: Array[Float], ipcid: String, timeslot: Int,
                      //timestamp:时间戳 pictype：图片类型 date：时间
                      exacttime: Timestamp, date: String,
@@ -35,7 +30,6 @@ object KafkaToParquet {
                      //清晰度评价
                      sharpness: Int
                     )
-
   def getItem(parameter: String, properties: Properties): String = {
     val item = properties.getProperty(parameter)
     if (null != item) {
@@ -46,7 +40,6 @@ object KafkaToParquet {
     }
     null
   }
-
   def main(args: Array[String]): Unit = {
     val appname: String = getItem("job.faceObjectConsumer.appName", properties)
     val brokers: String = getItem("job.faceObjectConsumer.broker.list", properties)
@@ -61,7 +54,6 @@ object KafkaToParquet {
     ssc.start()
     ssc.awaitTermination()
   }
-
   private def setupSsc(topics: Set[String], kafkaParams: Map[String, String]
                        , spark: SparkSession)(): StreamingContext = {
     val timeInterval: Duration = Durations.seconds(getItem("job.faceObjectConsumer.timeInterval", properties).toLong)
@@ -96,7 +88,6 @@ object KafkaToParquet {
     messages.foreachRDD(rdd => saveOffsets(zKClient, zkHosts, zKPaths, rdd))
     ssc
   }
-
   private def createCustomDirectKafkaStream(ssc: StreamingContext, kafkaParams: Map[String, String], zkHosts: String
                                             , zkPath: String, topics: Set[String]): InputDStream[(String, String)] = {
     val topic = topics.last
@@ -112,7 +103,6 @@ object KafkaToParquet {
     }
     kafkaStream
   }
-
   private def readOffsets(zkClient: ZkClient, zkHosts: String, zkPath: String, topic: String): Option[Map[TopicAndPartition, Long]] = {
     LOG.info("Reading offsets from Zookeeper")
     val stopwatch = new Stopwatch()
@@ -127,7 +117,6 @@ object KafkaToParquet {
       }
       dataAndStat
     }
-
     offsetsRangesStrOpt match {
       case Some(offsetsRangesStr) =>
         LOG.info(s"Read offset ranges: $offsetsRangesStr")
@@ -143,7 +132,6 @@ object KafkaToParquet {
         None
     }
   }
-
   private def saveOffsets(zkClient: ZkClient, zkHosts: String, zkPath: String, rdd: RDD[_]): Unit = {
     LOG.info("Saving offsets to Zookeeper")
     val stopwatch = new Stopwatch()
@@ -151,7 +139,7 @@ object KafkaToParquet {
     offsetsRanges.foreach(offsetRange => LOG.debug(s"Using $offsetRange"))
     val offsetsRangesStr = offsetsRanges.map(offsetRange => s"${offsetRange.partition}:${offsetRange.fromOffset}")
       .mkString(",")
-    LOG.info("chandan Writing offsets to Zookeeper zkClient=" + zkClient + "  zkHosts=" + zkHosts + "zkPath=" + zkPath + "  offsetsRangesStr:" + offsetsRangesStr)
+    LOG.info("chandan Writing offsets to Zookeeper zkClient=" + zkClient + " zkHosts=" + zkHosts + "zkPath=" + zkPath + " offsetsRangesStr:" + offsetsRangesStr)
     zkClient.writeData(zkPath, offsetsRangesStr)
     LOG.info("Done updating offsets in Zookeeper. Took " + stopwatch)
   }
