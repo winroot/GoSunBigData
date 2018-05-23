@@ -6,8 +6,6 @@ import java.util
 import java.util.{Calendar, Date, Properties, UUID}
 
 import com.hzgc.cluster.spark.consumer.PutDataToEs
-import com.hzgc.cluster.spark.spark.consumer.PutDataToEs
-import com.hzgc.cluster.spark.spark.util.{FtpDownloadUtils, PropertiesUtil}
 import com.hzgc.cluster.spark.util.{FtpDownloadUtils, PropertiesUtil}
 import com.hzgc.common.clustering.ClusteringAttribute
 import edu.berkeley.cs.amplab.spark.indexedrdd.IndexedRDD

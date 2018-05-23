@@ -4,8 +4,6 @@ import java.sql.Timestamp
 import java.util.Properties
 
 import com.google.common.base.Stopwatch
-import com.google.gson.Gson
-import com.hzgc.cluster.spark.spark.util.{FaceObjectUtil, PropertiesUtil}
 import com.hzgc.cluster.spark.util.{FaceObjectUtil, PropertiesUtil}
 import kafka.common.TopicAndPartition
 import kafka.message.MessageAndMetadata
