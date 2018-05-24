@@ -14,8 +14,8 @@
 cd `dirname $0`
 BIN_DIR=`pwd`   ###bin目录
 cd ..
-DEPLOY_DIR=`pwd`  ###azkaban目录
-CONF_DIR=$DEPLOY_DIR/logs  ###集群log日志目录
+AZKABAN_DIR=`pwd`  ###azkaban目录
+LOG_DIR=${AZKABAN_DIR}/logs  ###集群log日志目录
 LOG_FILE=${LOG_DIR}/create-schedule-job-to-zip.log  ##log日志文件
 SCHEMA_FILE="schema-merge-parquet-file.sh"
 OFFLINE_FILE="start-face-offline-alarm-job.sh"
@@ -25,7 +25,7 @@ cd ..
 cd ..
 OBJECT_DIR=`pwd`                                 ## 根目录
 CLUSTER_BIN_DIR=/opt/RealTimeFaceCompare/cluster/spark/bin
-SERVICE_BIN_DIR=/opt/RealTimeFaceCompare/service/visual/bin
+SERVICE_BIN_DIR=/opt/RealTimeFaceCompare/cluster/es/bin
 AZKABAN_BIN_DIR=/opt/RealTimeFaceCompare/cluster/azkaban/bin
 
 cd ${CLUSTER_BIN_DIR}  ##进入cluster的bin目录
@@ -79,7 +79,9 @@ cd ${SERVICE_BIN_DIR}
 zip get-dynamicshow-table-run_onehour.job.zip get-dynamicshow-table-run.job
 mv get-dynamicshow-table-run_onehour.job.zip ${CLUSTER_BIN_DIR}/midTableAndPersonTableNow
 rm -rf get-dynamicshow-table-run.job
-cd ${AZKABAN_BIN_DIR}
+cd ${AZKABAN_DIR}
+mkdir -p zip
+cd zip
 mkdir -p midTableAndPersonTableNow
 mv ${CLUSTER_BIN_DIR}/midTableAndPersonTableNow/* midTableAndPersonTableNow
 rm -rf ${CLUSTER_BIN_DIR}/midTableAndPersonTableNow

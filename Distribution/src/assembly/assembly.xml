@@ -66,11 +66,11 @@
             <outputDirectory>cluster/phoenix/bin</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Cluster/Phoenix-udf/conf</directory>
+            <directory>../Cluster/Phoenix-udf/sql</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>cluster/phoenix/conf</outputDirectory>
+            <outputDirectory>cluster/phoenix/sql</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/Phoenix-udf/target/</directory>
@@ -98,11 +98,11 @@
             <outputDirectory>cluster/hbase/bin</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Cluster/HBase/conf</directory>
+            <directory>../Cluster/HBase/sql</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>cluster/hbase/conf</outputDirectory>
+            <outputDirectory>cluster/hbase/sql</outputDirectory>
         </fileSet>
 
         <!--azkaban-->

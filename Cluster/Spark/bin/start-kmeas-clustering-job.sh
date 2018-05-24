@@ -94,6 +94,8 @@ fi
 ############### 判断是否存在配置文件 ##################
 if [ ! -e ${SPARK_CONF_DIR}/sparkJob.properties ];then
     echo "${SPARK_CONF_DIR}/sparkJob.properties does not exit!"
+else
+    cp ${SPARK_CONF_DIR}/sparkJob.properties /opt/hzgc/bigdata/Spark/spark/conf/
     exit 0
 fi
 if [ ! -e ${SPARK_CONF_DIR}/log4j.properties ];then
