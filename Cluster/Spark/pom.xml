@@ -146,10 +146,6 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.hadoop</groupId>
-                    <artifactId>hadoop-auth</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.hadoop</groupId>
                     <artifactId>hadoop-mapreduce-client-core</artifactId>
                 </exclusion>
                 <exclusion>
@@ -367,6 +363,11 @@
                     <artifactId>netty-all</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.phoenix</groupId>
+            <artifactId>phoenix-core</artifactId>
+            <version>4.13.1-HBase-1.2</version>
         </dependency>
     </dependencies>
     <repositories>
