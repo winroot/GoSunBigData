@@ -44,11 +44,15 @@ public class CaptureSearchService {
         if (option.getSimilarity() < 0.0) {
             log.error("Start search picture, but threshold is null");
         }
+        if (option.getDeviceIds() != null && option.getDeviceIds().size() > 0) {
+            captureServiceHelper.capturOptionConver(option);
+        }
 
         log.info("Start search picture, search option is:" + JSONUtil.toJson(option));
         String searchId = UuidUtil.getUuid();
         log.info("Start search picture, generate search id and search id is:[" + searchId + "]");
-        resultSet = sparkJDBCDao.searchPicture(option);
+        SearchCallBack searchCallBack = sparkJDBCDao.searchPicture(option);
+        resultSet = searchCallBack.getResultSet();
         log.info("Start search picture, execute query total time is:" + (System.currentTimeMillis() - start));
         if (resultSet != null) {
             if (option.isSinglePerson() || option.getImages().size() == 1) {
@@ -75,6 +79,8 @@ public class CaptureSearchService {
         } else {
             log.info("Query result set is null");
         }
+        sparkJDBCDao.closeConnection(searchCallBack.getConnection(), searchCallBack.getStatement());
+        System.out.println(JSONUtil.toJson(searchResult));
         return searchResult;
     }
 

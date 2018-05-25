@@ -1,9 +1,11 @@
 package com.hzgc.service.dynrepo.service;
 
+import com.hzgc.collect.zk.register.RegisterWatcher;
 import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.service.dynrepo.bean.*;
-import com.hzgc.service.dynrepo.bean.platform.DeviceDTO;
+import com.hzgc.service.util.api.DeviceDTO;
+import com.hzgc.service.util.api.DeviceQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -12,10 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -33,6 +32,9 @@ class CaptureServiceHelper {
     @Autowired
     @SuppressWarnings("unused")
     private DeviceQueryService queryService;
+
+    @Autowired
+    private RegisterWatcher registerWatcher;
 
     /**
      * 通过排序参数进行排序
@@ -122,7 +124,6 @@ class CaptureServiceHelper {
             //结束行大于总数，则返回起始行开始的后续所有数据
             subCapturePictureList = capturedPictures.subList(offset, totalPicture);
         }
-        addDeviceName(subCapturePictureList);
         return subCapturePictureList;
     }
 
@@ -136,26 +137,26 @@ class CaptureServiceHelper {
             //结束行大于总数，则返回起始行开始的后续所有数据
             subCapturePictureList = capturedPictures.subList(offset, totalPicture);
         }
-        addDeviceName(subCapturePictureList);
+//        addDeviceName(subCapturePictureList);
         return subCapturePictureList;
     }
 
-    void addDeviceName(List<CapturedPicture> capturedPictureList) {
-        if (environment.getProperty("call.external.service", boolean.class)) {
-            if (capturedPictureList != null && capturedPictureList.size() > 0) {
-                List<String> ipcList = new ArrayList<>();
-                for (CapturedPicture picture : capturedPictureList) {
-                    ipcList.add(picture.getDeviceId());
-                }
-                Map<String, DeviceDTO> ipcMapping = queryService.getDeviceInfoByBatch(ipcList);
-                for (CapturedPicture picture : capturedPictureList) {
-                    if (ipcMapping.containsKey(picture.getDeviceId())) {
-                        picture.setDeviceName(ipcMapping.get(picture.getDeviceId()).getName());
-                    }
-                }
-            }
-        }
-    }
+//    void addDeviceName(List<CapturedPicture> capturedPictureList) {
+//        if (environment.getProperty("call.external.service", boolean.class)) {
+//            if (capturedPictureList != null && capturedPictureList.size() > 0) {
+//                List<String> ipcList = new ArrayList<>();
+//                for (CapturedPicture picture : capturedPictureList) {
+//                    ipcList.add(picture.getDeviceId());
+//                }
+//                Map<String, DeviceDTO> ipcMapping = queryService.getDeviceInfoByBatchIpc(ipcList);
+//                for (CapturedPicture picture : capturedPictureList) {
+//                    if (ipcMapping.containsKey(picture.getDeviceId())) {
+//                        picture.setDeviceName(ipcMapping.get(picture.getDeviceId()).getName());
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     SearchResult parseResultOnePerson(ResultSet resultSet, SearchOption option, String searchId) {
         SingleSearchResult singleSearchResult = new SingleSearchResult();
@@ -166,6 +167,7 @@ class CaptureServiceHelper {
             while (resultSet.next()) {
                 //小图ftpurl
                 String surl = resultSet.getString(DynamicTable.FTPURL);
+                System.out.println(surl);
                 //设备id
                 String ipcid = resultSet.getString(DynamicTable.IPCID);
                 //相似度
@@ -183,7 +185,7 @@ class CaptureServiceHelper {
                 capturedPicture.setSimilarity(similaritys);
                 capturedPictureList.add(capturedPicture);
             }
-            addDeviceName(capturedPictureList);
+//            addDeviceName(capturedPictureList);
             List<String> imageIdList = new ArrayList<>();
             for (int i = 0; i < option.getImages().size(); i++) {
                 imageIdList.add(option.getImages().get(i).getImageID());
@@ -212,6 +214,7 @@ class CaptureServiceHelper {
             while (resultSet.next()) {
                 //小图ftpurl
                 String surl = resultSet.getString(DynamicTable.FTPURL);
+                System.out.println(surl);
                 //设备id
                 String ipcid = resultSet.getString(DynamicTable.IPCID);
                 //相似度
@@ -242,7 +245,7 @@ class CaptureServiceHelper {
                 SingleSearchResult singleSearchResult = new SingleSearchResult();
                 String picId = option.getImages().get(i).getImageID();
                 if (mapSet.containsKey(picId)) {
-                    addDeviceName(mapSet.get(picId));
+//                    addDeviceName(mapSet.get(picId));
                     singleSearchResult.setPictures(mapSet.get(picId));
                     singleSearchResult.setTotal(mapSet.get(picId).size());
                     List<String> list = new ArrayList<>();
@@ -270,11 +273,43 @@ class CaptureServiceHelper {
     String getFtpUrl(String ftpUrl) {
 
         String hostName = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
-        String ftpServerIP = environment.getProperty(hostName);
+        String ftpServerIP = registerWatcher.getRegisterInfo().getHostNameMapping().get(hostName);
         if (IsEmpty.strIsRight(ftpServerIP)) {
             return ftpUrl.replace(hostName, ftpServerIP);
         }
         return ftpUrl;
+    }
+
+    /**
+     * 将设备树中获取的设备ID转为ipc id
+     *
+     * @param idList 设备ID列表
+     * @return ipc id列表
+     */
+    List<String> deviceIdToDeviceIpc(List<Long> idList) {
+        Map<String, DeviceDTO> result = queryService.getDeviceInfoByBatchId(idList);
+        return result.values().stream().map(DeviceDTO::getSerial).collect(toList());
+    }
+
+    /**
+     * 向CaptureOption中添加转换后的IPC列表以及IPC映射DeviceDTO
+     *
+     * @param option 抓拍查询参数
+     */
+    public void capturOptionConver(CaptureOption option) {
+        Map<String, DeviceDTO> result = queryService.getDeviceInfoByBatchId(option.getDeviceIds());
+        List<String> ipcList = result.values().stream().map(DeviceDTO::getSerial).collect(toList());
+        List<String> bak = new ArrayList<>();
+        bak.add("3K01E84PAU00083");
+        bak.add("2L04129PAU01933");
+        option.setDeviceIpcs(bak);
+        Map<String, DeviceDTO> ipcListMapping = result.values().stream().collect(Collectors.toMap(DeviceDTO::getSerial, DeviceDTO -> DeviceDTO));
+        Map<String, DeviceDTO> aa = new HashMap<>();
+
+        aa.put("3K01E84PAU00083", new DeviceDTO());
+        aa.put("2L04129PAU01933", new DeviceDTO());
+        option.setIpcMappingDevice(aa
+        );
     }
 
     /**

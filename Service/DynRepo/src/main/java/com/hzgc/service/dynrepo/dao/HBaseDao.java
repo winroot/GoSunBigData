@@ -178,7 +178,7 @@ public class HBaseDao {
                             SearchCollection collection =
                                     (SearchCollection) ObjectUtil.byteToObject(CellUtil.cloneValue(cell));
                             searchHisotry.setAttributes(collection.getSearchOption().getAttributes());
-                            searchHisotry.setDeviceIds(collection.getSearchOption().getDeviceIds());
+                            searchHisotry.setDeviceIds(collection.getSearchOption().getDeviceIpcs());
                             searchHisotry.setSearchId(new String(CellUtil.cloneRow(cell)));
                             searchHisotry.setSimilarity(collection.getSearchOption().getSimilarity() + "");
                             searchHisotry.setStartTime(collection.getSearchOption().getStartTime());

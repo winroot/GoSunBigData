@@ -2,9 +2,11 @@ package com.hzgc.service.dynrepo.controller;
 
 import com.hzgc.common.attribute.bean.Attribute;
 import com.hzgc.common.attribute.service.AttributeService;
+import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.dynrepo.bean.*;
 import com.hzgc.service.dynrepo.service.CaptureHistoryService;
 import com.hzgc.service.dynrepo.service.CaptureSearchService;
+import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
@@ -44,6 +46,7 @@ public class CaptureSearchController {
     @SuppressWarnings("unused")
     public ResponseResult<SearchResult> searchPicture(
             @RequestBody @ApiParam(value = "以图搜图入参") SearchOption searchOption) throws SQLException {
+        System.out.println(JSONUtil.toJson(searchOption));
         SearchResult searchResult;
         if (searchOption != null) {
             searchResult = captureSearchService.searchPicture(searchOption);
@@ -72,7 +75,7 @@ public class CaptureSearchController {
      * @param searchResultOption 以图搜图入参
      * @return SearchResult
      */
-    @ApiOperation(value = "历史搜索记录查询", response = SearchResult.class)
+    @ApiOperation(value = "获取更多搜图结果", response = SearchResult.class)
     @RequestMapping(value = BigDataPath.DYNREPO_SEARCHRESULT, method = RequestMethod.POST)
     @ApiImplicitParam(name = "searchResultOption", value = "以图搜图入参", paramType = "body")
     @SuppressWarnings("unused")
@@ -97,7 +100,7 @@ public class CaptureSearchController {
      * @param limit      返回条数
      * @return 返回查询结果
      */
-    @ApiOperation(value = "查询搜索记录", response = SearchHisotry.class, responseContainer = "List")
+    @ApiOperation(value = "查询搜图记录", response = SearchHisotry.class, responseContainer = "List")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "start_time", value = "起始时间", paramType = "query"),
             @ApiImplicitParam(name = "end_time", value = "结束时间", paramType = "query"),
@@ -106,6 +109,7 @@ public class CaptureSearchController {
             @ApiImplicitParam(name = "limit", value = "返回条数", paramType = "query")
     })
     @SuppressWarnings("unused")
+    @RequestMapping(value = BigDataPath.DYNREPO_SEARCHHISTORY, method = RequestMethod.GET)
     public ResponseResult<List<SearchHisotry>> getSearchHistory(
             String start_time,
             String end_time,
@@ -121,18 +125,21 @@ public class CaptureSearchController {
      * @param searchOption 以图搜图入参
      * @return List<SearchResult>
      */
-    @ApiOperation(value = "抓拍历史记录查询", response = SearchResult.class, responseContainer = "List")
+    @ApiOperation(value = "抓拍查询", response = SearchResult.class, responseContainer = "List")
     @ApiImplicitParam(name = "searchOption", value = "抓拍记录查询参数", paramType = "body")
     @RequestMapping(value = BigDataPath.DYNREPO_HISTORY, method = RequestMethod.POST)
     @SuppressWarnings("unused")
     public ResponseResult<List<SingleCaptureResult>> getCaptureHistory(
             @RequestBody @ApiParam(value = "以图搜图入参") CaptureOption searchOption) {
-        List<SingleCaptureResult> searchResultList;
-        if (searchOption != null) {
-            searchResultList = captureHistoryService.getCaptureHistory(searchOption);
+        if (searchOption.getDeviceIds() != null &&
+                searchOption.getDeviceIds().size() > 0 &&
+                searchOption.getDeviceIds().get(0) != null) {
+            List<SingleCaptureResult> searchResultList =
+                    captureHistoryService.getCaptureHistory(searchOption);
+            return ResponseResult.init(searchResultList);
         } else {
-            searchResultList = null;
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-        return ResponseResult.init(searchResultList);
+
     }
 }

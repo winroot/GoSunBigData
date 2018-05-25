@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * 搜索选项
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class SearchOption extends CaptureOption implements Serializable {
 

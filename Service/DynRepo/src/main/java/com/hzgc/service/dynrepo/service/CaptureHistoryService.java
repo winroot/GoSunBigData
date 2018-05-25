@@ -35,7 +35,6 @@ public class CaptureHistoryService {
             log.warn("Start query capture history, search option is null");
             return new ArrayList<>();
         }
-        log.info("Start query capture history, search option is:" + JSONUtil.toJson(option));
         String sortParam = EsSearchParam.DESC;
         List<SortParam> sortParams = option.getSort()
                 .stream().map(param -> SortParam.values()[param]).collect(Collectors.toList());
@@ -47,15 +46,24 @@ public class CaptureHistoryService {
             }
         }
         log.debug("Sort param is " + sortParam);
+        System.out.println(option.getDeviceIds().size());
+        System.out.println(option.getDeviceIds());
         if (option.getDeviceIds() != null &&
                 option.getDeviceIds().size() > 0 &&
                 sortParams.get(0).name().equals(SortParam.IPC.toString())) {
-            log.debug("The current query needs to be grouped by ipcid");
+            log.info("The current query needs to be grouped by ipcid");
+            log.info("Start query capture history, search option is:" + JSONUtil.toJson(option));
+            log.info("Start convert device id to ipc id");
+            captureServiceHelper.capturOptionConver(option);
             return getCaptureHistory(option, sortParam);
-        } else if (option.getDeviceIds() != null && option.getDeviceIds().size() > 0 &&
+        } else if (option.getDeviceIds() != null &&
+                option.getDeviceIds().size() > 0 &&
                 !sortParams.get(0).name().equals(SortParam.IPC.toString())) {
-            log.debug("The current query don't needs to be grouped by ipcid");
-            return getCaptureHistory(option, option.getDeviceIds(), sortParam);
+            log.info("The current query don't needs to be grouped by ipcid");
+            log.info("Start query capture history, search option is:" + JSONUtil.toJson(option));
+            log.info("Start convert device id to ipc id");
+            captureServiceHelper.capturOptionConver(option);
+            return getCaptureHistory(option, option.getDeviceIpcs(), sortParam);
         } else {
             log.debug("The current query is default");
             return getDefaultCaptureHistory(option, sortParam);
@@ -93,7 +101,7 @@ public class CaptureHistoryService {
 
     private List<SingleCaptureResult> getCaptureHistory(CaptureOption option, String sortParam) {
         List<SingleCaptureResult> results = new ArrayList<>();
-        for (String ipcId : option.getDeviceIds()) {
+        for (String ipcId : option.getDeviceIpcs()) {
             SingleCaptureResult singleResult = new SingleCaptureResult();
             List<CapturedPicture> capturedPictureList = new ArrayList<>();
             SearchResponse searchResponse = elasticSearchDao.getCaptureHistory(option, ipcId, sortParam);
@@ -110,7 +118,8 @@ public class CaptureHistoryService {
                     String timestamp = (String) hit.getSource().get(DynamicTable.TIMESTAMP);
                     capturePicture.setSurl(captureServiceHelper.getFtpUrl(surl));
                     capturePicture.setBurl(captureServiceHelper.getFtpUrl(burl));
-                    capturePicture.setDeviceId(ipc);
+                    capturePicture.setDeviceId(option.getIpcMappingDevice().get(ipc).getId());
+                    capturePicture.setDeviceName(option.getIpcMappingDevice().get(ipc).getName());
                     capturePicture.setTime(timestamp);
                     if (ipcId.equals(ipc)) {
                         capturedPictureList.add(capturePicture);
@@ -120,9 +129,9 @@ public class CaptureHistoryService {
                 capturePicture = new CapturedPicture();
                 capturedPictureList.add(capturePicture);
             }
-            captureServiceHelper.addDeviceName(capturedPictureList);
             singleResult.setTotal((int) searchHits.getTotalHits());
-            singleResult.setDeviceId(ipcId);
+            singleResult.setDeviceId(option.getIpcMappingDevice().get(ipcId).getId());
+            singleResult.setDeviceName(option.getIpcMappingDevice().get(ipcId).getName());
             singleResult.setPictures(capturedPictureList);
             results.add(singleResult);
         }
@@ -149,11 +158,15 @@ public class CaptureHistoryService {
                 capturePicture.setBurl(captureServiceHelper.getFtpUrl(burl));
                 capturePicture.setDeviceId(ipc);
                 capturePicture.setTime(timestamp);
+                capturePicture.setDeviceId(option.getIpcMappingDevice().get(ipc).getId());
+                capturePicture.setDeviceName(option.getIpcMappingDevice().get(ipc).getName());
+                captureList.add(capturePicture);
             }
         }
-        captureServiceHelper.addDeviceName(captureList);
         singleResult.setTotal((int) searchHits.getTotalHits());
         singleResult.setPictures(captureList);
+        singleResult.setDeviceId(option.getDeviceIds().get(0).toString());
+        singleResult.setDeviceName(option.getIpcMappingDevice().get(option.getDeviceIpcs().get(0)).getName());
         results.add(singleResult);
         return results;
     }

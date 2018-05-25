@@ -1,8 +1,9 @@
 package com.hzgc.service.dynrepo.dao;
 
+import com.hzgc.service.dynrepo.bean.SearchCallBack;
 import com.hzgc.service.dynrepo.bean.SearchOption;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -17,14 +18,14 @@ public class SparkJDBCDao {
     private String hiveUrl;
 
 
-    public ResultSet searchPicture(SearchOption option) throws SQLException {
+    public SearchCallBack searchPicture(SearchOption option) throws SQLException {
         Connection connection = createConnection();
         Statement statement = connection.createStatement();
-        closeConnection(connection, statement);
-        return statement.executeQuery(parseByOption(option));
+        ResultSet resultSet =  statement.executeQuery(parseByOption(option));
+        return new SearchCallBack(connection, statement, resultSet);
     }
 
-    private void closeConnection(Connection connection, Statement statement) {
+    public void closeConnection(Connection connection, Statement statement) {
         try {
             if (statement != null && !statement.isClosed()) {
                 statement.close();
@@ -44,8 +45,8 @@ public class SparkJDBCDao {
     }
 
     private String parseByOption(SearchOption option) throws SQLException {
-        log.info("Query sql: " + ParseByOption.getFinalSQLwithOption(option, false));
-        return ParseByOption.getFinalSQLwithOption(option, true);
+        log.info("Query sql: " + ParseByOption.getFinalSQLwithOption(option, true));
+        return ParseByOption.getFinalSQLwithOption(option, false);
     }
 
     private Connection createConnection() throws SQLException {

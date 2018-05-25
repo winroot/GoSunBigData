@@ -200,14 +200,14 @@ class ParseByOption {
      * @param finalSql 最终的SQL语句
      * @param option   搜索参数
      */
-    private static void getDeviceId(StringBuilder finalSql, SearchOption option) {
+    private static void getDeviceIpcId(StringBuilder finalSql, SearchOption option) {
         finalSql.append(" and ")
                 .append(DynamicTable.IPCID)
                 .append(" in ")
                 .append("(");
-        for (int i = 0; option.getDeviceIds().size() > i; i++) {
-            String ipcid = option.getDeviceIds().get(i);
-            if (option.getDeviceIds().size() - 1 > i) {
+        for (int i = 0; option.getDeviceIpcs().size() > i; i++) {
+            String ipcid = option.getDeviceIpcs().get(i);
+            if (option.getDeviceIpcs().size() - 1 > i) {
                 finalSql.append("'")
                         .append(ipcid)
                         .append("'")
@@ -429,8 +429,8 @@ class ParseByOption {
             getData(finalSql, option);
         }
 
-        if (option.getDeviceIds() != null && option.getDeviceIds().size() > 0) {
-            getDeviceId(finalSql, option);
+        if (option.getDeviceIpcs() != null && option.getDeviceIpcs().size() > 0) {
+            getDeviceIpcId(finalSql, option);
         }
 
         if (option.isClean()) {
