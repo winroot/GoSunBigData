@@ -1,9 +1,11 @@
-package com.hzgc.service.dynrepo.bean.platform;
+package com.hzgc.service.util.api;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class DeviceDTO {
+public class DeviceDTO implements Serializable {
     private String id;
     private Long platId;
     private String code;

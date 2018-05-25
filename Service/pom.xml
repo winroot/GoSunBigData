@@ -21,6 +21,7 @@
         <module>Face</module>
         <module>Address</module>
         <module>Visual</module>
+        <module>Dispatch</module>
     </modules>
 
     <dependencies>

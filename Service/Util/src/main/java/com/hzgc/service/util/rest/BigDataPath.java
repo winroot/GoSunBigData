@@ -8,7 +8,7 @@ public class BigDataPath {
     /**
      * 大数据路径
      */
-    private static final String ROOT = "/bigData";
+    private static final String ROOT = "";
 
     /**
      * ftp模块请求路径
@@ -54,6 +54,7 @@ public class BigDataPath {
     public static final String DYNREPO_SEARCHRESULT = "/getSearchResult";
     public static final String DYNREPO_GETPICTURE = "/getSearchPicture";
     public static final String DYNREPO_HISTORY = "/getCaptureHistory";
+    public static final String DYNREPO_SEARCHHISTORY="/getSearchHistory";
 
     /**
      * Face模块请求路径
