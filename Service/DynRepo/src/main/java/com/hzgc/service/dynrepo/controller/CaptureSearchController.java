@@ -131,6 +131,10 @@ public class CaptureSearchController {
     @SuppressWarnings("unused")
     public ResponseResult<List<SingleCaptureResult>> getCaptureHistory(
             @RequestBody @ApiParam(value = "以图搜图入参") CaptureOption searchOption) {
+        if (searchOption == null) {
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+
         if (searchOption.getDeviceIds() != null &&
                 searchOption.getDeviceIds().size() > 0 &&
                 searchOption.getDeviceIds().get(0) != null) {
