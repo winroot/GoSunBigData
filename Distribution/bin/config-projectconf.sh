@@ -2,9 +2,9 @@
 ################################################################################
 ## Copyright:   HZGOSUN Tech. Co, BigData
 ## Filename:    config-projectconf
-## Description: 一键配置脚本：执行common、cluster、ftp、service的一键配置脚本
-## Author:      mashencai
-## Created:     2017-11-30
+## Description: 一键配置脚本：执行common、cluster、service的一键配置脚本
+## Author:      chenke
+## Created:     2018-05-28
 ################################################################################
 #set -x  ## 用于调试用，不用的时候可以注释掉
 
@@ -68,6 +68,32 @@ function distribute_common()
 }
 
 #####################################################################
+# 函数名: distribute_service
+# 描述: 将service文件夹分发到所有节点
+# 参数: N/A
+# 返回值: N/A
+# 其他: N/A
+#####################################################################
+function distribute_service()
+{
+    echo "" | tee -a $LOG_FILE
+    echo "**************************************************" | tee -a $LOG_FILE
+    echo "" | tee -a $LOG_FILE
+    echo "分发service......" | tee -a $LOG_FILE
+
+    CLUSTER_HOSTNAME_LISTS=$(grep Cluster_HostName ${CONF_FILE} | cut -d '=' -f2)
+    CLUSTER_HOSTNAME_ARRAY=(${CLUSTER_HOSTNAME_LISTS//;/ })
+    for hostname in ${CLUSTER_HOSTNAME_ARRAY[@]}
+    do
+      ssh root@${hostname} "if [ ! -x "${OBJECT_DIR}" ];then mkdir "${OBJECT_DIR}"; fi"
+      rsync -rvl ${OBJECT_DIR}/service  root@${hostname}:${OBJECT_DIR} >/dev/null
+      ssh root@${hostname} "chmod -R 755 ${OBJECT_DIR}/service"
+      echo "${hostname}上分发service完毕......" | tee -a $LOG_FILE
+    done
+
+    echo "配置完毕......" | tee -a $LOG_FILE
+}
+#####################################################################
 # 函数名: sh_cluster
 # 描述: 执行config-clusterconf.sh脚本
 # 参数: N/A
@@ -77,26 +103,10 @@ function distribute_common()
 function sh_cluster()
 {
 	# 判断脚本是否存在，存在才执行
-	if [ -f "${CLUSTER_SCRPIT}" ]; then 
+	if [ -f "${CLUSTER_SCRPIT}" ]; then
 		sh ${CLUSTER_SCRPIT}
 	else
-		echo "config-clusterconf.sh脚本不存在...." 
-	fi
-}
-
-#####################################################################
-# 函数名: sh_ftp
-# 描述: 执行config-ftpconf.sh脚本
-# 参数: N/A
-# 返回值: N/A
-# 其他: N/A
-#####################################################################
-function sh_ftp()
-{
-	if [ -f "${FTP_SCRPIT}" ]; then 
-		sh ${FTP_SCRPIT}
-	else
-		echo "config-ftpconf.sh脚本不存在...." 
+		echo "config-clusterconf.sh脚本不存在...."
 	fi
 }
 
@@ -125,11 +135,9 @@ function sh_service()
 #####################################################################
 function main()
 {
-#    config_common_dubbo
-	# config_common_ftp
 	distribute_common
+	distribute_service
     sh_cluster
-    # sh_ftp
     sh_service
 }
 

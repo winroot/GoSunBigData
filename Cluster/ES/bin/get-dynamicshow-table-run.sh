@@ -15,20 +15,18 @@ cd `dirname $0`
 BIN_DIR=`pwd`    ### bin目录
 cd ..
 cd ..
+CLUSTER_DIR=`pwd`                     ##cluster根目录
+cd ..                                 ##REAL根目录
+cd service
 SERVICE_DIR=`pwd`                     ##service根目录
-CONF_DIR=$SERVICE_DIR/conf
-LIB_DIR=$SERVICE_DIR/lib              ##Jar包目录
-CONF_DYN=$SERVICE_DIR/dynrepo/conf    ## dynrepo 配置文件
-LIB_DYN=$SERVICE_DIR/dynrepo/lib      ## dynrepo Jar包
+CONF_DYN=$SERVICE_DIR/visual/conf    ## visual 配置文件
+LIB_DYN=$SERVICE_DIR/visual/lib      ## visual Jar包
 
-LIB_JARS=`ls $LIB_DIR|grep .jar | grep -v avro-ipc-1.7.7-tests.jar \
-| grep -v avro-ipc-1.7.7.jar | grep -v spark-network-common_2.10-1.5.1.jar | \
-awk '{print "'$LIB_DIR'/"$0}'|tr "\n" ":"`   ## jar包位置以及第三方依赖jar包，绝对路径
-cd ..
-OBJECT_DIR=`pwd`
-OBJECT_LIB_DIR=$OBJECT_DIR/lib
-OBJECT_JARS=`ls $OBJECT_LIB_DIR | grep .jar | awk '{print "'${OBJECT_LIB_DIR}'/"$0}'|tr "\n" ":"`
-LOG_DIR=${SERVICE_DIR}/logs                  ##log日记目录
+#LIB_JARS=`ls $LIB_DIR|grep .jar | grep -v avro-ipc-1.7.7-tests.jar \
+#| grep -v avro-ipc-1.7.7.jar | grep -v spark-network-common_2.10-1.5.1.jar | \
+#awk '{print "'$LIB_DIR'/"$0}'|tr "\n" ":"`   ## jar包位置以及第三方依赖jar包，绝对路径
+OBJECT_JARS=`ls $LIB_DYN | grep .jar | awk '{print "'${OBJECT_LIB_DIR}'/"$0}'|tr "\n" ":"`
+LOG_DIR=${SERVICE_DIR}/visual/logs                  ##log日记目录
 LOG_FILE=${LOG_DIR}/dynamicshow-table.log
 
 ##########################################################################
@@ -44,7 +42,7 @@ function start_consumer()
             mkdir $LOG_DIR;
     fi
 
-    java -classpath $CONF_DYN:$LIB_DYN:$OBJECT_JARS com.hzgc.service.dynamicrepo.CaptureNumberImplTimer | tee -a  ${LOG_FILE}
+    java -classpath $OBJECT_JARS BOOT-INF/classes/com/hzgc/service/visual/CaptureNumberImplTimer | tee -a  ${LOG_FILE}
 }
 #########################################################################
 # 函数名：main
