@@ -25,7 +25,7 @@ LIB_DYN=$SERVICE_DIR/visual/lib      ## visual Jar包
 #LIB_JARS=`ls $LIB_DIR|grep .jar | grep -v avro-ipc-1.7.7-tests.jar \
 #| grep -v avro-ipc-1.7.7.jar | grep -v spark-network-common_2.10-1.5.1.jar | \
 #awk '{print "'$LIB_DIR'/"$0}'|tr "\n" ":"`   ## jar包位置以及第三方依赖jar包，绝对路径
-OBJECT_JARS=`ls $LIB_DYN | grep .jar | awk '{print "'${OBJECT_LIB_DIR}'/"$0}'|tr "\n" ":"`
+OBJECT_JARS=`ls $LIB_DYN | grep .jar`
 LOG_DIR=${SERVICE_DIR}/visual/logs                  ##log日记目录
 LOG_FILE=${LOG_DIR}/dynamicshow-table.log
 
