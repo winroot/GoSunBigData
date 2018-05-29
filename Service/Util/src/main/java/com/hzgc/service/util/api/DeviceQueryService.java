@@ -87,8 +87,7 @@ public class DeviceQueryService {
                             HttpMethod.POST,
                             new HttpEntity<>(idList),
                             parameterizedTypeReference);
-            System.out.println(responseEntity.getBody());
-            return responseEntity.getBody();
+            return responseEntity.getBody() == null ? new HashMap<>() : responseEntity.getBody();
         }
         return new HashMap<>();
     }

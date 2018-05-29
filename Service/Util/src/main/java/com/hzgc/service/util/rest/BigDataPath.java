@@ -49,12 +49,12 @@ public class BigDataPath {
     /**
      * DynRepo模块请求路径
      */
-    public static final String DYNREPO = ROOT + "/dynRepoSearch";
-    public static final String DYNREPO_SEARCH = "/search";
-    public static final String DYNREPO_SEARCHRESULT = "/getSearchResult";
-    public static final String DYNREPO_GETPICTURE = "/getSearchPicture";
-    public static final String DYNREPO_HISTORY = "/getCaptureHistory";
-    public static final String DYNREPO_SEARCHHISTORY="/getSearchHistory";
+    public static final String DYNREPO = ROOT + "/dynrepo";
+    public static final String DYNREPO_SEARCH = "/search_picture";
+    public static final String DYNREPO_SEARCHRESULT = "/search_result";
+    public static final String DYNREPO_GETPICTURE = "/origin_picture";
+    public static final String DYNREPO_HISTORY = "/capture_history";
+    public static final String DYNREPO_SEARCHHISTORY="/search_history";
 
     /**
      * Face模块请求路径

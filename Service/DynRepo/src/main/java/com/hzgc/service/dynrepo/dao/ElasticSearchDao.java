@@ -26,9 +26,6 @@ public class ElasticSearchDao {
                             @Value("${es.hosts}") String esHost,
                             @Value("${es.cluster.port}") String esPort) {
         this.esClient = ElasticSearchHelper.getEsClient(clusterName, esHost, Integer.parseInt(esPort));
-        for (DiscoveryNode node: esClient.listedNodes()) {
-            System.out.println(node.getAddress().getAddress());
-        }
     }
 
 

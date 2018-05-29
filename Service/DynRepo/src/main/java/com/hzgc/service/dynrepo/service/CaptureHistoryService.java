@@ -31,10 +31,6 @@ public class CaptureHistoryService {
     private CaptureServiceHelper captureServiceHelper;
 
     public List<SingleCaptureResult> getCaptureHistory(CaptureOption option) {
-        if (option == null) {
-            log.warn("Start query capture history, search option is null");
-            return new ArrayList<>();
-        }
         String sortParam = EsSearchParam.DESC;
         List<SortParam> sortParams = option.getSort()
                 .stream().map(param -> SortParam.values()[param]).collect(Collectors.toList());
@@ -45,27 +41,15 @@ public class CaptureHistoryService {
                 sortParam = EsSearchParam.ASC;
             }
         }
-        log.debug("Sort param is " + sortParam);
-        System.out.println(option.getDeviceIds().size());
-        System.out.println(option.getDeviceIds());
-        if (option.getDeviceIds() != null &&
-                option.getDeviceIds().size() > 0 &&
-                sortParams.get(0).name().equals(SortParam.IPC.toString())) {
+
+        if (sortParams.get(0).name().equals(SortParam.IPC.toString())) {
             log.info("The current query needs to be grouped by ipcid");
-            log.info("Start query capture history, search option is:" + JSONUtil.toJson(option));
-            log.info("Start convert device id to ipc id");
-            captureServiceHelper.capturOptionConver(option);
             return getCaptureHistory(option, sortParam);
-        } else if (option.getDeviceIds() != null &&
-                option.getDeviceIds().size() > 0 &&
-                !sortParams.get(0).name().equals(SortParam.IPC.toString())) {
+        } else if (!sortParams.get(0).name().equals(SortParam.IPC.toString())) {
             log.info("The current query don't needs to be grouped by ipcid");
-            log.info("Start query capture history, search option is:" + JSONUtil.toJson(option));
-            log.info("Start convert device id to ipc id");
-            captureServiceHelper.capturOptionConver(option);
             return getCaptureHistory(option, option.getDeviceIpcs(), sortParam);
         } else {
-            log.debug("The current query is default");
+            log.info("The current query is default");
             return getDefaultCaptureHistory(option, sortParam);
         }
     }

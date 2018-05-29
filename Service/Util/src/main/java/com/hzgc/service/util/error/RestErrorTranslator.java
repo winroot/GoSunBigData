@@ -28,11 +28,11 @@ public final class RestErrorTranslator {
      */
     private final static class MessageReader {
 
-        private static ResourceBundle bundle = null;
-
-        static {
-            bundle = ResourceBundle.getBundle("META-INF/message/Message_zh");
-        }
+//        private static ResourceBundle bundle = null;
+//
+//        static {
+//            bundle = ResourceBundle.getBundle("META-INF/message/Message_zh");
+//        }
 
         /**
          * 根据错误码获取错误信息
@@ -44,7 +44,7 @@ public final class RestErrorTranslator {
         public static String getMessage(Integer err, String... args) {
             String s;
             try {
-                String t = bundle.getString(String.valueOf(err));
+                String t = String.valueOf(err);
                 s = format(t, args);
             } catch (MissingResourceException e) {
                 s = e.getMessage();

@@ -1,27 +1,36 @@
 package com.hzgc.service.dynrepo.controller;
 
-import com.hzgc.common.attribute.bean.Attribute;
 import com.hzgc.common.attribute.service.AttributeService;
 import com.hzgc.common.util.json.JSONUtil;
+import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.service.dynrepo.bean.*;
 import com.hzgc.service.dynrepo.service.CaptureHistoryService;
 import com.hzgc.service.dynrepo.service.CaptureSearchService;
+import com.hzgc.service.dynrepo.service.CaptureServiceHelper;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
-import io.swagger.models.HttpMethod;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @RestController
 @FeignClient(name = "dynRepo")
 @RequestMapping(value = BigDataPath.DYNREPO)
 @Api(value = "/dynRepoSearch", tags = "以图搜图服务")
+@Slf4j
 @SuppressWarnings("unused")
 public class CaptureSearchController {
 
@@ -34,6 +43,9 @@ public class CaptureSearchController {
     @Autowired
     @SuppressWarnings("unused")
     private CaptureSearchService captureSearchService;
+    @Autowired
+    @SuppressWarnings("unused")
+    private CaptureServiceHelper captureServiceHelper;
 
     /**
      * 以图搜图
@@ -46,13 +58,33 @@ public class CaptureSearchController {
     @SuppressWarnings("unused")
     public ResponseResult<SearchResult> searchPicture(
             @RequestBody @ApiParam(value = "以图搜图入参") SearchOption searchOption) throws SQLException {
-        System.out.println(JSONUtil.toJson(searchOption));
         SearchResult searchResult;
-        if (searchOption != null) {
-            searchResult = captureSearchService.searchPicture(searchOption);
-        } else {
-            searchResult = null;
+        if (searchOption == null) {
+            log.error("Start search picture, but search option is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
+
+        if (searchOption.getImages() == null && searchOption.getImages().size() < 1) {
+            log.error("Start search picture, but images is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+
+        if (searchOption.getSimilarity() < 0.0) {
+            log.error("Start search picture, but threshold is error");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        log.info("Start convert device id to ipc id");
+        captureServiceHelper.capturOptionConver(searchOption);
+        if (searchOption.getDeviceIpcs() == null
+                || searchOption.getDeviceIpcs().size() <= 0
+                || searchOption.getDeviceIpcs().get(0) == null) {
+            log.error("Start search picture, but deviceIpcs option is error");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        log.info("Start search picture, set search id");
+        String searchId = UuidUtil.getUuid();
+        log.info("Start search picture, search option is:" + JSONUtil.toJson(searchOption));
+        searchResult = captureSearchService.searchPicture(searchOption, searchId);
         return ResponseResult.init(searchResult);
     }
 
@@ -64,9 +96,11 @@ public class CaptureSearchController {
      */
     @ApiOperation(value = "获取原图", response = byte[].class, httpMethod = "GET")
     @ApiImplicitParam(name = "image_name", value = "原图ID", paramType = "query")
-    @RequestMapping(value = BigDataPath.DYNREPO_GETPICTURE, method = RequestMethod.GET)
-    public ResponseResult<byte[]> getSearchPicture(String image_name) {
-        return ResponseResult.init(captureSearchService.getSearchPicture(image_name));
+    @RequestMapping(value = BigDataPath.DYNREPO_GETPICTURE, method = RequestMethod.GET, produces = "image/jpeg")
+    public ResponseEntity<byte[]> getSearchPicture(String image_name) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(captureSearchService.getSearchPicture(image_name));
     }
 
     /**
@@ -114,15 +148,34 @@ public class CaptureSearchController {
             String start_time,
             String end_time,
             String sort,
-            int start,
-            int limit) {
-        return ResponseResult.init(captureSearchService.getSearchHistory(start_time, end_time, sort, start, limit));
+            @RequestParam int start,
+            @RequestParam int limit) {
+        if (start < 0 || limit <= 0) {
+            log.error("Start get search history, start is:" + start + ", limit is:" + limit);
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        if (!StringUtils.isBlank(start_time) && !StringUtils.isBlank(end_time) && !StringUtils.isBlank(sort)) {
+            return ResponseResult.init(captureSearchService.getSearchHistory(start_time, end_time, sort, start, limit));
+        } else {
+            Date date = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String endTime = format.format(System.currentTimeMillis());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DATE, -7);
+            String startTime = format.format(calendar.getTime());
+            log.info("Start get search history, start time is:" + startTime +
+                    ", end time is:" + endTime +
+                    ", start is:" + start +
+                    ", limit is:" + limit);
+            return ResponseResult.init(captureSearchService.getSearchHistory(startTime, endTime, sort, start, limit));
+        }
     }
 
     /**
      * 抓拍历史记录查询
      *
-     * @param searchOption 以图搜图入参
+     * @param captureOption 以图搜图入参
      * @return List<SearchResult>
      */
     @ApiOperation(value = "抓拍查询", response = SearchResult.class, responseContainer = "List")
@@ -130,20 +183,22 @@ public class CaptureSearchController {
     @RequestMapping(value = BigDataPath.DYNREPO_HISTORY, method = RequestMethod.POST)
     @SuppressWarnings("unused")
     public ResponseResult<List<SingleCaptureResult>> getCaptureHistory(
-            @RequestBody @ApiParam(value = "以图搜图入参") CaptureOption searchOption) {
-        if (searchOption == null) {
+            @RequestBody @ApiParam(value = "以图搜图入参") CaptureOption captureOption) {
+        if (captureOption == null) {
+            log.error("Start query capture history, capture option is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-
-        if (searchOption.getDeviceIds() != null &&
-                searchOption.getDeviceIds().size() > 0 &&
-                searchOption.getDeviceIds().get(0) != null) {
-            List<SingleCaptureResult> searchResultList =
-                    captureHistoryService.getCaptureHistory(searchOption);
-            return ResponseResult.init(searchResultList);
-        } else {
+        log.info("Start convert device id to ipc id");
+        captureServiceHelper.capturOptionConver(captureOption);
+        if (captureOption.getDeviceIpcs() == null ||
+                captureOption.getDeviceIpcs().size() <= 0 ||
+                captureOption.getDeviceIpcs().get(0) == null) {
+            log.error("Start query capture history, deviceIpcs option is error");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-
+        log.info("Start query capture history, search option is:" + JSONUtil.toJson(captureOption));
+        List<SingleCaptureResult> searchResultList =
+                captureHistoryService.getCaptureHistory(captureOption);
+        return ResponseResult.init(searchResultList);
     }
 }

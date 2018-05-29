@@ -16,12 +16,12 @@ public class SearchResultOption implements Serializable {
     /**
      * 针对每个子ID查询的参数
      */
-    private List<SingleResultOption> singleResultOptions;
+    private List<SingleResultOption> singleSearchResultOptions;
 
     /**
      * 总的排序参数
      */
-    private List<Integer> sortParam;
+    private List<Integer> sort;
 
     /**
      * 查询起始位置

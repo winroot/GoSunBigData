@@ -3,6 +3,7 @@ package com.hzgc.service.dynrepo.dao;
 import com.hzgc.common.hbase.HBaseHelper;
 import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.common.table.seachres.SearchResultTable;
+import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.service.dynrepo.bean.SearchCollection;
 import com.hzgc.service.dynrepo.bean.SearchHisotry;
@@ -44,7 +45,7 @@ public class HBaseDao {
         try {
             Put put = new Put(Bytes.toBytes(collection.getSearchResult().getSearchId()));
             put.setDurability(Durability.SYNC_WAL);
-            byte[] searchMessage = ObjectUtil.objectToByte(collection);
+            byte[] searchMessage = Bytes.toBytes(JSONUtil.toJson(collection));
             put.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY,
                     SearchResultTable.SEARCHRES_COLUMN_SEARCHMESSAGE, searchMessage);
             put.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY,
@@ -52,7 +53,7 @@ public class HBaseDao {
             putList.add(put);
             for (int i = 0; i < collection.getSearchOption().getImages().size(); i++) {
                 put.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY,
-                        Bytes.toBytes(i+ ""), collection.getSearchOption().getImages().get(i).getImageData());
+                        Bytes.toBytes(i + ""), collection.getSearchOption().getImages().get(i).getImageData());
                 Put putimage = new Put(Bytes.toBytes(collection.getSearchOption().getImages().get(i).getImageID()));
                 putimage.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY,
                         SearchResultTable.SEARCHRES_COLUM_PICTURE,
@@ -61,14 +62,14 @@ public class HBaseDao {
             }
             if (searchRes != null) {
                 searchRes.put(putList);
-                log.info("SaveResult time is:" + (System.currentTimeMillis() - start));
+                log.info("Save search result successfull, time is:" + (System.currentTimeMillis() - start));
                 return true;
             } else {
                 return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("Insert data by searchId from table_searchRes failed! used method DynamicPhotoServiceHelper.insertSearchRes.");
+            log.error("Save search result failed");
         } finally {
             HBaseHelper.closeTable(searchRes);
         }
@@ -97,7 +98,8 @@ public class HBaseDao {
                 byte[] searchMessage =
                         result.getValue(SearchResultTable.SEARCHRES_COLUMNFAMILY,
                                 SearchResultTable.SEARCHRES_COLUMN_SEARCHMESSAGE);
-                searchCollection = ((SearchCollection) ObjectUtil.byteToObject(searchMessage));
+                String jsonCollection = Bytes.toString(searchMessage);
+                searchCollection = JSONUtil.toObject(jsonCollection, SearchCollection.class);
                 searchResult = searchCollection.getSearchResult();
                 if (searchResult != null) {
                     searchResult.setSearchId(searchId);
@@ -123,7 +125,7 @@ public class HBaseDao {
      * @return 图片二进制
      */
     public byte[] getSearchPicture(String image_name) {
-        Table table = HBaseHelper.getTable(image_name);
+        Table table = HBaseHelper.getTable(SearchResultTable.TABLE_SEARCHRES);
         Get get = new Get(Bytes.toBytes(image_name));
         get.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY, SearchResultTable.SEARCHRES_COLUM_PICTURE);
         try {
@@ -176,7 +178,7 @@ public class HBaseDao {
                             searchHisotry.setSearchTime(new String(CellUtil.cloneValue(cell)));
                         } else if (qualifier.equals(new String(SearchResultTable.SEARCHRES_COLUMN_SEARCHMESSAGE))) {
                             SearchCollection collection =
-                                    (SearchCollection) ObjectUtil.byteToObject(CellUtil.cloneValue(cell));
+                                    JSONUtil.toObject(Bytes.toString(CellUtil.cloneValue(cell)), SearchCollection.class);
                             searchHisotry.setAttributes(collection.getSearchOption().getAttributes());
                             searchHisotry.setDeviceIds(collection.getSearchOption().getDeviceIpcs());
                             searchHisotry.setSearchId(new String(CellUtil.cloneRow(cell)));
@@ -185,6 +187,7 @@ public class HBaseDao {
                             searchHisotry.setEndTime(collection.getSearchOption().getEndTime());
                         }
                     }
+                    searchHisotryList.add(searchHisotry);
                 }
             }
         } catch (IOException e) {
@@ -203,6 +206,15 @@ public class HBaseDao {
                 return o2.getSearchTime().compareTo(o1.getSearchTime());
             });
         }
-        return searchHisotryList;
+
+        if (searchHisotryList.size() > (start + limit - 1)) {
+            return searchHisotryList.subList(start, limit);
+        } else {
+            if (searchHisotryList.size() > 0) {
+                return searchHisotryList.subList(start, searchHisotryList.size());
+            }else {
+                return searchHisotryList;
+            }
+        }
     }
 }

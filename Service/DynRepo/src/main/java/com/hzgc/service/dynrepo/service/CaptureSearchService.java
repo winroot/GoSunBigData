@@ -29,31 +29,13 @@ public class CaptureSearchService {
     @SuppressWarnings("unused")
     private CaptureServiceHelper captureServiceHelper;
 
-    public SearchResult searchPicture(SearchOption option) throws SQLException {
+    public SearchResult searchPicture(SearchOption option, String searchId) throws SQLException {
         SearchResult searchResult = null;
         ResultSet resultSet;
         long start = System.currentTimeMillis();
-        if (option == null) {
-            log.error("Start search picture, but search option is null");
-            return new SearchResult();
-        }
-        if (option.getImages() == null && option.getImages().size() < 1) {
-            log.error("Start search picture, but images is null");
-            return new SearchResult();
-        }
-        if (option.getSimilarity() < 0.0) {
-            log.error("Start search picture, but threshold is null");
-        }
-        if (option.getDeviceIds() != null && option.getDeviceIds().size() > 0) {
-            captureServiceHelper.capturOptionConver(option);
-        }
-
-        log.info("Start search picture, search option is:" + JSONUtil.toJson(option));
-        String searchId = UuidUtil.getUuid();
-        log.info("Start search picture, generate search id and search id is:[" + searchId + "]");
         SearchCallBack searchCallBack = sparkJDBCDao.searchPicture(option);
-        resultSet = searchCallBack.getResultSet();
         log.info("Start search picture, execute query total time is:" + (System.currentTimeMillis() - start));
+        resultSet = searchCallBack.getResultSet();
         if (resultSet != null) {
             if (option.isSinglePerson() || option.getImages().size() == 1) {
                 searchResult = captureServiceHelper.parseResultOnePerson(resultSet, option, searchId);
@@ -66,9 +48,9 @@ public class CaptureSearchService {
                 collection.setSearchResult(searchResult);
                 boolean flag = hBaseDao.insertSearchRes(collection);
                 if (flag) {
-                    log.info("The search history of: [" + searchId + "] saved successful");
+                    log.info("The search history saved successful, search id is:" + searchId);
                 } else {
-                    log.error("The search history of: [" + searchId + "] saved failure");
+                    log.error("The search history saved failure, search id is:" + searchId);
                 }
                 for (SingleSearchResult singleResult : searchResult.getSingleResults()) {
                     singleResult.setPictures(captureServiceHelper.pageSplit(singleResult.getPictures(),
@@ -77,10 +59,9 @@ public class CaptureSearchService {
                 }
             }
         } else {
-            log.info("Query result set is null");
+            log.info("Start search picture, search result set is null");
         }
         sparkJDBCDao.closeConnection(searchCallBack.getConnection(), searchCallBack.getStatement());
-        System.out.println(JSONUtil.toJson(searchResult));
         return searchResult;
     }
 
@@ -108,16 +89,7 @@ public class CaptureSearchService {
      * @return 返回查询结果
      */
     public List<SearchHisotry> getSearchHistory(String start_time, String end_time, String sort, int start, int limit) {
-        if (!StringUtils.isBlank(start_time) && !StringUtils.isBlank(end_time) && !StringUtils.isBlank(sort)) {
-            List<SearchHisotry> searchHisotryList = hBaseDao.getSearchHistory(start_time, end_time, sort, start, limit);
-            if (start >= 0 && searchHisotryList.size() > (start + limit - 1) && limit > 0) {
-                return searchHisotryList.subList(start, limit);
-            } else {
-                return new ArrayList<>();
-            }
-        } else {
-            return new ArrayList<>();
-        }
+            return hBaseDao.getSearchHistory(start_time, end_time, sort, start, limit);
     }
 
     /**
@@ -132,21 +104,21 @@ public class CaptureSearchService {
             searchResult = hBaseDao.getSearchRes(resultOption.getSearchId());
             log.info("Start query searchResult, SearchResultOption is " + JSONUtil.toJson(resultOption));
             if (searchResult != null) {
-                if (resultOption.getSortParam() != null && resultOption.getSortParam().size() > 0) {
+                if (resultOption.getSort() != null && resultOption.getSort().size() > 0) {
                     captureServiceHelper.sortByParamsAndPageSplit(searchResult, resultOption);
                 } else {
                     for (SingleSearchResult singleSearchResult : searchResult.getSingleResults()) {
                         captureServiceHelper.pageSplit(singleSearchResult.getPictures(), resultOption);
                     }
                 }
-                if (resultOption.getSingleResultOptions() != null
-                        && resultOption.getSingleResultOptions().size() > 0) {
+                if (resultOption.getSingleSearchResultOptions() != null
+                        && resultOption.getSingleSearchResultOptions().size() > 0) {
                     List<SingleSearchResult> singleList = searchResult.getSingleResults();
                     List<SingleSearchResult> tempList = new ArrayList<>();
                     for (SingleSearchResult singleResult : singleList) {
                         boolean isContanis = false;
-                        for (SingleResultOption singleResultOption : resultOption.getSingleResultOptions()) {
-                            if (Objects.equals(((SingleSearchResult)singleResult).getSearchId(), singleResultOption.getSearchId())) {
+                        for (SingleResultOption singleResultOption : resultOption.getSingleSearchResultOptions()) {
+                            if (Objects.equals((singleResult).getSearchId(), singleResultOption.getSearchId())) {
                                 isContanis = true;
                             }
                         }
