@@ -1,7 +1,7 @@
 #!/bin/bash
 ##  动态抓拍总数映射
-##curl -XDELETE 's103:9200/dynamicshow?pretty'  -H 'Content-Type: application/json'
-curl -XPUT 's103:9200/dynamicshow?pretty' -H 'Content-Type: application/json' -d'
+##curl -XDELETE 's100:9200/dynamicshow?pretty'  -H 'Content-Type: application/json'
+curl -XPUT 's100:9200/dynamicshow?pretty' -H 'Content-Type: application/json' -d'
 {
     "settings": {
 	    "number_of_shards":5,
@@ -47,9 +47,8 @@ curl -XPUT 's103:9200/dynamicshow?pretty' -H 'Content-Type: application/json' -d
     }
 '
 
-curl -XPUT 's103:9200/dynamicshow/_settings' -d '{
+curl -XPUT 's100:9200/dynamicshow/_settings' -d '{
     "index": {
         "max_result_window": 1000000000
     }
 }'
-

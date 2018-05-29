@@ -16,7 +16,7 @@ cd `dirname $0`
 BIN_DIR=`pwd`                                   ### bin 目录
 cd ..
 HBASE_DIR=`pwd`                                 ### hbase 目录
-SQL_DIR=${HBASE_DIR}/conf
+SQL_DIR=${HBASE_DIR}/sql
 LOG_DIR=${HBASE_DIR}/log
 LOG_FILE=${LOG_DIR}/create-table.log
 cd ..
@@ -34,8 +34,6 @@ BIGDATA_CLUSTER_PATH=/opt/hzgc/bigdata
 SPARK_PATH=${BIGDATA_CLUSTER_PATH}/Spark/spark
 ## HBase_home
 HBASE_HOME=${BIGDATA_CLUSTER_PATH}/HBase/hbase
-## sql 文件目录
-SQL_DIR=${DEPLOY_DIR}/sql
 ## bigdata hadoop path
 HADOOP_PATH=${BIGDATA_CLUSTER_PATH}/Hadoop/hadoop
 ## bigdata hive path
