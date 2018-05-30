@@ -121,7 +121,6 @@ public class StaticRepoUtil implements Serializable {
     private static List<Object[]> searchByPkeys() {
         String sql = "select " + ObjectInfoTable.ROWKEY + ", " + ObjectInfoTable.PKEY +
                 ", " + ObjectInfoTable.FEATURE + " from " + ObjectInfoTable.TABLE_NAME;
-        System.out.println(sql);
         PreparedStatement pstm = null;
         List<Object[]> findResult = new ArrayList<>();
         java.sql.Connection conn;

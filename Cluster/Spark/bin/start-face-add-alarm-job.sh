@@ -2,46 +2,34 @@
 ################################################################################
 ## Copyright:   HZGOSUN Tech. Co, BigData
 ## Filename:    start-face-add-alarm-job.sh
-## Description: to start faceAddAlarmJob(启动新增告警任务)
+## Description: to start faceAddAlarmJob(启动新增告警)
 ## Author:      qiaokaifeng
 ## Created:     2017-11-09
 ################################################################################
-#set -x  ## 用于调试用，不用的时候可以注释掉
+#set -x   ##用于调试使用，不用的时候可以注释掉
 
 #---------------------------------------------------------------------#
-#                              定义变量                               #
+#                              定义变量                                #
 #---------------------------------------------------------------------#
 cd `dirname $0`
 ## bin目录
-BIN_DIR=`pwd`   
+BIN_DIR=`pwd`
 cd ..
-SPARK_DIR=`pwd`                           ## spark模块目录
+SPARK_DIR=`pwd`                                    #spark模块目录
 cd ..
-CLUSTER_DIR=`pwd`                           ## cluster 模块目录
-# DEPLOY_DIR=`pwd`
-cd ..
-OBJRCT_DIR=`pwd`                            ## Real 根目录
+DEPLOY_DIR=`pwd`                                       #cluster目录
+REALTIME_DIR=`pwd`                                     #RealTimeFaceCompare目录
 ######## cluster目录 ########
-CLUSTER_CONF_DIR=${CLUSTER_DIR}/conf
-CLUSTER_LIB_DIR=${CLUSTER_DIR}/lib
-######## spark目录 ########
 SPARK_CONF_DIR=${SPARK_DIR}/conf
 SPARK_LIB_DIR=${SPARK_DIR}/lib
 SPARK_LOG_DIR=${SPARK_DIR}/logs
 LOG_FILE=${SPARK_LOG_DIR}/sparkFaceAddAlarmJob.log
 ######## common目录 ########
-COMMON_CONF_DIR=${OBJRCT_DIR}/common/conf
-# COMMON_LIB_DIR=${DEPLOY_DIR}/lib
-######## ftp目录 #########
-FTP_CONF_DIR=${DEPLOY_DIR}/ftp/conf
-FTP_LIB_DIR=${DEPLOY_DIR}/ftp/lib
-######## service目录 ########
-SERVICE_CONF_DIR=${DEPLOY_DIR}/service/conf
-SERVICE_LIB_DIR=${DEPLOY_DIR}/service/starepo/lib
+COMMON_CONF_DIR=${DEPLOY_DIR}/common/conf
 ## bigdata_env
 BIGDATA_ENV=/opt/hzgc/env_bigdata.sh
 ## spark class
-SPARK_CLASS_PARAM=com.hzgc.cluster.alarm.FaceAddAlarmJob
+SPARK_CLASS_PARAM=com.hzgc.cluster.spark.alarm.FaceAddAlarmJob
 ## bigdata cluster path
 BIGDATA_CLUSTER_PATH=/opt/hzgc/bigdata
 
@@ -49,14 +37,29 @@ BIGDATA_CLUSTER_PATH=/opt/hzgc/bigdata
 #                              jar版本控制                            #
 #---------------------------------------------------------------------#
 ## module version(模块)
-# BIGDATA_API_VERSION=`ls ${COMMON_LIB_DIR}| grep ^bigdata-api-[0-9].[0-9].[0-9].jar$`
-CLUSTER_VERSION=`ls ${COMMON_LIB_DIR}| grep ^spark-[0-9].[0-9].[0-9].jar$`
-FTP_VERSION=`ls ${COMMON_LIB_DIR}| grep ^common-ftp--[0-9].[0-9].[0-9].jar$`
-JNI_VERSION=`ls ${COMMON_LIB_DIR}| grep ^jni-[0-9].[0-9].[0-9].jar$`
-SERVICE_VERSION=`ls ${COMMON_LIB_DIR}| grep ^common-service-[0-9].[0-9].[0-9].jar$`
-UTIL_VERSION=`ls ${COMMON_LIB_DIR}| grep ^common-util-[0-9].[0-9].[0-9].jar$`
+SPARK_API_VERSION=`ls ${SPARK_LIB_DIR} | grep ^spark-[0-9].[0-9].[0-9].jar$`
+JNI_VERSION=`ls ${SPARK_LIB_DIR}| grep ^jni-[0-9].[0-9].jar$`
+ADDRESS_VERSION=`ls /opt/RealTimeFaceCompare/service/address | grep ^address-[0-9].[0-9].[0-9].jar$`
+ALARM_VERSION=`ls /opt/RealTimeFaceCompare/service/alarm | grep ^alarm-[0-9].[0-9].[0-9].jar$`
+CLUSTERING_VERSION=`ls /opt/RealTimeFaceCompare/service/clustering | grep ^clustering-[0-9].[0-9].[0-9].jar$`
+DEVICE_VERSION=`ls /opt/RealTimeFaceCompare/service/device | grep ^device-[0-9].[0-9].[0-9].jar$`
+FACE_VERSION=`ls /opt/RealTimeFaceCompare/service/face | grep ^face-[0-9].[0-9].[0-9].jar$`
+VISUAL_VERSION=`ls /opt/RealTimeFaceCompare/service/visual | grep ^visual-[0-9].[0-9].[0-9].jar$`
+COMMON_UTIL_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-util-[0-9].[0-9].[0-9].jar$`
+COMMON_HBASE_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-hbase-[0-9].[0-9].[0-9].jar$`
+COMMON_TABLE_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-table-[0-9].[0-9].[0-9].jar$`
 
 ## quote version(引用)
+TWILL_API_VERSION=twill-api-0.8.0.jar
+TWILL_COMMON_VERSION=twill-common-0.8.0.jar
+TWILL_CORE_VERSION=twill-core-0.8.0.jar
+TWILL_DIS_API_VERSION=twill-discovery-api-0.8.0.jar
+TWILL_DIS_CORE_VERSION=twill-discovery-core-0.8.0.jar
+TWILL_ZOOKEEPER_VERSION=twill-zookeeper-0.8.0.jar
+TEPHRA_HBASE_VERSION=tephra-hbase-compat-1.1-0.13.0-incubating.jar
+TEPHRA_CORE_VERSION=tephra-core-0.13.0-incubating.jar
+TEPHRA_API_VERSION=tephra-api-0.13.0-incubating.jar
+PHOENIXDRIVER_VERSION=phoenix-core-4.13.1-HBase-1.2.jar
 GSON_VERSION=gson-2.8.0.jar
 JACKSON_CORE_VERSION=jackson-core-2.8.6.jar
 SPARK_STREAMING_KAFKA_VERSION=spark-streaming-kafka-0-8_2.11-2.2.0.jar
@@ -65,160 +68,117 @@ HBASE_CLIENT_VERSION=hbase-client-1.2.6.jar
 HBASE_COMMON_VERSION=hbase-common-1.2.6.jar
 HBASE_PROTOCOL_VERSION=hbase-protocol-1.2.6.jar
 KAFKA_VERSION=kafka_2.11-0.8.2.1.jar
-ELASTICSEARCH_VERSION=elasticsearch-1.0.jar
-# ROCKETMQ_CLIENT_VERSION=`ls ${FTP_LIB_DIR}| grep ^rocketmq-client-[0-9].[0-9].[0-9].jar$`
-# ROCKETMQ_COMMON_VERSION=`ls ${FTP_LIB_DIR}| grep ^rocketmq-common-[0-9].[0-9].[0-9].jar$`
-# ROCKETMQ_REMOTING_VERSION=`ls ${FTP_LIB_DIR}| grep ^rocketmq-remoting-[0-9].[0-9].[0-9].jar$`
-# FASTJSON_VERSION=fastjson-1.2.29.jar
-KAFKA_CLIENTS_VERSION=kafka-clients-0.8.2.1.jar
+ELASTICSEARCH_VERSION=elasticsearch-5.5.0.jar
+ROCKETMQ_CLIENT_VERSION=rocketmq-client-4.2.0.jar
+ROCKETMQ_COMMON_VERSION=rocketmq-common-4.2.0.jar
+ROCKETMQ_REMOTING_VERSION=rocketmq-remoting-4.2.0.jar
+FASTJSON_VERSION=fastjson-1.2.29.jar
+KAFKA_CLIENTS_VERSION=kafka-clients-1.0.0.jar
 METRICS_CORE_VERSION=metrics-core-2.2.0.jar
-PHOENIX_CORE_VERSION=phoenix-core-4.13.1-HBase-1.2.jar
-TWILL_ZOOKEEPER=twill-zookeeper-0.8.0.jar
-TEPHRA_API=tephra-api-0.13.0-incubating.jar
-TEPHRA_HBASE=tephra-hbase-compat-1.1-0.13.0-incubating.jar
-TWILL_DISCOVERY=twill-discovery-api-0.8.0.jar
-TEPHRA_CORE=tephra-core-0.13.0-incubating.jar
+ZKCLIENT_VERSION=zkclient-0.3.jar
 
 ############ 创建log目录 ###############
-if [ ! -d ${CLUSTER_LOG_DIR} ];then
-   mkdir ${CLUSTER_LOG_DIR}
+if [ ! -d ${SPARK_LOG_DIR} ];then
+   mkdir ${SPARK_LOG_DIR}
 fi
-
-############ 判断是否存在大数据集群 ###################
+############ 判断是否存在大数据集群###################
 if [ ! -d ${BIGDATA_CLUSTER_PATH} ];then
    echo "${BIGDATA_CLUSTER_PATH} does not exit,please go to the node of the existing bigdata cluster !"
    exit 0
 fi
-
 ############### 判断是否存在配置文件 ##################
-if [ ! -e ${SERVICE_CONF_DIR}/common_service_es.properties ];then
-    echo "${SERVICE_CONF_DIR}/common_service_es.properties does not exit!"
+if [ ! -e ${SPARK_CONF_DIR}/sparkJob.properties ];then
+    echo "${SPARK_CONF_DIR}/sparkJob.properties does not exit!"
+else
+   cp ${SPARK_CONF_DIR}/sparkJob.properties /opt/hzgc/bigdata/Spark/spark/conf/
     exit 0
 fi
-if [ ! -e ${FTP_CONF_DIR}/rocketmq.properties ];then
-    echo "${FTP_CONF_DIR}/rocketmq.properties does not exit!"
+if [ ! -e ${SPARK_CONF_DIR}/log4j.properties ];then
+    echo "${SPARK_CONF_DIR}/log4j.properties does not exit!"
     exit 0
+else
+    echo "===================开始配置log4j.properties===================="
+    sed -i "s#^log4j.appender.FILE.File=.*#log4j.appender.FILE.File=${LOG_FILE}#g" ${SPARK_CONF_DIR}/log4j.properties
 fi
-if [ ! -e ${CLUSTER_CONF_DIR}/sparkJob.properties ];then
-    echo "${CLUSTER_CONF_DIR}/sparkJob.properties does not exit!"
-    exit 0
-fi
-if [ ! -e ${SERVICE_CONF_DIR}/hbase-site.xml ];then
-    echo "${SERVICE_CONF_DIR}/hbase-site.xml does not exit!"
-    exit 0
-fi
-if [ ! -e ${FTP_CONF_DIR}/ftpAddress.properties ];then
-    echo "${FTP_CONF_DIR}/ftpAddress.properties does not exit!"
-    exit 0
-fi
-
 ################# 判断是否存在jar ###################
-if [ ! -e ${SERVICE_LIB_DIR}/${TEPHRA_CORE} ];then
-    echo "${SERVICE_LIB_DIR}/${TEPHRA_CORE} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${COMMMON_UTIL_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${COMMMON_UTIL_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SERVICE_LIB_DIR}/${TEPHRA_HBASE} ];then
-    echo "${SERVICE_LIB_DIR}/${TEPHRA_HBASE} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${JNI_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${JNI_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SERVICE_LIB_DIR}/${TEPHRA_API} ];then
-    echo "${SERVICE_LIB_DIR}/${TEPHRA_API} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${SPARK_API_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${SPARK_API_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SERVICE_LIB_DIR}/${TWILL_ZOOKEEPER} ];then
-    echo "${SERVICE_LIB_DIR}/${TWILL_ZOOKEEPER} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${HBASE_CLIENT_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${HBASE_CLIENT_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SERVICE_LIB_DIR}/${PHOENIX_CORE_VERSION} ];then
-    echo "${SERVICE_LIB_DIR}/${PHOENIX_CORE_VERSION} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${HBASE_COMMON_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${HBASE_COMMON_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SERVICE_LIB_DIR}/${TWILL_DISCOVERY} ];then
-    echo "${SERVICE_LIB_DIR}/${TWILL_DISCOVERY} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${GSON_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${GSON_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${CLUSTER_LIB_DIR}/${HBASE_CLIENT_VERSION} ];then
-    echo "${CLUSTER_LIB_DIR}/${HBASE_CLIENT_VERSION} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${JACKSON_CORE_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${JACKSON_CORE_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${CLUSTER_LIB_DIR}/${HBASE_COMMON_VERSION} ];then
-    echo "${CLUSTER_LIB_DIR}/${HBASE_COMMON_VERSION} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${SPARK_STREAMING_KAFKA_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${SPARK_STREAMING_KAFKA_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${CLUSTER_LIB_DIR}/${GSON_VERSION} ];then
-    echo "${CLUSTER_LIB_DIR}/${GSON_VERSION} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${SERVICE_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${SERVICE_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${CLUSTER_LIB_DIR}/${JACKSON_CORE_VERSION} ];then
-    echo "${CLUSTER_LIB_DIR}/${JACKSON_CORE_VERSION} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${HBASE_SERVER_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${HBASE_SERVER_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${CLUSTER_LIB_DIR}/${SPARK_STREAMING_KAFKA_VERSION} ];then
-    echo "${CLUSTER_LIB_DIR}/${SPARK_STREAMING_KAFKA_VERSION} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${HBASE_PROTOCOL_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${HBASE_PROTOCOL_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${COMMON_LIB_DIR}/${SERVICE_VERSION} ];then
-    echo "${COMMON_LIB_DIR}/${SERVICE_VERSION} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${JNI_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${JNI_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${CLUSTER_LIB_DIR}/${HBASE_SERVER_VERSION} ];then
-    echo "${CLUSTER_LIB_DIR}/${HBASE_SERVER_VERSION} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${KAFKA_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${KAFKA_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${CLUSTER_LIB_DIR}/${HBASE_PROTOCOL_VERSION} ];then
-    echo "${CLUSTER_LIB_DIR}/${HBASE_PROTOCOL_VERSION} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${ELASTICSEARCH_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${ELASTICSEARCH_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${COMMON_LIB_DIR}/${JNI_VERSION} ];then
-    echo "${COMMON_LIB_DIR}/${JNI_VERSION} does not exit!"
+ if [ ! -e ${SPARK_LIB_DIR}/${ROCKETMQ_CLIENT_VERSION} ];then
+     echo "${SPARK_LIB_DIR}/${ROCKETMQ_CLIENT_VERSION} does not exit!"
+     exit 0
+ fi
+ if [ ! -e ${SPARK_LIB_DIR}/${ROCKETMQ_COMMON_VERSION} ];then
+     echo "${SPARK_LIB_DIR}/${ROCKETMQ_COMMON_VERSION} does not exit!"
+     exit 0
+ fi
+ if [ ! -e ${SPARK_LIB_DIR}/${ROCKETMQ_REMOTING_VERSION} ];then
+     echo "${SPARK_LIB_DIR}/${ROCKETMQ_REMOTING_VERSION} does not exit!"
+     exit 0
+ fi
+if [ ! -e ${SPARK_LIB_DIR}/${FASTJSON_VERSION} ];then
+     echo "${SPARK_LIB_DIR}/${FASTJSON_VERSION} does not exit!"
+     exit 0
+ fi
+if [ ! -e ${SPARK_LIB_DIR}/${KAFKA_CLIENTS_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${KAFKA_CLIENTS_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${CLUSTER_LIB_DIR}/${KAFKA_VERSION} ];then
-    echo "${CLUSTER_LIB_DIR}/${KAFKA_VERSION} does not exit!"
-    exit 0
-fi
-if [ ! -e ${SERVICE_LIB_DIR}/${ELASTICSEARCH_VERSION} ];then
-    echo "${SERVICE_LIB_DIR}/${ELASTICSEARCH_VERSION} does not exit!"
-    exit 0
-fi
-if [ ! -e ${COMMON_LIB_DIR}/${FTP_VERSION} ];then
-    echo "${COMMON_LIB_DIR}/${FTP_VERSION} does not exit!"
-    exit 0
-fi
-# if [ ! -e ${COMMON_LIB_DIR}/${BIGDATA_API_VERSION} ];then
-#     echo "${COMMON_LIB_DIR}/${BIGDATA_API_VERSION} does not exit!"
-#     exit 0
-# fi
-# if [ ! -e ${FTP_LIB_DIR}/${ROCKETMQ_CLIENT_VERSION} ];then
-#     echo "${FTP_LIB_DIR}/${ROCKETMQ_CLIENT_VERSION} does not exit!"
-#     exit 0
-# fi
-# if [ ! -e ${FTP_LIB_DIR}/${ROCKETMQ_COMMON_VERSION} ];then
-#     echo "${FTP_LIB_DIR}/${ROCKETMQ_COMMON_VERSION} does not exit!"
-#     exit 0
-# fi
-# if [ ! -e ${FTP_LIB_DIR}/${ROCKETMQ_REMOTING_VERSION} ];then
-#     echo "${FTP_LIB_DIR}/${ROCKETMQ_REMOTING_VERSION} does not exit!"
-#     exit 0
-# fi
-# if [ ! -e ${FTP_LIB_DIR}/${FASTJSON_VERSION} ];then
-#     echo "${FTP_LIB_DIR}/${FASTJSON_VERSION} does not exit!"
-#     exit 0
-# fi
-if [ ! -e ${COMMON_LIB_DIR}/${UTIL_VERSION} ];then
-    echo "${COMMON_LIB_DIR}/${UTIL_VERSION} does not exit!"
-    exit 0
-fi
-if [ ! -e ${CLUSTER_LIB_DIR}/${KAFKA_CLIENTS_VERSION} ];then
-    echo "${CLUSTER_LIB_DIR}/${KAFKA_CLIENTS_VERSION} does not exit!"
-    exit 0
-fi
-if [ ! -e ${COMMON_LIB_DIR}/${CLUSTER_VERSION} ];then
-    echo "${COMMON_LIB_DIR}/${CLUSTER_VERSION} does not exit!"
-    exit 0
-fi
-if [ ! -e ${CLUSTER_LIB_DIR}/${METRICS_CORE_VERSION} ];then
-    echo "${CLUSTER_LIB_DIR}/${METRICS_CORE_VERSION} does not exit!"
+if [ ! -e ${SPARK_LIB_DIR}/${METRICS_CORE_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${METRICS_CORE_VERSION} does not exit!"
     exit 0
 fi
 
@@ -232,36 +192,37 @@ nohup spark-submit \
 --executor-cores 2 \
 --num-executors 4 \
 --class ${SPARK_CLASS_PARAM} \
---jars ${CLUSTER_LIB_DIR}/${GSON_VERSION},\
-${CLUSTER_LIB_DIR}/${JACKSON_CORE_VERSION},\
-${CLUSTER_LIB_DIR}/${SPARK_STREAMING_KAFKA_VERSION},\
-${COMMON_LIB_DIR}/${SERVICE_VERSION},\
-${CLUSTER_LIB_DIR}/${HBASE_SERVER_VERSION},\
-${CLUSTER_LIB_DIR}/${HBASE_CLIENT_VERSION},\
-${CLUSTER_LIB_DIR}/${HBASE_COMMON_VERSION},\
-${CLUSTER_LIB_DIR}/${HBASE_PROTOCOL_VERSION},\
-${COMMON_LIB_DIR}/${JNI_VERSION},\
-${CLUSTER_LIB_DIR}/${KAFKA_VERSION},\
-${SERVICE_LIB_DIR}/${ELASTICSEARCH_VERSION},\
-${SERVICE_LIB_DIR}/${PHOENIX_CORE_VERSION},\
-${SERVICE_LIB_DIR}/${TWILL_ZOOKEEPER},\
-${SERVICE_LIB_DIR}/${TEPHRA_API},\
-${SERVICE_LIB_DIR}/${TEPHRA_HBASE},\
-${SERVICE_LIB_DIR}/${TWILL_DISCOVERY},\
-${SERVICE_LIB_DIR}/${TEPHRA_CORE},\
-${COMMON_LIB_DIR}/${FTP_VERSION},\
-# ${COMMON_LIB_DIR}/${BIGDATA_API_VERSION},\
-# ${FTP_LIB_DIR}/${ROCKETMQ_CLIENT_VERSION},\
-# ${FTP_LIB_DIR}/${ROCKETMQ_COMMON_VERSION},\
-# ${FTP_LIB_DIR}/${ROCKETMQ_REMOTING_VERSION},\
-# ${FTP_LIB_DIR}/${FASTJSON_VERSION},\
-${COMMON_LIB_DIR}/${UTIL_VERSION},\
-${CLUSTER_LIB_DIR}/${KAFKA_CLIENTS_VERSION},\
-${CLUSTER_LIB_DIR}/${METRICS_CORE_VERSION} \
---files ${SERVICE_CONF_DIR}/common_service_es.properties,\
-${SERVICE_CONF_DIR}/hbase-site.xml,\
-${SERVICE_CONF_DIR}/common_service_jdbc.properties,\
-${FTP_CONF_DIR}/ftpAddress.properties,\
-${CLUSTER_CONF_DIR}/sparkJob.properties,\
-${FTP_CONF_DIR}/rocketmq.properties \
-${COMMON_LIB_DIR}/${CLUSTER_VERSION} > ${LOG_FILE} 2>&1 &
+--jars ${SPARK_LIB_DIR}/${GSON_VERSION},\
+${SPARK_LIB_DIR}/${JACKSON_CORE_VERSION},\
+${SPARK_LIB_DIR}/${COMMON_UTIL_VERSION},\
+${SPARK_LIB_DIR}/${COMMON_HBASE_VERSION},\
+${SPARK_LIB_DIR}/${PHOENIXDRIVER_VERSION},\
+${SPARK_LIB_DIR}/${COMMON_TABLE_VERSION},\
+${SPARK_LIB_DIR}/${TEPHRA_API_VERSION},\
+${SPARK_LIB_DIR}/${TEPHRA_CORE_VERSION},\
+${SPARK_LIB_DIR}/${TEPHRA_HBASE_VERSION},\
+${SPARK_LIB_DIR}/${TWILL_API_VERSION},\
+${SPARK_LIB_DIR}/${TWILL_COMMON_VERSION},\
+${SPARK_LIB_DIR}/${TWILL_CORE_VERSION},\
+${SPARK_LIB_DIR}/${TWILL_DIS_API_VERSION},\
+${SPARK_LIB_DIR}/${TWILL_DIS_CORE_VERSION},\
+${SPARK_LIB_DIR}/${TWILL_ZOOKEEPER_VERSION},\
+${SPARK_LIB_DIR}/${SPARK_STREAMING_KAFKA_VERSION},\
+${SPARK_LIB_DIR}/${HBASE_SERVER_VERSION},\
+${SPARK_LIB_DIR}/${HBASE_CLIENT_VERSION},\
+${SPARK_LIB_DIR}/${HBASE_COMMON_VERSION},\
+${SPARK_LIB_DIR}/${HBASE_PROTOCOL_VERSION},\
+${SPARK_LIB_DIR}/${ZKCLIENT_VERSION},\
+${SPARK_LIB_DIR}/${JNI_VERSION},\
+${SPARK_LIB_DIR}/${KAFKA_VERSION},\
+${SPARK_LIB_DIR}/${ELASTICSEARCH_VERSION},\
+${SPARK_LIB_DIR}/${ROCKETMQ_CLIENT_VERSION},\
+${SPARK_LIB_DIR}/${ROCKETMQ_COMMON_VERSION},\
+${SPARK_LIB_DIR}/${ROCKETMQ_REMOTING_VERSION},\
+${SPARK_LIB_DIR}/${FASTJSON_VERSION},\
+${SPARK_LIB_DIR}/${KAFKA_CLIENTS_VERSION},\
+${SPARK_LIB_DIR}/${METRICS_CORE_VERSION} \
+--conf "spark.driver.extraJavaOptions=-Dlog4j.configuration=file:${SPARK_CONF_DIR}/log4j.properties" \
+--files ${SPARK_CONF_DIR}/sparkJob.properties,\
+/opt/hzgc/bigdata/HBase/hbase/conf/hbase-site.xml \
+${SPARK_LIB_DIR}/${SPARK_API_VERSION} > ${LOG_FILE} 2>&1 &

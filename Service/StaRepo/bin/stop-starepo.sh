@@ -1,25 +1,27 @@
 ################################################################################
 ##opyright:   HZGOSUN Tech. Co, BigData
-## Filename:    springCloud stop face
-## Description:  停止face服务
-## Author:      yansen
-## Created:     2018-05-18
+## Filename:    springCloud stop starepo
+## Description:  停止starepo服务
+## Author:      chenke
+## Created:     2018-05-19
 ################################################################################
 #set -x
 
-
 cd `dirname $0`
-BIN_DIR=`pwd`                                        ##bin 目录
+BIN_DIR=`pwd`    ##bin目录地址
 cd ..
-FACE_DIR=`pwd`					     ##face目录
-LIB_DIR=${FACE_DIR}/lib              ##lib目录地址
-FACE_JAR_NAME=`ls ${LIB_DIR}| grep ^face-[0-9].[0-9].[0-9].jar$`                   ##获取运行jar包名
-FACE_JAR_PID=`jps | grep ${FACE_JAR_NAME} | awk '{print $1}'`                       ##根据服务名称获取服务pid
+STAREPO_DIR=`pwd`    ##STAREPO目录地址
+LIB_DIR=${STAREPO_DIR}/lib        ##lib目录地址
+CONF_DIR=${STAREPO_DIR}/conf      ##conf目录地址
+STAREPO_JAR_NAME=`ls ${LIB_DIR} | grep ^starepo-[0-9].[0-9].[0-9].jar$`
+STAREPO_PID=`jps | grep ${STAREPO_JAR_NAME} | awk '{print $1}'`
 
 
 #---------------------------------------------------------------------#
 #                              定义函数                                #
 #---------------------------------------------------------------------#
+
+
 
 #####################################################################
 # 函数名:stop_spring_cloud
@@ -30,16 +32,14 @@ FACE_JAR_PID=`jps | grep ${FACE_JAR_NAME} | awk '{print $1}'`                   
 #####################################################################
 function stop_springCloud()
 {
-    if [ -n "${FACE_JAR_PID}" ];then
-       echo "Face service is exist,exit with 0, kill service now!!"
-  	   ##杀掉进程
-	   kill -9 ${FACE_JAR_PID}
-	   echo "stop service successfully!!"
-	else
-	   echo "Face service is not start!!"
-	fi
+    if [ -n "${STAREPO_PID}" ];then
+        echo "starepo service is exist, exit with 0, kill service now"
+        kill -9 ${STAREPO_PID}
+        echo "stop service successfully"
+    else
+        echo "starepo service is not start"
+    fi
 }
-
 
 
 #####################################################################

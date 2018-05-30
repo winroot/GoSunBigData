@@ -1,26 +1,26 @@
+#!/bin/bash
 ################################################################################
 ##opyright:   HZGOSUN Tech. Co, BigData
-## Filename:    springCloud stop face
-## Description:  停止face服务
-## Author:      yansen
-## Created:     2018-05-18
+## Filename:    springCloud stop address
+## Description:  停止address服务
+## Author:      chenke
+## Created:     2018-05-19
 ################################################################################
-set -x
-
+#set -x              ##用于调试
 
 cd `dirname $0`
-BIN_DIR=`pwd`                                        ##bin 目录
+BIN_DIR=`pwd`                           ##bin目录地址
 cd ..
-cd lib
-ADDRESS_JAR_NAME=`ls ${LIB_DIR}| grep ^address-[0-9].[0-9].[0-9].jar$`                   ##获取运行jar包名
-ADDRESS_JAR_PID=`jps | grep ${ADDRESS_JAR_NAME} | awk '{print $1}'`                      ##根据服务名称获取服务pid
+ADDRESS_DIR=`pwd`                       ##address目录地址
+LIB_DIR=${ADDRESS_DIR}/lib              ##lib目录地址
+CONF_DIR=${ADDRESS_DIR}/conf
+ADDRESS_JAR_NAME=`ls ${LIB_DIR} | grep ^address-[0-9].[0-9].[0-9].jar$`
+ADDRESS_JAR_PID=`jps | grep ${ADDRESS_JAR_NAME} | awk '{print $1}'`
 
 
 #---------------------------------------------------------------------#
 #                              定义函数                                #
 #---------------------------------------------------------------------#
-
-
 
 #####################################################################
 # 函数名:stop_spring_cloud
@@ -29,13 +29,17 @@ ADDRESS_JAR_PID=`jps | grep ${ADDRESS_JAR_NAME} | awk '{print $1}'`             
 # 返回值: N/A
 # 其他: N/A
 #####################################################################
-function stop_springCloud_address()
+function stop_springCloud()
 {
-  	##杀掉进程
-	kill -9 ${ADDRESS_JAR_PID}
-}  
-
-
+    if [  -n "${ADDRESS_JAR_PID}" ];then
+       echo "Address service is exist,exit with 0,kill service now!!"
+  	   ##杀掉进程
+	   kill -9 ${ADDRESS_JAR_PID}
+	   echo "stop service successfully!!"
+	else
+	   echo "Address service is not start!!"
+	fi
+}
 
 #####################################################################
 # 函数名: main
@@ -46,9 +50,7 @@ function stop_springCloud_address()
 #####################################################################
 function main()
 {
-    stop_springCloud_address
+    stop_springCloud
 }
-
-
 
 main

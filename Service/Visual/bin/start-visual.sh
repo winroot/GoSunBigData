@@ -1,8 +1,8 @@
 #!/bin/bash
 ################################################################################
 ## Copyright:   HZGOSUN Tech. Co, BigData
-## Filename:    springCloud start address
-## Description: 启动 address服务
+## Filename:    springCloud start visual
+## Description: 启动 visual服务
 ## Author:      chenke
 ## Created:     2018-05-19
 ################################################################################
@@ -11,11 +11,11 @@
 cd `dirname $0`
 BIN_DIR=`pwd`                         ##bin目录地址
 cd ..
-ADDRESS_DIR=`pwd`                     ##address目录地址
-LIB_DIR=${ADDRESS_DIR}/LIB
-ADDRESS_JAR_NAME=`ls ${LIB_DIR} | grep ^address-[0-9].[0-9].[0-9].jar$`          ##获取address的jar包名称
-ADDRESS_JAR=${LIB_DIR}/${ADDRESS_JAR_NAME}                        ##获取jar包的全路径
-CONF_DIR=${ADDRESS_DIR}/CONF                                          ##conf目录地址
+VISUAL_DIR=`pwd`                     ##visual目录地址
+LIB_DIR=${VISUAL_DIR}/lib            ##lib目录地址
+CONF_DIR=${VISUAL_DIR}/conf          ##conf目录地址
+VISUAL_JAR_NAME=`ls ${LIB_DIR} | grep ^visual-[0-9].[0-9].[0-9].jar$`          ##获取visual的jar包名称
+VISUAL_JAR=${LIB_DIR}/${VISUAL_JAR_NAME}                        ##获取jar包的全路径
 
 
 
@@ -33,25 +33,25 @@ ZOOKEEPER_HOST=172.18.18.100:2181
 #                                定义函数                                      #
 #------------------------------------------------------------------------------#
 #####################################################################
-# 函数名: start_address
-# 描述: 启动 springCloud address服务
+# 函数名: start_clustering
+# 描述: 启动 springCloud visual服务
 # 参数: N/A
 # 返回值: N/A
 # 其他: N/A
 #####################################################################
 function start_springCloud()
 {
-   ADDRESS_PID=`jps | grep ${ADDRESS_JAR_NAME} | awk '{print $1}'`
-   if [  -n "${ADDRESS_PID}" ];then
-       echo "address service already started !!"
-   else
-       nohup java -jar ${ADDRESS_JAR} --spring.profiles.active=pro \
+    VISUAL_PID=`jps | grep ${VISUAL_JAR_NAME} | awk '{print $1}'`
+    if [ -n "${VISUAL_PID}" ];then
+       echo "Visual service already started!!"
+    else
+       nohup java -jar ${VISUAL_JAR} --spring.profiles.active=pro  \
        --eureka.ip=${EUREKA_IP} \
        --eureka.port=${EUREKA_PORT} \
        --server.ip=${SERVER_IP} \
        --es.hosts=${ES_HOST} \
        --zookeeper.host=${ZOOKEEPER_HOST} 2&>1 &
-   fi
+    fi
 }
 #####################################################################
 # 函数名: main
