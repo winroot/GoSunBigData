@@ -56,13 +56,13 @@ function create_kafka_topic()
 
     # 根据zookeeper字段，查找配置文件中，zk的IP地址和端口号
     #ZK_IP_PORTS=`sed '/zookeeper/!d;s/.*=//' ${CONF_FILE} | tr -d '\r'`
-	ZK_IP_PORTS=$(grep zookeeper ${CONF_FILE}|cut -d '=' -f2)
+	ZK_IP_PORTS=$(grep zookeeper_installnode ${CONF_FILE}|cut -d '=' -f2)
     # 将读取的IP（原本为分号分割），配置为以逗号分割
     zk_arr=(${ZK_IP_PORTS//;/ })
     zkpro=''    
     for zk_host in ${zk_arr[@]}
     do
-        zkpro="$zkpro$zk_host,"
+        zkpro=$zkpro$zk_host":2181"
     done
     zkpro=${zkpro%?}
     

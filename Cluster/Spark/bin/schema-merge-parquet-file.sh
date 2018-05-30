@@ -69,12 +69,12 @@ function merge_parquet()
         mkdir $LOG_DIR;
     fi
     if [ "${dateString}" == "" ];then
-        spark-submit --class com.hzgc.cluster.smallfile.MergeParquetFileV1 \
+        spark-submit --class com.hzgc.cluster.spark.smallfile.MergeParquetFileV1 \
         --master local[*] \
         --driver-memory 4g \
         ${SPARK_DIR}/lib/${CLUSTER_VERSION} ${hdfsClusterName} ${tmpTableHdfsPath} ${hisTableHdfsPath} ${tableName} ${dateString}
     else
-        spark-submit --class com.hzgc.cluster.smallfile.MergeParquetFileV2 \
+        spark-submit --class com.hzgc.cluster.spark.smallfile.MergeParquetFileV2 \
         --master local[*] \
         --driver-memory 4g \
         ${SPARK_DIR}/lib/${CLUSTER_VERSION} ${hdfsClusterName} ${tmpTableHdfsPath} ${hisTableHdfsPath} ${tableName} ${dateString}
