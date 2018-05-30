@@ -73,7 +73,7 @@ public class CaptureHistoryService {
                 capturePicture.setSurl(captureServiceHelper.getFtpUrl(surl));
                 capturePicture.setBurl(captureServiceHelper.getFtpUrl(burl));
                 capturePicture.setDeviceId(ipcid);
-                capturePicture.setTime(timestamp);
+                capturePicture.setTimeStamp(timestamp);
                 persons.add(capturePicture);
             }
         }
@@ -104,7 +104,7 @@ public class CaptureHistoryService {
                     capturePicture.setBurl(captureServiceHelper.getFtpUrl(burl));
                     capturePicture.setDeviceId(option.getIpcMappingDevice().get(ipc).getId());
                     capturePicture.setDeviceName(option.getIpcMappingDevice().get(ipc).getName());
-                    capturePicture.setTime(timestamp);
+                    capturePicture.setTimeStamp(timestamp);
                     if (ipcId.equals(ipc)) {
                         capturedPictureList.add(capturePicture);
                     }
@@ -141,7 +141,7 @@ public class CaptureHistoryService {
                 capturePicture.setSurl(captureServiceHelper.getFtpUrl(surl));
                 capturePicture.setBurl(captureServiceHelper.getFtpUrl(burl));
                 capturePicture.setDeviceId(ipc);
-                capturePicture.setTime(timestamp);
+                capturePicture.setTimeStamp(timestamp);
                 capturePicture.setDeviceId(option.getIpcMappingDevice().get(ipc).getId());
                 capturePicture.setDeviceName(option.getIpcMappingDevice().get(ipc).getName());
                 captureList.add(capturePicture);

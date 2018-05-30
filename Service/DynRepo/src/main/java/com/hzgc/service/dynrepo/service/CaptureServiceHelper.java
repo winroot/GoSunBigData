@@ -167,7 +167,7 @@ public class CaptureServiceHelper {
                 capturedPicture.setBurl(getFtpUrl(burl));
                 capturedPicture.setDeviceId(option.getIpcMappingDevice().get(ipcid).getId());
                 capturedPicture.setDeviceName(option.getIpcMappingDevice().get(ipcid).getName());
-                capturedPicture.setTime(format.format(timestamp));
+                capturedPicture.setTimeStamp(format.format(timestamp));
                 capturedPicture.setSimilarity(similaritys);
                 capturedPictureList.add(capturedPicture);
             }
@@ -215,7 +215,7 @@ public class CaptureServiceHelper {
                 capturedPicture.setBurl(getFtpUrl(burl));
                 capturedPicture.setDeviceId(option.getIpcMappingDevice().get(ipcid).getId());
                 capturedPicture.setDeviceName(option.getIpcMappingDevice().get(ipcid).getName());
-                capturedPicture.setTime(format.format(timestamp));
+                capturedPicture.setTimeStamp(format.format(timestamp));
                 capturedPicture.setSimilarity(similaritys);
                 if (mapSet.containsKey(id)) {
                     mapSet.get(id).add(capturedPicture);

@@ -1,5 +1,6 @@
 package com.hzgc.service.dynrepo.bean;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -33,5 +34,6 @@ public class CapturedPicture implements Serializable {
     private Map<String, Object> extend;
 
     //时间戳
-    private String time;
+    @JsonProperty("time")
+    private String timeStamp;
 }

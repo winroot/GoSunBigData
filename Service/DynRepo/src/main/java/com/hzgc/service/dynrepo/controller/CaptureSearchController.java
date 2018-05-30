@@ -27,9 +27,8 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@FeignClient(name = "dynRepo")
-@RequestMapping(value = BigDataPath.DYNREPO)
-@Api(value = "/dynRepoSearch", tags = "以图搜图服务")
+//@RequestMapping(value = BigDataPath.DYNREPO)
+@Api(tags = "动态库服务")
 @Slf4j
 @SuppressWarnings("unused")
 public class CaptureSearchController {
@@ -57,7 +56,7 @@ public class CaptureSearchController {
     @RequestMapping(value = BigDataPath.DYNREPO_SEARCH, method = RequestMethod.POST)
     @SuppressWarnings("unused")
     public ResponseResult<SearchResult> searchPicture(
-            @RequestBody @ApiParam(value = "以图搜图入参") SearchOption searchOption) throws SQLException {
+            @RequestBody @ApiParam(value = "以图搜图查询参数") SearchOption searchOption) throws SQLException {
         SearchResult searchResult;
         if (searchOption == null) {
             log.error("Start search picture, but search option is null");
@@ -94,9 +93,9 @@ public class CaptureSearchController {
      * @param image_name 原图ID
      * @return 图片二进制
      */
-    @ApiOperation(value = "获取原图", response = byte[].class, httpMethod = "GET")
+    @ApiOperation(value = "获取原图", produces = "image/jpeg")
     @ApiImplicitParam(name = "image_name", value = "原图ID", paramType = "query")
-    @RequestMapping(value = BigDataPath.DYNREPO_GETPICTURE, method = RequestMethod.GET, produces = "image/jpeg")
+    @RequestMapping(value = BigDataPath.DYNREPO_GETPICTURE, method = RequestMethod.GET)
     public ResponseEntity<byte[]> getSearchPicture(String image_name) {
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
@@ -109,9 +108,9 @@ public class CaptureSearchController {
      * @param searchResultOption 以图搜图入参
      * @return SearchResult
      */
-    @ApiOperation(value = "获取更多搜图结果", response = SearchResult.class)
+    @ApiOperation(value = "获取历史搜图结果", response = SearchResult.class)
     @RequestMapping(value = BigDataPath.DYNREPO_SEARCHRESULT, method = RequestMethod.POST)
-    @ApiImplicitParam(name = "searchResultOption", value = "以图搜图入参", paramType = "body")
+    @ApiImplicitParam(name = "searchResultOption", value = "历史结果查询参数", paramType = "body")
     @SuppressWarnings("unused")
     public ResponseResult<SearchResult> getSearchResult(
             @RequestBody SearchResultOption searchResultOption) {
@@ -134,13 +133,13 @@ public class CaptureSearchController {
      * @param limit      返回条数
      * @return 返回查询结果
      */
-    @ApiOperation(value = "查询搜图记录", response = SearchHisotry.class, responseContainer = "List")
+    @ApiOperation(value = "搜图记录查询", response = SearchHisotry.class, responseContainer = "List")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "start_time", value = "起始时间", paramType = "query"),
             @ApiImplicitParam(name = "end_time", value = "结束时间", paramType = "query"),
             @ApiImplicitParam(name = "sort", value = "排序参数", paramType = "query"),
-            @ApiImplicitParam(name = "start", value = "起始位置", paramType = "query"),
-            @ApiImplicitParam(name = "limit", value = "返回条数", paramType = "query")
+            @ApiImplicitParam(name = "start", value = "起始位置", paramType = "query", required = true),
+            @ApiImplicitParam(name = "limit", value = "返回条数", paramType = "query", required = true)
     })
     @SuppressWarnings("unused")
     @RequestMapping(value = BigDataPath.DYNREPO_SEARCHHISTORY, method = RequestMethod.GET)
@@ -178,8 +177,8 @@ public class CaptureSearchController {
      * @param captureOption 以图搜图入参
      * @return List<SearchResult>
      */
-    @ApiOperation(value = "抓拍查询", response = SearchResult.class, responseContainer = "List")
-    @ApiImplicitParam(name = "searchOption", value = "抓拍记录查询参数", paramType = "body")
+    @ApiOperation(value = "抓拍历史查询", response = SearchResult.class, responseContainer = "List")
+    @ApiImplicitParam(name = "searchOption", value = "抓拍历史查询参数", paramType = "body")
     @RequestMapping(value = BigDataPath.DYNREPO_HISTORY, method = RequestMethod.POST)
     @SuppressWarnings("unused")
     public ResponseResult<List<SingleCaptureResult>> getCaptureHistory(
