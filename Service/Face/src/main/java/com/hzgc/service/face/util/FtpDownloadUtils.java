@@ -23,7 +23,7 @@ public class FtpDownloadUtils {
      */
     public static byte[] downloadftpFile2Bytes(String ftpUrl, String account, String password) {
         byte[] ftpFileBytes = null;
-        if (IsEmpty.strIsRight(ftpUrl) && IsEmpty.strIsRight(account) && IsEmpty.strIsRight(password)) {
+        if (IsEmpty.strIsRight(ftpUrl) && IsEmpty.strIsRight(account)) {
             //解析FTP地址，得到ftpAddress、ftpPort、ftpFilePath、ftpFileName
             String ftpAddress = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
             String path = ftpUrl.substring(ftpUrl.lastIndexOf(":") + 1);

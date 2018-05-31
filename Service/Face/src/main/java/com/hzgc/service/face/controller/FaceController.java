@@ -36,10 +36,8 @@ public class FaceController {
     private AttributeService attributeService = new AttributeService();
 
     //特征值获取
-    @ApiOperation(value = "图片的特征值提取", response = ResponseResult.class, responseContainer = "List")
+    @ApiOperation(value = "图片的特征值提取", response = ResponseResult.class)
     @ApiImplicitParam(name = "image", value = "图片", required = true, dataType = "file", paramType = "form")
-    @ApiResponses(
-            {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.FEATURE_EXTRACT_BIN, method = RequestMethod.POST)
     public ResponseResult<PictureData> featureExtract(@ApiParam(name = "image", value = "图片", required = true) MultipartFile image) {
         PictureData pictureData = new PictureData();
@@ -64,41 +62,41 @@ public class FaceController {
      *
      * @return List<Attribute>
      */
-    @ApiOperation(value = "属性特征查询", response = Attribute.class, responseContainer = "List")
+    @ApiOperation(value = "属性特征查询", response = ResponseResult.class)
     @RequestMapping(value = BigDataPath.FACE_ATTRIBUTE, method = RequestMethod.GET)
     @SuppressWarnings("unused")
     public ResponseResult<List<Attribute>> getAttribute() {
         List<Attribute> attributeList;
         attributeList = attributeService.getAttribute();
-        return ResponseResult.init(attributeList);
+        if (null != attributeList){
+            log.info("attributeList acquires is successed");
+            return ResponseResult.init(attributeList);
+        }else {
+            log.error("attributeList acquires is null");
+            return ResponseResult.error(RestErrorCode.RECORD_NOT_EXIST);
+        }
     }
 
-    //URL提取特征值
+    //ftp提取特征值
     @ApiOperation(value = "根据url提取图片特征值", response = ResponseResult.class)
-    @ApiResponses(
-            {@ApiResponse(code = 200, message = "successful response")})
-    @RequestMapping(value = "/feature_url", method = RequestMethod.POST)
-    public ResponseResult<PictureData> getFeatureExtract(@RequestBody PictureUrl pictureUrl) {
+    @ApiImplicitParam(name = "pictureUrl", value = "图片路径", required = true, dataType = "string", paramType = "form")
+    @RequestMapping(value = BigDataPath.FEATURE_EXTRACT_FTP, method = RequestMethod.POST)
+    public ResponseResult<PictureData> getFeatureExtract(@RequestBody PictureUrl pictureUrl){
         ResponseResult<PictureData> response = ResponseResult.ok();
         PictureData pictureData = new PictureData();
-        FaceAttribute faceAttribute = null;
-        if (null != pictureUrl) {
-            //FTP匿名账号Anonymous和密码
-            byte[] bytes = FtpDownloadUtils.downloadftpFile2Bytes(pictureUrl.getUrl(), "anonymous", null);
-            if (null != bytes) {
-                pictureData.setImageData(bytes);
-                //调用大数据接口
-                faceAttribute = faceExtractService.featureExtract(bytes);
-                if (null != faceAttribute) {
-                    pictureData.setFeature(faceAttribute);
-                    pictureData.setImageID(UuidUtil.getUuid());
-                    response.setBody(pictureData);
-                    log.info("faceAttribute acquires is successed");
-                    return response;
-                }
-            }
+        pictureData.setImageID(UuidUtil.getUuid());
+        FaceAttribute faceAttribute;
+        if (null == pictureUrl){
+            log.error("Start extract feature by ftp, pictureUrl is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-        log.info("faceAttribute acquires is failed");
-        return null;
+        byte[] bytes = faceExtractService.getFeatureExtract(pictureUrl);
+        pictureData.setImageData(bytes);
+        //调用大数据接口
+        faceAttribute = faceExtractService.featureExtract(bytes);
+        pictureData.setFeature(faceAttribute);
+        response.setBody(pictureData);
+        log.info("faceAttribute acquires is successed");
+        return response;
     }
 }
