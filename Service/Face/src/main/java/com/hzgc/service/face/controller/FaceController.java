@@ -37,8 +37,6 @@ public class FaceController {
     @ApiImplicitParam(name = "image", value = "图片", required = true, dataType = "file", paramType = "form")
     @RequestMapping(value = BigDataPath.FEATURE_EXTRACT_BIN, method = RequestMethod.POST)
     public ResponseResult<PictureData> featureExtract(@ApiParam(name = "image", value = "图片", required = true) MultipartFile image) {
-        PictureData pictureData = new PictureData();
-        pictureData.setImageID(UuidUtil.getUuid());
         byte[] imageBin = null;
         if (image == null) {
             log.error("Start extract feature by binary, image is null");
@@ -49,7 +47,7 @@ public class FaceController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        pictureData.setFeature(faceExtractService.featureExtract(imageBin));
+        PictureData pictureData = faceExtractService.featureExtractByImage(imageBin);
         return ResponseResult.init(pictureData);
     }
 
@@ -77,11 +75,12 @@ public class FaceController {
     @ApiOperation(value = "根据url提取图片特征值", response = ResponseResult.class)
     @ApiImplicitParam(name = "pictureUrl", value = "图片路径", required = true, dataType = "string", paramType = "query")
     @RequestMapping(value = BigDataPath.FEATURE_EXTRACT_FTP, method = RequestMethod.GET)
-    public ResponseResult<PictureData> getFeatureExtract(String pictureUrl){
+    public ResponseResult<PictureData> getFeatureExtract( String pictureUrl){
         if (null == pictureUrl){
             log.error("Start extract feature by ftp, pictureUrl is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-        return faceExtractService.getFeatureExtract(pictureUrl);
+        PictureData pictureData =  faceExtractService.getFeatureExtractByFtp(pictureUrl);
+        return ResponseResult.init(pictureData);
     }
 }

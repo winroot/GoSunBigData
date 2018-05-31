@@ -35,11 +35,15 @@ public class FaceExtractService {
      * @param imageBytes 图片的字节数组
      * @return float[] 特征值:长度为512的float[]数组
      */
-    public FaceAttribute featureExtract(byte[] imageBytes) {
+    public PictureData featureExtractByImage(byte[] imageBytes) {
+        PictureData pictureData = new PictureData();
+        pictureData.setImageID(UuidUtil.getUuid());
+        pictureData.setImageData(imageBytes);
         FaceAttribute faceAttribute = FaceFunction.featureExtract(imageBytes);
         if (faceAttribute != null) {
             log.info("Face extract successful, image contains feature");
-            return faceAttribute;
+            pictureData.setFeature(faceAttribute);
+            return pictureData;
         } else {
             log.info("Face extract failed, image not contains feature");
             return null;
@@ -47,20 +51,14 @@ public class FaceExtractService {
     }
 
     //ftp获取特征值
-    public ResponseResult<PictureData> getFeatureExtract(String pictureUrl){
-        ResponseResult<PictureData> response = ResponseResult.ok();
-        PictureData pictureData = new PictureData();
-        pictureData.setImageID(UuidUtil.getUuid());
-        FaceAttribute faceAttribute;
+    public PictureData getFeatureExtractByFtp(String pictureUrl){
+        PictureData pictureData;
         //FTP匿名账号Anonymous和密码
         byte[] bytes = FtpDownloadUtils.downloadftpFile2Bytes(pictureUrl,"anonymous",null);
         if (null != bytes){
-            pictureData.setImageData(bytes);
             log.info("Face extract successful, pictureUrl contains feature");
-            faceAttribute = faceExtractService.featureExtract(bytes);
-            pictureData.setFeature(faceAttribute);
-            response.setBody(pictureData);
-            return response;
+            pictureData = faceExtractService.featureExtractByImage(bytes);
+            return pictureData;
         }else {
             log.info("Face extract failed, pictureUrl not contains feature");
             return null;
