@@ -29,7 +29,7 @@ CONF_CLUSTER_DIR=$CLUSTER_BUILD_DIR/conf               ### 配置文件目录
 CONF_FILE=$CONF_CLUSTER_DIR/project-conf.properties    ### 项目配置文件
 
 ## 安装的根目录，所有bigdata 相关的根目录
-INSTALL_HOME=$(grep Install_HomeDir ${CONF_FILE}|cut -d '=' -f2)
+INSTALL_HOME=$(grep install_homedir ${CONF_FILE}|cut -d '=' -f2)
 
 HADOOP_INSTALL_HOME=${INSTALL_HOME}/Hadoop            ### hadoop 安装目录
 HADOOP_HOME=${HADOOP_INSTALL_HOME}/hadoop             ### hadoop 根目录
@@ -83,7 +83,7 @@ function config_sparkJob()
 
     ### 从project-conf.properties读取sparkJob所需配置IP
     # 根据字段kafka，查找配置文件中，Kafka的安装节点所在IP端口号的值，这些值以分号分割
-	KAFKA_IP=$(grep Kafka_InstallNode ${CONF_FILE}|cut -d '=' -f2)
+	KAFKA_IP=$(grep kafka_install_node ${CONF_FILE}|cut -d '=' -f2)
     # 将这些分号分割的ip用放入数组
     spark_arr=(${KAFKA_IP//;/ })
     sparkpro=''    
@@ -98,7 +98,7 @@ function config_sparkJob()
     sed -i "s#^job.faceObjectConsumer.broker.list=.*#job.faceObjectConsumer.broker.list=${sparkpro}#g" ${CONF_SPARK_DIR}/sparkJob.properties
 
     # 根据字段zookeeper_installnode，查找配置文件中，Zk的安装节点所在IP端口号的值，这些值以分号分割
-    ZK_IP=$(grep Zookeeper_InstallNode ${CONF_FILE}|cut -d '=' -f2)
+    ZK_IP=$(grep zookeeper_installnode ${CONF_FILE}|cut -d '=' -f2)
     # 将这些分号分割的ip用放入数组
     zk_arr=(${ZK_IP//;/ })
     zkpro=''

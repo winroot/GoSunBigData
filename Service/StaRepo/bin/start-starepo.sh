@@ -47,7 +47,7 @@ function start_springCloud()
        nohup java -jar ${STAREPO_JAR} --spring.profiles.active=pro  \
        --eureka.ip=${EUREKA_IP} \
        --eureka.port=${EUREKA_PORT} \
-       --es.hosts=${ES_HOST} \
+       --es.host=${ES_HOST} \
        --server.ip=${SERVER_IP} \
        --zookeeper.host=${ZOOKEEPER_HOST} 2>&1 &
    fi

@@ -50,7 +50,7 @@ function start_springCloud()
       --eureka.port=${EUREKA_PORT} \
       --server.ip=${SERVER_IP} \
       --es.hosts=${ES_HOST} \
-      --zookeeper.host=${ZOOKEEPER_HOST} 2&>1 &
+      --zookeeper.host=${ZOOKEEPER_HOST} 2>&1 &
    fi
 }
 #####################################################################

@@ -47,7 +47,7 @@ function start_springCloud()
     else
        nohup java -jar ${FACE_JAR} --spring.profiles.active=pro \
        --eureka.ip=${EUREKA_IP} \
-       --eureka.port=${EUREKA_PORT} \
+       --eureka.port=${EUREKA_PORT}  2>&1 &
 }
 #####################################################################
 # 函数名: main

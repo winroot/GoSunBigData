@@ -46,7 +46,7 @@ function start_springCloud()
        nohup java -jar ${DYNREPO_JAR} --spring.profiles.active=pro  \
        --eureka.ip=${EUREKA_IP} \
        --eureka.port=${EUREKA_PORT} \
-       --es.hosts=${ES_HOST} \
+       --es.host=${ES_HOST} \
        --spring.cloud.config.enabled=false \
        --zookeeper.host=${ZOOKEEPER_HOST} 2>&1 &
    fi
