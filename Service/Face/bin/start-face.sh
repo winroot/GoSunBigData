@@ -25,9 +25,8 @@ FACE_JAR=${LIB_DIR}/${FACE_JAR_NAME}       ##获取jar包的全路径
 #---------------------------------------------------------------------#
 #                          springcloud配置参数                        #
 #---------------------------------------------------------------------#
-EUREKA_IP=[图片]172.18.18.201     ##注册中心的ip地址
-EUREKA_PORT=9000			##服务注册中心端口
-SERVER_IP=[图片]172.18.18.100     ##服务中心ip地址
+EUREKA_IP=172.18.18.201     ##注册中心的ip地址
+EUREKA_PORT=9000         ##服务注册中心端口
 
 #---------------------------------------------------------------------#
 #                              定义函数                               #
@@ -48,8 +47,7 @@ function start_springCloud()
     else
        nohup java -jar ${FACE_JAR} --spring.profiles.active=pro \
        --eureka.ip=${EUREKA_IP} \
-       --eureka.port=${EUREKA_PORT} \
-       --server.ip=${SERVER_IP} 2>&1 &
+       --eureka.port=${EUREKA_PORT}  2>&1 &
 }
 #####################################################################
 # 函数名: main
