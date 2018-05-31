@@ -12,10 +12,10 @@ cd `dirname $0`
 BIN_DIR=`pwd`                         ##bin目录地址
 cd ..
 ADDRESS_DIR=`pwd`                     ##address目录地址
-LIB_DIR=${ADDRESS_DIR}/LIB
+LIB_DIR=${ADDRESS_DIR}/lib
 ADDRESS_JAR_NAME=`ls ${LIB_DIR} | grep ^address-[0-9].[0-9].[0-9].jar$`          ##获取address的jar包名称
 ADDRESS_JAR=${LIB_DIR}/${ADDRESS_JAR_NAME}                        ##获取jar包的全路径
-CONF_DIR=${ADDRESS_DIR}/CONF                                          ##conf目录地址
+CONF_DIR=${ADDRESS_DIR}/conf                                          ##conf目录地址
 
 
 
@@ -23,9 +23,7 @@ CONF_DIR=${ADDRESS_DIR}/CONF                                          ##conf目�
 #                               springcloud配置参数                            #
 #-----------------------------------------------------------------------------#
 EUREKA_IP=172.18.18.201     ##注册中心的ip地址
-SERVER_IP=172.18.18.104     ##服务的ip地址
 EUREKA_PORT=9000            ##服务注册中心端口
-ES_HOST=172.18.18.100
 ZOOKEEPER_HOST=172.18.18.100:2181
 
 
@@ -48,9 +46,8 @@ function start_springCloud()
        nohup java -jar ${ADDRESS_JAR} --spring.profiles.active=pro \
        --eureka.ip=${EUREKA_IP} \
        --eureka.port=${EUREKA_PORT} \
-       --server.ip=${SERVER_IP} \
-       --es.hosts=${ES_HOST} \
-       --zookeeper.host=${ZOOKEEPER_HOST} 2&>1 &
+       --spring.cloud.config.enabled=false \
+       --zookeeper.host=${ZOOKEEPER_HOST} 2>&1 &
    fi
 }
 #####################################################################

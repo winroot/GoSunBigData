@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = BigDataPath.FTP)
-@Api(value = "/ftp", tags = "ftp地址服务")
+@Api(value = "/ftp", tags = "大数据地址服务")
 public class FtpAddressController {
 
     @Autowired
@@ -22,7 +21,7 @@ public class FtpAddressController {
      *
      * @return ftp相关配置参数
      */
-    @ApiOperation(value = "ftp配置信息查询", response = Map.class, responseContainer = "List")
+    @ApiOperation(value = "获取可绑定ftp地址信息", response = Map.class, responseContainer = "List")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "successful response")})
     @ResponseBody
     @RequestMapping(value = BigDataPath.FTP_GET_PROPERTIES, method = RequestMethod.GET)
@@ -37,11 +36,11 @@ public class FtpAddressController {
      * @param hostname 主机名
      * @return IP地址
      */
-    @ApiOperation(value = "ftp配置信息查询", response = String.class, responseContainer = "List")
+    @ApiOperation(value = "ftp服务器主机名转IP", response = String.class, responseContainer = "List")
     @ApiImplicitParam(name = "hostname", value = "主机名", required = true, dataType = "String",paramType = "query")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.FTP_GET_IP, method = RequestMethod.GET)
-    public ResponseResult<String> getIPAddress(@ApiParam(value = "聚类信息查询入参") String hostname) {
+    public ResponseResult<String> getIPAddress(@ApiParam(value = "主机名") String hostname) {
         String ip = ftpAddressService.getIPAddress(hostname);
         return ResponseResult.init(ip);
     }

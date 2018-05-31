@@ -13,13 +13,9 @@ public class BigDataPath {
     /**
      * ftp模块请求路径
      */
-    public static final String FTP = ROOT + "/ftpProper";
-    public static final String FTP_GET_PROPERTIES = "/get";
-    public static final String FTP_GET_IP = "/getIP";
+    public static final String FTP_GET_PROPERTIES = "/ftp_info";
+    public static final String FTP_GET_IP = "/hostname_convert";
 
-    public static final String FTP_SUBSCRIPTION = ROOT + "/ftpSubscription";
-    public static final String FTP_SUBSCRIPTION_OPEN = "/open";
-    public static final String FTP_SUBSCRIPTION_CLOSE = "/close";
     /**
      * Clustering模块请求路径
      */
@@ -49,7 +45,6 @@ public class BigDataPath {
     /**
      * DynRepo模块请求路径
      */
-    public static final String DYNREPO = ROOT + "/dynrepo";
     public static final String DYNREPO_SEARCH = "/search_picture";
     public static final String DYNREPO_SEARCHRESULT = "/search_result";
     public static final String DYNREPO_GETPICTURE = "/origin_picture";
@@ -59,9 +54,9 @@ public class BigDataPath {
     /**
      * Face模块请求路径
      */
-    public static final String FACE = ROOT + "/face";
-    public static final String FEATURE_EXTRACT = "/featureExtract";
-    public static final String FACE_ATTRIBUTE = "/getAttribute";
+    public static final String FEATURE_EXTRACT_BIN = "/extract_bin";
+    public static final String FEATURE_EXTRACT_FTP = "/extract_ftp";
+    public static final String FACE_ATTRIBUTE = "/attribute";
 
     /**
      * StaRepo模块请求路径

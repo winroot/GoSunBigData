@@ -4,6 +4,7 @@ import com.hzgc.collect.zk.register.RegisterWatcher;
 import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
+import com.hzgc.jni.PictureData;
 import com.hzgc.service.dynrepo.bean.*;
 import com.hzgc.service.util.api.DeviceDTO;
 import com.hzgc.service.util.api.DeviceQueryService;
@@ -171,12 +172,8 @@ public class CaptureServiceHelper {
                 capturedPicture.setSimilarity(similaritys);
                 capturedPictureList.add(capturedPicture);
             }
-            List<String> imageIdList = new ArrayList<>();
-            for (int i = 0; i < option.getImages().size(); i++) {
-                imageIdList.add(option.getImages().get(i).getImageID());
-            }
-            singleSearchResult.
-                    setImageNames(imageIdList);
+
+            singleSearchResult.setPictureDatas(option.getImages());
             singleSearchResult.setSearchId(searchId);
             singleSearchResult.setPictures(capturedPictureList);
             singleSearchResult.setTotal(capturedPictureList.size());
@@ -232,14 +229,12 @@ public class CaptureServiceHelper {
                 if (mapSet.containsKey(picId)) {
                     singleSearchResult.setPictures(mapSet.get(picId));
                     singleSearchResult.setTotal(mapSet.get(picId).size());
-                    List<String> list = new ArrayList<>();
-                    list.add(picId);
-                    singleSearchResult.setImageNames(list);
+                    List<PictureData> list = new ArrayList<>();
+                    list.add(option.getImages().get(i));
+                    singleSearchResult.setPictureDatas(list);
                     singleSearchResult.setSearchId(picId);
                     singleResultList.add(singleSearchResult);
                 }
-
-
             }
             searchResult.setSingleResults(singleResultList);
         } catch (SQLException e) {

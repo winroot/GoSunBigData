@@ -29,9 +29,13 @@ public class FaceExtractService {
      * @return float[] 特征值:长度为512的float[]数组
      */
     public FaceAttribute featureExtract(byte[] imageBytes) {
-        if (imageBytes != null && imageBytes.length > 0) {
-            return FaceFunction.featureExtract(imageBytes);
+        FaceAttribute faceAttribute = FaceFunction.featureExtract(imageBytes);
+        if (faceAttribute != null) {
+            log.info("Face extract successfull, image contains feature");
+            return faceAttribute;
+        } else {
+            log.info("Face extract successfull, image not contains feature");
+            return null;
         }
-        return null;
     }
 }
