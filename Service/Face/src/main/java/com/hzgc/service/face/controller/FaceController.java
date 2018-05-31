@@ -3,11 +3,8 @@ package com.hzgc.service.face.controller;
 import com.hzgc.common.attribute.bean.Attribute;
 import com.hzgc.common.attribute.service.AttributeService;
 import com.hzgc.common.util.uuid.UuidUtil;
-import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.PictureData;
-import com.hzgc.service.face.bean.PictureUrl;
 import com.hzgc.service.face.service.FaceExtractService;
-import com.hzgc.service.face.util.FtpDownloadUtils;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
@@ -53,7 +50,6 @@ public class FaceController {
             e.printStackTrace();
         }
         pictureData.setFeature(faceExtractService.featureExtract(imageBin));
-        log.info("faceAttribute acquires is successed");
         return ResponseResult.init(pictureData);
     }
 
@@ -69,34 +65,23 @@ public class FaceController {
         List<Attribute> attributeList;
         attributeList = attributeService.getAttribute();
         if (null != attributeList){
-            log.info("attributeList acquires is successed");
+            log.info("AttributeList acquires is successed");
             return ResponseResult.init(attributeList);
         }else {
-            log.error("attributeList acquires is null");
+            log.error("AttributeList acquires is null");
             return ResponseResult.error(RestErrorCode.RECORD_NOT_EXIST);
         }
     }
 
     //ftp提取特征值
     @ApiOperation(value = "根据url提取图片特征值", response = ResponseResult.class)
-    @ApiImplicitParam(name = "pictureUrl", value = "图片路径", required = true, dataType = "string", paramType = "form")
-    @RequestMapping(value = BigDataPath.FEATURE_EXTRACT_FTP, method = RequestMethod.POST)
-    public ResponseResult<PictureData> getFeatureExtract(@RequestBody PictureUrl pictureUrl){
-        ResponseResult<PictureData> response = ResponseResult.ok();
-        PictureData pictureData = new PictureData();
-        pictureData.setImageID(UuidUtil.getUuid());
-        FaceAttribute faceAttribute;
+    @ApiImplicitParam(name = "pictureUrl", value = "图片路径", required = true, dataType = "string", paramType = "query")
+    @RequestMapping(value = BigDataPath.FEATURE_EXTRACT_FTP, method = RequestMethod.GET)
+    public ResponseResult<PictureData> getFeatureExtract(String pictureUrl){
         if (null == pictureUrl){
             log.error("Start extract feature by ftp, pictureUrl is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-        byte[] bytes = faceExtractService.getFeatureExtract(pictureUrl);
-        pictureData.setImageData(bytes);
-        //调用大数据接口
-        faceAttribute = faceExtractService.featureExtract(bytes);
-        pictureData.setFeature(faceAttribute);
-        response.setBody(pictureData);
-        log.info("faceAttribute acquires is successed");
-        return response;
+        return faceExtractService.getFeatureExtract(pictureUrl);
     }
 }

@@ -1,17 +1,22 @@
 package com.hzgc.service.face.service;
 
+import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
 import com.hzgc.jni.NativeFunction;
-import com.hzgc.service.face.bean.PictureUrl;
+import com.hzgc.jni.PictureData;
 import com.hzgc.service.face.util.FtpDownloadUtils;
+import com.hzgc.service.util.response.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import springfox.documentation.annotations.ApiIgnore;
 
 @Service
 @Slf4j
 public class FaceExtractService {
+
+    @Autowired
+    FaceExtractService faceExtractService;
 
     private FaceExtractService() {
         try {
@@ -42,12 +47,20 @@ public class FaceExtractService {
     }
 
     //ftp获取特征值
-    public byte[] getFeatureExtract(PictureUrl pictureUrl){
+    public ResponseResult<PictureData> getFeatureExtract(String pictureUrl){
+        ResponseResult<PictureData> response = ResponseResult.ok();
+        PictureData pictureData = new PictureData();
+        pictureData.setImageID(UuidUtil.getUuid());
+        FaceAttribute faceAttribute;
         //FTP匿名账号Anonymous和密码
-        byte[] bytes = FtpDownloadUtils.downloadftpFile2Bytes(pictureUrl.getUrl(),"anonymous",null);
+        byte[] bytes = FtpDownloadUtils.downloadftpFile2Bytes(pictureUrl,"anonymous",null);
         if (null != bytes){
+            pictureData.setImageData(bytes);
             log.info("Face extract successful, pictureUrl contains feature");
-            return bytes;
+            faceAttribute = faceExtractService.featureExtract(bytes);
+            pictureData.setFeature(faceAttribute);
+            response.setBody(pictureData);
+            return response;
         }else {
             log.info("Face extract failed, pictureUrl not contains feature");
             return null;
