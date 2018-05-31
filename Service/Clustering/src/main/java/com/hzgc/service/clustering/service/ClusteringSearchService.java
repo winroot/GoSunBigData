@@ -1,6 +1,5 @@
 package com.hzgc.service.clustering.service;
 
-import com.hzgc.common.clustering.AlarmInfo;
 import com.hzgc.common.clustering.ClusteringAttribute;
 import com.hzgc.common.table.clustering.ClusteringTable;
 import com.hzgc.common.table.dynrepo.DynamicTable;
@@ -10,6 +9,7 @@ import com.hzgc.service.clustering.bean.SortParam;
 import com.hzgc.service.clustering.dao.ElasticSearchDao;
 import com.hzgc.service.clustering.dao.HBaseDao;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,54 +40,45 @@ public class ClusteringSearchService {
      * @return 聚类列表
      */
     public ClusteringInfo clusteringSearch(String region, String time, int start, int limit, String sortParam) {
-        List<ClusteringAttribute> clusteringList = hBaseDao.clusteringSearch(region, time);
-        if (IsEmpty.strIsRight(sortParam)) {
+        //查询不忽略的对象
+        List<ClusteringAttribute> listNotIgnore = hBaseDao.getClustering(region, time, ClusteringTable.ClUSTERINGINFO_COLUMN_YES);
+        //查询忽略的对象
+        List<ClusteringAttribute> listIgnore = hBaseDao.getClustering(region, time, ClusteringTable.ClUSTERINGINFO_COLUMN_NO);
+        if (!StringUtils.isBlank(sortParam)) {
             SortParam sortParams = ListUtils.getOrderStringBySort(sortParam);
-            ListUtils.sort(clusteringList, sortParams.getSortNameArr(), sortParams.getIsAscArr());
+            ListUtils.sort(listNotIgnore, sortParams.getSortNameArr(), sortParams.getIsAscArr());
+            ListUtils.sort(listIgnore, sortParams.getSortNameArr(), sortParams.getIsAscArr());
         }
-        int total = clusteringList.size();
+        int totalYes = listNotIgnore.size();
+        int totalNo = listIgnore.size();
+        int total = 0;
         ClusteringInfo clusteringInfo = new ClusteringInfo();
-        clusteringInfo.setTotalClustering(total);
-        if (start > -1 && start <= total) {
-            if ((start + limit) > total) {
-                clusteringInfo.setClusteringAttributeList(clusteringList.subList(start, total));
+        //优先返回不忽略的聚类
+        if (start > -1 && start <= totalYes) {
+            if ((start + limit - 1) <= totalYes) {
+                clusteringInfo.setClusteringAttributeList(listNotIgnore.subList(start - 1, start + limit - 1));
+                log.info("Select clustering attributes not ignored num : " + limit);
+                total = limit;
+            } else if((start + limit - 1) > totalYes && (start + limit - 1) <= (totalYes + totalNo)){
+                clusteringInfo.setClusteringAttributeList(listNotIgnore.subList(start - 1, totalYes));
+                clusteringInfo.setClusteringAttributeList_ignore(listIgnore.subList(0, start + limit - totalYes - 1));
+                log.info("Select clustering attributes not ignored num : " + (totalYes - start + 1));
+                log.info("Select clustering attributes ignored num : " + (start + limit - totalYes - 1));
+                total = limit;
             } else {
-                clusteringInfo.setClusteringAttributeList(clusteringList.subList(start, start + limit));
+                clusteringInfo.setClusteringAttributeList(listNotIgnore.subList(start - 1, totalYes));
+                clusteringInfo.setClusteringAttributeList_ignore(listIgnore.subList(0, totalNo));
+                log.info("Select clustering attributes not ignored num : " + (totalYes - start + 1));
+                log.info("Select clustering attributes ignored num : " + (totalNo));
+                total = totalNo + totalYes - start;
             }
         } else {
-            log.info("start or limit out of index ");
+            log.info("Start or limit out of index ");
         }
+        clusteringInfo.setTotalClustering(total);
         return clusteringInfo;
     }
 
-    /**
-     * 查询单个聚类详细信息(告警记录)
-     *
-     * @param clusterId 聚类ID
-     * @param time      聚类时间
-     * @param start     分页查询开始行
-     * @param limit     查询条数
-     * @param sortParam 排序参数（默认时间先后排序）
-     * @return 返回该类下面所以告警信息
-     */
-    public List<AlarmInfo> detailClusteringSearch(String clusterId, String time, int start, int limit, String sortParam) {
-        List<AlarmInfo> alarmInfoList = hBaseDao.detailClusteringSearch(clusterId, time);
-        if (IsEmpty.strIsRight(sortParam)) {
-            SortParam sortParams = ListUtils.getOrderStringBySort(sortParam);
-            ListUtils.sort(alarmInfoList, sortParams.getSortNameArr(), sortParams.getIsAscArr());
-        }
-        int total = alarmInfoList.size();
-        if (start > -1 && start <= total) {
-            if ((start + limit) > total) {
-                return alarmInfoList.subList(start, total);
-            } else {
-                return alarmInfoList.subList(start, start + limit);
-            }
-        } else {
-            log.info("start or limit out of index");
-            return null;
-        }
-    }
 
     /**
      * 查询单个聚类详细信息(告警ID)
@@ -96,10 +87,9 @@ public class ClusteringSearchService {
      * @param time      聚类时间
      * @param start     分页查询开始行
      * @param limit     查询条数
-     * @param sortParam 排序参数（默认时间先后排序）
      * @return 返回该类下面所以告警信息
      */
-    public List<Integer> detailClusteringSearch_v1(String clusterId, String time, int start, int limit, String sortParam) {
+    public List<Integer> detailClusteringSearch_v1(String clusterId, String time, int start, int limit) {
         SearchHit[] results = elasticSearchDao.detailClusteringSearch_v1(clusterId, time, start, limit);
         List<Integer> alarmIdList = new ArrayList<>();
         if (results != null && results.length > 0) {
@@ -108,7 +98,7 @@ public class ClusteringSearchService {
                 alarmIdList.add(alarmTime);
             }
         } else {
-            log.info("no data get from es");
+            log.info("No data get from es");
         }
         return alarmIdList;
     }
@@ -122,32 +112,32 @@ public class ClusteringSearchService {
      * @return ture or false indicating whether delete is successful
      */
     public boolean deleteClustering(List<String> clusterIdList, String time, String flag) {
-        if (clusterIdList != null && time != null) {
-            String clusteringId = clusterIdList.get(0);
-            String region = clusteringId.split("-")[0];
-            byte[] colName;
-            if (flag.toLowerCase().equals("yes")) {
-                colName = ClusteringTable.ClUSTERINGINFO_COLUMN_NO;
-            } else if (flag.toLowerCase().equals("no")) {
-                colName = ClusteringTable.ClUSTERINGINFO_COLUMN_YES;
-            } else {
-                log.info("flag is error, it must be yes or no");
-                return false;
-            }
-            List<ClusteringAttribute> clusteringAttributeList = hBaseDao.getClustering(region, time, colName);
-            for (String clusterId : clusterIdList) {
-                Iterator<ClusteringAttribute> iterator = clusteringAttributeList.iterator();
-                ClusteringAttribute clusteringAttribute;
-                while (iterator.hasNext()) {
-                    clusteringAttribute = iterator.next();
-                    if (clusterId.equals(clusteringAttribute.getClusteringId())) {
-                        iterator.remove();
-                    }
+        String clusteringId = clusterIdList.get(0);
+        String region = clusteringId.split("-")[0];
+        byte[] colName;
+        if (flag.toLowerCase().equals("yes")) {
+            colName = ClusteringTable.ClUSTERINGINFO_COLUMN_NO;
+            log.info("Delete cluster attribute ignored");
+        } else if (flag.toLowerCase().equals("no")) {
+            colName = ClusteringTable.ClUSTERINGINFO_COLUMN_YES;
+            log.info("Delete cluster attribute not ignored");
+        } else {
+            log.info("Flag is error, it must be yes or no");
+            return false;
+        }
+        List<ClusteringAttribute> clusteringAttributeList = hBaseDao.getClustering(region, time, colName);
+        for (String clusterId : clusterIdList) {
+            Iterator<ClusteringAttribute> iterator = clusteringAttributeList.iterator();
+            ClusteringAttribute clusteringAttribute;
+            while (iterator.hasNext()) {
+                clusteringAttribute = iterator.next();
+                if (clusterId.equals(clusteringAttribute.getClusteringId())) {
+                    iterator.remove();
                 }
             }
-            return hBaseDao.putClustering(region, time, colName, clusteringAttributeList);
         }
-        return false;
+        return hBaseDao.putClustering(region, time, colName, clusteringAttributeList);
+
     }
 
     /**
@@ -156,44 +146,44 @@ public class ClusteringSearchService {
      * @param clusterIdList cluteringId include region information
      * @param time          clutering time
      * @param flag          yes is ignore, no is not ignore
-     * @return
      */
     public boolean ignoreClustering(List<String> clusterIdList, String time, String flag) {
-        if (clusterIdList != null && time != null) {
-            String clusteringId = clusterIdList.get(0);
-            String region = clusteringId.split("-")[0];
-            byte[] colNameSrc;
-            byte[] colNameDes;
-            if (flag.toLowerCase().equals("yes")) {
-                colNameSrc = ClusteringTable.ClUSTERINGINFO_COLUMN_YES;
-                colNameDes = ClusteringTable.ClUSTERINGINFO_COLUMN_NO;
-            } else if (flag.toLowerCase().equals("no")) {
-                colNameSrc = ClusteringTable.ClUSTERINGINFO_COLUMN_NO;
-                colNameDes = ClusteringTable.ClUSTERINGINFO_COLUMN_YES;
-            } else {
-                log.info("flag is error, it must be yes or no");
-                return false;
-            }
-            List<ClusteringAttribute> listSrc = hBaseDao.getClustering(region, time, colNameSrc);
-            List<ClusteringAttribute> listDes = hBaseDao.getClustering(region, time, colNameDes);
-            //yes 表示数据需要忽略（HBase表中存入"n"列），no 表示数据不需要忽略（HBase表中存入"y"列）
-            for (String clusterId : clusterIdList) {
-                Iterator<ClusteringAttribute> iterator = listSrc.iterator();
-                ClusteringAttribute clusteringAttribute;
-                while (iterator.hasNext()) {
-                    clusteringAttribute = iterator.next();
-                    if (clusterId.equals(clusteringAttribute.getClusteringId())) {
-                        clusteringAttribute.setFlag(flag);
-                        listDes.add(clusteringAttribute);
-                        iterator.remove();
-                    }
+
+        String clusteringId = clusterIdList.get(0);
+        String region = clusteringId.split("-")[0];
+        byte[] colNameSrc;
+        byte[] colNameDes;
+        if (flag.toLowerCase().equals("yes")) {
+            log.info("ignore cluster : " + clusterIdList);
+            colNameSrc = ClusteringTable.ClUSTERINGINFO_COLUMN_YES;
+            colNameDes = ClusteringTable.ClUSTERINGINFO_COLUMN_NO;
+        } else if (flag.toLowerCase().equals("no")) {
+            log.info("dont ignore cluster : " + clusterIdList);
+            colNameSrc = ClusteringTable.ClUSTERINGINFO_COLUMN_NO;
+            colNameDes = ClusteringTable.ClUSTERINGINFO_COLUMN_YES;
+        } else {
+            log.info("flag is error, it must be yes or no");
+            return false;
+        }
+        List<ClusteringAttribute> listSrc = hBaseDao.getClustering(region, time, colNameSrc);
+        List<ClusteringAttribute> listDes = hBaseDao.getClustering(region, time, colNameDes);
+        //yes 表示数据需要忽略（HBase表中存入"n"列），no 表示数据不需要忽略（HBase表中存入"y"列）
+        for (String clusterId : clusterIdList) {
+            Iterator<ClusteringAttribute> iterator = listSrc.iterator();
+            ClusteringAttribute clusteringAttribute;
+            while (iterator.hasNext()) {
+                clusteringAttribute = iterator.next();
+                if (clusterId.equals(clusteringAttribute.getClusteringId())) {
+                    clusteringAttribute.setFlag(flag);
+                    listDes.add(clusteringAttribute);
+                    iterator.remove();
                 }
             }
-            boolean booSrc = hBaseDao.putClustering(region, time, colNameSrc, listSrc);
-            boolean booDes = hBaseDao.putClustering(region, time, colNameDes, listDes);
-            return booSrc && booDes;
         }
-        return false;
+        boolean booSrc = hBaseDao.putClustering(region, time, colNameSrc, listSrc);
+        boolean booDes = hBaseDao.putClustering(region, time, colNameDes, listDes);
+        return booSrc && booDes;
+
     }
 
     /**
@@ -204,7 +194,6 @@ public class ClusteringSearchService {
      * @param start     index start
      * @param limit     count of data
      * @param sortParam the parameters of sort
-     * @return
      */
     @Deprecated
     public List<Integer> detailClusteringSearch_Hbase(String clusterId, String time, int start, int limit, String sortParam) {

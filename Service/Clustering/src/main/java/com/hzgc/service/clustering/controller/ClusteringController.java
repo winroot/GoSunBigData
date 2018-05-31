@@ -1,15 +1,18 @@
 package com.hzgc.service.clustering.controller;
 
-import com.hzgc.common.clustering.AlarmInfo;
+import com.hzgc.common.util.json.JSONUtil;
+import com.hzgc.service.clustering.bean.ClusteringInfo;
 import com.hzgc.service.clustering.bean.ClusteringSaveParam;
 import com.hzgc.service.clustering.bean.ClusteringSearchParam;
-import com.hzgc.service.clustering.bean.ClusteringInfo;
 import com.hzgc.service.clustering.service.ClusteringSearchService;
+import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,129 +20,92 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Slf4j
 @RestController
-@FeignClient(name = "clustering")
-@RequestMapping(value = BigDataPath.CLUSTERING, consumes = "application/json", produces = "application/json")
-@Api(value = "/clustering", tags = "聚类服务")
+@Api(tags = "人口实名制管理")
 public class ClusteringController {
 
     @Autowired
     private ClusteringSearchService clusteringSearchService;
 
-    @ApiOperation(value = "聚类信息查询", response = ClusteringInfo.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
+    @ApiOperation(value = "建议迁入信息查询", response = ClusteringInfo.class)
     @RequestMapping(value = BigDataPath.CLUSTERING_SEARCH, method = RequestMethod.POST)
     public ResponseResult<ClusteringInfo> clusteringSearch(
-            @RequestBody @ApiParam(value = "聚类信息查询入参") ClusteringSearchParam clusteringSearchParam) {
-        String region;
-        String time;
-        int start;
-        int limit;
-        String sortParam;
-        if (clusteringSearchParam != null) {
-            region = clusteringSearchParam.getRegion();
-            time = clusteringSearchParam.getTime();
-            start = clusteringSearchParam.getStart();
-            limit = clusteringSearchParam.getLimt();
-            sortParam = clusteringSearchParam.getSortParam();
+            @RequestBody @ApiParam(value = "聚类信息查询参数") ClusteringSearchParam clusteringSearchParam) {
+        if (clusteringSearchParam != null && clusteringSearchParam.getRegion() != null &&
+                clusteringSearchParam.getTime() != null) {
+            //若传入的start和limit为空，则默认从第一条开始，取所有
+            int start = clusteringSearchParam.getStart();
+            int limit = clusteringSearchParam.getLimit();
+            if(start == 0){
+                start = 1;
+            }
+            if(limit == 0){
+                limit = Integer.MAX_VALUE;
+            }
+            log.info("Start searching param : " + JSONUtil.toJson(clusteringSearchParam));
+            ClusteringInfo clusteringInfo = clusteringSearchService.clusteringSearch(clusteringSearchParam.getRegion()
+                    , clusteringSearchParam.getTime() , start, limit, clusteringSearchParam.getSortParam());
+            return ResponseResult.init(clusteringInfo);
         } else {
-            return null;
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-        ClusteringInfo clusteringInfo = clusteringSearchService.clusteringSearch(region, time, start, limit, sortParam);
-        return ResponseResult.init(clusteringInfo);
     }
 
-    @ApiOperation(value = "单个聚类信息详细查询", response = AlarmInfo.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
-    @RequestMapping(value = BigDataPath.CLUSTERING_DETAILSEARCH, method = RequestMethod.POST)
-    public ResponseResult<List<AlarmInfo>> detailClusteringSearch(
-            @RequestBody @ApiParam(value = "聚类信息查询入参") ClusteringSearchParam clusteringSearchParam) {
-        String clusterId;
-        String time;
-        int start;
-        int limit;
-        String sortParam;
-        if (clusteringSearchParam != null) {
-            clusterId = clusteringSearchParam.getClusterId();
-            time = clusteringSearchParam.getTime();
-            start = clusteringSearchParam.getStart();
-            limit = clusteringSearchParam.getLimt();
-            sortParam = clusteringSearchParam.getSortParam();
-        } else {
-            return null;
-        }
-        List<AlarmInfo> alarmInfoList = clusteringSearchService.detailClusteringSearch(clusterId, time, start, limit, sortParam);
-        return ResponseResult.init(alarmInfoList);
-    }
 
     @ApiOperation(value = "单个聚类信息详细查询(告警ID)", response = Integer.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
     @RequestMapping(value = BigDataPath.CLUSTERING_DETAILSEARCH_V1, method = RequestMethod.POST)
     public ResponseResult<List<Integer>> detailClusteringSearch_v1(
-            @RequestBody @ApiParam(value = "聚类信息查询入参") ClusteringSearchParam clusteringSearchParam) {
-        String clusterId;
-        String time;
-        int start;
-        int limit;
-        String sortParam;
-        if (clusteringSearchParam != null) {
-            clusterId = clusteringSearchParam.getClusterId();
-            time = clusteringSearchParam.getTime();
-            start = clusteringSearchParam.getStart();
-            limit = clusteringSearchParam.getLimt();
-            sortParam = clusteringSearchParam.getSortParam();
+            @RequestBody @ApiParam(value = "聚类信息查询参数") ClusteringSearchParam clusteringSearchParam) {
+        if (clusteringSearchParam != null && clusteringSearchParam.getClusterId() != null &&
+                clusteringSearchParam.getTime() != null) {
+            int start = clusteringSearchParam.getStart();
+            int limit = clusteringSearchParam.getLimit();
+            if(start == 0){
+                start = 1;
+            }
+            if(limit == 0){
+                limit = Integer.MAX_VALUE;
+            }
+            log.info("Starting searching param : " + JSONUtil.toJson(clusteringSearchParam));
+            List<Integer> alarmIdList = clusteringSearchService.detailClusteringSearch_v1(
+                    clusteringSearchParam.getClusterId(), clusteringSearchParam.getTime(), start, limit);
+            return ResponseResult.init(alarmIdList);
         } else {
-            return null;
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-        List<Integer> alarmIdList = clusteringSearchService.detailClusteringSearch_v1(clusterId, time, start, limit, sortParam);
-        return ResponseResult.init(alarmIdList);
+
     }
 
-    @ApiOperation(value = "删除聚类信息", response = Boolean.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
+    @ApiOperation(value = "删除聚类信息", response = Boolean.class)
     @RequestMapping(value = BigDataPath.CLUSTERING_DELETE, method = RequestMethod.DELETE)
     public ResponseResult<Boolean> deleteClustering(
-            @RequestBody @ApiParam(value = "聚类信息存储入参") ClusteringSaveParam clusteringSaveParam) {
-        List<String> clusterIdList;
-        String time;
-        String flag;
-        if (clusteringSaveParam != null) {
-            clusterIdList = clusteringSaveParam.getClusterIdList();
-            time = clusteringSaveParam.getTime();
-            flag = clusteringSaveParam.getFlag();
+            @RequestBody @ApiParam(value = "聚类信息存储参数") ClusteringSaveParam clusteringSaveParam) {
+        if (clusteringSaveParam != null && clusteringSaveParam.getClusterIdList() != null &&
+                clusteringSaveParam.getTime() != null && clusteringSaveParam.getClusterIdList().size() > 0 &&
+                clusteringSaveParam.getFlag() != null) {
+            log.info("Starting delete param : " + JSONUtil.toJson(clusteringSaveParam));
+            boolean succeed = clusteringSearchService.deleteClustering(clusteringSaveParam.getClusterIdList(),
+                    clusteringSaveParam.getTime(), clusteringSaveParam.getFlag());
+            return ResponseResult.init(succeed);
         } else {
-            return null;
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-        boolean succeed = clusteringSearchService.deleteClustering(clusterIdList, time, flag);
-        return ResponseResult.init(succeed);
     }
 
-    @ApiOperation(value = "忽视聚类信息", response = Boolean.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
+    @ApiOperation(value = "忽视聚类信息", response = Boolean.class)
     @RequestMapping(value = BigDataPath.CLUSTERING_IGNORE, method = RequestMethod.POST)
     public ResponseResult<Boolean> ignoreClustering(
-            @RequestBody @ApiParam(value = "聚类信息存储入参") ClusteringSaveParam clusteringSaveParam) {
-        List<String> clusterIdList;
-        String time;
-        String flag;
-        if (clusteringSaveParam != null) {
-            clusterIdList = clusteringSaveParam.getClusterIdList();
-            time = clusteringSaveParam.getTime();
-            flag = clusteringSaveParam.getFlag();
+            @RequestBody @ApiParam(value = "聚类信息存储参数") ClusteringSaveParam clusteringSaveParam) {
+        if (clusteringSaveParam != null && clusteringSaveParam.getClusterIdList() != null &&
+                clusteringSaveParam.getTime() != null && clusteringSaveParam.getClusterIdList().size() > 0 &&
+                clusteringSaveParam.getFlag() != null) {
+            log.info("Starting ignore param : " + JSONUtil.toJson(clusteringSaveParam));
+            boolean succeed = clusteringSearchService.ignoreClustering(clusteringSaveParam.getClusterIdList(),
+                    clusteringSaveParam.getTime(), clusteringSaveParam.getFlag());
+            return ResponseResult.init(succeed);
         } else {
-            return null;
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-        boolean succeed = clusteringSearchService.ignoreClustering(clusterIdList, time, flag);
-        return ResponseResult.init(succeed);
     }
 }

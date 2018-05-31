@@ -1,60 +1,29 @@
 package com.hzgc.service.clustering.dao;
 
-import com.hzgc.common.clustering.AlarmInfo;
 import com.hzgc.common.clustering.ClusteringAttribute;
 import com.hzgc.common.hbase.HBaseHelper;
 import com.hzgc.common.table.clustering.ClusteringTable;
 import com.hzgc.common.util.object.ObjectUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Repository
 public class HBaseDao {
 
-    private static Logger LOG = Logger.getLogger(HBaseDao.class);
+
 
     public HBaseDao() {
         HBaseHelper.getHBaseConnection();
-    }
-
-    public List<ClusteringAttribute> clusteringSearch(String region, String time) {
-        Table clusteringInfoTable = HBaseHelper.getTable(ClusteringTable.TABLE_ClUSTERINGINFO);
-        Get get = new Get(Bytes.toBytes(time + "-" + region));
-        List<ClusteringAttribute> clusteringList = new ArrayList<>();
-        try {
-            Result result = clusteringInfoTable.get(get);
-            if (result != null && result.size() > 0) {
-                clusteringList = (List<ClusteringAttribute>) ObjectUtil.byteToObject(result.getValue(ClusteringTable.ClUSTERINGINFO_COLUMNFAMILY, ClusteringTable.ClUSTERINGINFO_COLUMN_YES));
-            } else {
-                LOG.info("no data get from HBase");
-                return null;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return clusteringList;
-    }
-
-    public List<AlarmInfo> detailClusteringSearch(String clusterId, String time) {
-        Table clusteringInfoTable = HBaseHelper.getTable(ClusteringTable.TABLE_DETAILINFO);
-        Get get = new Get(Bytes.toBytes(time + "-" + clusterId));
-        List<AlarmInfo> alarmInfoList = new ArrayList<>();
-        try {
-            Result result = clusteringInfoTable.get(get);
-            alarmInfoList = (List<AlarmInfo>) ObjectUtil.byteToObject(result.getValue(ClusteringTable.ClUSTERINGINFO_COLUMNFAMILY, ClusteringTable.ClUSTERINGINFO_COLUMN_YES));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return alarmInfoList;
     }
 
     public List<ClusteringAttribute> getClustering(String region, String time, byte[] colName) {
@@ -67,11 +36,11 @@ public class HBaseDao {
             if (bytes != null) {
                 clusteringAttributeList = (List<ClusteringAttribute>) ObjectUtil.byteToObject(bytes);
             } else {
-                LOG.info("no clustering in the database to be delete");
-                return null;
+                log.info("no clustering in the database to be delete");
+                return clusteringAttributeList;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info(e.getMessage());
         }
         return clusteringAttributeList;
     }
@@ -85,7 +54,7 @@ public class HBaseDao {
             clusteringInfoTable.put(put);
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info(e.getMessage());
         }
         return false;
     }
@@ -98,7 +67,7 @@ public class HBaseDao {
             Result result = clusteringInfoTable.get(get);
             alarmInfoList = (List<Integer>) ObjectUtil.byteToObject(result.getValue(ClusteringTable.ClUSTERINGINFO_COLUMNFAMILY, ClusteringTable.ClUSTERINGINFO_COLUMN_YES));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info(e.getMessage());
         }
         return alarmInfoList;
     }

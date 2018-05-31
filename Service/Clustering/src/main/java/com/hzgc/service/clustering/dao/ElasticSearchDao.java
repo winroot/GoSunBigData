@@ -2,7 +2,7 @@ package com.hzgc.service.clustering.dao;
 
 import com.hzgc.common.es.ElasticSearchHelper;
 import com.hzgc.common.table.dynrepo.DynamicTable;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -12,10 +12,9 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 public class ElasticSearchDao {
-
-    private static Logger LOG = Logger.getLogger(ElasticSearchDao.class);
 
     private TransportClient esClient;
 

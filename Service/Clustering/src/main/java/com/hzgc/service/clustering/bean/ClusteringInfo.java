@@ -15,4 +15,5 @@ public class ClusteringInfo implements Serializable {
     private int totalClustering;
 
     private List<ClusteringAttribute> clusteringAttributeList;
+    private List<ClusteringAttribute> clusteringAttributeList_ignore;
 }
