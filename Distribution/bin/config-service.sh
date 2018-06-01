@@ -46,12 +46,12 @@ CLUSTERING_BIN_DIR=$CLUSTERING_DIR/bin                                ##clusteri
 CLUSTERING_START_FILE=$CLUSTERING_BIN_DIR/start-clustering.sh         ##clustering模块启动脚本
 CLUSTERING_CONF_DIR=$CLUSTERING_DIR/conf                              ##clustering模块conf目录
 CLUSTERING_PRO_FILE=$CLUSTERING_CONF_DIR/application-pro.properties   ##clustering模块配置文件
-##device模块
-DEVICE_DIR=$SERVICE_DIR/device                           ##device模块目录
-DEVICE_BIN_DIR=$DEVICE_DIR/bin                           ##device模块脚本存放目录
-DEVICE_START_FILE=$DEVICE_BIN_DIR/start-device.sh       ##device模块启动脚本
-DEVICE_CONF_DIR=$DEVICE_DIR/conf                         ##device模块conf目录
-DEVICE_PRO_FILE=$DEVICE_CONF_DIR/application-pro.properties   ##device模块配置文件
+##dispatch模块
+DISPATCH_DIR=$SERVICE_DIR/dispatch                           ##dispatch模块目录
+DISPATCH_BIN_DIR=$DISPATCH_DIR/bin                           ##dispatch模块脚本存放目录
+DISPATCH_START_FILE=$DISPATCH_BIN_DIR/start-dispatch.sh       ##dispatch模块启动脚本
+DISPATCH_CONF_DIR=$DISPATCH_DIR/conf                         ##dispatch模块conf目录
+DISPATCH_PRO_FILE=$DISPATCH_CONF_DIR/application-pro.properties   ##dispatch模块配置文件
 ##dynrepo模块
 DYNREPO_DIR=$SERVICE_DIR/dynRepo                           ##dynrepo模块目录
 DYNREPO_BIN_DIR=$DYNREPO_DIR/bin                           ##dynrepo模块脚本存放目录
@@ -150,8 +150,8 @@ function distribute_service()
     echo "start-clustering.sh脚本配置es完成......"
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^ES_HOST=.*#ES_HOST=${espro}#g" ${DEVICE_START_FILE}
-    echo "start-device.sh脚本配置es完成......"
+    sed -i "s#^ES_HOST=.*#ES_HOST=${espro}#g" ${DISPATCH_START_FILE}
+    echo "start-dispatch.sh脚本配置es完成......"
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^ES_HOST=.*#ES_HOST=${espro}#g" ${DYNREPO_START_FILE}
@@ -183,8 +183,8 @@ function distribute_service()
     echo "start-address.sh脚本配置zookeeper完成......"
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${DEVICE_START_FILE}
-    echo "start-device.sh脚本配置zookeeper完成......"
+    sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${DISPATCH_START_FILE}
+    echo "start-dispatch.sh脚本配置zookeeper完成......"
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${DYNREPO_START_FILE}
@@ -220,8 +220,8 @@ function distribute_service()
     echo "start-clustering.sh脚本配置eureka_node完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^EUREKA_IP=.*#EUREKA_IP=${enpro}#g" ${DEVICE_START_FILE}
-    echo "start-device.sh脚本配置eureka_node完成......."
+    sed -i "s#^EUREKA_IP=.*#EUREKA_IP=${enpro}#g" ${DISPATCH_START_FILE}
+    echo "start-dispatch.sh脚本配置eureka_node完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_IP=.*#EUREKA_IP=${enpro}#g" ${DYNREPO_START_FILE}
@@ -254,8 +254,8 @@ function distribute_service()
     echo "start-clustering.sh脚本配置eureka_port完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^EUREKA_PORT=.*#EUREKA_PORT=${EUREKA_PORT}#g" ${DEVICE_START_FILE}
-    echo "start-device.sh脚本配置eureka_port完成......."
+    sed -i "s#^EUREKA_PORT=.*#EUREKA_PORT=${EUREKA_PORT}#g" ${DISPATCH_START_FILE}
+    echo "start-dispatch.sh脚本配置eureka_port完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_PORT=.*#EUREKA_PORT=${EUREKA_PORT}#g" ${DYNREPO_START_FILE}
