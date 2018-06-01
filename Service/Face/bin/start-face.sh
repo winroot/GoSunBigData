@@ -49,6 +49,7 @@ function start_springCloud()
        --eureka.ip=${EUREKA_IP} \
        --spring.cloud.config.enabled=false \
        --eureka.port=${EUREKA_PORT}  2>&1 &
+    fi
 }
 #####################################################################
 # 函数名: main
