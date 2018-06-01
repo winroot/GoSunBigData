@@ -49,6 +49,7 @@ function start_springCloud()
        --eureka.port=${EUREKA_PORT} \
        --es.host=${ES_HOST} \
        --server.ip=${SERVER_IP} \
+       --spring.cloud.config.enabled=false \
        --zookeeper.host=${ZOOKEEPER_HOST} 2>&1 &
    fi
 
