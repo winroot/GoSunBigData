@@ -36,7 +36,7 @@ public class HBaseDao {
             if (bytes != null) {
                 clusteringAttributeList = (List<ClusteringAttribute>) ObjectUtil.byteToObject(bytes);
             } else {
-                log.info("no clustering in the database to be delete");
+                log.info("No clustering in the database to be delete");
                 return clusteringAttributeList;
             }
         } catch (IOException e) {

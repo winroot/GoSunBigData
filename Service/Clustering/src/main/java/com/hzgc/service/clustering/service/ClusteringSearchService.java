@@ -154,15 +154,15 @@ public class ClusteringSearchService {
         byte[] colNameSrc;
         byte[] colNameDes;
         if (flag.toLowerCase().equals("yes")) {
-            log.info("ignore cluster : " + clusterIdList);
+            log.info("Ignore cluster : " + clusterIdList);
             colNameSrc = ClusteringTable.ClUSTERINGINFO_COLUMN_YES;
             colNameDes = ClusteringTable.ClUSTERINGINFO_COLUMN_NO;
         } else if (flag.toLowerCase().equals("no")) {
-            log.info("dont ignore cluster : " + clusterIdList);
+            log.info("Dont ignore cluster : " + clusterIdList);
             colNameSrc = ClusteringTable.ClUSTERINGINFO_COLUMN_NO;
             colNameDes = ClusteringTable.ClUSTERINGINFO_COLUMN_YES;
         } else {
-            log.info("flag is error, it must be yes or no");
+            log.info("Flag is error, it must be yes or no");
             return false;
         }
         List<ClusteringAttribute> listSrc = hBaseDao.getClustering(region, time, colNameSrc);
@@ -209,7 +209,7 @@ public class ClusteringSearchService {
                 return alarmInfoList.subList(start, start + limit);
             }
         } else {
-            log.info("start must bigger than -1");
+            log.info("Start must bigger than -1");
             return null;
         }
     }
