@@ -47,6 +47,7 @@ function start_springCloud()
     else
        nohup java -jar ${FACE_JAR} --spring.profiles.active=pro \
        --eureka.ip=${EUREKA_IP} \
+       --spring.cloud.config.enabled=false \
        --eureka.port=${EUREKA_PORT}  2>&1 &
 }
 #####################################################################

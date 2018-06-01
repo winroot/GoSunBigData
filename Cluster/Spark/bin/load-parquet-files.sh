@@ -12,15 +12,13 @@
 cd `dirname $0`
 BIN_DIR=`pwd`                                                                ## spark/bin目录
 cd ..
-DEPLOY_DIR=`pwd`                                                             ## spark模块根目录
-LIB_SPARK_DIR=${DEPLOY_DIR}/lib
+DEPLOY_DIR=`pwd`
 cd ..
 CLUSTER_DIR=`pwd`                                                            ## cluster 模块目录
 cd ..
 PROJECT_DIR=`pwd`                                                            ## 项目根目录
 CONF_DIR=$DEPLOY_DIR/conf                                                    ## spark模块conf目录
-LIB_DIR=$DEPLOY_DIR/lib                                                      ## spark模块jar目录
-                                                 ## lib目录
+LIB_DIR=$DEPLOY_DIR/lib                                                      ## lib目录
 LIB_JARS=`ls $LIB_DIR|grep .jar|awk '{print "'$LIB_DIR'/"$0}'|tr "\n" ":"`   ## jar 包位置以及第三方依赖jar包，绝对路径
 sleep 2s
 LOG_DIR=${DEPLOY_DIR}/logs                                                   ## log 日记目录
@@ -52,7 +50,7 @@ tableName=$(grep job.smallfile.merge.person_table.hdfs_path   ${SPARKJOB_PROPERT
 function load_parquet()
 {
     source /etc/profile
-    spark-submit --class com.hzgc.cluster.loaddata.LoadParquetFile \
+    spark-submit --class com.hzgc.cluster.spark.loaddata.LoadParquetFile \
     --master local[*] \
     --driver-memory 4g \
     ${LIB_DIR}/${LIB_SPARK_JAR} ${hdfsClusterName} ${hdfsPath} ${tableName}

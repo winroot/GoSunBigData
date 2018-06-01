@@ -17,12 +17,20 @@ BIN_DIR=`pwd`                                              ##bin目录：脚本�
 cd ..
 COMMON_DIR=`pwd`                                           ##common模块部署目录
 CONF_COMMON_DIR=$COMMON_DIR/conf                           ##配置文件目录
-CONF_FILE=$CONF_COMMON_DIR/project-conff.properties        ##项目配置文件
+CONF_FILE=$CONF_COMMON_DIR/project-conf.properties        ##项目配置文件
 
 LOG_DIR=$COMMON_DIR/logs                                   ##log日志目录
 LOG_FILE=$LOG_DIR/config-service.log                       ##log日志
 cd ..
 OBJECT_DIR=`pwd`                                           ##项目根目录
+
+cd /opt/hzgc/bigdata/Hadoop/hadoop/etc/hadoop
+HADOOP_CONF_DIR=`pwd`                                      ##hadoop有关配置文件目录
+CORE_FILE=$HADOOP_CONF_DIR/core-site.xml
+HDFS_FILE=$HADOOP_CONF_DIR/hdfs-site.xml
+cd /opt/hzgc/bigdata/HBase/hbase/conf
+HBASE_CONF_DIR=`pwd`                                       ##hbase有关配置文件目录
+HBASE_FILE=$HBASE_CONF_DIR/hbase-site.xml
 
 SPARK_DIR=$OBJECT_DIR/cluster/spark                        ##spark模块部署目录
 SERVICE_DIR=$OBJECT_DIR/service                            ##service模块部署目录
@@ -72,6 +80,27 @@ VISUAL_PRO_FILE=$VISUAL_CONF_DIR/application-pro.properties   ##visual模块配�
 # 创建日志目录
 mkdir -p $LOG_DIR
 
+################################################################################
+# 函数名：service_copy
+# 描述：将hbase-site、core-site、hdfs-site拷贝至需要的模块conf底下
+# 参数：N/A
+# 返回值：N/A
+# 其他：N/A
+################################################################################
+function service_copy()
+{
+    echo "" | tee -a $LOG_FILE
+    echo "**************************************************" | tee -a $LOG_FILE
+    echo "" | tee -a $LOG_FILE
+    echo "开始将配置文件拷贝至需要的模块下......" | tee -a $LOG_FILE
+
+    scp -r $CORE_FILE $HDFS_FILE $HBASE_FILE $ADDRESS_CONF_DIR
+    scp -r $CORE_FILE $HDFS_FILE $HBASE_FILE $DYNREPO_CONF_DIR
+    scp -r $CORE_FILE $HDFS_FILE $HBASE_FILE $STAREPO_CONF_DIR
+    scp -r $CORE_FILE $HDFS_FILE $HBASE_FILE $CLUSTERING_CONF_DIR
+    scp -r $CORE_FILE $HDFS_FILE $HBASE_FILE $VISUAL_CONF_DIR
+}
+
 
 ################################################################################
 # 函数名：distribute_service
@@ -82,10 +111,26 @@ mkdir -p $LOG_DIR
 ################################################################################
 function distribute_service()
 {
-  echo "" | tee -a $LOG_FILE
+    echo "" | tee -a $LOG_FILE
     echo "**************************************************" | tee -a $LOG_FILE
     echo "" | tee -a $LOG_FILE
     echo "开始配置service底下的各个模块......" | tee -a $LOG_FILE
+
+    #单独给静态库配置pro配置文件：
+    #从project-conf.properties中读取kafka配置IP
+    KAFKA_IP=$(grep kafka_install_node $CONF_FILE | cut -d '=' -f2)
+    #将这些分号分割的ip用于放入数组中
+    kafka_arr=(${KAFKA_IP//;/ })
+    kafkapro=''
+    for kafka_host in ${kafka_arr[@]}
+    do
+      kafkapro=$kafkapro$kafka_host":9092,"
+    done
+    kafkapro=${kafkapro%?}
+
+    #替换pro文件中的值：
+    sed -i "s#^kafka.bootstrap.servers=.*#kafka.bootstrap.servers=${kafkapro}#g" ${STAREPO_PRO_FILE}
+    echo "静态库application-pro文件配置完成......"
 
     #配置es.hosts:
     #从project-conf.properties中读取es所需配置IP
@@ -101,10 +146,6 @@ function distribute_service()
     espro=${espro%?}
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^ES_HOST=.*#ES_HOST=${espro}#g" ${ADDRESS_START_FILE}
-    echo "start-address.sh脚本配置es完成......"
-
-    #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^ES_HOST=.*#ES_HOST=${espro}#g" ${CLUSTERING_START_FILE}
     echo "start-clustering.sh脚本配置es完成......"
 
@@ -115,10 +156,6 @@ function distribute_service()
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^ES_HOST=.*#ES_HOST=${espro}#g" ${DYNREPO_START_FILE}
     echo "start-dynrepo.sh脚本配置es完成......"
-
-    #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^ES_HOST=.*#ES_HOST=${espro}#g" ${FACE_START_FILE}
-    echo "start-face.sh脚本配置es完成......"
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^ES_HOST=.*#ES_HOST=${espro}#g" ${STAREPO_START_FILE}
@@ -146,20 +183,12 @@ function distribute_service()
     echo "start-address.sh脚本配置zookeeper完成......"
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${CLUSTERING_START_FILE}
-    echo "start-clustering.sh脚本配置zookeeper完成......"
-
-    #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${DEVICE_START_FILE}
     echo "start-device.sh脚本配置zookeeper完成......"
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${DYNREPO_START_FILE}
     echo "start-dynrepo.sh脚本配置zookeeper完成......"
-
-    #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${FACE_START_FILE}
-    echo "start-face.sh脚本配置zookeeper完成......"
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${STAREPO_START_FILE}
@@ -185,51 +214,30 @@ function distribute_service()
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_IP=.*#EUREKA_IP=${enpro}#g" ${ADDRESS_START_FILE}
     echo "start-address.sh脚本配置eureka_node完成......."
-    #替换app-pro配置文件中的eureka.ip
-    sed -i "s/eureka.ip/${enpro}/g" ${ADDRESS_PRO_FILE}
-    echo "address配置文件app-pro中eureka_node完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_IP=.*#EUREKA_IP=${enpro}#g" ${CLUSTERING_START_FILE}
     echo "start-clustering.sh脚本配置eureka_node完成......."
-    #替换app-pro配置文件中的eureka.ip
-    sed -i "s/eureka.ip/${enpro}/g" ${CLUSTERING_PRO_FILE}
-    echo "clustering配置文件app-pro中eureka_node完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_IP=.*#EUREKA_IP=${enpro}#g" ${DEVICE_START_FILE}
     echo "start-device.sh脚本配置eureka_node完成......."
-    #替换app-pro配置文件中的eureka.ip
-    sed -i "s/eureka.ip/${enpro}/g" ${DEVICE_PRO_FILE}
-    echo "device配置文件app-pro中eureka_node完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_IP=.*#EUREKA_IP=${enpro}#g" ${DYNREPO_START_FILE}
     echo "start-dynrepo.sh脚本配置eureka_node完成......."
-    #替换app-pro配置文件中的eureka.ip
-    sed -i "s/eureka.ip/${enpro}/g" ${DYNREPO_PRO_FILE}
-    echo "dynrepo配置文件app-pro中eureka_node完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_IP=.*#EUREKA_IP=${enpro}#g" ${FACE_START_FILE}
     echo "start-face.sh脚本配置eureka_node完成......."
-    #替换app-pro配置文件中的eureka.ip
-    sed -i "s/eureka.ip/${enpro}/g" ${FACE_PRO_FILE}
-    echo "face配置文件app-pro中eureka_node完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_IP=.*#EUREKA_IP=${enpro}#g" ${STAREPO_START_FILE}
     echo "start-starepo.sh脚本配置eureka_node完成......."
-    #替换app-pro配置文件中的eureka.ip
-    sed -i "s/eureka.ip/${enpro}/g" ${STAREPO_PRO_FILE}
-    echo "starepo配置文件app-pro中eureka_node完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_IP=.*#EUREKA_IP=${enpro}#g" ${VISUAL_START_FILE}
     echo "start-visual.sh脚本配置eureka_node完成......."
-    #替换app-pro配置文件中的eureka.ip
-    sed -i "s/eureka.ip/${enpro}/g" ${VISUAL_PRO_FILE}
-    echo "visual配置文件app-pro中eureka_node完成......."
 
 
     #配置eureka_port:
@@ -240,115 +248,30 @@ function distribute_service()
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_PORT=.*#EUREKA_PORT=${EUREKA_PORT}#g" ${ADDRESS_START_FILE}
     echo "start-address.sh脚本配置eureka_port完成......."
-    #替换app-pro配置文件中的eureka.port
-    sed -i "s/eureka.port/${EUREKA_PORT}/g" ${ADDRESS_PRO_FILE}
-    echo "address配置文件app-pro中eureka_port完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_PORT=.*#EUREKA_PORT=${EUREKA_PORT}#g" ${CLUSTERING_START_FILE}
     echo "start-clustering.sh脚本配置eureka_port完成......."
-    #替换app-pro配置文件中的eureka.port
-    sed -i "s/eureka.port/${EUREKA_PORT}/g" ${CLUSTERING_PRO_FILE}
-    echo "clustering配置文件app-pro中eureka_port完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_PORT=.*#EUREKA_PORT=${EUREKA_PORT}#g" ${DEVICE_START_FILE}
     echo "start-device.sh脚本配置eureka_port完成......."
-    #替换app-pro配置文件中的eureka.port
-    sed -i "s/eureka.port/${EUREKA_PORT}/g" ${DEVICE_PRO_FILE}
-    echo "device配置文件app-pro中eureka_port完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_PORT=.*#EUREKA_PORT=${EUREKA_PORT}#g" ${DYNREPO_START_FILE}
     echo "start-dynrepo.sh脚本配置eureka_port完成......."
-    #替换app-pro配置文件中的eureka.port
-    sed -i "s/eureka.port/${EUREKA_PORT}/g" ${DYNREPO_PRO_FILE}
-    echo "dynrepo配置文件app-pro中eureka_port完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_PORT=.*#EUREKA_PORT=${EUREKA_PORT}#g" ${FACE_START_FILE}
     echo "start-face.sh脚本配置eureka_port完成......."
-    #替换app-pro配置文件中的eureka.port
-    sed -i "s/eureka.port/${EUREKA_PORT}/g" ${FACE_PRO_FILE}
-    echo "face配置文件app-pro中eureka_port完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_PORT=.*#EUREKA_PORT=${EUREKA_PORT}#g" ${STAREPO_START_FILE}
     echo "start-starepo.sh脚本配置eureka_port完成......."
-    #替换app-pro配置文件中的eureka.port
-    sed -i "s/eureka.port/${EUREKA_PORT}/g" ${STAREPO_PRO_FILE}
-    echo "starepo配置文件app-pro中eureka_port完成......."
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^EUREKA_PORT=.*#EUREKA_PORT=${EUREKA_PORT}#g" ${VISUAL_START_FILE}
     echo "start-visual.sh脚本配置eureka_port完成......."
-    #替换app-pro配置文件中的eureka.port
-    sed -i "s/eureka.port/${EUREKA_PORT}/g" ${VISUAL_PRO_FILE}
-    echo "visual配置文件app-pro中eureka_port完成......."
-
-
-
-    #配置server.ip:
-    #从project-conf.properties中读取server_ip所需配置ip
-    #根据字段server_ip，查找配置文件
-    SERVER_HOSTS=$(grep spring_cloud_deploy_node $CONF_FILE | cut -d '=' -f2)
-    server_arr=(${SERVER_HOSTS//;/ })
-    serverpro=''
-    for server_host in ${server_arr[@]}
-    do
-     serverpro=${serverpro}${server_host}","
-    done
-    serverpro=${serverpro%?}
-
-    #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^SERVER_IP=.*#SERVER_IP=${serverpro}#g"  ${ADDRESS_START_FILE}
-    echo "start-address.sh脚本配置server.ip完成......."
-    #替换app-pro配置文件中的server.ip
-    sed -i "s/spring.cloud.client.ipAddress/${serverpro}/g" ${ADDRESS_PRO_FILE}
-    echo "address配置文件app-pro中server.ip完成......."
-
-    #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^SERVER_IP=.*#SERVER_IP=${serverpro}#g"  ${CLUSTERING_START_FILE}
-    echo "start-clustering.sh脚本配置server.ip完成......."
-    #替换app-pro配置文件中的server.ip
-    sed -i "s/spring.cloud.client.ipAddress/${serverpro}/g" ${CLUSTERING_PRO_FILE}
-    echo "clustering配置文件app-pro中server.ip完成......."
-
-
-    #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^SERVER_IP=.*#SERVER_IP=${serverpro}#g"  ${DEVICE_START_FILE}
-    echo "start-device.sh脚本配置server.ip完成......."
-    #替换app-pro配置文件中的server.ip
-    sed -i "s/spring.cloud.client.ipAddress/${serverpro}/g" ${DEVICE_PRO_FILE}
-    echo "device配置文件app-pro中server.ip完成......."
-
-    #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^SERVER_IP=.*#SERVER_IP=${serverpro}#g"  ${DYNREPO_START_FILE}
-    echo "start-dynrepo.sh脚本配置server.ip完成......."
-    #替换app-pro配置文件中的server.ip
-    sed -i "s/spring.cloud.client.ipAddress/${serverpro}/g" ${DYNREPO_PRO_FILE}
-    echo "dynrepo配置文件app-pro中server.ip完成......."
-
-    #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^SERVER_IP=.*#SERVER_IP=${serverpro}#g"  ${FACE_START_FILE}
-    echo "start-face.sh脚本配置server.ip完成......."
-    #替换app-pro配置文件中的server.ip
-    sed -i "s/spring.cloud.client.ipAddress/${serverpro}/g" ${FACE_PRO_FILE}
-    echo "face配置文件app-pro中server.ip完成......."
-
-    #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^SERVER_IP=.*#SERVER_IP=${serverpro}#g"  ${STAREPO_START_FILE}
-    echo "start-starepo.sh脚本配置server.ip完成......."
-    #替换app-pro配置文件中的server.ip
-    sed -i "s/spring.cloud.client.ipAddress/${serverpro}/g" ${STAREPO_PRO_FILE}
-    echo "starepo配置文件app-pro中server.ip完成......."
-
-    #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^SERVER_IP=.*#SERVER_IP=${serverpro}#g"  ${VISUAL_START_FILE}
-    echo "start-visual.sh脚本配置server.ip完成......."
-    #替换app-pro配置文件中的server.ip
-    sed -i "s/spring.cloud.client.ipAddress/${serverpro}/g" ${VISUAL_PRO_FILE}
-    echo "visual配置文件app-pro中server.ip完成......."
 
 }
 
@@ -362,6 +285,7 @@ function distribute_service()
 
 function main()
 {
+    service_copy
     distribute_service
 }
 

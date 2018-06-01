@@ -54,7 +54,7 @@ function distribute_common()
     echo "" | tee -a $LOG_FILE
     echo "分发common......"  | tee  -a  $LOG_FILE
     
-	CLUSTER_HOSTNAME_LISTS=$(grep Cluster_HostName ${CONF_FILE}|cut -d '=' -f2)
+	CLUSTER_HOSTNAME_LISTS=$(grep cluster_hostname ${CONF_FILE}|cut -d '=' -f2)
 	CLUSTER_HOSTNAME_ARRY=(${CLUSTER_HOSTNAME_LISTS//;/ })
     for hostname in ${CLUSTER_HOSTNAME_ARRY[@]}
     do
@@ -81,7 +81,7 @@ function distribute_service()
     echo "" | tee -a $LOG_FILE
     echo "分发service......" | tee -a $LOG_FILE
 
-    CLUSTER_HOSTNAME_LISTS=$(grep Cluster_HostName ${CONF_FILE} | cut -d '=' -f2)
+    CLUSTER_HOSTNAME_LISTS=$(grep cluster_hostname ${CONF_FILE} | cut -d '=' -f2)
     CLUSTER_HOSTNAME_ARRAY=(${CLUSTER_HOSTNAME_LISTS//;/ })
     for hostname in ${CLUSTER_HOSTNAME_ARRAY[@]}
     do
