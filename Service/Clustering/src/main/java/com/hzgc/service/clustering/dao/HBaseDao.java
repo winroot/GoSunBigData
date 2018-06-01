@@ -41,6 +41,7 @@ public class HBaseDao {
             }
         } catch (IOException e) {
             log.info(e.getMessage());
+            e.printStackTrace();
         }
         return clusteringAttributeList;
     }
@@ -55,6 +56,7 @@ public class HBaseDao {
             return true;
         } catch (IOException e) {
             log.info(e.getMessage());
+            e.printStackTrace();
         }
         return false;
     }
@@ -68,6 +70,7 @@ public class HBaseDao {
             alarmInfoList = (List<Integer>) ObjectUtil.byteToObject(result.getValue(ClusteringTable.ClUSTERINGINFO_COLUMNFAMILY, ClusteringTable.ClUSTERINGINFO_COLUMN_YES));
         } catch (IOException e) {
             log.info(e.getMessage());
+            e.printStackTrace();
         }
         return alarmInfoList;
     }
