@@ -24,7 +24,6 @@ EUREKA_IP=172.18.18.201     ##注册中心的ip地址
 EUREKA_PORT=9000
 ES_HOST=172.18.18.100
 ZOOKEEPER_HOST=172.18.18.100:2181
-SERVER_IP=172.18.18.146
 
 
 #---------------------------------------------------------------------#
@@ -48,7 +47,6 @@ function start_springCloud()
        --eureka.ip=${EUREKA_IP} \
        --eureka.port=${EUREKA_PORT} \
        --es.host=${ES_HOST} \
-       --server.ip=${SERVER_IP} \
        --spring.cloud.config.enabled=false \
        --zookeeper.host=${ZOOKEEPER_HOST} 2>&1 &
    fi

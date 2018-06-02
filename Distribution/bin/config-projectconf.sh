@@ -36,7 +36,7 @@ STAREPO_DIR=$SERVICE_DIR/staRepo                     ###starepo模块目录
 VISUAL_DIR=$SERVICE_DIR/visual                       ###visual模块目录
 
 CLUSTER_SCRPIT=$SPARK_DIR/bin/config-clusterconf.sh ### 一键配置spark脚本
-SERVICE_SCRPIT=$SERVICE_DIR/bin/config-serviceconf.sh ### 一键配置service脚本
+SERVICE_SCRPIT=$COMMON_DIR/bin/config-service.sh ### 一键配置service脚本
 
 SPARKLOG_DIR=$SPARK_DIR/logs                          ### spark的log日志目录
 SERVICE_LOG_DIR=$SERVICE_DIR/logs                     ### service的log日志目录
@@ -63,8 +63,8 @@ function distribute_common()
     echo "分发common......"  | tee  -a  $LOG_FILE
     
 	CLUSTER_HOSTNAME_LISTS=$(grep cluster_hostname ${CONF_FILE}|cut -d '=' -f2)
-	CLUSTER_HOSTNAME_ARRY=(${CLUSTER_HOSTNAME_LISTS//;/ })
-    for hostname in ${CLUSTER_HOSTNAME_ARRY[@]}
+	CLUSTER_HOSTNAME_ARRAY=(${CLUSTER_HOSTNAME_LISTS//;/ })
+    for hostname in ${CLUSTER_HOSTNAME_ARRAY[@]}
     do
         ssh root@${hostname} "if [ ! -x "${OBJECT_DIR}" ]; then mkdir "${OBJECT_DIR}"; fi"
         rsync -rvl ${OBJECT_DIR}/common   root@${hostname}:${OBJECT_DIR}  >/dev/null
