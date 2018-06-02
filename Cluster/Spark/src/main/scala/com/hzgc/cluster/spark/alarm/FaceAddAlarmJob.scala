@@ -97,7 +97,7 @@ object FaceAddAlarmJob {
           if (result._4 == null || result._4.isEmpty) {
             val dateStr = df.format(new Date())
             val addAlarmMessage = new AddAlarmMessage()
-            val surl = result._1.getSurl
+            val surl = result._1.getRelativePath
             addAlarmMessage.setAlarmTime(dateStr)
             addAlarmMessage.setAlarmType(DeviceTable.ADDED.toString)
 
