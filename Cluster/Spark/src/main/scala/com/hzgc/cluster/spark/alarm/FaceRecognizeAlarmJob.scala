@@ -108,7 +108,7 @@ object FaceRecognizeAlarmJob {
           val recognizeAlarmMessage = new RecognizeAlarmMessage()
           val items = new ArrayBuffer[Item]()
           val dateStr = df.format(new Date())
-          val surl = result._1.getSurl
+          val surl = result._1.getRelativePath
           recognizeAlarmMessage.setAlarmType(DeviceTable.IDENTIFY.toString)
           recognizeAlarmMessage.setDynamicDeviceID(result._2)
           recognizeAlarmMessage.setSmallPictureURL(surl)

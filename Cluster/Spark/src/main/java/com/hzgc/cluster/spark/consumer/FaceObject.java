@@ -27,6 +27,8 @@ public class FaceObject implements Serializable {
 
     private String burl;
 
+    private String relativePath;
+
     private String hostname;
 
     public String getIpcId() {
@@ -51,6 +53,14 @@ public class FaceObject implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public int getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(int timeSlot) {
+        this.timeSlot = timeSlot;
     }
 
     public FaceAttribute getAttribute() {
@@ -85,19 +95,19 @@ public class FaceObject implements Serializable {
         this.burl = burl;
     }
 
+    public String getRelativePath() {
+        return relativePath;
+    }
+
+    public void setRelativePath(String relativePath) {
+        this.relativePath = relativePath;
+    }
+
     public String getHostname() {
         return hostname;
     }
 
     public void setHostname(String hostname) {
         this.hostname = hostname;
-    }
-
-    public int getTimeSlot() {
-        return timeSlot;
-    }
-
-    public void setTimeSlot(int timeSlot) {
-        this.timeSlot = timeSlot;
     }
 }
