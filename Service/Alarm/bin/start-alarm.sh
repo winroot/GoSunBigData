@@ -23,7 +23,6 @@ CONF_DIR=${ALARM_DIR}/conf                                        ##conf目录�
 #                               springcloud配置参数                            #
 #-----------------------------------------------------------------------------#
 EUREKA_IP=172.18.18.201     ##注册中心的ip地址
-SERVER_IP=172.18.18.104     ##服务的ip地址
 EUREKA_PORT=9000            ##服务注册中心端口
 ES_HOST=172.18.18.100
 ZOOKEEPER_HOST=172.18.18.100:2181
@@ -48,7 +47,6 @@ function start_springCloud()
       nohup java -jar ${ALARM_JAR} --spring.profiles.active=pro  \
       --eureka.ip=${EUREKA_IP} \
       --eureka.port=${EUREKA_PORT} \
-      --server.ip=${SERVER_IP} \
       --es.hosts=${ES_HOST} \
       --spring.cloud.config.enabled=false \
       --zookeeper.host=${ZOOKEEPER_HOST} 2>&1 &
