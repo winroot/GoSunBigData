@@ -88,4 +88,13 @@ public class BigDataPath {
     public static final String CAPTURECOUNT_IPCIDS = "/getCaptureCount";
     public static final String CAPTURECOUNT_ATTRIBUTE = "/captureAttributeQuery";
 
+    /**
+     * Dispatch模块请求路径
+     */
+    public static final String DISPATCH_ADD = "/add_rule";
+    public static final String DISPATCH_MODIFY = "/modify_rule";
+    public static final String DISPATCH_DELETE = "/delete_rules";
+    public static final String DISPATCH_SEARCH_BYID = "/rule_info";
+    public static final String DISPATCH_CUTPAGE_RULE = "/get_rule";
+
 }

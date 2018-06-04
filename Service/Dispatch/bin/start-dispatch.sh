@@ -24,8 +24,7 @@ DISPATCH_JAR=${LIB_DIR}/${DISPATCH_JAR_NAME}                        ##获取jar�
 #-----------------------------------------------------------------------------#
 EUREKA_IP=172.18.18.201     ##注册中心的ip地址
 EUREKA_PORT=9000            ##服务注册中心端口
-ES_HOST=172.18.18.100
-ZOOKEEPER_HOST=172.18.18.100:2181
+
 
 
 #------------------------------------------------------------------------------#
@@ -47,10 +46,21 @@ function start_springCloud()
       nohup java -jar ${DISPATCH_JAR} --spring.profiles.active=pro \
       --eureka.ip=${EUREKA_IP} \
       --eureka.port=${EUREKA_PORT} \
-      --es.host=${ES_HOST} \
-      --spring.cloud.config.enabled=false \
-      --zookeeper.host=${ZOOKEEPER_HOST} 2>&1 &
+      --es.host=${ES_HOST}  2>&1 &
    fi
+}
+#####################################################################
+# 函数名: start_spring_cloud
+# 描述: 启动 springCloud dispatch服务
+# 参数: N/A
+# 返回值: N/A
+# 其他: N/A
+#####################################################################
+function prepare_resource_file()
+{
+  cp ${CONF_DIR}/hbase-site.xml .
+  jar -uf ${DYNREPO_JAR} hbase-site.xml
+  rm -rf hbase-site.xml
 }
 #####################################################################
 # 函数名: main
@@ -61,6 +71,7 @@ function start_springCloud()
 #####################################################################
 function main()
 {
+    prepare_resource_file
     start_springCloud
 }
 

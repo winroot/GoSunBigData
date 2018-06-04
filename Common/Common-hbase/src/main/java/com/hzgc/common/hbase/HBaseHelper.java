@@ -1,7 +1,6 @@
 package com.hzgc.common.hbase;
 
 import com.hzgc.common.util.empty.IsEmpty;
-import com.hzgc.common.util.file.ResourceFileUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
@@ -33,7 +32,7 @@ public class HBaseHelper implements Serializable {
     private static void initHBaseConfiguration() {
         try {
             innerHBaseConf = HBaseConfiguration.create();
-            innerHBaseConf.addResource(ClassLoader.getSystemResourceAsStream("hbase-site.xml"));
+            innerHBaseConf.addResource(ClassLoader.getSystemResourceAsStream("BOOT-INF/classes/hbase-site.xml"));
         } catch (Exception e) {
             e.printStackTrace();
         }

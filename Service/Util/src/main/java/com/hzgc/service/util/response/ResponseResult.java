@@ -156,7 +156,7 @@ public class ResponseResult<T> implements Serializable {
     /**
      * 设置总数(分页时使用)
      *
-     * @param total 总数
+//     * @param total 总数
      */
     private void setTotal(long total) {
         if (extend == null) {
