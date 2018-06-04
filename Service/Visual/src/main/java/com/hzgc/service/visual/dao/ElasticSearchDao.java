@@ -4,16 +4,21 @@ import com.hzgc.common.attribute.bean.Attribute;
 import com.hzgc.common.es.ElasticSearchHelper;
 import com.hzgc.common.table.dynrepo.DynamicShowTable;
 import com.hzgc.common.table.dynrepo.DynamicTable;
-import org.apache.log4j.Logger;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
+import org.elasticsearch.search.aggregations.metrics.sum.SumAggregationBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 
 @Repository
@@ -58,11 +63,12 @@ public class ElasticSearchDao {
         BoolQueryBuilder timeQuery = QueryBuilders.boolQuery();
         timeQuery.must(QueryBuilders.rangeQuery("time").gte(startTime).lte(endTime));
         timeQuery.must(totolQuery);
-        return esClient.prepareSearch(DynamicShowTable.INDEX)
-                .setTypes(DynamicShowTable.TYPE)
-                .setQuery(timeQuery)
-                .setSize(100000000)
-                .get();
+        SearchRequestBuilder sbuilder = esClient.prepareSearch(DynamicShowTable.INDEX).setTypes(DynamicShowTable.TYPE).setQuery(timeQuery);
+        TermsAggregationBuilder timeagg = AggregationBuilders.terms("times").field("time").size(1000000);
+        SumAggregationBuilder countagg = AggregationBuilders.sum("count_count").field("count");
+        timeagg.subAggregation(countagg);
+        sbuilder.addAggregation(timeagg);
+        return sbuilder.execute().actionGet();
     }
 
     public SearchResponse captureCountQuery(String startTime, String endTime, String ipcId) {
@@ -130,5 +136,4 @@ public class ElasticSearchDao {
                 .setTypes(DynamicTable.PERSON_INDEX_TYPE)
                 .setQuery(filterIpcId).get();
     }
-
 }

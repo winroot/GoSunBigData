@@ -3,21 +3,30 @@ package com.hzgc.service.visual.service;
 import com.hzgc.common.attribute.bean.Attribute;
 import com.hzgc.common.attribute.bean.AttributeValue;
 import com.hzgc.common.attribute.service.AttributeService;
-import com.hzgc.common.table.dynrepo.DynamicShowTable;
 import com.hzgc.common.table.dynrepo.DynamicTable;
-import com.hzgc.service.visual.bean.AttributeCount;
-import com.hzgc.service.visual.bean.CaptureCount;
-import com.hzgc.service.visual.bean.TimeSlotNumber;
-import com.hzgc.service.visual.bean.TotalAndTodayCount;
+import com.hzgc.common.util.empty.IsEmpty;
+import com.hzgc.service.util.api.DeviceDTO;
+import com.hzgc.service.util.api.DeviceQueryService;
+import com.hzgc.service.visual.bean.*;
 import com.hzgc.service.visual.dao.ElasticSearchDao;
 import com.hzgc.service.visual.dao.EsSearchParam;
+import com.hzgc.service.visual.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.metrics.sum.InternalSum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.apache.commons.net.util.Base64;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,163 +41,225 @@ import java.util.*;
 @Service
 @Slf4j
 public class CaptureCountService {
-    @Autowired
+    private static final int DAY_YMD_END = 10;
+    private static final int HOUR_YMD_END = 13;
+    private static final Integer OFFSET_DAY_SEVEN = 7;
+    private static final Integer OFFSET_DAY_ONE = 1;
+    private static final String FTP_NAME = "admin";
+    private static final String FTP_PASSWORD = "123456";
+    private CaptureCountBean saveCaptureCount = new CaptureCountBean(0, 0);
+
+    private DeviceQueryService deviceQueryService;
+
     @SuppressWarnings("unused")
     private ElasticSearchDao elasticSearchDao;
+
+    @Autowired
+    public CaptureCountService(DeviceQueryService deviceQueryService, ElasticSearchDao elasticSearchDao) {
+        this.deviceQueryService = deviceQueryService;
+        this.elasticSearchDao = elasticSearchDao;
+    }
 
     /**
      * 抓拍统计与今日抓拍统计
      * 查询es的动态库，返回总抓拍数量和今日抓拍数量
      *
-     * @param ipcId 设备ID：ipcId
+     * @param deviceIdList 设备ID：deviceIdList 可不填
      * @return 返回总抓拍数量和今日抓拍数量
      */
-    public TotalAndTodayCount dynamicNumberService(List<String> ipcId) {
-        SearchResponse[] responsesArray = elasticSearchDao.dynamicNumberService(ipcId);
+    public CaptureCountBean dynamicNumberService(List<Long> deviceIdList) {
+        //将deviceIdList转换为ipcIdList
+        List<String> ipcIdList = new ArrayList<>();
+        if(deviceIdList != null && deviceIdList.size() > 0) {
+            Map<String, DeviceDTO> deviceDTOMap = deviceQueryService.getDeviceInfoByBatchId(deviceIdList);
+            for (Map.Entry<String, DeviceDTO> entry : deviceDTOMap.entrySet()) {
+                ipcIdList.add(entry.getValue().getSerial());
+            }
+        }
+
+        SearchResponse[] responsesArray = elasticSearchDao.dynamicNumberService(ipcIdList);
         SearchResponse searchResponse0 = responsesArray[0];
         SearchHits searchHits0 = searchResponse0.getHits();
         int totalNumber = (int) searchHits0.getTotalHits();
         SearchResponse searchResponse1 = responsesArray[1];
         SearchHits searchHits1 = searchResponse1.getHits();
         int todaytotalNumber = (int) searchHits1.getTotalHits();
-        TotalAndTodayCount count = new TotalAndTodayCount();
-        count.setTotalNumber(totalNumber);
-        count.setTodayTotalNumber(todaytotalNumber);
-        return count;
+        CaptureCountBean bean = new CaptureCountBean(todaytotalNumber,totalNumber);
+        saveCaptureCount.save(bean);
+        return saveCaptureCount;
     }
 
     /**
      * 多设备每小时抓拍统计
      * 根据入参ipcid的list、startTime和endTime去es查询到相应的值
      *
-     * @param ipcids    设备ID：ipcid
+     * @param deviceIdList    设备ID：deviceId
      * @param startTime 搜索的开始时间
      * @param endTime   搜索的结束时间
      * @return 返回某段时间内，这些ipcid的抓拍的总数量
      */
-    public TimeSlotNumber timeSoltNumber(List<String> ipcids, String startTime, String endTime) {
+    public TimeSlotNumber timeSoltNumber(List<Long> deviceIdList, String startTime, String endTime) {
         TimeSlotNumber slotNumber = new TimeSlotNumber();
+        Boolean flag = false;
+        if (IsEmpty.strIsRight(startTime) && IsEmpty.strIsRight(endTime)) {
+            // 整理成整点
+            startTime = DateUtils.checkTime(startTime);
+            endTime = DateUtils.checkTime(endTime);
+        } else if (IsEmpty.strIsRight(startTime)) {
+            // 只传了一个开始时间
+            startTime = DateUtils.checkTime(startTime);
+            endTime = DateUtils.getSpecifiedDayAfter(startTime, OFFSET_DAY_ONE);
+        } else if (IsEmpty.strIsRight(endTime)) {
+            // 只传了一个结束时间
+            endTime = DateUtils.checkTime(startTime);
+            startTime = DateUtils.getSpecifiedDayBefore(endTime, OFFSET_DAY_ONE);
+        } else {
+            // 时间没有传
+            endTime = DateUtils.checkTime(DateUtils.formatDateTime(new Date()));
+            startTime = DateUtils.getSpecifiedDayBefore(endTime, OFFSET_DAY_ONE);
+            flag = true;
+        }
+
+        //将deviceIdList转换为ipcIdList
+        List<String> ipcIdList = new ArrayList<>();
+        if(deviceIdList.size() > 0) {
+            Map<String, DeviceDTO> deviceDTOMap = deviceQueryService.getDeviceInfoByBatchId(deviceIdList);
+            for (Map.Entry<String, DeviceDTO> entry : deviceDTOMap.entrySet()) {
+                ipcIdList.add(entry.getValue().getSerial());
+            }
+        }
+
         List<String> times;
-        if (startTime != null && endTime != null && !startTime.equals("") && !endTime.equals("")) {
-            times = getHourTime(startTime, endTime);
-            SearchResponse searchResponse = elasticSearchDao.timeSoltNumber(ipcids, startTime, endTime);
-            SearchHits searchHits = searchResponse.getHits();
-            SearchHit[] hits = searchHits.getHits();
-            if (times.size() > 0) {
-                for (String time : times) {
-                    int count = 0;
-                    for (SearchHit hit : hits) {
-                        String actTime = (String) hit.getSource().get(DynamicShowTable.TIME);
-                        int actCount = (int) hit.getSource().get(DynamicShowTable.COUNT);
-                        if (Objects.equals(actTime, time)) {
-                            count += actCount;
-                        }
-                    }
-                    slotNumber.getTimeSlotNumber().put(time, count);
+        times = getHourTime(startTime, endTime);
+        SearchResponse response = elasticSearchDao.timeSoltNumber(ipcIdList, startTime, endTime);
+//        int a = response.getHits().getHits().length;
+        Map<String, Aggregation> aggMap = response.getAggregations().asMap();
+        Terms time = (Terms) aggMap.get("times");
+        Iterator<Terms.Bucket> teamBucket = (Iterator<Terms.Bucket>) time.getBuckets().iterator();
+
+        while (teamBucket.hasNext()) {
+            Terms.Bucket buck = teamBucket.next();
+            String timess = (String) buck.getKey();
+            Map<String, Aggregation> subagg = buck.getAggregations().asMap();
+            int count_count = (int) ((InternalSum) subagg.get("count_count")).getValue();
+            slotNumber.getFaceList().add(new FaceDayStatistic(timess,count_count));
+            times.remove(timess);
+        }
+        for(String timeStr : times){
+            slotNumber.getFaceList().add(new FaceDayStatistic(timeStr,0));
+        }
+
+        if(slotNumber.getFaceList().size() > 0) {
+            slotNumber.getFaceList().sort((o1, o2) -> {
+                if (o1.getId().compareTo(o2.getId()) > 0) {
+                    return 1;
                 }
+                return -1;
+            });
+            for (FaceDayStatistic faceDayStatistic : slotNumber.getFaceList()) {
+                faceDayStatistic.setDate(faceDayStatistic.getId().substring(0, DAY_YMD_END));
+                faceDayStatistic.setId(faceDayStatistic.getId().substring(DAY_YMD_END + 1, HOUR_YMD_END));
+            }
+            // 时间段不传，去除第一个数据
+            if (flag) {
+                slotNumber.getFaceList().remove(0);
             }
         }
         return slotNumber;
     }
 
     /**
-     * 单设备抓拍统计（马燊偲）
-     * 查询指定时间段内，指定设备抓拍的图片数量、该设备最后一次抓拍时间
-     *
+     *  抓拍统计
      * @param startTime 开始时间
-     * @param endTime   结束时间
-     * @param ipcId     设备ID
-     * @return CaptureCount 查询结果对象。对象内封装了：该时间段内该设备抓拍张数，该时间段内该设备最后一次抓拍时间。
+     * @param endTime 结束时间
+     * @param deviceIdList 设备Id
+     * @return 每天抓拍数
      */
-    public CaptureCount captureCountQuery(String startTime, String endTime, String ipcId) {
-        //CaptureCount是一个封装类，用于封装返回的结果。
-        CaptureCount result = new CaptureCount();
-        //所有判断结束后
-        SearchResponse searchResponse = elasticSearchDao.captureCountQuery(startTime, endTime, ipcId);
-
-        SearchHits hits = searchResponse.getHits(); //返回结果包含的文档放在数组hits中
-        long totalresultcount = hits.getTotalHits(); //符合qb条件的结果数量
-
-        //返回结果包含的文档放在数组hits中
-        SearchHit[] searchHits = hits.hits();
-        //若不存在符合条件的查询结果
-        if (totalresultcount == 0) {
-            log.error("The result count is 0! Last capture time does not exist!");
-            result.setTotalresultcount(totalresultcount);
-            result.setLastcapturetime("None");
-        } else {
-            /*
-              获取该时间段内设备最后一次抓拍时间：
-              返回结果包含的文档放在数组hits中，由于结果按照降序排列，
-              因此hits数组里的第一个值代表了该设备最后一次抓拍的具体信息
-              例如{"s":"XXXX","t":"2017-09-20 15:55:06","sj":"1555"}
-              将该信息以Map形式读取，再获取到key="t“的值，即最后一次抓拍时间。
-             */
-
-            //获取最后一次抓拍时间
-            String lastcapturetime = (String) searchHits[0].getSource().get(DynamicTable.TIMESTAMP);
-
-            /*
-              返回值为：设备抓拍张数、设备最后一次抓拍时间。
-             */
-            result.setTotalresultcount(totalresultcount);
-            result.setLastcapturetime(lastcapturetime);
+    public List<StatisticsBean> getStatisticsFace(String startTime, String endTime, List<Long> deviceIdList){
+        List<StatisticsBean> statisticsBeanList = new ArrayList<>();
+        if(endTime != null && endTime.matches("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}")){
+            endTime = endTime + " 00:00:00";
         }
-        return result;
+        if(startTime != null && startTime.matches("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}")){
+            startTime = startTime + " 00:00:00";
+        }
+
+        // 时间段判断
+        if (StringUtils.isBlank(startTime) && StringUtils.isBlank(endTime)) {
+            endTime = DateUtils.formatDateTime(new Date());
+            startTime = DateUtils.getSpecifiedDayBefore(endTime, OFFSET_DAY_SEVEN);
+        } else if (StringUtils.isBlank(startTime)) {
+            startTime = DateUtils.getSpecifiedDayBefore(endTime, OFFSET_DAY_SEVEN);
+        } else if (StringUtils.isBlank(endTime)) {
+            endTime = DateUtils.getSpecifiedDayAfter(startTime, OFFSET_DAY_SEVEN);
+        }
+
+        //调接口，将 deviceId 转换为IpcId
+        List<String> ipcIdList = new ArrayList<>();
+        Map<String, DeviceDTO> deviceDTOMap = deviceQueryService.getDeviceInfoByBatchId(deviceIdList);
+        for(Map.Entry<String, DeviceDTO> entry : deviceDTOMap.entrySet()){
+            ipcIdList.add(entry.getValue().getSerial());
+        }
+
+        // 第一次循环时间设置
+        String searchStartTime = startTime;
+        String searchEndTime = startTime.substring(0, startTime.indexOf(" ")) + " 23:59:59";
+        if (searchEndTime.compareTo(endTime) > 0) {
+            searchEndTime = endTime;
+        }
+
+        do {
+            StatisticsBean statisticsBean = new StatisticsBean();
+            // 设置日期和抓拍数
+            SearchResponse searchResponse = elasticSearchDao.getCaptureCount(searchStartTime, searchEndTime, ipcIdList);
+            SearchHits searchHits = searchResponse.getHits();
+            statisticsBean.setNumber(searchHits.getTotalHits() + "");
+            statisticsBean.setGroupId(searchEndTime.substring(0, searchEndTime.indexOf(" ")));
+            // 设置下次循环查询时间
+            searchStartTime = searchEndTime;
+            searchEndTime = DateUtils.getSpecifiedDayAfter(searchStartTime, OFFSET_DAY_ONE);
+//            if (DateUtils.comparetor(searchEndTime, endTime) > 0) {
+//                searchEndTime = endTime;
+//            }
+            statisticsBeanList.add(statisticsBean);
+        } while (DateUtils.comparetor(searchStartTime, endTime) < 0);
+        return statisticsBeanList;
     }
 
     /**
-     * 多设备抓拍统计（陈柯）
-     * 查询指定时间段内，指定的多个设备抓拍的图片数量
-     *
-     * @param startTime 开始时间
-     * @param endTime   结束时间
-     * @param ipcId     多个设备id
-     * @return 图片数量以long值表示
+     * 根据ftpurl获取图片
+     * @param ftpUrl 图片地址
+     * @return 图片数据
      */
-    public Long getCaptureCount(String startTime, String endTime, List<String> ipcId) {
-        SearchResponse searchResponse = elasticSearchDao.getCaptureCount(startTime, endTime, ipcId);
-        SearchHits searchHits = searchResponse.getHits();
-        return searchHits.getTotalHits();
-    }
-
-    /**
-     * 抓拍属性统计 (刘思阳)
-     * 查询指定时间段内，单个或某组设备中某种属性在抓拍图片中的数量
-     *
-     * @param startTime 开始时间
-     * @param endTime   结束时间
-     * @param ipcIdList 单个或某组设备ID
-     * @return 单个或某组设备中某种属性在抓拍图片中的数量
-     */
-    public List<AttributeCount> captureAttributeQuery(String startTime, String endTime, List<String> ipcIdList) {
-        List<AttributeCount> attributeCountList = new ArrayList<>();
-            AttributeService attributeService = new AttributeService();
-            if (ipcIdList != null && ipcIdList.size() > 0) {
-                for (String ipcId : ipcIdList) {
-                    AttributeCount attributeCount = new AttributeCount();
-                    attributeCount.setIPCId(ipcId);
-                    CaptureCount captureCount = captureCountQuery(startTime, endTime, ipcId);
-                    long count = captureCount.getTotalresultcount();
-                    attributeCount.setCaptureCount(count);
-                    List<Attribute> attributeList = attributeService.getAttribute();
-                    for (Attribute attribute : attributeList) {
-                        List<AttributeValue> values = attribute.getValues();
-                        for (AttributeValue attributeValue : values) {
-                            SearchResponse searchResponse = elasticSearchDao
-                                    .captureAttributeQuery(startTime, endTime, ipcId, attribute, attributeValue.getValue());
-                            SearchHits hits = searchResponse.getHits();
-                            long totalHits = hits.getTotalHits();
-                            attributeValue.setCount(totalHits);
-                        }
-                    }
-                    attributeCount.setAttributes(attributeList);
-                    attributeCountList.add(attributeCount);
-                }
-            } else {
-                log.error("ipcIdList is null.");
-            }
-        return attributeCountList;
+    public String getImageBase64(String ftpUrl){
+        int substart = 6;
+        int offset = 1;
+        FTPClient ftpClient = new FTPClient();
+        //FTP地址
+        String ip = ftpUrl.substring(substart, ftpUrl.indexOf(":", substart));
+        String port = ftpUrl.substring(ftpUrl.indexOf(":", substart) + offset, ftpUrl.indexOf("/", substart));
+        // 设置IP，端口
+        try {
+            ftpClient.connect(ip, Integer.valueOf(port));
+            // 登录
+            ftpClient.login(FTP_NAME, FTP_PASSWORD);
+            // 设置编码格式
+            ftpClient.setControlEncoding("UTF-8");
+            // 设置二进制文件传输方式
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            // 进入对应目录
+            ftpClient.changeWorkingDirectory(ftpUrl.substring(ftpUrl.indexOf("/", substart) + offset, ftpUrl.lastIndexOf("/")));
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            // 写入照片输出流
+            ftpClient.retrieveFile(ftpUrl.substring(ftpUrl.lastIndexOf("/") + offset), os);
+            byte[] bytes = os.toByteArray();
+            // base64转化
+            return new String(Base64.encodeBase64(bytes));
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+        }
+        return "";
     }
 
     /**

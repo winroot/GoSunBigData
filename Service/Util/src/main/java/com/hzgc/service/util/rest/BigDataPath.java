@@ -78,12 +78,9 @@ public class BigDataPath {
     /**
      * visual模块请求路径
      */
-    public static final String CAPTURECOUNT = ROOT + "/CaptureCount";
-    public static final String CAPTURECOUNT_DYNREPO = "/dynaicNumberService";
-    public static final String CAPTURECOUNT_STAREPO = "/staticNumberService";
-    public static final String CAPTURECOUNT_IPCIDS_TIME = "/timeSoltNumber";
-    public static final String CAPTURECOUNT_IPCID = "/captureCountQuery";
-    public static final String CAPTURECOUNT_IPCIDS = "/getCaptureCount";
-    public static final String CAPTURECOUNT_ATTRIBUTE = "/captureAttributeQuery";
+    public static final String CAPTURECOUNT_DYNREPO = "/capture_day_count";
+    public static final String CAPTURECOUNT_IPCIDS_TIME = "/face_hours";
+    public static final String CAPTURECOUNT_IPCIDS = "/face";
+    public static final String GET_PICTURE = "/image";
 
 }
