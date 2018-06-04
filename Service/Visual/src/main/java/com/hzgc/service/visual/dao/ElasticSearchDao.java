@@ -4,7 +4,6 @@ import com.hzgc.common.attribute.bean.Attribute;
 import com.hzgc.common.es.ElasticSearchHelper;
 import com.hzgc.common.table.dynrepo.DynamicShowTable;
 import com.hzgc.common.table.dynrepo.DynamicTable;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
 
 @Repository

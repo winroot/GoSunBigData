@@ -1,13 +1,12 @@
 package com.hzgc.service.visual.service;
 
-import com.hzgc.common.attribute.bean.Attribute;
-import com.hzgc.common.attribute.bean.AttributeValue;
-import com.hzgc.common.attribute.service.AttributeService;
-import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.service.util.api.DeviceDTO;
 import com.hzgc.service.util.api.DeviceQueryService;
-import com.hzgc.service.visual.bean.*;
+import com.hzgc.service.visual.bean.CaptureCountBean;
+import com.hzgc.service.visual.bean.FaceDayStatistic;
+import com.hzgc.service.visual.bean.StatisticsBean;
+import com.hzgc.service.visual.bean.TimeSlotNumber;
 import com.hzgc.service.visual.dao.ElasticSearchDao;
 import com.hzgc.service.visual.dao.EsSearchParam;
 import com.hzgc.service.visual.util.DateUtils;
@@ -15,8 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.util.Base64;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -24,7 +23,6 @@ import org.elasticsearch.search.aggregations.metrics.sum.InternalSum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.apache.commons.net.util.Base64;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
