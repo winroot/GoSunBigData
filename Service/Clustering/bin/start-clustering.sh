@@ -23,10 +23,8 @@ CLUSTERING_JAR=${LIB_DIR}/${CLUSTERING_JAR_NAME}                        ##获取
 #                               springcloud配置参数                            #
 #-----------------------------------------------------------------------------#
 EUREKA_IP=172.18.18.201     ##注册中心的ip地址
-SERVER_IP=172.18.18.104     ##服务的ip地址
 EUREKA_PORT=9000            ##服务注册中心端口
 ES_HOST=172.18.18.100
-ZOOKEEPER_HOST=172.18.18.100:2181
 
 
 #------------------------------------------------------------------------------#
@@ -48,10 +46,26 @@ function start_springCloud()
       nohup java -jar ${CLUSTERING_JAR} --spring.profiles.active=pro \
        --eureka.ip=${EUREKA_IP} \
        --eureka.port=${EUREKA_PORT} \
-       --server.ip=${SERVER_IP} \
-       --es.hosts=${ES_HOST} \
-       --zookeeper.host=${ZOOKEEPER_HOST} 2&>1 &
+       --spring.cloud.config.enabled=false \
+       --es.host=${ES_HOST}  2>&1 &
    fi
+}
+#---------------------------------------------------------------------#
+#                              定义函数                               #
+#---------------------------------------------------------------------#
+
+#####################################################################
+# 函数名: start_spring_cloud
+# 描述: 启动 springCloud face服务
+# 参数: N/A
+# 返回值: N/A
+# 其他: N/A
+#####################################################################
+function prepare_resource_file()
+{
+  cp ${CONF_DIR}/hbase-site.xml .
+  jar -uf ${CLUSTERING_JAR} hbase-site.xml
+  rm -rf hbase-site.xml
 }
 #####################################################################
 # 函数名: main
@@ -62,6 +76,7 @@ function start_springCloud()
 #####################################################################
 function main()
 {
+    prepare_resource_file
     start_springCloud
 }
 

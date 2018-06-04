@@ -1,137 +1,249 @@
 package com.hzgc.service.starepo.controller;
 
-import com.hzgc.service.starepo.bean.ObjectSearchResult;
-import com.hzgc.service.starepo.bean.PSearchArgsModel;
-import com.hzgc.service.starepo.bean.SearchRecordOpts;
+import com.hzgc.common.table.seachres.SearchResultTable;
+import com.hzgc.common.util.empty.IsEmpty;
+import com.hzgc.common.util.json.JSONUtil;
+import com.hzgc.jni.PictureData;
+import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
+import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
+import com.hzgc.service.starepo.bean.param.SearchRecordParam;
+import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
 import com.hzgc.service.starepo.service.ObjectInfoHandlerService;
-import com.hzgc.service.starepo.bean.ObjectInfoHandler;
+import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Map;
 
+@Slf4j
 @RestController
-@FeignClient(name = "staRepo")
-@RequestMapping(value = BigDataPath.STAREPO, consumes = "application/json", produces = "application/json")
-@Api(value = "objectInfo", tags = "对象信息服务")
+@Api(tags = "静态库服务")
 public class ObjectInfoHandlerController {
 
     @Autowired
+    @SuppressWarnings("unused")
     private ObjectInfoHandlerService objectInfoHandlerService;
 
-    @ApiOperation(value = "添加对象信息", response = Integer.class)
+    /**
+     * 添加对象
+     *
+     * @param param 对象信息
+     * @return 成功状态【0：插入成功；1：插入失败】
+     */
+    @ApiOperation(value = "添加对象", response = ResponseResult.class)
+    @RequestMapping(value = BigDataPath.OBJECTINFO_ADD, method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public ResponseResult<Integer> addObjectInfo(@RequestBody @ApiParam(value = "添加对象") ObjectInfoParam param) {
+        if (param == null) {
+            log.error("Starg add object info, but param is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        if (StringUtils.isBlank(param.getObjectTypeKey())) {
+            log.error("Start add object info ,but object type key is error");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        if (param.getPictureDatas() == null || param.getPictureDatas().getImageData() != null) {
+            log.error("Start add object info, but picture data is error");
+        }
+        log.info("Start add object info, param is:" + JSONUtil.toJson(param));
+        Integer succeed = objectInfoHandlerService.addObjectInfo(param);
+        return ResponseResult.init(succeed);
+    }
+
+    /**
+     * 删除对象
+     *
+     * @param rowkeyList 对象ID列表
+     * @return 成功状态【0：插入成功；1：插入失败】
+     */
+    @ApiOperation(value = "删除对象", response = ResponseResult.class)
+    @RequestMapping(value = BigDataPath.OBJECTINFO_DELETE, method = RequestMethod.DELETE)
+    public ResponseResult<Integer> deleteObjectInfo(@RequestBody @ApiParam(value = "删除列表") List<String> rowkeyList) {
+        if (rowkeyList == null || rowkeyList.size() == 0) {
+            log.error("Start delete object info, but rowkey list is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        log.info("Start delete object info, rowkey list is:" + JSONUtil.toJson(rowkeyList));
+        Integer succeed = objectInfoHandlerService.deleteObjectInfo(rowkeyList);
+        return ResponseResult.init(succeed);
+    }
+
+    /**
+     * 修改对象
+     *
+     * @param param 对象信息
+     * @return 成功状态【0：插入成功；1：插入失败】
+     */
+    @ApiOperation(value = "修改对象", response = ResponseResult.class)
+    @RequestMapping(value = BigDataPath.OBJECTINFO_UPDATE, method = RequestMethod.PUT)
+    public ResponseResult<Integer> updateObjectInfo(@RequestBody @ApiParam(value = "修改对象") ObjectInfoParam param) {
+        if (param == null) {
+            log.error("Start update object info, but param is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        if (StringUtils.isBlank(param.getId())) {
+            log.error("Start update object info, but id is error");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+
+        if (StringUtils.isBlank(param.getObjectTypeKey())) {
+            log.error("Start update object info, but object type key is error");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        log.info("Start update object info, param is:" + JSONUtil.toJson(param));
+        Integer succeed = objectInfoHandlerService.updateObjectInfo(param);
+        return ResponseResult.init(succeed);
+    }
+
+    /**
+     * 查询对象
+     *
+     * @param param 查询条件封装
+     * @return ObjectSearchResult
+     */
+    @ApiOperation(value = "对象查询", response = ObjectSearchResult.class)
+    @RequestMapping(value = BigDataPath.OBJECTINFO_SEARCH, method = RequestMethod.POST)
+    public ResponseResult<ObjectSearchResult> getObjectInfo(@RequestBody @ApiParam(value = "查询条件") GetObjectInfoParam param) {
+        if (param == null) {
+            log.error("Start get object info, param is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        log.info("Start get object info, param is:" + JSONUtil.toJson(param));
+        ObjectSearchResult result = objectInfoHandlerService.getObjectInfo(param);
+        return ResponseResult.init(result);
+    }
+
+    /**
+     * 获取静态库照片
+     *
+     * @param objectID 对象ID
+     * @return byte[]
+     */
+    @ApiOperation(value = "获取静态库照片", produces = "image/jpeg")
+    @ApiImplicitParam(name = "objectID", value = "对象ID", dataType = "String", paramType = "query")
+    @RequestMapping(value = BigDataPath.OBJECTINFO_GET_PHOTOBYKEY, method = RequestMethod.GET)
+    public ResponseEntity<byte[]> getObjectPhoto(String objectID) {
+        if (!StringUtils.isBlank(objectID)) {
+            log.error("Start get object photo, but object id error");
+            return ResponseEntity.badRequest().contentType(MediaType.IMAGE_JPEG).body(null);
+        }
+        log.info("Starg get photo by rowkey. rowkey is:" + objectID);
+        byte[] photo = objectInfoHandlerService.getPhotoByKey(objectID);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(photo);
+    }
+
+    /**
+     * 获取特征值
+     *
+     * @param rowkey 对象ID
+     * @return PictureData
+     */
+    @ApiOperation(value = "获取特征值<PictureData>", response = PictureData.class)
+    @ApiImplicitParam(name = "rowkey", value = "对象ID", dataType = "String", paramType = "query")
+    @RequestMapping(value = BigDataPath.OBJECTINFO_GET_FEATURE, method = RequestMethod.GET)
+    public ResponseResult<PictureData> getFeature(String rowkey) {
+        if (!IsEmpty.strIsRight(rowkey)) {
+            return null;
+        }
+        PictureData result = objectInfoHandlerService.getFeature(rowkey);
+        return ResponseResult.init(result);
+    }
+
+    /**
+     * 获取更多对象
+     *
+     * @param param 查询条件封装
+     * @return ObjectSearchResult
+     */
+//    @ApiOperation(value = "获取更多对象", response = ObjectSearchResult.class)
+    @RequestMapping(value = BigDataPath.STAREPO_GET_SEARCHRESULT, method = RequestMethod.POST)
+    public ResponseResult<ObjectSearchResult> getRocordOfObjectInfo(@RequestBody @ApiParam(value = "查询记录") SearchRecordParam param) {
+        if (param == null) {
+            return null;
+        }
+        ObjectSearchResult result = objectInfoHandlerService.getRocordOfObjectInfo(param);
+        return ResponseResult.init(result);
+    }
+
+    /**
+     * 导出重点人员
+     *
+     * @param param 查询条件封装
+     * @return 导出Word文本
+     */
+    @ApiOperation(value = "生成重点人员Word", response = String.class)
     @ApiResponses(
             {@ApiResponse(code = 200, message = "successful response")})
-    @RequestMapping(value = BigDataPath.STAREPO_ADD, method = RequestMethod.POST)
-    public ResponseResult<Integer> addObjectInfo(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
-        String platformId;
-        Map <String, Object> personObject;
-        if (objectInfoHandler != null) {
-            platformId = objectInfoHandler.getPlatformId();
-            personObject = objectInfoHandler.getPersonObject();
-        } else {
+    @RequestMapping(value = BigDataPath.STAREPO_CREATE_WORD, method = RequestMethod.POST)
+    public ResponseResult<String> createPeoplesWord(@RequestBody @ApiParam(value = "历史查询参数") SearchRecordParam param) {
+        if (param == null) {
             return null;
         }
-        Integer succeed = objectInfoHandlerService.addObjectInfo(platformId, personObject);
-        return ResponseResult.init(succeed);
+        String rowkey_file = objectInfoHandlerService.exportPeoples(param);
+        return ResponseResult.init(rowkey_file);
     }
 
-    @ApiOperation(value = "删除对象信息", response = Integer.class)
-    @RequestMapping(value = BigDataPath.STAREPO_DELETE, method = RequestMethod.DELETE)
-    public ResponseResult <Integer> deleteObjectInfo(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
-        List <String> rowkeys;
-        if (objectInfoHandler != null) {
-            rowkeys = objectInfoHandler.getRowkeys();
-        } else {
+    /**
+     * 导出重点人员Word
+     *
+     * @param fileAddress 文件地址
+     * @return 文件二进制
+     */
+    @ApiOperation(value = "导出重点人员Word", response = byte[].class)
+    @ApiImplicitParam(name = "fileAddress", value = "文件地址", dataType = "String", paramType = "query")
+    @RequestMapping(value = BigDataPath.STAREPO_EXPORT_WORD, method = RequestMethod.GET)
+    public ResponseEntity<byte[]> exportPeoplesWord(@ApiParam(value = "文件地址") String fileAddress) {
+        if (fileAddress == null) {
             return null;
         }
-        Integer succeed = objectInfoHandlerService.deleteObjectInfo(rowkeys);
-        return ResponseResult.init(succeed);
+        byte[] file = objectInfoHandlerService.getDataFromHBase(fileAddress, SearchResultTable.STAREPO_COLUMN_FILE);
+        HttpHeaders headers = new HttpHeaders();
+        try {
+            headers.add("Content-Disposition",
+                    "attachment;filename=" + new String(fileAddress.getBytes("UTF-8"), "ISO8859-1"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).headers(headers).body(file);
     }
 
-    @ApiOperation(value = "修改对象信息", response = Integer.class)
-    @RequestMapping(value = BigDataPath.STAREPO_UPDATE, method = RequestMethod.POST)
-    public ResponseResult <Integer> updateObjectInfo(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
-        Map <String, Object> personObject;
-        if (objectInfoHandler != null) {
-            personObject = objectInfoHandler.getPersonObject();
-        } else {
+    /**
+     * 获取搜索原图
+     *
+     * @param picID 图片ID
+     * @return 图片数据
+     */
+//    @ApiOperation(value = " 获取搜索原图", produces = "image/jpeg")
+    @ApiImplicitParam(name = "picID", value = "图片ID", dataType = "String", paramType = "query")
+    @RequestMapping(value = BigDataPath.STAREPO_GET_SEARCHPHOTO, method = RequestMethod.GET)
+    public ResponseEntity<byte[]> getSearchPhots(@ApiParam(value = "图片ID") String picID) {
+        if (!IsEmpty.strIsRight(picID)) {
             return null;
         }
-        Integer succeed = objectInfoHandlerService.updateObjectInfo(personObject);
-        return ResponseResult.init(succeed);
+        byte[] photo = objectInfoHandlerService.getDataFromHBase(picID, SearchResultTable.STAREPO_COLUMN_PICTURE);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(photo);
     }
 
-    @ApiOperation(value = "通过rowKey查找", response = ObjectSearchResult.class)
-    @RequestMapping(value = BigDataPath.STAREPO_SEARCH_BYROWKEY, method = RequestMethod.POST)
-    public ResponseResult <ObjectSearchResult> searchByRowkey(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
-        String rowkey;
-        if (objectInfoHandler != null) {
-            rowkey = objectInfoHandler.getRowkey();
-        } else {
-            return null;
-        }
-        ObjectSearchResult result = objectInfoHandlerService.searchByRowkey(rowkey);
-        return ResponseResult.init(result);
-    }
-
-    @ApiOperation(value = "获得对象信息", response = ObjectSearchResult.class)
-    @RequestMapping(value = BigDataPath.STAREPO_GET_OBJECTINFO, method = RequestMethod.POST)
-    public ResponseResult <ObjectSearchResult> getObjectInfo(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
-        PSearchArgsModel pSearchArgsModel;
-        if (objectInfoHandler != null) {
-            pSearchArgsModel = objectInfoHandler.getPSearchArgsModel();
-        } else {
-            return null;
-        }
-        ObjectSearchResult result = objectInfoHandlerService.getObjectInfo(pSearchArgsModel);
-        return ResponseResult.init(result);
-    }
-
-    @ApiOperation(value = "获得对象信息", response = Byte.class)
-    @RequestMapping(value = BigDataPath.STAREPO_GET_PHOTOBYKEY, method = RequestMethod.POST)
-    public ResponseResult <Byte> getPhotoByKey(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
-        String rowkey;
-        if (objectInfoHandler != null) {
-            rowkey = objectInfoHandler.getRowkey();
-        } else {
-            return null;
-        }
-        Byte photo = objectInfoHandlerService.getPhotoByKey(rowkey);
-        return ResponseResult.init(photo);
-    }
-
-    @ApiOperation(value = "获得记录的对象信息", response = ObjectSearchResult.class)
-    @RequestMapping(value = BigDataPath.STAREPO_GETSEARCHRESULT, method = RequestMethod.POST)
-    public ResponseResult <ObjectSearchResult> getRocordOfObjectInfo(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
-        SearchRecordOpts searchRecordOpts;
-        if (objectInfoHandler != null) {
-            searchRecordOpts = objectInfoHandler.getSearchRecordOpts();
-        } else {
-            return null;
-        }
-        ObjectSearchResult result = objectInfoHandlerService.getRocordOfObjectInfo(searchRecordOpts);
-        return ResponseResult.init(result);
-    }
-
-    @ApiOperation(value = "查询图片", response = byte[].class)
-    @RequestMapping(value = BigDataPath.STAREPO_GETSEARCHPHOTO, method = RequestMethod.POST)
-    public ResponseResult <byte[]> getSearchPhoto(@RequestBody @ApiParam(value = "对象信息") ObjectInfoHandler objectInfoHandler) {
-        String rowkey;
-        if (objectInfoHandler != null) {
-            rowkey = objectInfoHandler.getRowkey();
-        } else {
-            return null;
-        }
-        byte[] bytes = objectInfoHandlerService.getSearchPhoto(rowkey);
-        return ResponseResult.init(bytes);
+    /**
+     * 统计常住人口
+     *
+     * @return int 常住人口数量
+     */
+    @ApiOperation(value = "统计常住人口", response = ResponseResult.class)
+    @RequestMapping(value = BigDataPath.OBJECTINFO_COUNT_STATUS, method = RequestMethod.GET)
+    public ResponseResult<Integer> permanentPopulationCount() {
+        int count = objectInfoHandlerService.permanentPopulationCount();
+        return ResponseResult.init(count);
     }
 }

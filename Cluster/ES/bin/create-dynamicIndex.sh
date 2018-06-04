@@ -61,13 +61,13 @@ function index_es_dynamic()
         sed -i "s#^${a3}.*${b3}#${replace3}#g" ${BIN_DIR}/create-dynamic-index.sh
 
 		##获取分片、副本数
-        Shards=$(grep Number_Of_Shards ${CONF_FILE} | cut -d '=' -f2)
-        Replicas=$(grep Number_Of_Replicas ${CONF_FILE} | cut -d '=' -f2)
+        Shards=$(grep number_of_shards ${CONF_FILE} | cut -d '=' -f2)
+        Replicas=$(grep number_of_replicas ${CONF_FILE} | cut -d '=' -f2)
         ##获取模糊查询最小、最大字符数
-        Min_Gram=$(grep Min_Gram ${CONF_FILE} | cut -d '=' -f2)
-        Max_Gram=$(grep Max_Gram ${CONF_FILE} | cut -d '=' -f2)
+        Min_Gram=$(grep min_gram ${CONF_FILE} | cut -d '=' -f2)
+        Max_Gram=$(grep max_gram ${CONF_FILE} | cut -d '=' -f2)
         ##获取最大分页搜素文档数
-        Max_Result_Window=$(grep Max_Result_Window ${CONF_FILE} | cut -d '=' -f2)
+        Max_Result_Window=$(grep max_result_window ${CONF_FILE} | cut -d '=' -f2)
 
         sed -i "s#^\"min_gram\"#\"min_gram\":${Min_Gram}#g" ${BIN_DIR}/create-dynamic-index.sh
         sed -i "s#^\"max_gram\"#\"max_gram\":${Max_Gram}#g" ${BIN_DIR}/create-dynamic-index.sh

@@ -7,10 +7,6 @@ public class ObjectInfoTable implements Serializable {
     public static final String TABLE_NAME = "objectinfo";   // 表名
     public static final String ROWKEY = "id";               // 对象信息的唯一标志
     public static final String PERSON_COLF = "person";      // person列族
-    public static final String NAME_PIN = "namepin";        // 姓名的拼音
-    public static final String CREATOR_PIN = "creatorpin";  // 创建者的拼音
-    public static final String TOTAL_NUMS_ROW_NAME = "99999999999999999999999999";  // 保存总的记录数的行的名字
-    public static final String TOTAL_NUMS = "tnums";        // 总的记录数
 
     public static final String TYPE_COLF = "type";          //type列族
     public static final String TYPE_NAME = "name";          //类型名
@@ -20,8 +16,6 @@ public class ObjectInfoTable implements Serializable {
     public static final String TYPE_UPDATE_TIME = "updatetime";
 
     // 以下是和平台组公用的属性
-    public static final String PLATFORMID = "platformid";   // 平台ID
-    public static final String TAG = "tag";                 // 人车标志
     public static final String PKEY = "pkey";               // 人员类型
     public static final String NAME = "name";               // 姓名
     public static final String IDCARD = "idcard";           // 身份证号
