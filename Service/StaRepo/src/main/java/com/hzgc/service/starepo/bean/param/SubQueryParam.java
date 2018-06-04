@@ -1,8 +1,9 @@
-package com.hzgc.service.starepo.bean;
+package com.hzgc.service.starepo.bean.param;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,7 +13,8 @@ import java.util.List;
  */
 @ApiModel(value = "子查询Id,以及子查询中按照对象类型分类的对象类型类表")
 @Data
-public class SubQueryOpts implements Serializable {
+@ToString
+public class SubQueryParam implements Serializable {
 
     /**
      * 子查询ID
@@ -24,5 +26,5 @@ public class SubQueryOpts implements Serializable {
      * 对象类型列表，用于按照对象类型分类
      */
     @ApiModelProperty(value = "对象类型列表，用于按照对象类型分类")
-    private List<String> pkeys;
+    private List<String> objectTypekeyList;
 }

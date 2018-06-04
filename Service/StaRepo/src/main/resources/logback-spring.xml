@@ -10,17 +10,17 @@
         </encoder>
         <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>debug</level>
+            <level>INFO</level>
         </filter>
     </appender>
 
     <!-- 按照每天生成日志文件 -->
-    <appender name="FILEINFO"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="FILEINFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文件的路径及文件名  <file>${LOG_PATH}/${APPDIR}/log_error.log</file>-->
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>D:\\%d{yyyy-MM-dd}.starepoinfo.%i.log</FileNamePattern>
+            <FileNamePattern>/opt/%d{yyyy-MM-dd}.starepo.%i.log</FileNamePattern>
             <!--日志文件保留天数-->
             <MaxHistory>10</MaxHistory>
             <!-- 除按日志记录之外，还配置了日志文件不能超过2M，若超过2M，日志文件会以索引0开始，
@@ -46,12 +46,12 @@
     </appender>
 
     <!-- 按照每天生成日志文件 -->
-    <appender name="FILEERROR"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="FILEERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文件的路径及文件名 <file>${LOG_PATH}/${APPDIR}/log_error.log</file>-->
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>D:\\%d{yyyy-MM-dd}.starepoerror.log</FileNamePattern>
+            <FileNamePattern>/opt/%d{yyyy-MM-dd}.starepoError.log</FileNamePattern>
             <!--日志文件保留天数<MaxHistory>10</MaxHistory>-->
             <!-- 除按日志记录之外，还配置了日志文件不能超过2M，若超过2M，日志文件会以索引0开始，
                 命名日志文件，例如log-error-2013-12-21.0.log
@@ -77,8 +77,8 @@
 
     <!-- 日志输出级别 -->
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILEINFO" />
-        <appender-ref ref="FILEERROR" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILEINFO"/>
+        <appender-ref ref="FILEERROR"/>
     </root>
 </configuration>

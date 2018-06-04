@@ -1,9 +1,9 @@
 package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.table.starepo.ObjectInfoTable;
-import com.hzgc.service.starepo.bean.PrisonCountResult;
-import com.hzgc.service.starepo.bean.PrisonCountResults;
-import com.hzgc.service.starepo.bean.PrisonSearchOpts;
+import com.hzgc.service.starepo.bean.prison.PrisonCountResult;
+import com.hzgc.service.starepo.bean.prison.PrisonCountResults;
+import com.hzgc.service.starepo.bean.prison.PrisonSearchOpts;
 import com.hzgc.service.starepo.util.PhoenixJDBCHelper;
 import lombok.extern.slf4j.Slf4j;
 
