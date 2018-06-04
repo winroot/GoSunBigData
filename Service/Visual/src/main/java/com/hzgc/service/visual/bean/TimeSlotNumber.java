@@ -2,14 +2,17 @@ package com.hzgc.service.visual.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class TimeSlotNumber implements Serializable {
-    private Map<String, Integer> timeSlotNumber;
+    private List<FaceDayStatistic> faceList;
+
+    public TimeSlotNumber(){
+        faceList = new ArrayList<>();
+    }
 }

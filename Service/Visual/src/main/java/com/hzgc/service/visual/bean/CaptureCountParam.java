@@ -18,13 +18,13 @@ public class CaptureCountParam implements Serializable {
      * 设备ID
      */
     @ApiModelProperty(value = "设备ID")
-    private String ipcId;
+    private Long deviceId;
 
     /**
      * 设备ID列表
      */
     @ApiModelProperty(value = "设备ID列表")
-    private List<String> ipcIdList;
+    private List<Long> deviceIdList;
 
     /**
      * 起始时间

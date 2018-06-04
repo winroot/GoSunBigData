@@ -1,8 +1,6 @@
 package com.hzgc.service.starepo.service;
 
-import com.hzgc.common.table.dynrepo.SearchRecordTable;
 import com.hzgc.common.table.starepo.ObjectInfoTable;
-import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.service.starepo.bean.*;
 import com.hzgc.service.starepo.bean.export.PersonObjectGroupByPkey;
 import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
@@ -12,7 +10,6 @@ import com.hzgc.service.starepo.dao.PhoenixDao;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 

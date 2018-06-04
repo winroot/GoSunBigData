@@ -6,14 +6,6 @@ public class ObjectInfoTable implements Serializable {
 
     public static final String TABLE_NAME = "objectinfo";   // 表名
     public static final String ROWKEY = "id";               // 对象信息的唯一标志
-    public static final String PERSON_COLF = "person";      // person列族
-
-    public static final String TYPE_COLF = "type";          //type列族
-    public static final String TYPE_NAME = "name";          //类型名
-    public static final String TYPE_CREATOR = "creator";    //创建者
-    public static final String TYPE_REMARK = "remark";
-    public static final String TYPE_ADD_TIME = "addtime";
-    public static final String TYPE_UPDATE_TIME = "updatetime";
 
     // 以下是和平台组公用的属性
     public static final String PKEY = "pkey";               // 人员类型

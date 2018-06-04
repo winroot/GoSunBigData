@@ -2,6 +2,7 @@ package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.table.seachres.SearchResultTable;
 import com.hzgc.common.table.starepo.ObjectInfoTable;
+import com.hzgc.common.table.starepo.ObjectTypeTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.file.FileUtil;
 import com.hzgc.common.util.json.JSONUtil;
@@ -174,6 +175,7 @@ public class ObjectInfoHandlerService {
                 hbaseDao.saveSearchRecord(param, objectSearchResult);
             }
         } else {
+            log.info("Starg get object info not search picture");
             //封装personSingleResult
             String searchId = UuidUtil.getUuid();
             objectSearchResult = new ObjectSearchResult();
@@ -221,7 +223,7 @@ public class ObjectInfoHandlerService {
         List<String> types = new ArrayList<>();
         int lable = 0;
         while (sqlRowSet.next()) {
-            String type = sqlRowSet.getString(ObjectInfoTable.TYPE_COLF);
+            String type = sqlRowSet.getString(ObjectInfoTable.PKEY);
             if (!types.contains(type)) {
                 types.add(type);
                 if (types.size() > 1) {
