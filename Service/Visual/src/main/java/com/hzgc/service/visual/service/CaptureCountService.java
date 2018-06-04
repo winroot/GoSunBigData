@@ -111,7 +111,7 @@ public class CaptureCountService {
             endTime = DateUtils.getSpecifiedDayAfter(startTime, OFFSET_DAY_ONE);
         } else if (IsEmpty.strIsRight(endTime)) {
             // 只传了一个结束时间
-            endTime = DateUtils.checkTime(startTime);
+            endTime = DateUtils.checkTime(endTime);
             startTime = DateUtils.getSpecifiedDayBefore(endTime, OFFSET_DAY_ONE);
         } else {
             // 时间没有传
