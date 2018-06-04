@@ -1,27 +1,29 @@
 package com.hzgc.service.visual.controller;
 
+import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
-import com.hzgc.service.visual.bean.AttributeCount;
-import com.hzgc.service.visual.bean.CaptureCount;
-import com.hzgc.service.visual.bean.CaptureCountParam;
+import com.hzgc.service.visual.bean.CaptureCountBean;
+import com.hzgc.service.visual.bean.StatisticsBean;
 import com.hzgc.service.visual.bean.TimeSlotNumber;
 import com.hzgc.service.visual.bean.TotalAndTodayCount;
 import com.hzgc.service.visual.service.CaptureCountService;
-import io.swagger.annotations.*;
+import com.hzgc.service.visual.util.DateUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@FeignClient(name = "visual")
-@RequestMapping(value = BigDataPath.CAPTURECOUNT, consumes = "application/json", produces = "application/json")
-@Api(value = "/captureCount", tags = "大数据可视化服务")
+//@FeignClient(name = "visual")
+@Api(tags = "大数据可视化服务")
 public class CaptureCountController {
 
     @Autowired
@@ -31,135 +33,75 @@ public class CaptureCountController {
      * 抓拍统计与今日抓拍统计
      * 查询es的动态库，返回总抓拍数量和今日抓拍数量
      *
-     * @param captureCountParam 抓拍统计入参
-     * @return Map
+     * @return 今日抓拍数和总抓拍数
      */
-    @ApiOperation(value = "抓拍统计与今日抓拍统计", response = TotalAndTodayCount.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
+    @ApiOperation(value = "抓拍统计与今日抓拍统计", response = TotalAndTodayCount.class)
     @RequestMapping(value = BigDataPath.CAPTURECOUNT_DYNREPO, method = RequestMethod.GET)
-    public ResponseResult<TotalAndTodayCount> dynaicNumberService(
-            @RequestBody @ApiParam(value = "抓拍统计入参") CaptureCountParam captureCountParam) {
-        List<String> ipcIdList;
-        if (captureCountParam != null) {
-            ipcIdList = captureCountParam.getIpcIdList();
-        } else {
-            return null;
-        }
-        TotalAndTodayCount count = captureCountService.dynamicNumberService(ipcIdList);
+    public ResponseResult<CaptureCountBean> dynaicNumberService() {
+
+        CaptureCountBean count = captureCountService.dynamicNumberService(new ArrayList<>());
         return ResponseResult.init(count);
     }
 
     /**
      * 多设备每小时抓拍统计
      * 返回某段时间内，这些ipcid的抓拍的总数量
-     *
-     * @param captureCountParam 抓拍统计入参
-     * @return Map
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return 每小时抓拍数
      */
-    @ApiOperation(value = "多设备每小时抓拍统计", response = TimeSlotNumber.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
+    @ApiOperation(value = "多设备抓拍统计（每小时）", response = TimeSlotNumber.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startTime", value = "开始时间", paramType = "query"),
+            @ApiImplicitParam(name = "endTime", value = "结束时间", paramType = "query")
+    })
     @RequestMapping(value = BigDataPath.CAPTURECOUNT_IPCIDS_TIME, method = RequestMethod.GET)
-    public ResponseResult<TimeSlotNumber> timeSoltNumber(
-            @RequestBody @ApiParam(value = "抓拍统计入参") CaptureCountParam captureCountParam) {
-        List<String> ipcIdList;
-        String startTime;
-        String endTime;
-        if (captureCountParam != null) {
-            ipcIdList = captureCountParam.getIpcIdList();
-            startTime = captureCountParam.getStartTime();
-            endTime = captureCountParam.getEndTime();
-        } else {
-            return null;
+    public ResponseResult<TimeSlotNumber> timeSoltNumber(String startTime, String endTime) {
+        //时间格式检测
+        if(!DateUtils.checkForm(startTime) || !DateUtils.checkForm(endTime)){
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
+                    "Time does not conform to the format: yyyy-MM-dd");
         }
-        TimeSlotNumber count = captureCountService.timeSoltNumber(ipcIdList, startTime, endTime);
+        TimeSlotNumber count = captureCountService.timeSoltNumber(new ArrayList<>(), startTime, endTime);
         return ResponseResult.init(count);
+
     }
 
     /**
-     * 单设备抓拍统计
-     * 查询指定时间段内，指定设备抓拍的图片数量、该设备最后一次抓拍时间
-     *
-     * @param captureCountParam 抓拍统计入参
-     * @return CaptureCount
+     * 多设备抓拍，每天统计
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return 每天抓拍数
      */
-    @ApiOperation(value = "单设备抓拍统计", response = CaptureCount.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
-    @RequestMapping(value = BigDataPath.CAPTURECOUNT_IPCID, method = RequestMethod.GET)
-    public ResponseResult<CaptureCount> captureCountQuery(
-            @RequestBody @ApiParam(value = "抓拍统计入参") CaptureCountParam captureCountParam) {
-        String startTime;
-        String endTime;
-        String ipcId;
-        if (captureCountParam != null) {
-            startTime = captureCountParam.getStartTime();
-            endTime = captureCountParam.getEndTime();
-            ipcId = captureCountParam.getIpcId();
-        } else {
-            return null;
-        }
-        CaptureCount captureCount = captureCountService.captureCountQuery(startTime, endTime, ipcId);
-        return ResponseResult.init(captureCount);
-    }
-
-    /**
-     * 多设备抓拍统计
-     * 查询指定时间段内，指定的多个设备抓拍的图片数量
-     *
-     * @param captureCountParam 抓拍统计入参
-     * @return Long
-     */
-    @ApiOperation(value = "多设备抓拍统计", response = Long.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
+    @ApiOperation(value = "多设备抓拍统计（每天）", response = Long.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startTime", value = "开始时间", paramType = "query"),
+            @ApiImplicitParam(name = "endTime", value = "结束时间", paramType = "query")
+    })
     @RequestMapping(value = BigDataPath.CAPTURECOUNT_IPCIDS, method = RequestMethod.GET)
-    public ResponseResult<Long> getCaptureCount(
-            @RequestBody @ApiParam(value = "抓拍统计入参") CaptureCountParam captureCountParam) {
-        String startTime;
-        String endTime;
-        List<String> ipcIdList;
-        if (captureCountParam != null) {
-            startTime = captureCountParam.getStartTime();
-            endTime = captureCountParam.getEndTime();
-            ipcIdList = captureCountParam.getIpcIdList();
-        } else {
-            return null;
+    public ResponseResult<List<StatisticsBean>> getStatisticsFace(String startTime, String endTime){
+        //时间格式检测
+        if(!DateUtils.checkForm(startTime) || !DateUtils.checkForm(endTime)){
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
+                    "Time does not conform to the format: yyyy-MM-dd");
         }
-        Long count = captureCountService.getCaptureCount(startTime, endTime, ipcIdList);
+        List<StatisticsBean> count = captureCountService.getStatisticsFace(startTime, endTime, new ArrayList<>());
         return ResponseResult.init(count);
     }
 
     /**
-     * 抓拍属性统计
-     * 查询指定时间段内，单个或某组设备中某种属性在抓拍图片中的数量
-     *
-     * @param captureCountParam 抓拍统计入参
-     * @return List<AttributeCount>
+     * 根据URL获取图片
+     * @param ftpurl 图片地址
+     * @return 图片内容
      */
-    @ApiOperation(value = "抓拍属性统计", response = AttributeCount.class, responseContainer = "List")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful response"),
-            @ApiResponse(code = 404, message = "404")})
-    @RequestMapping(value = BigDataPath.CAPTURECOUNT_ATTRIBUTE, method = RequestMethod.POST)
-    public ResponseResult<List<AttributeCount>> captureAttributeQuery(
-            @RequestBody @ApiParam(value = "抓拍统计入参") CaptureCountParam captureCountParam) {
-        String startTime;
-        String endTime;
-        List<String> ipcIdList;
-        if (captureCountParam != null) {
-            startTime = captureCountParam.getStartTime();
-            endTime = captureCountParam.getEndTime();
-            ipcIdList = captureCountParam.getIpcIdList();
-        } else {
-            return null;
+    @ApiOperation(value = "获取图片", response = Long.class)
+    @ApiImplicitParam(name = "ftpurl", value = "图片地址", paramType = "query")
+    @RequestMapping(value = BigDataPath.GET_PICTURE, method = RequestMethod.GET)
+    public ResponseResult<String> getImageBase64(String ftpurl) {
+        if (ftpurl != null && !"".equals(ftpurl)) {
+            String photo = captureCountService.getImageBase64(ftpurl);
+            return ResponseResult.init(photo);
         }
-        List<AttributeCount> attributeCountList = captureCountService.captureAttributeQuery(startTime, endTime, ipcIdList);
-        return ResponseResult.init(attributeCountList);
+        return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
     }
 }
