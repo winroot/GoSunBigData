@@ -1,8 +1,10 @@
-package com.hzgc.service.starepo.bean;
+package com.hzgc.service.starepo.bean.param;
 
+import com.hzgc.service.starepo.bean.StaticSortParam;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,7 +14,8 @@ import java.util.List;
  */
 @ApiModel(value = "历史查询的时候传过来的参数")
 @Data
-public class SearchRecordOpts implements Serializable {
+@ToString
+public class SearchRecordParam implements Serializable {
 
     /**
      * 查询ID
@@ -30,7 +33,7 @@ public class SearchRecordOpts implements Serializable {
      * 子查询Id,以及子查询中按照对象类型分类的对象类型类表
      */
     @ApiModelProperty(value = "子查询Id,以及子查询中按照对象类型分类的对象类型类表")
-    private List<SubQueryOpts> subQueryOptsList;
+    private List<SubQueryParam> subQueryParamList;
 
     /**
      * 返回条数中的起始位置

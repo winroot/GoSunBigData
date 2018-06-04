@@ -59,28 +59,30 @@ public class BigDataPath {
     /**
      * StaRepo模块请求路径
      */
-    public static final String STAREPO = ROOT + "/staRepo";
-    public static final String STAREPO_ADD = "/addObjectInfo";
-    public static final String STAREPO_DELETE = "/deleteObjectInfo";
-    public static final String STAREPO_UPDATE = "/updateObjectInfo";
-    public static final String STAREPO_GET_OBJECTINFO = "/getObjectInfo";
-    public static final String STAREPO_GET_PHOTOBYKEY = "/getPhotoByKey";
-    public static final String STAREPO_SEARCH_BYROWKEY = "/searchByRowkey";
-    public static final String STAREPO_GETSEARCHRESULT= "/getRocordOfObjectInfo";
-    public static final String STAREPO_GETSEARCHPHOTO = "/getSearchPhoto";
+    public static final String OBJECTINFO_ADD = "/object_add";
+    public static final String OBJECTINFO_DELETE = "/object_delete";
+    public static final String OBJECTINFO_UPDATE = "/object_update";
+    public static final String OBJECTINFO_SEARCH = "/object_search";
+    public static final String OBJECTINFO_GET_PHOTOBYKEY = "/get_object_photo";
+    public static final String OBJECTINFO_GET_FEATURE = "/get_feature";
+    public static final String STAREPO_GET_SEARCHRESULT= "/get_search_result";
+    public static final String STAREPO_GET_SEARCHPHOTO = "/get_search_photo";
+    public static final String STAREPO_CREATE_WORD = "/create_word";
+    public static final String STAREPO_EXPORT_WORD = "/export_word";
+    public static final String OBJECTINFO_COUNT_STATUS = "/count_status";
 
-    public static final String TYPE = ROOT + "/objecttype";
-    public static final String TYPE_ADD = "/addObjecttype";
-    public static final String TYPE_DELETE = "/deleteObjecttype";
-    public static final String TYPE_UPDATE = "/updateObjecttype";
-    public static final String TYPE_SEARCH = "/searchObjecttype";
+    public static final String TYPE_ADD = "/type_add";
+    public static final String TYPE_DELETE = "/type_delete";
+    public static final String TYPE_UPDATE = "/type_update";
+    public static final String TYPE_SEARCH = "/type_search";
+    public static final String TYPE_SEARCH_NAMES = "/type_search_names";
+    public static final String TYPE_COUNT = "/type_count";
 
     /**
      * visual模块请求路径
      */
     public static final String CAPTURECOUNT = ROOT + "/CaptureCount";
     public static final String CAPTURECOUNT_DYNREPO = "/dynaicNumberService";
-    public static final String CAPTURECOUNT_STAREPO = "/staticNumberService";
     public static final String CAPTURECOUNT_IPCIDS_TIME = "/timeSoltNumber";
     public static final String CAPTURECOUNT_IPCID = "/captureCountQuery";
     public static final String CAPTURECOUNT_IPCIDS = "/getCaptureCount";

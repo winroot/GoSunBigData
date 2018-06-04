@@ -9,6 +9,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 
 @Configuration
 public class PhoenixDataSource {
@@ -24,6 +25,11 @@ public class PhoenixDataSource {
         dataSource.setUsername(environment.getProperty("phoenix.username"));
         dataSource.setPassword(environment.getProperty("phoenix.password"));
         dataSource.setDefaultAutoCommit(Boolean.valueOf(environment.getProperty("phoenix.default-auto-commit")));
+        try {
+            dataSource.getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return dataSource;
     }
 

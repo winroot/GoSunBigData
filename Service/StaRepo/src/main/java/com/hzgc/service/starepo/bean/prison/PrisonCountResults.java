@@ -1,4 +1,4 @@
-package com.hzgc.service.starepo.bean;
+package com.hzgc.service.starepo.bean.prison;
 
 import lombok.Data;
 

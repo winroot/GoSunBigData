@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-//@RequestMapping(value = BigDataPath.DYNREPO)
 @Api(tags = "动态库服务")
 @Slf4j
 @SuppressWarnings("unused")
