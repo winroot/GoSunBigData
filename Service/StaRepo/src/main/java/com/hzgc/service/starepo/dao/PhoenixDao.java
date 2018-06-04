@@ -2,6 +2,7 @@ package com.hzgc.service.starepo.dao;
 
 import com.hzgc.common.table.dynrepo.SearchRecordTable;
 import com.hzgc.common.table.starepo.ObjectInfoTable;
+import com.hzgc.common.table.starepo.ObjectTypeTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.jni.FaceAttribute;
@@ -92,7 +93,7 @@ public class PhoenixDao implements Serializable {
             log.error(e.getMessage());
             return false;
         }
-        log.info("Delete List<objectType> = [" + objectTypeKeyList.toString() + "]" );
+        log.info("Delete List<objectType> = [" + objectTypeKeyList.toString() + "]");
         return true;
     }
 
@@ -150,8 +151,8 @@ public class PhoenixDao implements Serializable {
         ObjectTypeParam objectType = new ObjectTypeParam();
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql);
         while (sqlRowSet.next()) {
-            objectType.setCreator(sqlRowSet.getString(ObjectInfoTable.TYPE_CREATOR));
-            objectType.setRemark(sqlRowSet.getString(ObjectInfoTable.TYPE_REMARK));
+            objectType.setCreator(sqlRowSet.getString(ObjectTypeTable.TYPE_CREATOR));
+            objectType.setRemark(sqlRowSet.getString(ObjectTypeTable.TYPE_REMARK));
         }
         log.info("Get objectType by rowkey result: " + objectType.toString());
         return objectType;
@@ -169,8 +170,8 @@ public class PhoenixDao implements Serializable {
         String sql = parseByOption.getTypeNameMapping(personKey);
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql);
         while (sqlRowSet.next()) {
-            String name = sqlRowSet.getString(ObjectInfoTable.TYPE_NAME);
-            String typeKey = sqlRowSet.getString(ObjectInfoTable.ROWKEY);
+            String name = sqlRowSet.getString(ObjectTypeTable.TYPE_NAME);
+            String typeKey = sqlRowSet.getString(ObjectTypeTable.ROWKEY);
             map.put(typeKey, name);
         }
         return map;
@@ -214,14 +215,12 @@ public class PhoenixDao implements Serializable {
     private List<ObjectTypeParam> getResult(SqlRowSet sqlRowSet) throws SQLException {
         List<ObjectTypeParam> result = new ArrayList<>();
         while (sqlRowSet.next()) {
-            if (sqlRowSet.getString(ObjectInfoTable.ROWKEY).contains("type_")) {
-                ObjectTypeParam objectTypeParam = new ObjectTypeParam();
-                objectTypeParam.setObjectTypeKey(sqlRowSet.getString(ObjectInfoTable.ROWKEY));
-                objectTypeParam.setObjectTypeName(sqlRowSet.getString(ObjectInfoTable.TYPE_NAME));
-                objectTypeParam.setCreator(sqlRowSet.getString(ObjectInfoTable.TYPE_CREATOR));
-                objectTypeParam.setRemark(sqlRowSet.getString(ObjectInfoTable.TYPE_REMARK));
-                result.add(objectTypeParam);
-            }
+            ObjectTypeParam objectTypeParam = new ObjectTypeParam();
+            objectTypeParam.setObjectTypeKey(sqlRowSet.getString(ObjectTypeTable.ROWKEY));
+            objectTypeParam.setObjectTypeName(sqlRowSet.getString(ObjectTypeTable.TYPE_NAME));
+            objectTypeParam.setCreator(sqlRowSet.getString(ObjectTypeTable.TYPE_CREATOR));
+            objectTypeParam.setRemark(sqlRowSet.getString(ObjectTypeTable.TYPE_REMARK));
+            result.add(objectTypeParam);
         }
         return result;
     }
@@ -232,7 +231,7 @@ public class PhoenixDao implements Serializable {
     private String getLastRowkey(SqlRowSet sqlRowSet) throws SQLException {
         String lastRowKey = null;
         while (sqlRowSet.next()) {
-            lastRowKey = sqlRowSet.getString(ObjectInfoTable.ROWKEY);
+            lastRowKey = sqlRowSet.getString(ObjectTypeTable.ROWKEY);
         }
         return lastRowKey;
     }
@@ -363,6 +362,7 @@ public class PhoenixDao implements Serializable {
         }
         log.info("Start get object info, generate sql successfull, sql is:");
         log.info(sqlAndArgs.getSql());
+        log.info(sqlAndArgs.getArgs().toString());
         return jdbcTemplate.queryForRowSet(sqlAndArgs.getSql(), sqlAndArgs.getArgs().toArray());
     }
 

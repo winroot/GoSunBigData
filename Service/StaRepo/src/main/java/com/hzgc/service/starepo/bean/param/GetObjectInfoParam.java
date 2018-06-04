@@ -42,7 +42,7 @@ public class GetObjectInfoParam implements Serializable{
     @ApiModelProperty(value = "人员状态")
     private int status;                           // 人员状态 [ 0:常住人口，1:建议迁出，默认为0]
     @ApiModelProperty(value = "关注等级")
-    private int followLevel;                      // 关注等级 [ 0:非重点关注，1:重点关注，默认为0]
+    private int followLevel;                      // 关注等级 [ 1:非重点关注,2:重点关注,不选或者都可以为0]
     @ApiModelProperty(value = "起始行数")
     private int start;                            // 起始行数
     @ApiModelProperty(value = "分页行数")

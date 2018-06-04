@@ -134,7 +134,7 @@ public class ObjectInfoHandlerController {
     @ApiImplicitParam(name = "objectID", value = "对象ID", dataType = "String", paramType = "query")
     @RequestMapping(value = BigDataPath.OBJECTINFO_GET_PHOTOBYKEY, method = RequestMethod.GET)
     public ResponseEntity<byte[]> getObjectPhoto(String objectID) {
-        if (!StringUtils.isBlank(objectID)) {
+        if (StringUtils.isBlank(objectID)) {
             log.error("Start get object photo, but object id error");
             return ResponseEntity.badRequest().contentType(MediaType.IMAGE_JPEG).body(null);
         }

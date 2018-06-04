@@ -1,6 +1,7 @@
 package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.table.starepo.ObjectInfoTable;
+import com.hzgc.common.table.starepo.ObjectTypeTable;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
 import com.hzgc.jni.PictureData;
@@ -21,12 +22,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ParseByOption {
 
     public String addObjectType() {
-        return "upsert into " + ObjectInfoTable.TABLE_NAME
-                + "( " + ObjectInfoTable.ROWKEY + ", "
-                + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_NAME + ", "
-                + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_CREATOR + ", "
-                + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_REMARK + ", "
-                + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_ADD_TIME
+        return "upsert into " + ObjectTypeTable.TABLE_NAME
+                + "( " + ObjectTypeTable.ROWKEY + ", "
+                + ObjectTypeTable.TYPE_NAME + ", "
+                + ObjectTypeTable.TYPE_CREATOR + ", "
+                + ObjectTypeTable.TYPE_REMARK + ", "
+                + ObjectTypeTable.TYPE_ADD_TIME
                 + ") values (?,?,?,?,?)";
     }
 
@@ -35,27 +36,26 @@ public class ParseByOption {
     }
 
     public String deleteObjectType_delete() {
-        return "delete from " + ObjectInfoTable.TABLE_NAME + " where " + ObjectInfoTable.ROWKEY + " = ?";
+        return "delete from " + ObjectTypeTable.TABLE_NAME + " where " + ObjectTypeTable.ROWKEY + " = ?";
     }
 
     public String updateObjectType() {
-        return "upsert into " + ObjectInfoTable.TABLE_NAME
-                + "( " + ObjectInfoTable.ROWKEY + ", "
-                + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_NAME + ", "
-                + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_CREATOR + ", "
-                + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_REMARK + ", "
-                + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_UPDATE_TIME
+        return "upsert into " + ObjectTypeTable.TABLE_NAME
+                + "( " + ObjectTypeTable.ROWKEY + ", "
+                + ObjectTypeTable.TYPE_NAME + ", "
+                + ObjectTypeTable.TYPE_CREATOR + ", "
+                + ObjectTypeTable.TYPE_REMARK + ", "
+                + ObjectTypeTable.TYPE_UPDATE_TIME
                 + ") values (?,?,?,?,?)";
     }
 
     public String searchObjectType() {
-        String sql = "select " + ObjectInfoTable.ROWKEY + ", "
-                + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_NAME + ", "
-                + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_CREATOR + ", "
-                + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_REMARK + ", "
-                + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_ADD_TIME
-                + " from " + ObjectInfoTable.TABLE_NAME + " where " + ObjectInfoTable.ROWKEY + " > ?" + " LIMIT ?";
-        return sql;
+        return "select " + ObjectTypeTable.ROWKEY + ", "
+                + ObjectTypeTable.TYPE_NAME + ", "
+                + ObjectTypeTable.TYPE_CREATOR + ", "
+                + ObjectTypeTable.TYPE_REMARK + ", "
+                + ObjectTypeTable.TYPE_ADD_TIME
+                + " from " + ObjectTypeTable.TABLE_NAME + " where " + ObjectTypeTable.ROWKEY + " > ?" + " LIMIT ?";
     }
 
     public SqlAndArgs getSqlFromGetObjectInfoParm(GetObjectInfoParam param) {
@@ -72,7 +72,7 @@ public class ParseByOption {
                         .append(" from (select ")
                         .append(sameFieldNeedReturn())
                         .append(", FACECOMP(")
-                        .append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.FEATURE)
+                        .append(ObjectInfoTable.FEATURE)
                         .append(", ?");
                 StringBuilder featureString = new StringBuilder();
                 int size = pictureDataList.size();
@@ -90,14 +90,14 @@ public class ParseByOption {
                 }
                 setValues.add(new String(featureString));
                 sql.append(") as sim from ")
-                        .append(ObjectInfoTable.TABLE_NAME)
-                        .append(" where ")
-                        .append(sameWhereSql(param, setValues))
-                        .append(")")
-                        .append(" where sim > ? ");
+                        .append(ObjectInfoTable.TABLE_NAME);
+                StringBuilder temp = sameWhereSql(param, setValues);
+                if (setValues.size() > 1) {
+                    sql.append(" where ").append(temp);
+                }
+                sql.append(")").append(" where sim >= ? ");
                 setValues.add(param.getSimilarity());
-
-                sql.append(" order by ")
+                sql.append("order by ")
                         .append(sameSortSql(params, true));
             } else if (!param.isSinglePerson() && pictureDataList.size() != 1) {
                 sql.append(", type")
@@ -119,7 +119,6 @@ public class ParseByOption {
                             .append(", ? as type");
                     setValues.add(key);
                     subSql.append(", FACECOMP(")
-                            .append(ObjectInfoTable.PERSON_COLF).append(".")
                             .append(ObjectInfoTable.FEATURE)
                             .append(", ?");
                     setValues.add(FaceFunction.floatArray2string(feature));
@@ -137,7 +136,7 @@ public class ParseByOption {
                     sql.append(subSqls.get(i));
                 }
 
-                sql.append(") where sim > ? ");
+                sql.append(") where sim >= ? ");
                 setValues.add(param.getSimilarity());
                 //排序sql 拼装
                 if (params != null && params.size() != 0) {
@@ -151,12 +150,13 @@ public class ParseByOption {
         } else {
             sql.append(sameFieldNeedReturn())
                     .append(" from ")
-                    .append(ObjectInfoTable.TABLE_NAME)
-                    .append(" where ")
-                    .append(sameWhereSql(param, setValues));
-            if (params != null) {
-                sql.append(" order by ")
-                        .append(sameSortSql(params, false));
+                    .append(ObjectInfoTable.TABLE_NAME);
+            StringBuilder temp = sameWhereSql(param, setValues);
+            if (setValues.size() > 0) {
+                sql.append(" where ").append(temp);
+            }
+            if (params != null && params.size() > 1) {
+                sql.append(" order by ").append(sameSortSql(params, false));
             }
         }
         // 进行分组
@@ -193,32 +193,32 @@ public class ParseByOption {
 
             }
             if (params.contains(StaticSortParam.IMPORTANTASC)) {
-                sameSortSql.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.IMPORTANT);
+                sameSortSql.append(ObjectInfoTable.IMPORTANT);
                 sameSortSql.append(" asc");
                 count++;
             }
             if (params.contains(StaticSortParam.IMPORTANTDESC)) {
-                sameSortSql.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.IMPORTANT);
+                sameSortSql.append(ObjectInfoTable.IMPORTANT);
                 sameSortSql.append(" desc");
                 count++;
             }
             if (params.contains(StaticSortParam.TIMEASC)) {
                 if (count > 0) {
                     sameSortSql.append(", ");
-                    sameSortSql.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.CREATETIME);
+                    sameSortSql.append(ObjectInfoTable.CREATETIME);
                     sameSortSql.append(" asc");
                 } else {
-                    sameSortSql.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.CREATETIME);
+                    sameSortSql.append(ObjectInfoTable.CREATETIME);
                     sameSortSql.append(" asc");
                 }
             }
             if (params.contains(StaticSortParam.TIMEDESC)) {
                 if (count > 0) {
                     sameSortSql.append(", ");
-                    sameSortSql.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.CREATETIME);
+                    sameSortSql.append(ObjectInfoTable.CREATETIME);
                     sameSortSql.append(" desc");
                 } else {
-                    sameSortSql.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.CREATETIME);
+                    sameSortSql.append(ObjectInfoTable.CREATETIME);
                     sameSortSql.append(" desc");
                 }
             }
@@ -233,29 +233,29 @@ public class ParseByOption {
         StringBuffer sameFieldReturn = new StringBuffer("");
         sameFieldReturn.append(ObjectInfoTable.ROWKEY);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.PKEY);
+        sameFieldReturn.append(ObjectInfoTable.PKEY);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.NAME);
+        sameFieldReturn.append(ObjectInfoTable.NAME);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.SEX);
+        sameFieldReturn.append(ObjectInfoTable.SEX);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.IDCARD);
+        sameFieldReturn.append(ObjectInfoTable.IDCARD);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.CREATOR);
+        sameFieldReturn.append(ObjectInfoTable.CREATOR);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.CPHONE);
+        sameFieldReturn.append(ObjectInfoTable.CPHONE);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.CREATETIME);
+        sameFieldReturn.append(ObjectInfoTable.CREATETIME);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.UPDATETIME);
+        sameFieldReturn.append(ObjectInfoTable.UPDATETIME);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.REASON);
+        sameFieldReturn.append(ObjectInfoTable.REASON);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.IMPORTANT);
+        sameFieldReturn.append(ObjectInfoTable.IMPORTANT);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.STATUS);
+        sameFieldReturn.append(ObjectInfoTable.STATUS);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.LOCATION);
+        sameFieldReturn.append(ObjectInfoTable.LOCATION);
         return sameFieldReturn;
     }
 
@@ -273,9 +273,7 @@ public class ParseByOption {
 
         // 关于姓名的搜索
         if (!StringUtils.isBlank(param.getObjectName())) {
-            whereQuery.append(ObjectInfoTable.PERSON_COLF)
-                    .append(".")
-                    .append(ObjectInfoTable.NAME).append(" = ?");
+            whereQuery.append(ObjectInfoTable.NAME).append(" = ?");
             setArgsList.add(param.getObjectName());
             isChanged = true;
         }
@@ -285,9 +283,7 @@ public class ParseByOption {
             if (isChanged) {
                 whereQuery.append(" and ");
             }
-            whereQuery.append(ObjectInfoTable.PERSON_COLF)
-                    .append(".").
-                    append(ObjectInfoTable.IDCARD)
+            whereQuery.append(ObjectInfoTable.IDCARD)
                     .append(" = ?");
             setArgsList.add(param.getIdcard());
             isChanged = true;
@@ -298,8 +294,7 @@ public class ParseByOption {
             if (isChanged) {
                 whereQuery.append(" and ");
             }
-            whereQuery.append(ObjectInfoTable.PERSON_COLF)
-                    .append(".")
+            whereQuery
                     .append(ObjectInfoTable.SEX)
                     .append(" = ?");
             setArgsList.add(param.getSex());
@@ -311,15 +306,11 @@ public class ParseByOption {
         if (pkeys != null) {
             if (pkeys.size() == 1) {
                 if (isChanged) {
-                    whereQuery.append(" and ").append(ObjectInfoTable.PERSON_COLF)
-                            .append(".")
-                            .append(ObjectInfoTable.PKEY)
+                    whereQuery.append(" and ").append(ObjectInfoTable.PKEY)
                             .append(" = ? ");
                     setArgsList.add(pkeys.get(0));
                 } else {
-                    whereQuery.append(ObjectInfoTable.PERSON_COLF)
-                            .append(".")
-                            .append(ObjectInfoTable.PKEY)
+                    whereQuery.append(ObjectInfoTable.PKEY)
                             .append(" = ? ");
                     setArgsList.add(pkeys.get(0));
                     isChanged = true;
@@ -328,26 +319,19 @@ public class ParseByOption {
                 for (int i = 0; i < pkeys.size(); i++) {
                     if (i == pkeys.size() - 1) {
                         whereQuery.append(" or ");
-                        whereQuery.append(ObjectInfoTable.PERSON_COLF)
-                                .append(".")
-                                .append(ObjectInfoTable.PKEY)
+                        whereQuery.append(ObjectInfoTable.PKEY)
                                 .append(" = ?)");
                         setArgsList.add(pkeys.get(i));
                     } else if (i == 0) {
                         if (isChanged) {
                             whereQuery.append(" and (");
                         }
-                        whereQuery.append(ObjectInfoTable.PERSON_COLF)
-                                .append(".")
-                                .append(ObjectInfoTable.PKEY)
+                        whereQuery.append(ObjectInfoTable.PKEY)
                                 .append(" = ?");
                         setArgsList.add(pkeys.get(i));
                         isChanged = true;
                     } else {
-                        whereQuery.append(" or ")
-                                .append(ObjectInfoTable.PERSON_COLF)
-                                .append(".")
-                                .append(ObjectInfoTable.PKEY)
+                        whereQuery.append(" or ").append(ObjectInfoTable.PKEY)
                                 .append(" = ?");
                         setArgsList.add(pkeys.get(i));
                     }
@@ -361,8 +345,7 @@ public class ParseByOption {
             if (isChanged) {
                 whereQuery.append(" and ");
             }
-            whereQuery.append(ObjectInfoTable.PERSON_COLF)
-                    .append(".")
+            whereQuery
                     .append(ObjectInfoTable.CREATOR)
                     .append(" = ?");
             setArgsList.add(creator);
@@ -376,8 +359,7 @@ public class ParseByOption {
             if (isChanged) {
                 whereQuery.append(" and ");
             }
-            whereQuery.append(ObjectInfoTable.PERSON_COLF)
-                    .append(".")
+            whereQuery
                     .append(ObjectInfoTable.CPHONE)
                     .append(" = ?");
             setArgsList.add(param.getCreatorConractWay());
@@ -385,32 +367,14 @@ public class ParseByOption {
         }
 
         // 关于是否是重点人员的查询
-        if (isChanged) {
-            whereQuery.append(" and ");
-        }
-        whereQuery.append(ObjectInfoTable.PERSON_COLF)
-                .append(".")
-                .append(ObjectInfoTable.IMPORTANT);
-        whereQuery.append(" = ?");
-        setArgsList.add(param.getFollowLevel());
-
-        // 属于人员状态，建议迁入和常住人口的查询
-        whereQuery.append(" and ");
-        whereQuery.append(ObjectInfoTable.PERSON_COLF)
-                .append(".")
-                .append(ObjectInfoTable.STATUS);
-        whereQuery.append(" = ?");
-        setArgsList.add(param.getStatus());
-
-        // 人员位置搜索，location
-        String location = param.getLocation();
-        if (!StringUtils.isBlank(location))
-
-        {
-            whereQuery.append(" and ");
-            whereQuery.append(ObjectInfoTable.PERSON_COLF).append(".").append(ObjectInfoTable.LOCATION);
+        if (param.getFollowLevel() != 0) {
+            if (isChanged) {
+                whereQuery.append(" and ");
+            }
+            whereQuery
+                    .append(ObjectInfoTable.IMPORTANT);
             whereQuery.append(" = ?");
-            setArgsList.add(location);
+            setArgsList.add(param.getFollowLevel());
         }
         return whereQuery;
     }
@@ -432,8 +396,9 @@ public class ParseByOption {
 
         String name = objectInfo.getName();
         if (name != null) {
-            sql.append(", ");
-            sql.append(ObjectInfoTable.NAME);
+            sql.append(", ")
+
+                    .append(ObjectInfoTable.NAME);
             setValues.add(name);
         }
         String pkey = objectInfo.getObjectTypeKey();
@@ -464,8 +429,9 @@ public class ParseByOption {
         }
         String creator = objectInfo.getCreator();
         if (creator != null) {
-            sql.append(", ");
-            sql.append(ObjectInfoTable.CREATOR);
+            sql.append(", ")
+
+                    .append(ObjectInfoTable.CREATOR);
             setValues.add(creator);
         }
         String cphone = objectInfo.getCreatorConractWay();
@@ -502,22 +468,19 @@ public class ParseByOption {
     }
 
     public String getPhotoByObjectId() {
-        return "select " + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.PHOTO
+        return "select " + ObjectInfoTable.PHOTO
                 + " from " + ObjectInfoTable.TABLE_NAME + " where " + ObjectInfoTable.ROWKEY + " = ?";
     }
 
     public String getTypeNameMapping(List<String> objectTypeKeys) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select ")
-                .append(ObjectInfoTable.TYPE_COLF)
-                .append(".")
-                .append(ObjectInfoTable.TYPE_NAME)
+        sql.append("select ").append(ObjectTypeTable.TYPE_NAME)
                 .append(", ")
-                .append(ObjectInfoTable.ROWKEY)
+                .append(ObjectTypeTable.ROWKEY)
                 .append(" from ")
-                .append(ObjectInfoTable.TABLE_NAME)
+                .append(ObjectTypeTable.TABLE_NAME)
                 .append(" where ")
-                .append(ObjectInfoTable.ROWKEY)
+                .append(ObjectTypeTable.ROWKEY)
                 .append(" in (");
         int count = 0;
         for (String ignored : objectTypeKeys) {
@@ -537,19 +500,19 @@ public class ParseByOption {
     public String addObjectInfo(ObjectInfoParam objectInfo) {
         return "upsert into " + ObjectInfoTable.TABLE_NAME + "("
                 + ObjectInfoTable.ROWKEY + ", "
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.NAME + ", "
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.PKEY + ", "
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.IDCARD + ", "
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.SEX + ", "
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.PHOTO + ", "
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.FEATURE + ", "
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.REASON + ", "
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.CREATOR + ", "
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.CPHONE + ", "
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.CREATETIME + ", "
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.UPDATETIME + ", "
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.IMPORTANT + ", "
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.STATUS
+                + ObjectInfoTable.NAME + ", "
+                + ObjectInfoTable.PKEY + ", "
+                + ObjectInfoTable.IDCARD + ", "
+                + ObjectInfoTable.SEX + ", "
+                + ObjectInfoTable.PHOTO + ", "
+                + ObjectInfoTable.FEATURE + ", "
+                + ObjectInfoTable.REASON + ", "
+                + ObjectInfoTable.CREATOR + ", "
+                + ObjectInfoTable.CPHONE + ", "
+                + ObjectInfoTable.CREATETIME + ", "
+                + ObjectInfoTable.UPDATETIME + ", "
+                + ObjectInfoTable.IMPORTANT + ", "
+                + ObjectInfoTable.STATUS
                 + ") values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     }
 
@@ -558,30 +521,27 @@ public class ParseByOption {
     }
 
     public String getOBjectTypeByObjectId(String objectId) {
-        return "select " + ObjectInfoTable.ROWKEY +
-                ", " +
-                ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_CREATOR +
-                ", " +
-                ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_REMARK +
-                " from " +
-                ObjectInfoTable.TABLE_NAME +
-                " where " + ObjectInfoTable.ROWKEY + " = '" + objectId + "'";
+        return "select " + ObjectTypeTable.ROWKEY +
+                ", " + ObjectTypeTable.TYPE_CREATOR +
+                ", " + ObjectTypeTable.TYPE_REMARK +
+                " from " + ObjectTypeTable.TABLE_NAME +
+                " where " + ObjectTypeTable.ROWKEY + " = '" + objectId + "'";
     }
 
     public String getPictureData() {
-        return "select " + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.PHOTO + ","
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.FEATURE
+        return "select " + ObjectInfoTable.PHOTO + ","
+                + ObjectInfoTable.FEATURE
                 + " from " + ObjectInfoTable.TABLE_NAME + " where id = ?";
     }
 
     public String countStatus() {
         return "select count(*) as num from " + ObjectInfoTable.TABLE_NAME + " where "
-                + ObjectInfoTable.PERSON_COLF + "." + ObjectInfoTable.STATUS + " = 0";
+                + ObjectInfoTable.STATUS + " = 0";
     }
 
     public String objectTypeCount() {
-        return "select count(" + ObjectInfoTable.TYPE_COLF + "." + ObjectInfoTable.TYPE_NAME
-                + ") as num from " + ObjectInfoTable.TABLE_NAME;
+        return "select count(" + ObjectTypeTable.TYPE_NAME
+                + ") as num from " + ObjectTypeTable.TABLE_NAME;
     }
 
 }
