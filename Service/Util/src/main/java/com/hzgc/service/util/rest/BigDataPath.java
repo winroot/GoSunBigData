@@ -19,12 +19,10 @@ public class BigDataPath {
     /**
      * Clustering模块请求路径
      */
-    public static final String CLUSTERING = ROOT + "/clustering";
-    public static final String CLUSTERING_SEARCH = "/clusteringSearch";
-    public static final String CLUSTERING_DETAILSEARCH = "/detailClusteringSearch";
-    public static final String CLUSTERING_DETAILSEARCH_V1 = "/detailClusteringSearch_v1";
-    public static final String CLUSTERING_DELETE = "/deleteClustering";
-    public static final String CLUSTERING_IGNORE = "/ignoreClustering";
+    public static final String CLUSTERING_SEARCH = "/clustering_search";
+    public static final String CLUSTERING_DETAILSEARCH_V1 = "/clustering_detail";
+    public static final String CLUSTERING_DELETE = "/clustering_delete";
+    public static final String CLUSTERING_IGNORE = "/clustering_ignore";
 
     /**
      * Device模块请求路径

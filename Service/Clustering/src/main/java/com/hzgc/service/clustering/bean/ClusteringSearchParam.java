@@ -33,7 +33,7 @@ public class ClusteringSearchParam implements Serializable {
 
     //分页行数
     @ApiModelProperty(value = "分页行数")
-    private int limt;
+    private int limit;
 
     //排序参数（默认按出现次数排序）
     @ApiModelProperty(value = "排序参数")

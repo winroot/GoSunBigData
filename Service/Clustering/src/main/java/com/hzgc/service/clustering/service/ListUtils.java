@@ -52,7 +52,7 @@ public class ListUtils {
             sortParam.setSortNameArr(sortNameArr);
             sortParam.setIsAscArr(isAscArr);
         } else {
-            log.info("sortParam is null");
+            log.info("SortParam is null");
             sortParam = null;
         }
         return sortParam;
