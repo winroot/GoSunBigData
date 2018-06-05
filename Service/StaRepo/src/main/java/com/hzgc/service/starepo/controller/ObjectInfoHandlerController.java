@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -104,6 +105,27 @@ public class ObjectInfoHandlerController {
         log.info("Start update object info, param is:" + JSONUtil.toJson(param));
         Integer succeed = objectInfoHandlerService.updateObjectInfo(param);
         return ResponseResult.init(succeed);
+    }
+
+    /**
+     * 更新人员信息状态值
+     *
+     * @param objectId 对象ID
+     * @param status   状态值
+     * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
+     */
+    @ApiOperation(value = "更新人员信息状态值", response = ResponseResult.class)
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "objectId", value = "对象ID", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "status", value = "状态码", dataType = "Integer", paramType = "query")
+    })
+    @RequestMapping(value = BigDataPath.OBJECTINFO_UPDATE_STATUS, method = RequestMethod.GET)
+    public ResponseResult<Integer> updateObjectInfo_status(String objectId, int status) {
+        if (StringUtils.isBlank(objectId)) {
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        int result = objectInfoHandlerService.updateObjectInfo_status(objectId, status);
+        return ResponseResult.init(result);
     }
 
     /**
@@ -187,8 +209,8 @@ public class ObjectInfoHandlerController {
             {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.STAREPO_CREATE_WORD, method = RequestMethod.POST)
     public ResponseResult<String> createPeoplesWord(@RequestBody @ApiParam(value = "历史查询参数") SearchRecordParam param) {
-        if (param == null) {
-            return null;
+        if (param == null || param.getSize() == 0 || param.getStart() == 0 || param.getSubQueryParamList() == null) {
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
         String rowkey_file = objectInfoHandlerService.exportPeoples(param);
         return ResponseResult.init(rowkey_file);
@@ -245,5 +267,19 @@ public class ObjectInfoHandlerController {
     public ResponseResult<Integer> permanentPopulationCount() {
         int count = objectInfoHandlerService.permanentPopulationCount();
         return ResponseResult.init(count);
+    }
+
+    /**
+     * 每月迁出人口数量统计
+     *
+     * @param start_time 起始统计时间
+     * @param end_time  结束统计时间
+     * @return Map key:月份 value：数量
+     */
+    @ApiOperation(value = "迁出人口数量统计", response = ResponseResult.class)
+    @RequestMapping(value = BigDataPath.STAREPO_COUNT_MIGRATION, method = RequestMethod.GET)
+    public ResponseResult<Map>migrationCount(String start_time, String end_time) {
+        Map map = objectInfoHandlerService.migrationCount(start_time, end_time);
+        return ResponseResult.init(map);
     }
 }

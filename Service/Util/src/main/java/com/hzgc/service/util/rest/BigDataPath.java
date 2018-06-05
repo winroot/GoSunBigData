@@ -62,6 +62,7 @@ public class BigDataPath {
     public static final String OBJECTINFO_ADD = "/object_add";
     public static final String OBJECTINFO_DELETE = "/object_delete";
     public static final String OBJECTINFO_UPDATE = "/object_update";
+    public static final String OBJECTINFO_UPDATE_STATUS = "/object_update_status";
     public static final String OBJECTINFO_SEARCH = "/object_search";
     public static final String OBJECTINFO_GET_PHOTOBYKEY = "/get_object_photo";
     public static final String OBJECTINFO_GET_FEATURE = "/get_feature";
@@ -70,13 +71,13 @@ public class BigDataPath {
     public static final String STAREPO_CREATE_WORD = "/create_word";
     public static final String STAREPO_EXPORT_WORD = "/export_word";
     public static final String OBJECTINFO_COUNT_STATUS = "/count_status";
+    public static final String STAREPO_COUNT_MIGRATION = "/count_migration";
 
     public static final String TYPE_ADD = "/type_add";
     public static final String TYPE_DELETE = "/type_delete";
     public static final String TYPE_UPDATE = "/type_update";
     public static final String TYPE_SEARCH = "/type_search";
     public static final String TYPE_SEARCH_NAMES = "/type_search_names";
-    public static final String TYPE_COUNT = "/type_count";
 
     /**
      * visual模块请求路径

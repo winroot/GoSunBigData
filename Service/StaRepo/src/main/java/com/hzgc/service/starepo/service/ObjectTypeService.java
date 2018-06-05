@@ -70,13 +70,4 @@ public class ObjectTypeService {
     public Map<String, String> searchObjectTypeNames(List<String> objectTypeKeys){
         return phoenixDao.searchTypeNames(objectTypeKeys);
     }
-
-    /**
-     * 统计对象类型的数量
-     *
-     * @return int 对象类型的数量
-     */
-    public int objectTypeCount(){
-        return phoenixDao.objectTypeCount();
-    }
 }

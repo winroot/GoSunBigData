@@ -12,12 +12,13 @@ import java.util.Map;
 @Slf4j
 public class DocHandlerUtil {
     private static Configuration configuration = new Configuration(Configuration.VERSION_2_3_23);
-    private final static String exportDir = "/tmp/";
+    private final static String exportDir = "tmp" + File.separator;
+
     static {
         configuration.setDefaultEncoding("utf-8");
     }
 
-    public static byte[] createDoc(String templateName, Map<String, Object> dataMap, String fileName){
+    public static byte[] createDoc(Map<String, Object> dataMap, String fileName){
         configuration.setClassLoaderForTemplateLoading(DocHandlerUtil.class.getClassLoader(), "");
 
         Template t = null;
@@ -28,13 +29,20 @@ public class DocHandlerUtil {
         }
         // 输出文档路径及名称
         File outFile = new File(exportDir + fileName);
+        if(!outFile.isFile()){
+            try {
+                new File(exportDir).mkdir();
+                outFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         Writer out = null;
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(outFile);
             OutputStreamWriter oWriter = new OutputStreamWriter(fos, "UTF-8");
             out = new BufferedWriter(oWriter);
-           ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
             log.error(e.getMessage());
         }
