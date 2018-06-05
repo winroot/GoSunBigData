@@ -3,6 +3,7 @@ package com.hzgc.common.util.file;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class FileUtil {
     /**
@@ -16,13 +17,22 @@ public class FileUtil {
         if (!file.exists()) {
             return null;
         }
+        FileInputStream fis = null;
         try {
-            FileInputStream fis = new FileInputStream(file);
+            fis = new FileInputStream(file);
             byte[] bytes = new byte[(int) file.length()];
             fis.read(bytes);
             return bytes;
         } catch (IOException e) {
             return null;
+        }finally {
+            try {
+                if (fis != null) {
+                    fis.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -33,34 +33,13 @@ public class HBaseDao {
     private String getFailed = "Get data from " + SearchResultTable.TABLE_SEARCHRES + " failed! rowKey: ";
 
     public HBaseDao() {
-        //HBaseHelper.getHBaseConnection();
-    }
-
-    public void insert(String rowKey, Object obj) {
-        Table table = HBaseHelper.getTable(SearchResultTable.TABLE_SEARCHRES);
-        if (table == null) {
-            log.error(tableIsNull);
-            return;
-        }
-        try {
-            Put put = new Put(Bytes.toBytes(rowKey));
-            byte[] data = ObjectUtil.objectToByte(obj);
-            if (data != null) {
-                put.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY, SearchResultTable.STAREPO_COLUMN_PICTURE, data);
-                table.put(put);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            log.info(insertFailed + rowKey);
-        } finally {
-            HBaseHelper.closeTable(table);
-        }
+        HBaseHelper.getHBaseConnection();
     }
 
     /**
      * 保存重点人员Word
      */
-    public void insert_word(String rowKey, Object obj) {
+    public void insert_word(String rowKey, byte[] bytes) {
         Table table = HBaseHelper.getTable(SearchResultTable.TABLE_SEARCHRES);
         if (table == null) {
             log.error(tableIsNull);
@@ -68,9 +47,8 @@ public class HBaseDao {
         }
         try {
             Put put = new Put(Bytes.toBytes(rowKey));
-            byte[] data = ObjectUtil.objectToByte(obj);
-            if (data != null) {
-                put.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY, SearchResultTable.STAREPO_COLUMN_FILE, data);
+            if (bytes != null) {
+                put.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY, SearchResultTable.STAREPO_COLUMN_FILE, bytes);
                 table.put(put);
             }
         } catch (IOException e) {
@@ -91,8 +69,7 @@ public class HBaseDao {
         try {
             Result result = table.get(get);
             if (result != null) {
-                byte[] bytes = result.getValue(SearchResultTable.SEARCHRES_COLUMNFAMILY, column);
-                return bytes;
+                return result.getValue(SearchResultTable.SEARCHRES_COLUMNFAMILY, column);
             } else {
                 log.info(resultIsNull + rowKey);
                 return null;

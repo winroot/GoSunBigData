@@ -188,13 +188,16 @@ public class ObjectInfoHandlerService {
             //封装personSingleResult
             String searchId = UuidUtil.getUuid();
             objectSearchResult = new ObjectSearchResult();
+            objectSearchResult.setSearchId(searchId);
             PersonSingleResult personSingleResult = new PersonSingleResult();
             List<PersonSingleResult> singleResults = new ArrayList<>();
-            personSingleResult.setSearchId(searchId);
+            String personSingleResultId = UuidUtil.getUuid();
+            personSingleResult.setSearchId(personSingleResultId);
             objectInfoHandlerTool.getPersonSingleResult(personSingleResult, sqlRowSet, false);
             singleResults.add(personSingleResult);
             objectSearchResult.setSingleSearchResults(singleResults);
             objectSearchResult.setSearchId(UuidUtil.getUuid());
+            hbaseDao.saveSearchRecord(param, objectSearchResult);
         }
         //返回分页结果
         objectInfoHandlerTool.formatTheObjectSearchResult(objectSearchResult, param.getStart(), param.getLimit());
@@ -382,7 +385,15 @@ public class ObjectInfoHandlerService {
         //查询搜索记录
         String searchId = opts.getTotalSearchId();
         byte[] bytes = hbaseDao.get(searchId, SearchResultTable.STAREPO_COLUMN_SEARCHMESSAGE);
+        if (bytes == null || bytes.length <= 0){
+            log.info("Get file faild !");
+            return null;
+        }
         ObjectSearchResult objectSearchResult = JSONUtil.toObject(new String(bytes), ObjectSearchResult.class);
+        if (objectSearchResult == null || objectSearchResult.getSingleSearchResults() == null){
+            log.info("Get file faild !");
+            return null;
+        }
         PersonSingleResult result = objectSearchResult.getSingleSearchResults().get(0);
 
         //查询所有的类型名
@@ -399,8 +410,10 @@ public class ObjectInfoHandlerService {
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put(ConfigConstants.PEOPLE_DATA_KEY, objectData);
             byte[] buff = DocHandlerUtil.createDoc(dataMap, File.separator + exportFile);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String data = sdf.format(new Date());
             //把文件插入HBase表中
-            String rowkey = "file_" + System.currentTimeMillis() + UuidUtil.getUuid().substring(0, 8);
+            String rowkey = "file_" + data + "_" + UuidUtil.getUuid().substring(0, 4) + ".doc";
             hbaseDao.insert_word(rowkey, buff);
             //返回文件Id
             return rowkey;
@@ -541,11 +554,11 @@ public class ObjectInfoHandlerService {
     /**
      * 根据Id获取静态库库中的特征值
      *
-     * @param rowkey 对象ID
+     * @param id 对象ID
      * @return PictureData
      */
-    public PictureData getFeature(String rowkey) {
-        PictureData pictureData = phoenixDao.getPictureData(rowkey);
+    public PictureData getFeature(String id) {
+        PictureData pictureData = phoenixDao.getPictureData(id);
         if (pictureData != null) {
             byte[] photo = pictureData.getImageData();
             float[] feature = pictureData.getFeature().getFeature();
