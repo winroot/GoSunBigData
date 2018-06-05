@@ -33,15 +33,6 @@ public class IpcIdsUtil {
                  rule.setRuleId(UuidUtil.getUuid());
                  ruleId= rule.getRuleId();
             }
-//            List<Device> deviceList = dispatch.getDevices();
-//            List<DeviceDTO> deviceDTOList = new ArrayList <>();
-//            for (Map.Entry<String,DeviceDTO> entry:map.entrySet()){
-//                DeviceDTO deviceDTO = entry.getValue();
-//                deviceDTOList.add(deviceDTO);
-//            }
-//            for (int i=0;i<deviceDTOList.size();i++){
-//                deviceList.get(i).setIpcId(deviceDTOList.get(i).getSerial());
-//            }
             Map <String, Dispatch> dispatchMap = new LinkedHashMap <>();
             dispatchMap.put(ruleId, dispatch);
             return dispatchMap;
