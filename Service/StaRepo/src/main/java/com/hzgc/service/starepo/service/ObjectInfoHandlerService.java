@@ -194,6 +194,7 @@ public class ObjectInfoHandlerService {
             objectInfoHandlerTool.getPersonSingleResult(personSingleResult, sqlRowSet, false);
             singleResults.add(personSingleResult);
             objectSearchResult.setSingleSearchResults(singleResults);
+            objectSearchResult.setSearchId(UuidUtil.getUuid());
         }
         //返回分页结果
         objectInfoHandlerTool.formatTheObjectSearchResult(objectSearchResult, param.getStart(), param.getLimit());
