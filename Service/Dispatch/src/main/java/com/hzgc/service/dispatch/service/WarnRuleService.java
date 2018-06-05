@@ -7,6 +7,7 @@ import com.hzgc.service.dispatch.bean.IdsType;
 import com.hzgc.service.dispatch.bean.PageBean;
 import com.hzgc.service.dispatch.bean.Warn;
 import com.hzgc.service.dispatch.dao.HBaseDao;
+import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,9 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class WarnRuleService
-{
-
+public class WarnRuleService {
 
     @Autowired
     private HBaseDao hBaseDao;
@@ -40,16 +39,13 @@ public class WarnRuleService
         return hBaseDao.deleteRules(ipcIDs);
     }
 
-
     //存储原数据
-    public ResponseResult<String> saveOriginData(Map<String, Dispatch> map) throws IOException
-    {
+    public ResponseResult<String> saveOriginData(Map<String, Dispatch> map) throws IOException {
         return this.hBaseDao.saveOriginData(map);
     }
 
     //根据ruleId进行全部参数查询
-    public ResponseResult<Dispatch> searchByRuleId(String id) throws IOException
-    {
+    public ResponseResult<Dispatch> searchByRuleId(String id) throws IOException {
         Map<String,Dispatch> map = hBaseDao.searchByRuleId();
         for (String ruleId : map.keySet()) {
             if (ruleId.equals(id)) {
@@ -60,7 +56,7 @@ public class WarnRuleService
                 for (int i = 0; i < warnList.size(); i++) {
                     strings[i] = (warnList.get(i)).getObjectType();
                 }
-                log.info("strings数组" + JSONUtil.toJson(strings));
+                log.info("Strings is " + JSONUtil.toJson(strings));
                 Map<String,Map<String,String>> responseResult = hBaseDao.getObjectTypeName(strings);
                 Map<String,String> m = responseResult.get("restbody");
                 for (Warn warn : warnList) {
@@ -75,30 +71,26 @@ public class WarnRuleService
             }
         }
         log.info("Id query Data is null");
-        return null;
+        return ResponseResult.error(RestErrorCode.RECORD_NOT_EXIST);
     }
 
     //修改规则
-    public ResponseResult<Boolean> updateRule(Dispatch dispatch) throws IOException
-    {
+    public ResponseResult<Boolean> updateRule(Dispatch dispatch) throws IOException {
         return hBaseDao.updateRule(dispatch);
     }
 
     //删除规则
-    public List<Long> delRules(IdsType<String> idsType) throws IOException
-    {
+    public List<Long> delRules(IdsType<String> idsType) throws IOException {
         return hBaseDao.delRules(idsType);
     }
 
     //分页获取规则列表
-    public ResponseResult<List> getRuleList(PageBean pageBean) throws IOException
-    {
+    public ResponseResult<List> getRuleList(PageBean pageBean) throws IOException {
         return hBaseDao.getRuleList(pageBean);
     }
 
     //获取某个规则绑定的所有设备
-    public ResponseResult<List> getDeviceList(String rule_id) throws IOException
-    {
+    public ResponseResult<List> getDeviceList(String rule_id) throws IOException {
         return hBaseDao.getDeviceList(rule_id);
     }
 

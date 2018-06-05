@@ -11,6 +11,7 @@ import com.hzgc.service.dispatch.bean.Device;
 import com.hzgc.service.dispatch.bean.IdsType;
 import com.hzgc.service.dispatch.bean.PageBean;
 import com.hzgc.service.dispatch.bean.Warn;
+import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;
@@ -63,7 +64,7 @@ public class HBaseDao {
         try {
             //把putList列表添加到表device表中
             deviceTable.put(putList);
-            log.info("configRules are " + jsonString);
+            log.info("Config rules are " + jsonString);
             //config模式下，把离线告警offlineMap对象插入到device表中
             configOfflineWarn(offlineMap, deviceTable);
         } catch (IOException e) {
@@ -92,7 +93,7 @@ public class HBaseDao {
                     deviceDelList.add(deviceDelete);
                     //reply：（设备ID，删除成功）
                     reply.put(ipc, true);
-                    log.info("release the rule binding, the device ID is:" + ipc);
+                    log.info("Release the rule binding, the device ID is:" + ipc);
                 }
                 //获取离线告警数据的行键
                 Get offlineGet = new Get(DeviceTable.OFFLINERK);
@@ -123,7 +124,7 @@ public class HBaseDao {
                     String offline = JSONUtil.toJson(offlineMap);
                     offlinePut.addColumn(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL, Bytes.toBytes(offline));
                     deviceTable.put(offlinePut);
-                    log.info("delete rule is " + offline);
+                    log.info("Delete rule is " + offline);
                 }
                 deviceTable.delete(deviceDelList);
                 return reply;
@@ -198,9 +199,7 @@ public class HBaseDao {
      * 把传进来的rules：List<Warn> rules转化为commonRule：Map<Integer, Map<String, Integer>>格式
      */
 
-    private String parseDeviceRule(List <Warn> rules,
-                                   List <String> ipcIDs,
-                                   Map <Integer, Map <String, Integer>> commonRule) {
+    private String parseDeviceRule(List <Warn> rules, List <String> ipcIDs, Map <Integer, Map <String, Integer>> commonRule) {
         //判断：规则不为空，设备ID不为空
         if (rules != null && commonRule != null && ipcIDs != null) {
             for (Warn rule : rules) {
@@ -248,9 +247,7 @@ public class HBaseDao {
      * 离线告警数据类型Map<String, Map<String, Integer>>
      * 对象类型,   设备ID, 离线天数
      */
-    private void parseOfflineWarn(Warn rule,
-                                  String ipcID,
-                                  Map <String, Map <String, Integer>> offlineMap) {
+    private void parseOfflineWarn(Warn rule, String ipcID, Map <String, Map <String, Integer>> offlineMap) {
         //离线告警中存在传入规则中的对象类型
         if (offlineMap.containsKey(rule.getObjectType())) {
             //在离线告警相应的对象类型中添加ipcID和规则中的离线天数阈值DayThreshold
@@ -264,9 +261,8 @@ public class HBaseDao {
     }
 
     //添加规则进行判断这个ipcId是不是已经存在，存在的话返回该设备已经绑定了规则，不存在直接进行添加
-    @SuppressWarnings("UnnecessaryLocalVariable")
     public ResponseResult<String> saveOriginData(Map<String,Dispatch> originMap)throws IOException{
-        log.info("OriginMap is "+ JSONUtil.toJson(originMap));
+        log.info("Origin map is "+ JSONUtil.toJson(originMap));
         String originId;
         String oldId;
         //从Hbase数据库中读dispatchTable表
@@ -308,7 +304,7 @@ public class HBaseDao {
             Put put = new Put(Bytes.toBytes("ruleId"));
             put.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"), ObjectUtil.objectToByte(JSON.toJSONString(hbaseMap)));
             dispatchTable.put(put);
-            log.info("HbaseMap " + JSON.toJSONString(hbaseMap));
+            log.info("Hbase map " + JSON.toJSONString(hbaseMap));
             return ResponseResult.init("规则添加成功");
         }else{
             //数据库为空表示第一次增加，直接存到数据库中
@@ -321,7 +317,6 @@ public class HBaseDao {
     }
 
     //根据ruleId进行全部参数查询
-    @SuppressWarnings("UnnecessaryLocalVariable")
     public Map<String,Dispatch> searchByRuleId() throws IOException {
             Table dispatchTable = HBaseHelper.getTable("dispatchTable");
             Get get = new Get(Bytes.toBytes("ruleId"));
@@ -342,7 +337,6 @@ public class HBaseDao {
     }
 
     //修改规则
-    @SuppressWarnings("UnnecessaryLocalVariable")
     public ResponseResult<Boolean> updateRule(Dispatch dispatch) throws IOException {
         Table dispatchTable = HBaseHelper.getTable("dispatchTable");
         Get get = new Get(Bytes.toBytes("ruleId"));
@@ -367,7 +361,7 @@ public class HBaseDao {
             }
         }
         log.info("Hbase data is null");
-        return ResponseResult.init(false);
+        return ResponseResult.error(RestErrorCode.RECORD_NOT_EXIST);
     }
 
     //删除规则
@@ -408,7 +402,6 @@ public class HBaseDao {
     }
 
     //分页获取规则列表
-    @SuppressWarnings("UnnecessaryLocalVariable")
     public ResponseResult<List> getRuleList(PageBean pageBean) throws IOException {
         List<Rule> list = new ArrayList<>();
         Table dispatchTable = HBaseHelper.getTable("dispatchTable");
@@ -474,7 +467,6 @@ public class HBaseDao {
     }
 
     //获取某个规则绑定的所有设备
-    @SuppressWarnings("UnnecessaryLocalVariable")
     public ResponseResult<List> getDeviceList(String rule_id) throws IOException {
         Table dispatchTable = HBaseHelper.getTable("dispatchTable");
         Get get = new Get(Bytes.toBytes("ruleId"));
@@ -489,7 +481,7 @@ public class HBaseDao {
             return ResponseResult.init(deviceList);
         }
         log.info("Hbase data is null");
-        return null;
+        return ResponseResult.error(RestErrorCode.RECORD_NOT_EXIST);
     }
 
     //获取对象类型名称

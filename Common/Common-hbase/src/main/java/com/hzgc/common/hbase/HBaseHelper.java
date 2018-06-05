@@ -32,7 +32,7 @@ public class HBaseHelper implements Serializable {
     private static void initHBaseConfiguration() {
         try {
             innerHBaseConf = HBaseConfiguration.create();
-            innerHBaseConf.addResource(ClassLoader.getSystemResourceAsStream("BOOT-INF/classes/hbase-site.xml"));
+            innerHBaseConf.addResource(ClassLoader.getSystemResourceAsStream("hbase-site.xml"));
         } catch (Exception e) {
             e.printStackTrace();
         }
