@@ -37,7 +37,7 @@ public class WarnRuleController {
     @RequestMapping(value = BigDataPath.DISPATCH_SEARCH_BYID , method = RequestMethod.GET)
     public ResponseResult<Dispatch> getRuleInfo(String id) {
         if (null != id){
-            log.info("Get rule info param "+id);
+            log.info("Get rule info , param is "+id);
             ResponseResult<Dispatch> responseResult = null;
             try {
                 responseResult = warnRuleService.searchByRuleId(id);
@@ -46,7 +46,7 @@ public class WarnRuleController {
             }
             return responseResult;
         }else {
-            log.info("Get rule info param is null");
+            log.info("Get rule info , param is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
     }
@@ -57,7 +57,7 @@ public class WarnRuleController {
         if (null != dispatch) {
             List<String> ipcIDs = new ArrayList <>();
             List<Warn> warnList;
-            log.info("Add rule param is " + JSONUtil.toJson(dispatch));
+            log.info("Add rule , param is " + JSONUtil.toJson(dispatch));
             List list = IpcIdsUtil.toDeviceIdList(dispatch.getDevices());
 
             Map<String,DeviceDTO> map = deviceQueryService.getDeviceInfoByBatchId(list);
@@ -68,13 +68,13 @@ public class WarnRuleController {
             Map dispatchMap = IpcIdsUtil.toDispatchMap(dispatch);
             ResponseResult<String> responseResult = warnRuleService.saveOriginData(dispatchMap);
             //调用大数据接口
-            log.info("Big data param ipc ids is "+JSONUtil.toJson(ipcIDs)+" warn list is "+JSONUtil.toJson(warnList));
+            log.info("Bigdata param , ipcIDs is "+JSONUtil.toJson(ipcIDs)+" warn list is "+JSONUtil.toJson(warnList));
             if (null != ipcIDs && ipcIDs.size()>0 && null != warnList && warnList.size()>0){
                 warnRuleService.configRules(ipcIDs,warnList);
             }
             return responseResult;
         }
-        log.info("Add rule param is null");
+        log.info("Add rule , param is null");
         return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
     }
 
@@ -84,7 +84,7 @@ public class WarnRuleController {
         if (null != dispatch) {
             List<String> ipcIDs = new ArrayList <>();
             List<Warn> warnList;
-            log.info("Update rule param is " + JSONUtil.toJson(dispatch));
+            log.info("Update rule , param is " + JSONUtil.toJson(dispatch));
             List list = IpcIdsUtil.toDeviceIdList(dispatch.getDevices());
             Map<String, DeviceDTO> map = deviceQueryService.getDeviceInfoByBatchId(list);
             for (String s:map.keySet()){
@@ -93,13 +93,13 @@ public class WarnRuleController {
             warnList = dispatch.getRule().getWarns();
             ResponseResult<Boolean> responseResult = warnRuleService.updateRule(dispatch);
             //调用大数据接口
-            log.info("Big data param ipc ids is "+JSONUtil.toJson(ipcIDs)+" warn list is "+JSONUtil.toJson(warnList));
+            log.info("Bigdata param , ipcIDs is "+JSONUtil.toJson(ipcIDs)+" warn list is "+JSONUtil.toJson(warnList));
             if (null != ipcIDs && ipcIDs.size()>0 && null != warnList && warnList.size()>0){
                 warnRuleService.configRules(ipcIDs,warnList);
             }
             return responseResult;
         }
-        log.info("Update rule param is null");
+        log.info("Update rule , param is null");
         return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
     }
 
@@ -107,7 +107,7 @@ public class WarnRuleController {
     @RequestMapping(value = BigDataPath.DISPATCH_DELETE, method = RequestMethod.DELETE, consumes = "application/json", produces = "application/json")
     public ResponseResult<Boolean> delRules(@RequestBody IdsType<String> idsType) throws IOException {
         if (null != idsType) {
-            log.info("Delete rules param is " + idsType.toString());
+            log.info("Delete rules , param is " + idsType.toString());
             List<Long> ids = warnRuleService.delRules(idsType);
             Map<String, DeviceDTO> map = deviceQueryService.getDeviceInfoByBatchId(ids);
             List<String> ipcIDs = new ArrayList<>();
@@ -115,11 +115,11 @@ public class WarnRuleController {
                 ipcIDs.add(map.get(s).getSerial());
             }
             //调用大数据接口
-            log.info("Big data param ipc ids is "+JSONUtil.toJson(ipcIDs));
+            log.info("Bigdata param , ipcIDs is "+JSONUtil.toJson(ipcIDs));
             warnRuleService.deleteRules(ipcIDs);
             return ResponseResult.init(true);
         }
-        log.info("Delete rules param is null");
+        log.info("Delete rules , param is null");
         return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
     }
 
@@ -132,11 +132,11 @@ public class WarnRuleController {
     @RequestMapping(value = BigDataPath.DISPATCH_CUTPAGE_RULE, method = RequestMethod.GET)
     public ResponseResult<List> getRuleList(PageBean pageBean) throws IOException {
         if (null != pageBean) {
-            log.info("Get rule list param is " + JSONUtil.toJson(pageBean));
+            log.info("Get rule list , param is " + JSONUtil.toJson(pageBean));
             ResponseResult<List> responseResult = warnRuleService.getRuleList(pageBean);
             return responseResult;
         }
-        log.info("Get rule list param is null");
+        log.info("Get rule list , param is null");
         return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
     }
 
@@ -145,11 +145,11 @@ public class WarnRuleController {
     @RequestMapping(value = "/getdevicelist/{rule_id}",method = RequestMethod.GET)
     public ResponseResult<List> getDeviceList(String rule_id) throws IOException {
         if (null != rule_id) {
-            log.info("Get device list param is" + rule_id);
+            log.info("Get device list , param is" + rule_id);
             ResponseResult<List> responseResult = warnRuleService.getDeviceList(rule_id);
             return responseResult;
         }
-        log.info("Get device list param is null");
+        log.info("Get device list , param is null");
         return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
     }
 }
