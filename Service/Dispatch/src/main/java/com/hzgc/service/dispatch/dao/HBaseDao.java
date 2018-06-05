@@ -122,7 +122,7 @@ public class HBaseDao {
                     //把删除后的离线告警数据存入device表中
                     Put offlinePut = new Put(DispatchTable.OFFLINERK);
                     String offline = JSONUtil.toJson(offlineMap);
-                    offlinePut.addColumn(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL, Bytes.toBytes(offline));
+                    offlinePut.addColumn(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL,ObjectUtil.objectToByte(offline));
                     deviceTable.put(offlinePut);
                     log.info("Delete rule is " + offline);
                 }
@@ -178,16 +178,16 @@ public class HBaseDao {
                 }
                 Put offlinePut = new Put(DispatchTable.OFFLINERK);
                 offlineString = JSONUtil.toJson(offlineMap);
-                offlinePut.addColumn(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL, Bytes.toBytes(offlineString));
+                offlinePut.addColumn(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL, ObjectUtil.objectToByte(offlineString));
                 deviceTable.put(offlinePut);
             } else {
                 //若hbase的device表中offlineWarnRowKey行键对应的数据为空，直接把offlineMap的值加入到device表
                 Put offlinePut = new Put(DispatchTable.OFFLINERK);
                 offlineString = JSONUtil.toJson(offlineMap);
-                offlinePut.addColumn(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL, Bytes.toBytes(offlineString));
+                offlinePut.addColumn(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL, ObjectUtil.objectToByte(offlineString));
                 deviceTable.put(offlinePut);
             }
-            log.info("configRules are " + offlineString);
+            log.info("Config rules are " + offlineString);
         } catch (IOException e) {
             log.error(e.getMessage());
         }
@@ -302,14 +302,14 @@ public class HBaseDao {
             }
             //把新数据同步到数据库中
             Put put = new Put(Bytes.toBytes("ruleId"));
-            put.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"), ObjectUtil.objectToByte(JSON.toJSONString(hbaseMap)));
+            put.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"), ObjectUtil.objectToByte(JSONUtil.toJson(hbaseMap)));
             dispatchTable.put(put);
             log.info("Hbase map " + JSON.toJSONString(hbaseMap));
             return ResponseResult.init("规则添加成功");
         }else{
             //数据库为空表示第一次增加，直接存到数据库中
             Put put = new Put(Bytes.toBytes("ruleId"));
-            put.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"), ObjectUtil.objectToByte(JSON.toJSONString(originMap)));
+            put.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"), ObjectUtil.objectToByte(JSONUtil.toJson(originMap)));
             dispatchTable.put(put);
             log.info("This is first add originMap is "+ JSONUtil.toJson(originMap));
             return ResponseResult.init("规则添加成功");
