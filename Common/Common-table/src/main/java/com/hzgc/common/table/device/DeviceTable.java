@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class DeviceTable implements Serializable {
 
-    public final static String TABLE_DEVICE = "deviceTest";
+    public final static String TABLE_DEVICE = "device";
     public final static byte[] CF_DEVICE = "device".getBytes();
     public final static byte[] PLAT_ID = "p".getBytes();
     public final static byte[] NOTES = "n".getBytes();
