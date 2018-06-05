@@ -102,6 +102,9 @@ public class FaceCompFunc extends ScalarFunction {
 
 
     public static float featureCompare(float[] currentFeature, float[] historyFeature) {
+        if (currentFeature.length != 512 || historyFeature.length != 512) {
+            return 0;
+        }
         double similarityDegree = 0;
         double currentFeatureMultiple = 0;
         double historyFeatureMultiple = 0;
