@@ -244,6 +244,7 @@ public class PhoenixDao implements Serializable {
     public Integer addObjectInfo(ObjectInfoParam objectInfo) {
         String sql = parseByOption.addObjectInfo(objectInfo);
         try {
+            Timestamp createTime = new Timestamp(System.currentTimeMillis());
             if (objectInfo.getPictureDatas().getFeature() != null) {
                 float[] in = objectInfo.getPictureDatas().getFeature().getFeature();
                 Object[] out = new Object[in.length];
@@ -265,8 +266,8 @@ public class PhoenixDao implements Serializable {
                         objectInfo.getReason(),
                         objectInfo.getCreator(),
                         objectInfo.getCreatorConractWay(),
-                        new Timestamp(System.currentTimeMillis()),
-                        objectInfo.getUpdateTime(),
+                        createTime,
+                        createTime,
                         objectInfo.getFollowLevel(),
                         objectInfo.getStatus());
             } else {
@@ -281,8 +282,8 @@ public class PhoenixDao implements Serializable {
                         objectInfo.getReason(),
                         objectInfo.getCreator(),
                         objectInfo.getCreatorConractWay(),
-                        new Timestamp(System.currentTimeMillis()),
-                        objectInfo.getUpdateTime(),
+                        createTime,
+                        createTime,
                         objectInfo.getFollowLevel(),
                         objectInfo.getStatus());
             }
@@ -343,6 +344,27 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return 1;
         }
+        return 0;
+    }
+
+    /**
+     * 更新人员信息状态值
+     *
+     * @param objectId 对象ID
+     * @param status   状态值
+     * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
+     */
+    public Integer updateObjectInfo_status(String objectId, int status) {
+        log.info("Update objectInfo status param : objectId = " + objectId + ", status = " + status);
+        String sql = parseByOption.updateObjectInfo_status(objectId, status);
+        log.info("Update objectInfo status SQL : " + sql);
+        try {
+            jdbcTemplate.update(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+        log.info("Update object info status successfull");
         return 0;
     }
 
@@ -446,21 +468,17 @@ public class PhoenixDao implements Serializable {
         return count;
     }
 
-    /**
-     * 统计对象类型的数量
-     *
-     * @return int 对象类型的数量
-     */
-    public int objectTypeCount() {
-        log.info("Start count objectType number.");
-        String sql = parseByOption.objectTypeCount();
-        log.info("Count objectType number SQL : " + sql);
-        int count = 0;
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql);
+    public Map migrationCount(String month, Timestamp start_time, Timestamp end_time) {
+        log.info("Start count objectInfo migration number");
+        String sql = parseByOption.migrationCount();
+        log.info("Count objectInfo migration SQL : " + sql);
+        Map<String,Integer> map = new HashMap<>();
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, start_time, end_time);
         while (sqlRowSet.next()) {
-            count = sqlRowSet.getInt("num");
+            int count = sqlRowSet.getInt("num");
+            map.put(month,count);
         }
-        log.info("Count objectType number is: " + count);
-        return count;
+        log.info("Count objectInfo migration is: " + map.get(month));
+        return map;
     }
 }

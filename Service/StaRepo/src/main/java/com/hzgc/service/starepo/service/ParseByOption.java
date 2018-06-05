@@ -22,8 +22,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ParseByOption {
 
     public String addObjectType() {
-        return "upsert into " + ObjectTypeTable.TABLE_NAME
-                + "( " + ObjectTypeTable.ROWKEY + ", "
+        return "upsert into " + ObjectTypeTable.TABLE_NAME + "( "
+                + ObjectTypeTable.ROWKEY + ", "
                 + ObjectTypeTable.TYPE_NAME + ", "
                 + ObjectTypeTable.TYPE_CREATOR + ", "
                 + ObjectTypeTable.TYPE_REMARK + ", "
@@ -40,8 +40,8 @@ public class ParseByOption {
     }
 
     public String updateObjectType() {
-        return "upsert into " + ObjectTypeTable.TABLE_NAME
-                + "( " + ObjectTypeTable.ROWKEY + ", "
+        return "upsert into " + ObjectTypeTable.TABLE_NAME + "( "
+                + ObjectTypeTable.ROWKEY + ", "
                 + ObjectTypeTable.TYPE_NAME + ", "
                 + ObjectTypeTable.TYPE_CREATOR + ", "
                 + ObjectTypeTable.TYPE_REMARK + ", "
@@ -55,7 +55,8 @@ public class ParseByOption {
                 + ObjectTypeTable.TYPE_CREATOR + ", "
                 + ObjectTypeTable.TYPE_REMARK + ", "
                 + ObjectTypeTable.TYPE_ADD_TIME
-                + " from " + ObjectTypeTable.TABLE_NAME + " where " + ObjectTypeTable.ROWKEY + " > ?" + " LIMIT ?";
+                + " from " + ObjectTypeTable.TABLE_NAME
+                + " where " + ObjectTypeTable.ROWKEY + " > ?" + " LIMIT ?";
     }
 
     public SqlAndArgs getSqlFromGetObjectInfoParm(GetObjectInfoParam param) {
@@ -469,7 +470,8 @@ public class ParseByOption {
 
     public String getPhotoByObjectId() {
         return "select " + ObjectInfoTable.PHOTO
-                + " from " + ObjectInfoTable.TABLE_NAME + " where " + ObjectInfoTable.ROWKEY + " = ?";
+                + " from " + ObjectInfoTable.TABLE_NAME
+                + " where " + ObjectInfoTable.ROWKEY + " = ?";
     }
 
     public String getTypeNameMapping(List<String> objectTypeKeys) {
@@ -521,11 +523,11 @@ public class ParseByOption {
     }
 
     public String getOBjectTypeByObjectId(String objectId) {
-        return "select " + ObjectTypeTable.ROWKEY +
-                ", " + ObjectTypeTable.TYPE_CREATOR +
-                ", " + ObjectTypeTable.TYPE_REMARK +
-                " from " + ObjectTypeTable.TABLE_NAME +
-                " where " + ObjectTypeTable.ROWKEY + " = '" + objectId + "'";
+        return "select " + ObjectTypeTable.ROWKEY + ", "
+                + ObjectTypeTable.TYPE_CREATOR + ", "
+                + ObjectTypeTable.TYPE_REMARK + " from "
+                + ObjectTypeTable.TABLE_NAME + " where "
+                + ObjectTypeTable.ROWKEY + " = '" + objectId + "'";
     }
 
     public String getPictureData() {
@@ -535,7 +537,8 @@ public class ParseByOption {
     }
 
     public String countStatus() {
-        return "select count(*) as num from " + ObjectInfoTable.TABLE_NAME + " where "
+        return "select count(*) as num from "
+                + ObjectInfoTable.TABLE_NAME + " where "
                 + ObjectInfoTable.STATUS + " = 0";
     }
 
@@ -544,4 +547,17 @@ public class ParseByOption {
                 + ") as num from " + ObjectTypeTable.TABLE_NAME;
     }
 
+    public String updateObjectInfo_status(String objectId, int status) {
+        return "upsert into " + ObjectInfoTable.TABLE_NAME + "( "
+                + ObjectInfoTable.ROWKEY + ", " + ObjectInfoTable.STATUS
+                + ") values ('" +objectId + "', " + status + ")";
+    }
+
+    public String migrationCount() {
+        return "select count(*) as num from "
+                + ObjectInfoTable.TABLE_NAME + " where "
+                + ObjectInfoTable.STATUS + " = 1 and "
+                + ObjectInfoTable.UPDATETIME + " > ? AND "
+                + ObjectInfoTable.UPDATETIME + " < ?";
+    }
 }

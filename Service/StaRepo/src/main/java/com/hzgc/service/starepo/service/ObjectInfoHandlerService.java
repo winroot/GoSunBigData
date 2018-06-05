@@ -2,18 +2,16 @@ package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.table.seachres.SearchResultTable;
 import com.hzgc.common.table.starepo.ObjectInfoTable;
-import com.hzgc.common.table.starepo.ObjectTypeTable;
 import com.hzgc.common.util.empty.IsEmpty;
-import com.hzgc.common.util.file.FileUtil;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
 import com.hzgc.jni.PictureData;
-import com.hzgc.service.starepo.bean.*;
-import com.hzgc.service.starepo.bean.export.PersonObjectGroupByPkey;
+import com.hzgc.service.starepo.bean.StaticSortParam;
 import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
 import com.hzgc.service.starepo.bean.export.PersonObject;
+import com.hzgc.service.starepo.bean.export.PersonObjectGroupByPkey;
 import com.hzgc.service.starepo.bean.export.PersonSingleResult;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
@@ -29,11 +27,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
-
 import java.io.File;
 import java.io.Serializable;
-import java.sql.Array;
-import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -147,6 +144,18 @@ public class ObjectInfoHandlerService {
     }
 
     /**
+     * 更新人员信息状态值
+     *
+     * @param objectId 对象ID
+     * @param status   状态值
+     * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
+     */
+    public int updateObjectInfo_status(String objectId, int status) {
+        //数据库更新操作
+        return phoenixDao.updateObjectInfo_status(objectId, status);
+    }
+
+    /**
      * 可以匹配精确查找，以图搜索人员信息，模糊查找   （外）（李第亮）
      *
      * @param param 搜索参数的封装
@@ -185,6 +194,7 @@ public class ObjectInfoHandlerService {
             objectInfoHandlerTool.getPersonSingleResult(personSingleResult, sqlRowSet, false);
             singleResults.add(personSingleResult);
             objectSearchResult.setSingleSearchResults(singleResults);
+            objectSearchResult.setSearchId(UuidUtil.getUuid());
         }
         //返回分页结果
         objectInfoHandlerTool.formatTheObjectSearchResult(objectSearchResult, param.getStart(), param.getLimit());
@@ -370,9 +380,13 @@ public class ObjectInfoHandlerService {
      */
     public String exportPeoples(SearchRecordParam opts) {
         //查询搜索记录
-        PersonSingleResult result = getSearchResult(opts);
+        String searchId = opts.getTotalSearchId();
+        byte[] bytes = hbaseDao.get(searchId, SearchResultTable.STAREPO_COLUMN_SEARCHMESSAGE);
+        ObjectSearchResult objectSearchResult = JSONUtil.toObject(new String(bytes), ObjectSearchResult.class);
+        PersonSingleResult result = objectSearchResult.getSingleSearchResults().get(0);
+
         //查询所有的类型名
-        List<PersonObject> perList = null;
+        List<PersonObject> perList;
         if (result != null) {
             perList = result.getObjectInfoBeans();
             List<String> typeKey = perList.stream().map(PersonObject::getObjectTypeKey).collect(Collectors.toList());
@@ -384,15 +398,14 @@ public class ObjectInfoHandlerService {
             String exportFile = ConfigConstants.EXPORT_FILE_NAME;
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put(ConfigConstants.PEOPLE_DATA_KEY, objectData);
-            byte[] buff =  DocHandlerUtil.createDoc(ConfigConstants.IMPORTANT_PEOPLE_TEMPLATE, dataMap,
-                    File.separator + exportFile);
+            byte[] buff = DocHandlerUtil.createDoc(dataMap, File.separator + exportFile);
             //把文件插入HBase表中
             String rowkey = "file_" + System.currentTimeMillis() + UuidUtil.getUuid().substring(0, 8);
             hbaseDao.insert_word(rowkey, buff);
             //返回文件Id
             return rowkey;
         }
-        log.info("获取文件失败！");
+        log.info("Get file faild !");
         return null;
     }
 
@@ -437,10 +450,10 @@ public class ObjectInfoHandlerService {
     /**
      * 填充结果数据
      *
-     * @param objectData
-     * @param result
-     * @param start
-     * @param limit
+     * @param objectData 需要填充的数据集
+     * @param result     查询返回结果
+     * @param start      填充开始位置
+     * @param limit      填充数据量
      */
     private void fillPeopleDoc(List<Map<String, Object>> objectData, PersonSingleResult result,
                                int start, int limit, Map<String, String> typeMap) {
@@ -452,7 +465,6 @@ public class ObjectInfoHandlerService {
                 // 序号
                 map.put("index", "序号");
                 map.put("indexData", i);
-
                 // 布控时间
                 map.put("time", "时间");
                 if (null != personObject.getCreateTime()) {
@@ -460,7 +472,6 @@ public class ObjectInfoHandlerService {
                 } else {
                     map.put("timeData", "");
                 }
-
                 // 对象类型
                 map.put(ConfigConstants.TYPE_KEY, ConfigConstants.TYPE_KEY_DATA);
                 if (IsEmpty.strIsRight(typeMap.get(personObject.getObjectTypeKey()))) {
@@ -468,28 +479,23 @@ public class ObjectInfoHandlerService {
                 } else {
                     map.put(ConfigConstants.TYPE_DATA_KEY, ConfigConstants.NO_DATA);
                 }
-
                 // 对象名称
                 map.put(ConfigConstants.NAME_KEY, ConfigConstants.NAME_KEY_DATA);
-                if (IsEmpty.strIsRight(personObject.getObjectTypeName())) {
-                    map.put(ConfigConstants.NAME_DATA_KEY, personObject.getObjectTypeName());
+                if (IsEmpty.strIsRight(personObject.getName())) {
+                    map.put(ConfigConstants.NAME_DATA_KEY, personObject.getName());
                 } else {
                     map.put(ConfigConstants.NAME_DATA_KEY, ConfigConstants.NO_DATA);
                 }
-
                 // 性别
                 map.put(ConfigConstants.SEX_KEY, ConfigConstants.SEX_KEY_DATA);
-
                 if (IsEmpty.strIsRight(String.valueOf(personObject.getSex()))) {
                     map.put(ConfigConstants.SEX_DATA_KEY, personObject.getSex() == 1 ? "男" : (personObject.getSex() == 2 ? "女" : "未知"));
                 } else {
                     map.put(ConfigConstants.SEX_DATA_KEY, ConfigConstants.NO_DATA);
                 }
-
                 // 相似度
                 map.put(ConfigConstants.SIMILARITY_KEY, ConfigConstants.SIMILARITY_KEY_DATA);
                 map.put(ConfigConstants.SIMILARITY_DATA_KEY, personObject.getSimilarity());
-
                 // 布控人
                 map.put(ConfigConstants.CHARGE_KEY, ConfigConstants.CHARGE_KEY_DATA);
                 if (IsEmpty.strIsRight(personObject.getCreator())) {
@@ -497,7 +503,6 @@ public class ObjectInfoHandlerService {
                 } else {
                     map.put(ConfigConstants.CHARGE_DATA_KEY, ConfigConstants.NO_DATA);
                 }
-
                 // 联系方式
                 map.put(ConfigConstants.TELEPHNOE_KEY, ConfigConstants.TELEPHNOE_KEY_DATA);
                 if (IsEmpty.strIsRight(personObject.getCreatorConractWay())) {
@@ -505,7 +510,6 @@ public class ObjectInfoHandlerService {
                 } else {
                     map.put(ConfigConstants.TELEPHONE_DATA_KEY, ConfigConstants.NO_DATA);
                 }
-
                 // 身份证
                 map.put(ConfigConstants.ID_KEY, ConfigConstants.ID_KEY_DATA);
                 if (IsEmpty.strIsRight(personObject.getIdcard())) {
@@ -513,7 +517,6 @@ public class ObjectInfoHandlerService {
                 } else {
                     map.put(ConfigConstants.IDDATA_KEY, ConfigConstants.NO_DATA);
                 }
-
                 // 布控原因
                 map.put(ConfigConstants.REASON_KEY, ConfigConstants.REASON_KEY_DATA);
                 if (IsEmpty.strIsRight(personObject.getReason())) {
@@ -521,8 +524,6 @@ public class ObjectInfoHandlerService {
                 } else {
                     map.put(ConfigConstants.REASON_DATA_KEY, ConfigConstants.NO_DATA);
                 }
-
-
                 byte[] photo = phoenixDao.getPhotoByObjectId(personObject.getObjectID());
                 // 填充图片内容
                 if (photo != null && photo.length > 0) {
@@ -530,12 +531,9 @@ public class ObjectInfoHandlerService {
                 } else {
                     map.put(ConfigConstants.PICTURE_KEY, ConfigConstants.NO_DATA);
                 }
-
                 // 图片序号
                 map.put(ConfigConstants.PICTURE_INDEX_KEY, i);
-
                 objectData.add(map);
-
             }
         }
     }
@@ -576,6 +574,21 @@ public class ObjectInfoHandlerService {
      */
     public int permanentPopulationCount() {
         return phoenixDao.countStatus();
+    }
+
+    public Map migrationCount(String start_time, String end_time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        Timestamp startTime = null;
+        Timestamp endTime = null;
+        try {
+            Date start = sdf.parse(start_time);
+            Date end = sdf.parse(end_time);
+            startTime = new Timestamp(start.getTime());
+            endTime = new Timestamp(end.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return phoenixDao.migrationCount(start_time, startTime, endTime);
     }
 }
 

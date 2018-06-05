@@ -110,16 +110,4 @@ public class ObjectTypeController {
         Map map = objectTypeService.searchObjectTypeNames(objectTypeKeys);
         return ResponseResult.init(map);
     }
-
-    /**
-     * 统计对象类型的数量
-     *
-     * @return int 对象类型的数量
-     */
-    @ApiOperation(value = "统计常住人口", response = ResponseResult.class)
-    @RequestMapping(value = BigDataPath.TYPE_COUNT, method = RequestMethod.GET)
-    public ResponseResult<Integer>objectTypeCount() {
-        int count = objectTypeService.objectTypeCount();
-        return ResponseResult.init(count);
-    }
 }
