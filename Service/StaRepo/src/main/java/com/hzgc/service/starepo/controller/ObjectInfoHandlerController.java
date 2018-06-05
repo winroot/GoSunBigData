@@ -168,17 +168,17 @@ public class ObjectInfoHandlerController {
     /**
      * 获取特征值
      *
-     * @param rowkey 对象ID
+     * @param id 对象ID
      * @return PictureData
      */
     @ApiOperation(value = "获取特征值<PictureData>", response = PictureData.class)
     @ApiImplicitParam(name = "rowkey", value = "对象ID", dataType = "String", paramType = "query")
     @RequestMapping(value = BigDataPath.OBJECTINFO_GET_FEATURE, method = RequestMethod.GET)
-    public ResponseResult<PictureData> getFeature(String rowkey) {
-        if (!IsEmpty.strIsRight(rowkey)) {
+    public ResponseResult<PictureData> getFeature(String id) {
+        if (!IsEmpty.strIsRight(id)) {
             return null;
         }
-        PictureData result = objectInfoHandlerService.getFeature(rowkey);
+        PictureData result = objectInfoHandlerService.getFeature(id);
         return ResponseResult.init(result);
     }
 
@@ -205,11 +205,10 @@ public class ObjectInfoHandlerController {
      * @return 导出Word文本
      */
     @ApiOperation(value = "生成重点人员Word", response = String.class)
-    @ApiResponses(
-            {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.STAREPO_CREATE_WORD, method = RequestMethod.POST)
     public ResponseResult<String> createPeoplesWord(@RequestBody @ApiParam(value = "历史查询参数") SearchRecordParam param) {
-        if (param == null || param.getSize() == 0 || param.getStart() == 0 || param.getSubQueryParamList() == null) {
+        if (param == null || param.getSize() == 0 || param.getStart() == 0
+                || StringUtils.isBlank(param.getTotalSearchId()) || param.getSubQueryParamList() == null) {
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
         String rowkey_file = objectInfoHandlerService.exportPeoples(param);
