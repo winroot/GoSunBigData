@@ -25,8 +25,6 @@ DISPATCH_JAR=${LIB_DIR}/${DISPATCH_JAR_NAME}                        ##获取jar�
 EUREKA_IP=172.18.18.201     ##注册中心的ip地址
 EUREKA_PORT=9000            ##服务注册中心端口
 
-
-
 #------------------------------------------------------------------------------#
 #                                定义函数                                      #
 #------------------------------------------------------------------------------#
@@ -46,7 +44,7 @@ function start_springCloud()
       nohup java -jar ${DISPATCH_JAR} --spring.profiles.active=pro \
       --eureka.ip=${EUREKA_IP} \
       --eureka.port=${EUREKA_PORT} \
-      --es.host=${ES_HOST}  2>&1 &
+      --spring.cloud.config.enabled=false  2>&1 &
    fi
 }
 #####################################################################
