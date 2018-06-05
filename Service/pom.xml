@@ -14,7 +14,6 @@
     <modules>
         <module>Util</module>
         <module>Clustering</module>
-        <module>Device</module>
         <module>Alarm</module>
         <module>DynRepo</module>
         <module>StaRepo</module>
