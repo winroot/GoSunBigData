@@ -50,7 +50,6 @@ public class WarnRuleService {
         for (String ruleId : map.keySet()) {
             if (ruleId.equals(id)) {
                 Dispatch dispatch = map.get(ruleId);
-                log.info("--------------------------"+JSONUtil.toJson(dispatch));
                 List<Warn> warnList = dispatch.getRule().getWarns();
                 String[] strings = new String[warnList.size()];
                 for (int i = 0; i < warnList.size(); i++) {
