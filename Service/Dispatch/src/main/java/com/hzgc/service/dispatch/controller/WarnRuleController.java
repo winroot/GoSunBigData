@@ -32,8 +32,8 @@ public class WarnRuleController {
     @Autowired
     private DeviceQueryService deviceQueryService;
 
-    @ApiOperation(value = "根据规则id获取规则详情" , response = ResponseResult.class)
-    @ApiImplicitParam(name = "id" , value = "规则id" , required = true , dataType = "string" , paramType = "query")
+    @ApiOperation(value = "根据规则id获取规则详情", response = ResponseResult.class)
+    @ApiImplicitParam(name = "id", value = "规则id", required = true, dataType = "string", paramType = "query")
     @RequestMapping(value = BigDataPath.DISPATCH_SEARCH_BYID , method = RequestMethod.GET)
     public ResponseResult<Dispatch> getRuleInfo(String id) {
         if (null != id){
@@ -52,7 +52,7 @@ public class WarnRuleController {
     }
 
     @ApiOperation(value = "添加规则" , response = ResponseResult.class)
-    @RequestMapping(value = BigDataPath.DISPATCH_ADD , method = RequestMethod.POST , consumes = "application/json" , produces = "application/json")
+    @RequestMapping(value = BigDataPath.DISPATCH_ADD, method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public ResponseResult<String> addRule(@RequestBody @ApiParam(value="规则配置参数", required=true) Dispatch dispatch) throws IOException {
         if (null != dispatch) {
             List<String> ipcIDs = new ArrayList <>();
@@ -78,8 +78,8 @@ public class WarnRuleController {
         return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
     }
 
-    @ApiOperation(value = "修改规则" , response = ResponseResult.class)
-    @RequestMapping(value = BigDataPath.DISPATCH_MODIFY , method = RequestMethod.PUT , consumes = "application/json" , produces = "application/json")
+    @ApiOperation(value = "修改规则", response = ResponseResult.class)
+    @RequestMapping(value = BigDataPath.DISPATCH_MODIFY, method = RequestMethod.PUT, consumes = "application/json", produces = "application/json")
     public ResponseResult<Boolean> updateRule(@RequestBody Dispatch dispatch) throws IOException {
         if (null != dispatch) {
             List<String> ipcIDs = new ArrayList <>();
@@ -103,8 +103,8 @@ public class WarnRuleController {
         return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
     }
 
-    @ApiOperation(value = "删除规则" , response = ResponseResult.class)
-    @RequestMapping(value = BigDataPath.DISPATCH_DELETE , method = RequestMethod.DELETE , consumes = "application/json" , produces = "application/json")
+    @ApiOperation(value = "删除规则", response = ResponseResult.class)
+    @RequestMapping(value = BigDataPath.DISPATCH_DELETE, method = RequestMethod.DELETE, consumes = "application/json", produces = "application/json")
     public ResponseResult<Boolean> delRules(@RequestBody IdsType<String> idsType) throws IOException {
         if (null != idsType) {
             log.info("Delete rules param is " + idsType.toString());
