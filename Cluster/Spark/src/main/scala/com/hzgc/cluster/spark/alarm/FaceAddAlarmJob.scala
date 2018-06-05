@@ -4,12 +4,12 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import com.google.gson.Gson
-import com.hzgc.cluster.spark.device.DeviceUtilImpl
+import com.hzgc.cluster.spark.dispatch.DeviceUtilImpl
 import com.hzgc.cluster.spark.message.AddAlarmMessage
 import com.hzgc.cluster.spark.rocmq.RocketMQProducer
 import com.hzgc.cluster.spark.starepo.StaticRepoUtil
 import com.hzgc.cluster.spark.util.{FaceObjectUtil, PropertiesUtil}
-import com.hzgc.common.table.device.DeviceTable
+import com.hzgc.common.table.dispatch.DispatchTable
 import com.hzgc.jni.FaceFunction
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf
@@ -53,16 +53,14 @@ object FaceAddAlarmJob {
     val jsonResult = kafkaDynamicPhoto.map(data => (data._1, FaceObjectUtil.jsonToObject(data._2)))
       .filter(obj => obj._2.getAttribute.getFeature != null && obj._2.getAttribute.getFeature.length == 512)
       .map(obj => {
-      val totalList = JavaConverters.
-        asScalaBufferConverter(StaticRepoUtil.getInstance().getTotalList).asScala
-      val faceObj = obj._2
-      val ipcID = faceObj.getIpcId
-      val platID = deviceUtilI.getplatfromID(ipcID)
-      val alarmRule = deviceUtilI.isWarnTypeBinding(ipcID)
-      val filterResult = new ArrayBuffer[Json]()
-      if (platID != null && platID.length > 0) {
+        val totalList = JavaConverters.
+          asScalaBufferConverter(StaticRepoUtil.getInstance().getTotalList).asScala
+        val faceObj = obj._2
+        val ipcID = faceObj.getIpcId
+        val alarmRule = deviceUtilI.isWarnTypeBinding(ipcID)
+        val filterResult = new ArrayBuffer[Json]()
         if (alarmRule != null && !alarmRule.isEmpty) {
-          val addWarnRule = alarmRule.get(DeviceTable.ADDED)
+          val addWarnRule = alarmRule.get(DispatchTable.ADDED)
           if (addWarnRule != null && !addWarnRule.isEmpty) {
             totalList.foreach(record => {
               if (addWarnRule.containsKey(record(1))) {
@@ -73,7 +71,8 @@ object FaceAddAlarmJob {
               }
             })
             val finalResult = filterResult.sortWith(_.sim > _.sim).take(3)
-            (obj._2, ipcID, platID, finalResult)
+            //由于平台那边取消了平台ID的概念,以后默认为0001
+            (obj._2, ipcID, "0001", finalResult)
           } else {
             println("Device [" + ipcID + "] does not bind added alarm rule,current time [" + df.format(new Date()) + "]")
             (obj._2, ipcID, null, filterResult)
@@ -82,11 +81,7 @@ object FaceAddAlarmJob {
           println("Device [" + ipcID + "] does not bind alarm rule,current time [" + df.format(new Date()) + "]")
           (obj._2, ipcID, null, filterResult)
         }
-      } else {
-        println("Device [" + ipcID + "] does not bind platform ID,current time [" + df.format(new Date()) + "]")
-        (obj._2, ipcID, null, filterResult)
-      }
-    }).filter(jsonResultFilter => jsonResultFilter._3 != null)
+      }).filter(jsonResultFilter => jsonResultFilter._3 != null)
 
     jsonResult.foreachRDD(resultRDD => {
       resultRDD.foreachPartition(parRDD => {
@@ -99,14 +94,14 @@ object FaceAddAlarmJob {
             val addAlarmMessage = new AddAlarmMessage()
             val surl = result._1.getRelativePath
             addAlarmMessage.setAlarmTime(dateStr)
-            addAlarmMessage.setAlarmType(DeviceTable.ADDED.toString)
+            addAlarmMessage.setAlarmType(DispatchTable.ADDED.toString)
 
             addAlarmMessage.setSmallPictureURL(surl)
             addAlarmMessage.setBigPictureURL(result._1.getBurl)
             addAlarmMessage.setDynamicDeviceID(result._2)
             addAlarmMessage.setHostName(result._1.getHostname)
             rocketMQProducer.send(result._3,
-              "alarm_" + DeviceTable.ADDED.toString,
+              "alarm_" + DispatchTable.ADDED.toString,
               surl,
               gson.toJson(addAlarmMessage).getBytes(),
               null)

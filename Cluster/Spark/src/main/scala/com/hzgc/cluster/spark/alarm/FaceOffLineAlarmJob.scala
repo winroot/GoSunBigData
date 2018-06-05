@@ -4,12 +4,12 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import com.google.gson.Gson
-import com.hzgc.cluster.spark.device.DeviceUtilImpl
+import com.hzgc.cluster.spark.dispatch.DeviceUtilImpl
 import com.hzgc.cluster.spark.message.OffLineAlarmMessage
 import com.hzgc.cluster.spark.rocmq.RocketMQProducer
 import com.hzgc.cluster.spark.starepo.StaticRepoUtil
 import com.hzgc.cluster.spark.util.PropertiesUtil
-import com.hzgc.common.table.device.DeviceTable
+import com.hzgc.common.table.dispatch.DispatchTable
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.JavaConverters
@@ -59,14 +59,15 @@ object FaceOffLineAlarmJob {
           val rocketMQProducer = RocketMQProducer.getInstance(nameServer, mqTopic, grouId)
           val offLineAlarmMessage = new OffLineAlarmMessage()
           val gson = new Gson()
-          offLineAlarmMessage.setAlarmType(DeviceTable.OFFLINE.toString)
+          offLineAlarmMessage.setAlarmType(DispatchTable.OFFLINE.toString)
           offLineAlarmMessage.setStaticID(filterResultElem._1)
           offLineAlarmMessage.setUpdateTime(filterResultElem._3)
           offLineAlarmMessage.setAlarmTime(dateStr)
           val alarmStr = gson.toJson(offLineAlarmMessage)
           //离线告警信息推送的时候，平台id为对象类型字符串的前4个字节。
-          val platID = filterResultElem._2.substring(0, 4)
-          rocketMQProducer.send(platID, "alarm_" + DeviceTable.OFFLINE.toString, filterResultElem._1 + dateStr, alarmStr.getBytes(), null);
+          //          val platID = filterResultElem._2.substring(0, 4)
+          //由于平台那边取消了平台ID的概念,以后默认为0001
+          rocketMQProducer.send("0001", "alarm_" + DispatchTable.OFFLINE.toString, filterResultElem._1 + dateStr, alarmStr.getBytes(), null);
         })
       } else {
         println("No data was received from the static repository,the task is not running！")

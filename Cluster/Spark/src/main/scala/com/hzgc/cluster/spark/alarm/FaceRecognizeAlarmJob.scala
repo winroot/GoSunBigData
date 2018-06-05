@@ -5,12 +5,12 @@ import java.util
 import java.util.Date
 
 import com.google.gson.Gson
-import com.hzgc.cluster.spark.device.DeviceUtilImpl
+import com.hzgc.cluster.spark.dispatch.DeviceUtilImpl
 import com.hzgc.cluster.spark.message.{Item, RecognizeAlarmMessage}
 import com.hzgc.cluster.spark.rocmq.RocketMQProducer
 import com.hzgc.cluster.spark.starepo.StaticRepoUtil
 import com.hzgc.cluster.spark.util.{FaceObjectUtil, PropertiesUtil}
-import com.hzgc.common.table.device.DeviceTable
+import com.hzgc.common.table.dispatch.DispatchTable
 import com.hzgc.jni.FaceFunction
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf
@@ -60,34 +60,29 @@ object FaceRecognizeAlarmJob {
           asScalaBufferConverter(StaticRepoUtil.getInstance().getTotalList).asScala
         val faceObj = message._2
         val ipcID = faceObj.getIpcId
-        val platID = deviceUtilI.getplatfromID(ipcID)
         val alarmRule = deviceUtilI.isWarnTypeBinding(ipcID)
         val filterResult = new ArrayBuffer[Json]()
-        if (platID != null && platID.length > 0) {
-          if (alarmRule != null && !alarmRule.isEmpty) {
-            val recognizeWarnRule = alarmRule.get(DeviceTable.IDENTIFY)
-            if (recognizeWarnRule != null && !recognizeWarnRule.isEmpty) {
-              totalList.foreach(record => {
-                if (recognizeWarnRule.containsKey(record(1))) {
-                  val threshold = FaceFunction.featureCompare(record(2).asInstanceOf[Array[Float]], faceObj.getAttribute.getFeature)
-                  if (threshold > recognizeWarnRule.get(record(1))) {
-                    filterResult += Json(record(0).asInstanceOf[String], record(1).asInstanceOf[String], threshold)
-                  }
+        if (alarmRule != null && !alarmRule.isEmpty) {
+          val recognizeWarnRule = alarmRule.get(DispatchTable.IDENTIFY)
+          if (recognizeWarnRule != null && !recognizeWarnRule.isEmpty) {
+            totalList.foreach(record => {
+              if (recognizeWarnRule.containsKey(record(1))) {
+                val threshold = FaceFunction.featureCompare(record(2).asInstanceOf[Array[Float]], faceObj.getAttribute.getFeature)
+                if (threshold > recognizeWarnRule.get(record(1))) {
+                  filterResult += Json(record(0).asInstanceOf[String], record(1).asInstanceOf[String], threshold)
                 }
-              })
-            } else {
-              println("Device [" + ipcID + "] does not bind recognize rule,current time [" + df.format(new Date()) + "]")
-            }
+              }
+            })
           } else {
-            println("Device [" + ipcID + "] does not bind alarm rules,current time [" + df.format(new Date()) + "]")
+            println("Device [" + ipcID + "] does not bind recognize rule,current time [" + df.format(new Date()) + "]")
           }
         } else {
-          println("Device [" + ipcID + "] does not bind platform ID,current time [" + df.format(new Date()) + "]")
+          println("Device [" + ipcID + "] does not bind alarm rules,current time [" + df.format(new Date()) + "]")
         }
         val finalResult = filterResult.sortWith(_.sim > _.sim).take(itemNum)
         val updateTimeList = new util.ArrayList[String]()
-        if (alarmRule != null && platID != null) {
-          val offLineWarnRule = alarmRule.get(DeviceTable.OFFLINE)
+        if (alarmRule != null) {
+          val offLineWarnRule = alarmRule.get(DispatchTable.OFFLINE)
           if (offLineWarnRule != null && !offLineWarnRule.isEmpty) {
             finalResult.foreach(record => {
               if (offLineWarnRule.containsKey(record.staticObjectType)) {
@@ -97,7 +92,8 @@ object FaceRecognizeAlarmJob {
           }
         }
         StaticRepoUtil.getInstance().updateObjectInfoTime(updateTimeList)
-        (message._2, ipcID, platID, finalResult)
+        //由于平台那边取消了平台ID的概念,以后默认为0001
+        (message._2, ipcID, "0001", finalResult)
       }).filter(record => record._4.nonEmpty)
 
     jsonResult.foreachRDD(resultRDD => {
@@ -109,7 +105,7 @@ object FaceRecognizeAlarmJob {
           val items = new ArrayBuffer[Item]()
           val dateStr = df.format(new Date())
           val surl = result._1.getRelativePath
-          recognizeAlarmMessage.setAlarmType(DeviceTable.IDENTIFY.toString)
+          recognizeAlarmMessage.setAlarmType(DispatchTable.IDENTIFY.toString)
           recognizeAlarmMessage.setDynamicDeviceID(result._2)
           recognizeAlarmMessage.setSmallPictureURL(surl)
           recognizeAlarmMessage.setAlarmTime(dateStr)
@@ -124,7 +120,7 @@ object FaceRecognizeAlarmJob {
           })
           recognizeAlarmMessage.setItems(items.toArray)
           rocketMQProducer.send(result._3,
-            "alarm_" + DeviceTable.IDENTIFY.toString,
+            "alarm_" + DispatchTable.IDENTIFY.toString,
             surl,
             gson.toJson(recognizeAlarmMessage).getBytes(),
             null)

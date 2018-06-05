@@ -1,8 +1,8 @@
-package com.hzgc.common.table.device;
+package com.hzgc.common.table.dispatch;
 
 import java.io.Serializable;
 
-public class DeviceTable implements Serializable {
+public class DispatchTable implements Serializable {
 
     public final static String TABLE_DEVICE = "device";
     public final static byte[] CF_DEVICE = "device".getBytes();

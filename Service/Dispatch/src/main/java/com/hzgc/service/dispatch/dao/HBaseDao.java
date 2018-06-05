@@ -2,7 +2,7 @@ package com.hzgc.service.dispatch.dao;
 
 import com.alibaba.fastjson.JSON;
 import com.hzgc.common.hbase.HBaseHelper;
-import com.hzgc.common.table.device.DeviceTable;
+import com.hzgc.common.table.dispatch.DispatchTable;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.service.dispatch.bean.*;
@@ -37,7 +37,7 @@ public class HBaseDao {
 
     public Map <String, Boolean> configRules(List <String> ipcIDs, List <Warn> rules) {
         //从Hbase读device表
-        Table deviceTable = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
+        Table deviceTable = HBaseHelper.getTable(DispatchTable.TABLE_DEVICE);
         //初始化设备布控预案对象Map<告警类型，Map<对象类型，阈值>>
         Map <Integer, Map <String, Integer>> commonRule = new HashMap <>();
         //初始化离线告警对象Map<对象类型，Map<设备ID，离线天数>>
@@ -52,7 +52,7 @@ public class HBaseDao {
         for (String ipcID : ipcIDs) {
             //“以传入的设备ID为行键，device为列族，告警类型w为列，commonRuleBytes为值”，的Put对象添加到putList列表
             Put put = new Put(Bytes.toBytes(ipcID));
-            put.addColumn(DeviceTable.CF_DEVICE, DeviceTable.WARN, commonRuleBytes);
+            put.addColumn(DispatchTable.CF_DEVICE, DispatchTable.WARN, commonRuleBytes);
             putList.add(put);
             //对于每一条规则
             for (Warn rule : rules) {
@@ -77,7 +77,7 @@ public class HBaseDao {
 
     public Map <String, Boolean> deleteRules(List <String> ipcIDs) {
         //获取device表
-        Table deviceTable = HBaseHelper.getTable(DeviceTable.TABLE_DEVICE);
+        Table deviceTable = HBaseHelper.getTable(DispatchTable.TABLE_DEVICE);
         Map <String, Boolean> reply = new HashMap <>();
         List <Delete> deviceDelList = new ArrayList <>();
         String id = "";
@@ -89,19 +89,19 @@ public class HBaseDao {
                     id = ipc;
                     Delete deviceDelete = new Delete(Bytes.toBytes(ipc));
                     //列族：device，列：w
-                    deviceDelete.addColumns(DeviceTable.CF_DEVICE, DeviceTable.WARN);
+                    deviceDelete.addColumns(DispatchTable.CF_DEVICE, DispatchTable.WARN);
                     deviceDelList.add(deviceDelete);
                     //reply：（设备ID，删除成功）
                     reply.put(ipc, true);
                     log.info("Release the rule binding, the device ID is:" + ipc);
                 }
                 //获取离线告警数据的行键
-                Get offlineGet = new Get(DeviceTable.OFFLINERK);
+                Get offlineGet = new Get(DispatchTable.OFFLINERK);
                 Result offlineResult = deviceTable.get(offlineGet);
                 //若离线告警数据非空
                 if (!offlineResult.isEmpty()) {
                     //将离线告警数据反序列化
-                    byte[] bytes = offlineResult.getValue(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL);
+                    byte[] bytes = offlineResult.getValue(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL);
                     String offlineStr = null;
                     if (bytes != null) {
                         offlineStr = Bytes.toString(bytes);
@@ -120,9 +120,9 @@ public class HBaseDao {
                         }
                     }
                     //把删除后的离线告警数据存入device表中
-                    Put offlinePut = new Put(DeviceTable.OFFLINERK);
+                    Put offlinePut = new Put(DispatchTable.OFFLINERK);
                     String offline = JSONUtil.toJson(offlineMap);
-                    offlinePut.addColumn(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL, Bytes.toBytes(offline));
+                    offlinePut.addColumn(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL, Bytes.toBytes(offline));
                     deviceTable.put(offlinePut);
                     log.info("Delete rule is " + offline);
                 }
@@ -147,13 +147,13 @@ public class HBaseDao {
     private void configOfflineWarn(Map <String, Map <String, Integer>> offlineMap, Table deviceTable) {
         try {
             String offlineString;
-            Get offlinGet = new Get(DeviceTable.OFFLINERK);
+            Get offlinGet = new Get(DispatchTable.OFFLINERK);
             //获取device表中offlineWarnRowKey行键对应的数据
             Result offlineResult = deviceTable.get(offlinGet);
             //若device表中offlineWarnRowKey行键对应的数据offlineResult非空（value中有值）
             if (!offlineResult.isEmpty()) {
                 //反序列化该值类型（转化为Object）
-                byte[] bytes = offlineResult.getValue(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL);
+                byte[] bytes = offlineResult.getValue(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL);
                 String tempMapStr = null;
                 if (bytes != null) {
                     tempMapStr = Bytes.toString(bytes);
@@ -176,15 +176,15 @@ public class HBaseDao {
                         tempMap.put(type, offlineMap.get(type));
                     }
                 }
-                Put offlinePut = new Put(DeviceTable.OFFLINERK);
+                Put offlinePut = new Put(DispatchTable.OFFLINERK);
                 offlineString = JSONUtil.toJson(offlineMap);
-                offlinePut.addColumn(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL, Bytes.toBytes(offlineString));
+                offlinePut.addColumn(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL, Bytes.toBytes(offlineString));
                 deviceTable.put(offlinePut);
             } else {
                 //若hbase的device表中offlineWarnRowKey行键对应的数据为空，直接把offlineMap的值加入到device表
-                Put offlinePut = new Put(DeviceTable.OFFLINERK);
+                Put offlinePut = new Put(DispatchTable.OFFLINERK);
                 offlineString = JSONUtil.toJson(offlineMap);
-                offlinePut.addColumn(DeviceTable.CF_DEVICE, DeviceTable.OFFLINECOL, Bytes.toBytes(offlineString));
+                offlinePut.addColumn(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL, Bytes.toBytes(offlineString));
                 deviceTable.put(offlinePut);
             }
             log.info("configRules are " + offlineString);
@@ -210,7 +210,7 @@ public class HBaseDao {
                  */
 
                 //IDENTIFY：识别告警；ADDED：新增告警。若传入的规则rules中的告警类型为这两者
-                if (Objects.equals(rule.getAlarmType(), DeviceTable.IDENTIFY) || Objects.equals(rule.getAlarmType(), DeviceTable.ADDED)) {
+                if (Objects.equals(rule.getAlarmType(), DispatchTable.IDENTIFY) || Objects.equals(rule.getAlarmType(), DispatchTable.ADDED)) {
                     //判断commonRule的键（告警类型）是否是传入的规则rule中的告警类型。
                     if (commonRule.containsKey(rule.getAlarmType())) {
                         //如果之前存在对比规则，覆盖之前的规则（相当于清除后写入）
@@ -225,7 +225,7 @@ public class HBaseDao {
                 }
 
                 //OFFLINE：离线告警。若传入的规则rules中的告警类型为离线告警
-                if (Objects.equals(rule.getAlarmType(), DeviceTable.OFFLINE)) {
+                if (Objects.equals(rule.getAlarmType(), DispatchTable.OFFLINE)) {
                     //如果之前存在对比规则，先清除之前的规则，再重新写入
                     if (commonRule.containsKey(rule.getAlarmType())) {
                         commonRule.get(rule.getAlarmType()).put(rule.getObjectType(), rule.getOfflineDayThreshold());
