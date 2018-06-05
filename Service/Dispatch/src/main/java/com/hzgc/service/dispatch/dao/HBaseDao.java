@@ -81,7 +81,7 @@ public class HBaseDao {
         List <Delete> deviceDelList = new ArrayList <>();
         String id = "";
         //若传入的设备ID不为空
-        if (ipcIDs != null) {
+        if (ipcIDs != null && ipcIDs.size()>0) {
             try {
                 //对于每一个设备ID，删除其在device表中对应的列族、列
                 for (String ipc : ipcIDs) {

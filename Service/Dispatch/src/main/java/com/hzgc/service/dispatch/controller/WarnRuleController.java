@@ -71,8 +71,10 @@ public class WarnRuleController
             Map dispatchMap = IpcIdsUtil.toDispatchMap(dispatch);
             ResponseResult<String> responseResult = warnRuleService.saveOriginData(dispatchMap);
             //调用大数据接口
-            warnRuleService.configRules(ipcIDs,warnList);
-
+            log.info("Big data param ipc ids is "+JSONUtil.toJson(ipcIDs)+" warn list is "+JSONUtil.toJson(warnList));
+            if (null != ipcIDs && ipcIDs.size()>0 && null != warnList && warnList.size()>0){
+                warnRuleService.configRules(ipcIDs,warnList);
+            }
             return responseResult;
         }
 
@@ -98,8 +100,10 @@ public class WarnRuleController
 
             ResponseResult<Boolean> responseResult = warnRuleService.updateRule(dispatch);
             //调用大数据接口
-            warnRuleService.configRules(ipcIDs,warnList);
-
+            log.info("Big data param ipc ids is "+JSONUtil.toJson(ipcIDs)+" warn list is "+JSONUtil.toJson(warnList));
+            if (null != ipcIDs && ipcIDs.size()>0 && null != warnList && warnList.size()>0){
+                warnRuleService.configRules(ipcIDs,warnList);
+            }
             return responseResult;
         }
         log.info("Update rule param is null");
@@ -121,6 +125,7 @@ public class WarnRuleController
                 ipcIDs.add(map.get(s).getSerial());
             }
             //调用大数据接口
+            log.info("Big data param ipc ids is "+JSONUtil.toJson(ipcIDs));
             warnRuleService.deleteRules(ipcIDs);
             return ResponseResult.init(true);
         }
