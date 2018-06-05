@@ -150,10 +150,6 @@ function distribute_service()
     echo "start-clustering.sh脚本配置es完成......"
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^ES_HOST=.*#ES_HOST=${espro}#g" ${DISPATCH_START_FILE}
-    echo "start-dispatch.sh脚本配置es完成......"
-
-    #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^ES_HOST=.*#ES_HOST=${espro}#g" ${DYNREPO_START_FILE}
     echo "start-dynrepo.sh脚本配置es完成......"
 
@@ -181,10 +177,6 @@ function distribute_service()
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${ADDRESS_START_FILE}
     echo "start-address.sh脚本配置zookeeper完成......"
-
-    #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${DISPATCH_START_FILE}
-    echo "start-dispatch.sh脚本配置zookeeper完成......"
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${DYNREPO_START_FILE}
