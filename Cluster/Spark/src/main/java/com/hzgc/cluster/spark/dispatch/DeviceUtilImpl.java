@@ -1,5 +1,6 @@
 package com.hzgc.cluster.spark.dispatch;
 
+import com.alibaba.fastjson.JSON;
 import com.hzgc.common.hbase.HBaseHelper;
 import com.hzgc.common.table.dispatch.DispatchTable;
 import com.hzgc.common.util.empty.IsEmpty;
@@ -25,7 +26,14 @@ public class DeviceUtilImpl implements Serializable {
                 if (result.containsColumn(DispatchTable.CF_DEVICE, DispatchTable.WARN)) {
                     byte[] map = result.getValue(DispatchTable.CF_DEVICE, DispatchTable.WARN);
                     if (map != null) {
-                        return (Map<Integer, Map<String, Integer>>) ObjectUtil.byteToObject(map);
+                        String jsonString = JSON.toJSONString(map);
+                        Map<Integer,Map<String,Integer>> warnMap = JSON.parseObject(jsonString,Map.class);
+                        for (Integer t:warnMap.keySet()) {
+                            String str = JSON.toJSONString(warnMap.get(t));
+                            Map<String,Integer> map1 = JSON.parseObject(str,Map.class);
+                            warnMap.put(t,map1);
+                        }
+                        return warnMap;
                     }
                 }
             } catch (IOException e) {
@@ -45,7 +53,14 @@ public class DeviceUtilImpl implements Serializable {
             if (result.containsColumn(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL)) {
                 byte[] map = result.getValue(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL);
                 if (map != null) {
-                    return (Map<String, Map<String, Integer>>)ObjectUtil.byteToObject(map);
+                    String jsonString = JSON.toJSONString(map);
+                    Map<String,Map<String,Integer>> thresholdMap = JSON.parseObject(jsonString,Map.class);
+                    for (String t:thresholdMap.keySet()) {
+                        String str = JSON.toJSONString(thresholdMap.get(t));
+                        Map<String,Integer> map1 = JSON.parseObject(str,Map.class);
+                        thresholdMap.put(t,map1);
+                    }
+                    return thresholdMap;
                 }
             }
         } catch (IOException e) {
