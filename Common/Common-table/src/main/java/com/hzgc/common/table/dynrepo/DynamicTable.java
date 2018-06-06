@@ -14,6 +14,8 @@ public class DynamicTable implements Serializable {
     public static final String FTPURL = "ftpurl";
     //设备id
     public static final String IPCID = "ipcid";
+    //设备id keyword
+    public static final String IPCID_KEYWORD="ipcid.keyword";
     //时间区间 数据格式 小时+分钟 例如:11:30用1130表示
     public static final String TIMESLOT = "timeslot";
     //时间戳 数据格式 xxxx-xx-xx xx:xx:xx(年-月-日 时:分:秒)

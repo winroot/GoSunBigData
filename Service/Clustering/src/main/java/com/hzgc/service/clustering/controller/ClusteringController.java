@@ -58,20 +58,20 @@ public class ClusteringController {
             @ApiImplicitParam(name = "endTime", value = "结束时间", paramType = "query")
     })
     @RequestMapping(value = BigDataPath.CLUSTERING_TOTLE, method = RequestMethod.GET)
-    public ResponseResult<List<ClusterStatistics>> getTotleNum(String startTime, String endTime) {
-        if(StringUtils.isBlank(startTime) || !startTime.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")){
+    public ResponseResult<List<ClusterStatistics>> getTotleNum(String start_ime, String end_time) {
+        if(StringUtils.isBlank(start_ime) || !start_ime.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")){
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
                     "Start time does not conform to the format: yyyy-MM-dd");
         }
-        if(StringUtils.isBlank(endTime) || !endTime.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")){
+        if(StringUtils.isBlank(start_ime) || !end_time.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")){
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
                     "End time does not conform to the format: yyyy-MM-dd");
         }
-        if(endTime.compareTo(startTime) < 0){
+        if(end_time.compareTo(start_ime) < 0){
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
                     "End time mast be larger than start time.");
         }
-        List<ClusterStatistics> res = clusteringSearchService.getTotleNum(startTime, endTime);
+        List<ClusterStatistics> res = clusteringSearchService.getTotleNum(start_ime, end_time);
         return ResponseResult.init(res);
     }
 
