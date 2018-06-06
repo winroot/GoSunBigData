@@ -172,7 +172,7 @@ public class ObjectInfoHandlerController {
      * @return PictureData
      */
     @ApiOperation(value = "获取特征值<PictureData>", response = PictureData.class)
-    @ApiImplicitParam(name = "rowkey", value = "对象ID", dataType = "String", paramType = "query")
+    @ApiImplicitParam(name = "id", value = "对象ID", dataType = "String", paramType = "query")
     @RequestMapping(value = BigDataPath.OBJECTINFO_GET_FEATURE, method = RequestMethod.GET)
     public ResponseResult<PictureData> getFeature(String id) {
         if (!IsEmpty.strIsRight(id)) {

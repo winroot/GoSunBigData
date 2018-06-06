@@ -26,6 +26,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.Serializable;
@@ -53,6 +54,8 @@ public class ObjectInfoHandlerService {
     private ObjectInfoHandlerTool objectInfoHandlerTool;
     @Autowired
     private ParseByOption parseByOption;
+    @Autowired
+    private RestTemplate restTemplate;
 
     public ObjectInfoHandlerService() {
     }
@@ -184,7 +187,7 @@ public class ObjectInfoHandlerService {
                 hbaseDao.saveSearchRecord(param, objectSearchResult);
             }
         } else {
-            log.info("Starg get object info not search picture");
+            log.info("Start get object info not search picture");
             //封装personSingleResult
             String searchId = UuidUtil.getUuid();
             objectSearchResult = new ObjectSearchResult();
@@ -562,11 +565,12 @@ public class ObjectInfoHandlerService {
         if (pictureData != null) {
             byte[] photo = pictureData.getImageData();
             float[] feature = pictureData.getFeature().getFeature();
-            FaceAttribute faceAttribute = FaceFunction.featureExtract(photo);
-            faceAttribute.setFeature(feature);
-            pictureData.setFeature(faceAttribute);
+            pictureData = restTemplate.postForObject("http://FACETEST/extract_bytes", photo, PictureData.class);
+            if (pictureData != null){
+            pictureData.getFeature().setFeature(feature);
+            }
         }
-        log.info("Get objectInfo feature by rowkey result : " + pictureData.toString());
+        log.info("Get objectInfo feature by rowkey result : " + (pictureData != null ? pictureData.toString() : null));
         return pictureData;
     }
 
