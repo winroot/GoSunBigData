@@ -20,6 +20,7 @@ public class BigDataPath {
      * Clustering模块请求路径
      */
     public static final String CLUSTERING_SEARCH = "/clustering_search";
+    public static final String CLUSTERING_TOTLE = "/clustering_totle";
     public static final String CLUSTERING_DETAILSEARCH_V1 = "/clustering_detail";
     public static final String CLUSTERING_DELETE = "/clustering_delete";
     public static final String CLUSTERING_IGNORE = "/clustering_ignore";

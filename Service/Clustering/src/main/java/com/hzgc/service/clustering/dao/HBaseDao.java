@@ -5,16 +5,15 @@ import com.hzgc.common.hbase.HBaseHelper;
 import com.hzgc.common.table.clustering.ClusteringTable;
 import com.hzgc.common.util.object.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.hadoop.hbase.client.Get;
-import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Repository
@@ -73,5 +72,28 @@ public class HBaseDao {
             e.printStackTrace();
         }
         return alarmInfoList;
+    }
+
+    public Map<String, Integer> getTotleNum(String startTime, String endTime){
+        Table clusteringInfoTable = HBaseHelper.getTable(ClusteringTable.TABLE_ClUSTERINGINFO);
+        Map<String, Integer> map = new HashMap<>();
+        Scan scan = new Scan();
+        scan.addColumn(ClusteringTable.ClUSTERINGINFO_COLUMNFAMILY, ClusteringTable.ClUSTERINGINFO_COLUMN_YES);
+        scan.setStartRow(Bytes.toBytes(startTime));
+        scan.setStopRow(Bytes.toBytes(endTime));
+        try {
+            ResultScanner results = clusteringInfoTable.getScanner(scan);
+            for(Result result : results){
+                byte[] bytes = result.getValue(ClusteringTable.ClUSTERINGINFO_COLUMNFAMILY, ClusteringTable.ClUSTERINGINFO_COLUMN_YES);
+                List<ClusteringAttribute> clusteringAttributeList = (List<ClusteringAttribute>) ObjectUtil.byteToObject(bytes);
+                int size = clusteringAttributeList.size();
+                String rowkey = new String(result.getRow());
+                map.put(rowkey, size);
+            }
+            return map;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
     }
 }
