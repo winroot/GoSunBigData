@@ -556,7 +556,7 @@ public class ParseByOption {
                 + ") values ('" + objectId + "', " + status + ")";
     }
 
-    public String migrationCount() {
+    public String emigrationCount() {
         return "select count(*) as num from "
                 + ObjectInfoTable.TABLE_NAME + " where "
                 + ObjectInfoTable.STATUS + " = 1 and "

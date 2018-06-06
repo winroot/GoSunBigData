@@ -7,6 +7,7 @@ import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.PictureData;
+import com.hzgc.service.starepo.bean.export.EmigrationCount;
 import com.hzgc.service.starepo.bean.export.PersonSingleResult;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
@@ -473,17 +474,21 @@ public class PhoenixDao implements Serializable {
         return count;
     }
 
-    public Map migrationCount(String month, Timestamp start_time, Timestamp end_time) {
-        log.info("Start count objectInfo migration number");
-        String sql = parseByOption.migrationCount();
-        log.info("Count objectInfo migration SQL : " + sql);
-        Map<String, Integer> map = new HashMap<>();
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, start_time, end_time);
+    public EmigrationCount emigrationCount(String month, Timestamp startTime, Timestamp endTime) {
+        log.info("Start count objectInfo emigration number");
+        String sql = parseByOption.emigrationCount();
+        log.info("Count objectInfo emigration SQL : " + sql);
+        EmigrationCount count = null;
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, startTime, endTime);
         while (sqlRowSet.next()) {
-            int count = sqlRowSet.getInt("num");
-            map.put(month, count);
+            count = new EmigrationCount();
+            count.setMonth(month);
+            int i = sqlRowSet.getInt("num");
+            count.setCount(i);
         }
-        log.info("Count objectInfo migration is: " + map.get(month));
-        return map;
+        if (count != null) {
+            log.info("Count objectInfo emigration count : [ month = " + count.getMonth() + ", count = " + count.getCount() + "]");
+        }
+        return count;
     }
 }

@@ -2,17 +2,13 @@ package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.table.seachres.SearchResultTable;
 import com.hzgc.common.table.starepo.ObjectInfoTable;
+import com.hzgc.common.util.Date.Dateutil;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.jni.FaceFunction;
 import com.hzgc.jni.PictureData;
 import com.hzgc.service.starepo.bean.StaticSortParam;
-import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
-import com.hzgc.service.starepo.bean.export.PersonObject;
-import com.hzgc.service.starepo.bean.export.PersonObjectGroupByPkey;
-import com.hzgc.service.starepo.bean.export.PersonSingleResult;
+import com.hzgc.service.starepo.bean.export.*;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.SearchRecordParam;
@@ -31,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.File;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -388,12 +385,12 @@ public class ObjectInfoHandlerService {
         //查询搜索记录
         String searchId = opts.getTotalSearchId();
         byte[] bytes = hbaseDao.get(searchId, SearchResultTable.STAREPO_COLUMN_SEARCHMESSAGE);
-        if (bytes == null || bytes.length <= 0){
+        if (bytes == null || bytes.length <= 0) {
             log.info("Get file faild !");
             return null;
         }
         ObjectSearchResult objectSearchResult = JSONUtil.toObject(new String(bytes), ObjectSearchResult.class);
-        if (objectSearchResult == null || objectSearchResult.getSingleSearchResults() == null){
+        if (objectSearchResult == null || objectSearchResult.getSingleSearchResults() == null) {
             log.info("Get file faild !");
             return null;
         }
@@ -566,8 +563,8 @@ public class ObjectInfoHandlerService {
             byte[] photo = pictureData.getImageData();
             float[] feature = pictureData.getFeature().getFeature();
             pictureData = restTemplate.postForObject("http://FACETEST/extract_bytes", photo, PictureData.class);
-            if (pictureData != null){
-            pictureData.getFeature().setFeature(feature);
+            if (pictureData != null) {
+                pictureData.getFeature().setFeature(feature);
             }
         }
         log.info("Get objectInfo feature by rowkey result : " + (pictureData != null ? pictureData.toString() : null));
@@ -593,19 +590,52 @@ public class ObjectInfoHandlerService {
         return phoenixDao.countStatus();
     }
 
-    public Map migrationCount(String start_time, String end_time) {
+    public List<EmigrationCount> emigrationCount(String start_time, String end_time) {
+        List<EmigrationCount> emigrationCountList = new ArrayList<>();
+        List<String> monthList = getMonthsInRange(start_time, end_time);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        for (String month : monthList){
+            String start = month + "-" + "01";
+            int dates = Dateutil.getActualMaximum(month);
+            String end = month + "-" + dates;
+            Timestamp startTime = null;
+            Timestamp endTime = null;
+            try {
+                Date startDate = sdf.parse(start);
+                Date endDate = sdf.parse(end);
+                startTime = new Timestamp(startDate.getTime());
+                endTime = new Timestamp(endDate.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            EmigrationCount emigrationCount = phoenixDao.emigrationCount(month, startTime, endTime);
+            emigrationCountList.add(emigrationCount);
+        }
+        return emigrationCountList;
+    }
+
+    private static List<String> getMonthsInRange(String startTime, String endTime){
+        List<String> monthList = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-        Timestamp startTime = null;
-        Timestamp endTime = null;
         try {
-            Date start = sdf.parse(start_time);
-            Date end = sdf.parse(end_time);
-            startTime = new Timestamp(start.getTime());
-            endTime = new Timestamp(end.getTime());
+            Calendar start = Calendar.getInstance();
+            start.setTime(sdf.parse(startTime));
+            Calendar end = Calendar.getInstance();
+            end.setTime(sdf.parse(endTime));
+            Long startTimeL = start.getTimeInMillis();
+            Long endTimeL = end.getTimeInMillis();
+            while (startTimeL <= endTimeL) {
+                Date everyTime = new Date(startTimeL);
+                monthList.add(sdf.format(everyTime));
+
+                start.add(Calendar.MONTH, 1);
+                startTimeL = start.getTimeInMillis();
+            }
+            return monthList;
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return phoenixDao.migrationCount(start_time, startTime, endTime);
+        return monthList;
     }
 }
 
