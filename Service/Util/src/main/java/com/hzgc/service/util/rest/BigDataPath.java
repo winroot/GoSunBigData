@@ -55,6 +55,7 @@ public class BigDataPath {
     public static final String FEATURE_EXTRACT_BIN = "/extract_bin";
     public static final String FEATURE_EXTRACT_FTP = "/extract_ftp";
     public static final String FACE_ATTRIBUTE = "/attribute";
+    public static final String FEATURE_EXTRACT_BYTES = "extract_bytes";
 
     /**
      * StaRepo模块请求路径
