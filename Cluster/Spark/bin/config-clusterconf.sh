@@ -109,6 +109,19 @@ function config_sparkJob()
     zkpro=${zkpro%?}
     # 替换sparkJob.properties中：key=value（替换key字段的值value）
     sed -i "s#^job.zkDirAndPort=.*#job.zkDirAndPort=${zkpro}#g" ${CONF_SPARK_DIR}/sparkJob.properties
+
+    #根据字段es_service_node，查找配置文件中，es的安装节点所在ip端口号的值，这些值以分号分割
+    ES_IP=$(grep es_service_node ${CONF_FILE} | cut -d '=' -f2)
+    #将这些分号分割的ip用于放入数组中
+    es_arr=(${ES_IP//;/ })
+    espro=''
+    espro=$espro${es_arr[0]}
+    echo $espro
+    echo "++++++++++++++++++++++++++++++++++"
+    #替换sparkJob.properties中：key=value(替换key字段的值value)
+    sed -i "s#^es.hosts=.*#es.hosts=${espro}#g" ${CONF_SPARK_DIR}/sparkJob.properties
+
+
     # 根据job_clustering_mysql_url字段设置常驻人口管理告警信息MYSQL数据库地址
     num=$[ $(cat ${CONF_SPARK_DIR}/sparkJob.properties | cat -n | grep job.clustering.mysql.url  | awk '{print $1}') ]
     value=$(grep job_clustering_mysql_url ${CONF_FILE}  |  awk  -F  "url=" '{print $2}')
