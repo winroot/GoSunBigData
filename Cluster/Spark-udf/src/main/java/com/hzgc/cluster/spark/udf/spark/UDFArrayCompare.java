@@ -8,16 +8,15 @@ import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectIn
 import org.apache.hadoop.io.DoubleWritable;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
-public class UDFArrayCompare extends GenericUDF
-{
+public class UDFArrayCompare extends GenericUDF {
     private DoubleWritable result;
     private float[] floatFeature = null;
 
     public ObjectInspector initialize(ObjectInspector[] arguments)
-            throws UDFArgumentException
-    {
+            throws UDFArgumentException {
         this.floatFeature = null;
         this.result = new DoubleWritable(0.0D);
         return PrimitiveObjectInspectorFactory.writableDoubleObjectInspector;
@@ -26,18 +25,16 @@ public class UDFArrayCompare extends GenericUDF
     public Object evaluate(GenericUDF.DeferredObject[] arguments) throws HiveException {
         Object leftArray = arguments[0].get();
         Object rightArray = arguments[1].get();
-        if (null == this.floatFeature)
+        if (null == this.floatFeature) {
             this.floatFeature = string2floatArray(leftArray.toString());
-        else {
-            try {
-                List<Float> historyFeature = (List<Float>)rightArray;
-                double ret = featureCompare(this.floatFeature, historyFeature);
-                this.result.set(ret);
-            } catch (Exception e) {
-                this.result.set(0.0D);
-            }
         }
-
+        try {
+            List<Float> historyFeature = (List<Float>) rightArray;
+            double ret = featureCompare(this.floatFeature, historyFeature);
+            this.result.set(ret);
+        } catch (Exception e) {
+            this.result.set(0.0D);
+        }
         return this.result;
     }
 
