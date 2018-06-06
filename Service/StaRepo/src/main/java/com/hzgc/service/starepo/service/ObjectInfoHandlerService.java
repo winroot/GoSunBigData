@@ -594,9 +594,9 @@ public class ObjectInfoHandlerService {
         List<EmigrationCount> emigrationCountList = new ArrayList<>();
         List<String> monthList = getMonthsInRange(start_time, end_time);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        for (String month : monthList){
+        for (String month : monthList) {
             String start = month + "-" + "01";
-            int dates = Dateutil.getActualMaximum(month);
+            int dates = getActualMaximum(month);
             String end = month + "-" + dates;
             Timestamp startTime = null;
             Timestamp endTime = null;
@@ -614,7 +614,14 @@ public class ObjectInfoHandlerService {
         return emigrationCountList;
     }
 
-    private static List<String> getMonthsInRange(String startTime, String endTime){
+    /**
+     * 获取某段时间内所有的月份值
+     *
+     * @param startTime 起始时间
+     * @param endTime   结束时间
+     * @return 月份列表
+     */
+    private static List<String> getMonthsInRange(String startTime, String endTime) {
         List<String> monthList = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         try {
@@ -636,6 +643,21 @@ public class ObjectInfoHandlerService {
             e.printStackTrace();
         }
         return monthList;
+    }
+
+    /**
+     * 获取当前月份共有多少天
+     *
+     * @param date 时间 格式：2018-09
+     * @return 当月天数
+     */
+    public static int getActualMaximum(String date) {
+        int year = Integer.parseInt(String.valueOf(date.charAt(0)) + date.charAt(1) + date.charAt(2) + date.charAt(3));
+        int month = Integer.parseInt(String.valueOf(date.charAt(5)) + date.charAt(6));
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month - 1);             // 当前月份减1
+        return cal.getActualMaximum(Calendar.DATE);
     }
 }
 
