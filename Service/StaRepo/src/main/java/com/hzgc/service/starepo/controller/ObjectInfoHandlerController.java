@@ -4,10 +4,11 @@ import com.hzgc.common.table.seachres.SearchResultTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.jni.PictureData;
+import com.hzgc.service.starepo.bean.export.EmigrationCount;
 import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
-import com.hzgc.service.starepo.bean.param.SearchRecordParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
+import com.hzgc.service.starepo.bean.param.SearchRecordParam;
 import com.hzgc.service.starepo.service.ObjectInfoHandlerService;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
@@ -269,16 +270,16 @@ public class ObjectInfoHandlerController {
     }
 
     /**
-     * 每月迁出人口数量统计
+     * 迁出人口数量统计
      *
      * @param start_time 起始统计时间
      * @param end_time   结束统计时间
-     * @return Map key:月份 value：数量
+     * @return List<EmigrationCount> 统计列表
      */
     @ApiOperation(value = "迁出人口数量统计", response = ResponseResult.class)
-    @RequestMapping(value = BigDataPath.STAREPO_COUNT_MIGRATION, method = RequestMethod.GET)
-    public ResponseResult<Map> migrationCount(String start_time, String end_time) {
-        Map map = objectInfoHandlerService.migrationCount(start_time, end_time);
-        return ResponseResult.init(map);
+    @RequestMapping(value = BigDataPath.STAREPO_COUNT_EMIGRATION, method = RequestMethod.GET)
+    public ResponseResult<List<EmigrationCount>> emigrationCount(String start_time, String end_time) {
+        List<EmigrationCount> counts = objectInfoHandlerService.emigrationCount(start_time, end_time);
+        return ResponseResult.init(counts);
     }
 }

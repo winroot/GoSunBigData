@@ -72,7 +72,7 @@ public class BigDataPath {
     public static final String STAREPO_CREATE_WORD = "/create_word";
     public static final String STAREPO_EXPORT_WORD = "/export_word";
     public static final String OBJECTINFO_COUNT_STATUS = "/count_status";
-    public static final String STAREPO_COUNT_MIGRATION = "/count_migration";
+    public static final String STAREPO_COUNT_EMIGRATION = "/count_emigration";
 
     public static final String TYPE_ADD = "/type_add";
     public static final String TYPE_DELETE = "/type_delete";

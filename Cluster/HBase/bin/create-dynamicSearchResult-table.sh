@@ -49,67 +49,6 @@ UDF_VERSION=`ls ${SPARK_DIR}/lib | grep ^spark-udf-[0-9].[0-9].[0-9].jar$`
 ## hdfs udf Absolute path
 HDFS_UDF_ABSOLUTE_PATH=hdfs://hzgc/${HDFS_UDF_PATH}/${UDF_VERSION}
 
-
-#####################################################################
-# 函数名: add_hive_UDF
-# 描述: 添加Hive 自定义函数
-# 参数: N/A
-# 返回值: N/A
-# 其他: N/A
-#####################################################################
-function add_hive_UDF(){
-    ## 判断hdfs上/user/hive/udf目录是否存在
-    ${HADOOP_PATH}/bin/hdfs dfs -test -e ${HDFS_UDF_PATH}
-    if [ $? -eq 0 ] ;then
-        echo "=================================="
-        echo "${HDFS_UDF_PATH}已经存在"
-        echo "=================================="
-    else
-        echo "=================================="
-        echo "${HDFS_UDF_PATH}不存在,正在创建"
-        echo "=================================="
-        ${HADOOP_PATH}/bin/hdfs dfs -mkdir -p ${HDFS_UDF_PATH}
-        if [ $? == 0 ];then
-            echo "=================================="
-            echo "创建${HDFS_UDF_PATH}目录成功......"
-            echo "=================================="
-        else
-            echo "====================================================="
-            echo "创建${HDFS_UDF_PATH}目录失败,请检查服务是否启动......"
-            echo "====================================================="
-        fi
-    fi
-
-    ## 上传udf到hdfs指定目录
-    ${HADOOP_PATH}/bin/hdfs dfs -test -e ${HDFS_UDF_PATH}/${UDF_VERSION}
-    if [ $? -eq 0 ] ;then
-        echo "=================================="
-        echo "${HDFS_UDF_PATH}/${UDF_VERSION}已经存在"
-        echo "=================================="
-    else
-        echo "=================================="
-        echo "${HDFS_UDF_PATH}/${UDF_VERSION}不存在,正在上传"
-        echo "=================================="
-        ${HADOOP_PATH}/bin/hdfs dfs -put ${SPARK_DIR}/lib/${UDF_VERSION} ${HDFS_UDF_PATH}
-        if [ $? == 0 ];then
-            echo "===================================="
-            echo "上传udf函数成功......"
-            echo "===================================="
-        else
-            echo "===================================="
-            echo "上传udf函数失败,请查找失败原因......"
-            echo "===================================="
-        fi
-    fi
-
-    ## 在hive中添加并注册udf函数
-    ${HIVE_PATH}/bin/hive -e "create function ${UDF_FUNCTION_NAME} as '${UDF_CLASS_PATH}' using jar '${HDFS_UDF_ABSOLUTE_PATH}';show functions"
-
-    echo "================================================================================="
-    echo "Please see if there is a UDF function with the function called default.${UDF_FUNCTION_NAME}!!!"
-    echo "================================================================================="
-}
-
 #####################################################################
 # 函数名: create_person_table_mid_table
 # 描述: 创建person表， mid_table 表格
@@ -182,7 +121,6 @@ function create_searchRes_device_clusteringInfo_table() {
 }
 
 function main() {
-    add_hive_UDF
     create_person_table_mid_table
     create_searchRes_device_clusteringInfo_table
 }
