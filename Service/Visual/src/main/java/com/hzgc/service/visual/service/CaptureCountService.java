@@ -130,7 +130,6 @@ public class CaptureCountService {
         List<String> times;
         times = getHourTime(startTime, endTime);
         SearchResponse response = elasticSearchDao.timeSoltNumber(ipcIdList, startTime, endTime);
-//        int a = response.getHits().getHits().length;
         Map<String, Aggregation> aggMap = response.getAggregations().asMap();
         Terms time = (Terms) aggMap.get("times");
         Iterator<Terms.Bucket> teamBucket = (Iterator<Terms.Bucket>) time.getBuckets().iterator();
@@ -216,9 +215,6 @@ public class CaptureCountService {
             // 设置下次循环查询时间
             searchStartTime = searchEndTime;
             searchEndTime = DateUtils.getSpecifiedDayAfter(searchStartTime, OFFSET_DAY_ONE);
-//            if (DateUtils.comparetor(searchEndTime, endTime) > 0) {
-//                searchEndTime = endTime;
-//            }
             statisticsBeanList.add(statisticsBean);
         } while (DateUtils.comparetor(searchStartTime, endTime) < 0);
         return statisticsBeanList;

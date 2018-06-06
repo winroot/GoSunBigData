@@ -272,12 +272,12 @@ public class ObjectInfoHandlerController {
      * 每月迁出人口数量统计
      *
      * @param start_time 起始统计时间
-     * @param end_time  结束统计时间
+     * @param end_time   结束统计时间
      * @return Map key:月份 value：数量
      */
     @ApiOperation(value = "迁出人口数量统计", response = ResponseResult.class)
     @RequestMapping(value = BigDataPath.STAREPO_COUNT_MIGRATION, method = RequestMethod.GET)
-    public ResponseResult<Map>migrationCount(String start_time, String end_time) {
+    public ResponseResult<Map> migrationCount(String start_time, String end_time) {
         Map map = objectInfoHandlerService.migrationCount(start_time, end_time);
         return ResponseResult.init(map);
     }
