@@ -20,6 +20,7 @@ public class BigDataPath {
      * Clustering模块请求路径
      */
     public static final String CLUSTERING_SEARCH = "/clustering_search";
+    public static final String CLUSTERING_TOTLE = "/clustering_totle";
     public static final String CLUSTERING_DETAILSEARCH_V1 = "/clustering_detail";
     public static final String CLUSTERING_DELETE = "/clustering_delete";
     public static final String CLUSTERING_IGNORE = "/clustering_ignore";
@@ -55,6 +56,7 @@ public class BigDataPath {
     public static final String FEATURE_EXTRACT_BIN = "/extract_bin";
     public static final String FEATURE_EXTRACT_FTP = "/extract_ftp";
     public static final String FACE_ATTRIBUTE = "/attribute";
+    public static final String FEATURE_EXTRACT_BYTES = "extract_bytes";
 
     /**
      * StaRepo模块请求路径
@@ -85,6 +87,16 @@ public class BigDataPath {
     public static final String CAPTURECOUNT_DYNREPO = "/capture_day_count";
     public static final String CAPTURECOUNT_IPCIDS_TIME = "/face_hours";
     public static final String CAPTURECOUNT_IPCIDS = "/face";
+    public static final String PEOPLE_COUNT="/people_count";
     public static final String GET_PICTURE = "/image";
+
+    /**
+     * Dispatch模块请求路径
+     */
+    public static final String DISPATCH_ADD = "/add_rule";
+    public static final String DISPATCH_MODIFY = "/modify_rule";
+    public static final String DISPATCH_DELETE = "/delete_rules";
+    public static final String DISPATCH_SEARCH_BYID = "/rule_info";
+    public static final String DISPATCH_CUTPAGE_RULE = "/get_rule";
 
 }

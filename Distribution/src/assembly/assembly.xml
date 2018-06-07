@@ -181,27 +181,27 @@
             </includes>
             <outputDirectory>service/clustering/conf</outputDirectory>
         </fileSet>
-        <!--Device目录-->
+        <!--Dispatch目录-->
         <fileSet>
-            <directory>../Service/Device/target</directory>
+            <directory>../Service/Dispatch/target</directory>
             <includes>
-                <include>device-${project.parent.version}.jar</include>
+                <include>dispatch-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>service/device/lib</outputDirectory>
+            <outputDirectory>service/dispatch/lib</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Service/Device/bin</directory>
+            <directory>../Service/Dispatch/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/device/bin</outputDirectory>
+            <outputDirectory>service/dispatch/bin</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../Service/Device/src/main/resources</directory>
+            <directory>../Service/Dispatch/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/device/conf</outputDirectory>
+            <outputDirectory>service/dispatch/conf</outputDirectory>
         </fileSet>
         <!--DynRepo目录-->
         <fileSet>

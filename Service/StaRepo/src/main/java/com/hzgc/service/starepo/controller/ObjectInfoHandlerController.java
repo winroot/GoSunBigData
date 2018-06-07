@@ -276,10 +276,8 @@ public class ObjectInfoHandlerController {
      * @param end_time   结束统计时间
      * @return List<EmigrationCount> 统计列表
      */
-    @ApiOperation(value = "迁出人口数量统计", response = ResponseResult.class)
     @RequestMapping(value = BigDataPath.STAREPO_COUNT_EMIGRATION, method = RequestMethod.GET)
-    public ResponseResult<List<EmigrationCount>> emigrationCount(String start_time, String end_time) {
-        List<EmigrationCount> counts = objectInfoHandlerService.emigrationCount(start_time, end_time);
-        return ResponseResult.init(counts);
+    public List<EmigrationCount> emigrationCount(String start_time, String end_time) {
+        return objectInfoHandlerService.emigrationCount(start_time, end_time);
     }
 }

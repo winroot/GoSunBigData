@@ -15,6 +15,7 @@
         <module>Spark</module>
         <module>Phoenix-udf</module>
         <module>Spark-udf</module>
+        <module>ES</module>
     </modules>
     <dependencyManagement>
         <dependencies>

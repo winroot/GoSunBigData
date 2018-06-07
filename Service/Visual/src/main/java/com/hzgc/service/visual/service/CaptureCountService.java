@@ -18,8 +18,7 @@ import org.apache.commons.net.util.Base64;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.Aggregation;
-import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.elasticsearch.search.aggregations.metrics.sum.InternalSum;
+import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,7 +67,7 @@ public class CaptureCountService {
     public CaptureCountBean dynamicNumberService(List<Long> deviceIdList) {
         //将deviceIdList转换为ipcIdList
         List<String> ipcIdList = new ArrayList<>();
-        if(deviceIdList != null && deviceIdList.size() > 0) {
+        if (deviceIdList != null && deviceIdList.size() > 0) {
             Map<String, DeviceDTO> deviceDTOMap = deviceQueryService.getDeviceInfoByBatchId(deviceIdList);
             for (Map.Entry<String, DeviceDTO> entry : deviceDTOMap.entrySet()) {
                 ipcIdList.add(entry.getValue().getSerial());
@@ -82,7 +81,7 @@ public class CaptureCountService {
         SearchResponse searchResponse1 = responsesArray[1];
         SearchHits searchHits1 = searchResponse1.getHits();
         int todaytotalNumber = (int) searchHits1.getTotalHits();
-        CaptureCountBean bean = new CaptureCountBean(todaytotalNumber,totalNumber);
+        CaptureCountBean bean = new CaptureCountBean(todaytotalNumber, totalNumber);
         saveCaptureCount.save(bean);
         return saveCaptureCount;
     }
@@ -91,9 +90,9 @@ public class CaptureCountService {
      * 多设备每小时抓拍统计
      * 根据入参ipcid的list、startTime和endTime去es查询到相应的值
      *
-     * @param deviceIdList    设备ID：deviceId
-     * @param startTime 搜索的开始时间
-     * @param endTime   搜索的结束时间
+     * @param deviceIdList 设备ID：deviceId
+     * @param startTime    搜索的开始时间
+     * @param endTime      搜索的结束时间
      * @return 返回某段时间内，这些ipcid的抓拍的总数量
      */
     public TimeSlotNumber timeSoltNumber(List<Long> deviceIdList, String startTime, String endTime) {
@@ -120,7 +119,7 @@ public class CaptureCountService {
 
         //将deviceIdList转换为ipcIdList
         List<String> ipcIdList = new ArrayList<>();
-        if(deviceIdList.size() > 0) {
+        if (deviceIdList.size() > 0) {
             Map<String, DeviceDTO> deviceDTOMap = deviceQueryService.getDeviceInfoByBatchId(deviceIdList);
             for (Map.Entry<String, DeviceDTO> entry : deviceDTOMap.entrySet()) {
                 ipcIdList.add(entry.getValue().getSerial());
@@ -129,25 +128,29 @@ public class CaptureCountService {
 
         List<String> times;
         times = getHourTime(startTime, endTime);
-        SearchResponse response = elasticSearchDao.timeSoltNumber(ipcIdList, startTime, endTime);
-//        int a = response.getHits().getHits().length;
-        Map<String, Aggregation> aggMap = response.getAggregations().asMap();
-        Terms time = (Terms) aggMap.get("times");
-        Iterator<Terms.Bucket> teamBucket = (Iterator<Terms.Bucket>) time.getBuckets().iterator();
-
-        while (teamBucket.hasNext()) {
-            Terms.Bucket buck = teamBucket.next();
-            String timess = (String) buck.getKey();
-            Map<String, Aggregation> subagg = buck.getAggregations().asMap();
-            int count_count = (int) ((InternalSum) subagg.get("count_count")).getValue();
-            slotNumber.getFaceList().add(new FaceDayStatistic(timess,count_count));
-            times.remove(timess);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(EsSearchParam.TIMEFORMAT_YMDHMS);
+        for (String oneHourStart : times) {
+            String oneHourEnd = null;
+            int count = 0;
+            try {
+                long ohs = simpleDateFormat.parse(oneHourStart).getTime();
+                long ohe = ohs + EsSearchParam.LONG_OBNEHOUR;
+                oneHourEnd = simpleDateFormat.format(ohe);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            SearchResponse response = elasticSearchDao.timeSoltNumber(ipcIdList, oneHourStart, oneHourEnd);
+            Map<String, Aggregation> aggMap = response.getAggregations().asMap();
+            for (String a : aggMap.keySet()) {
+                StringTerms terms = (StringTerms) aggMap.get(a);
+                for (StringTerms.Bucket bucket : terms.getBuckets()) {
+                    count += bucket.getDocCount();
+                }
+            }
+            slotNumber.getFaceList().add(new FaceDayStatistic(oneHourStart, count));
         }
-        for(String timeStr : times){
-            slotNumber.getFaceList().add(new FaceDayStatistic(timeStr,0));
-        }
 
-        if(slotNumber.getFaceList().size() > 0) {
+        if (slotNumber.getFaceList().size() > 0) {
             slotNumber.getFaceList().sort((o1, o2) -> {
                 if (o1.getId().compareTo(o2.getId()) > 0) {
                     return 1;
@@ -167,18 +170,19 @@ public class CaptureCountService {
     }
 
     /**
-     *  抓拍统计
-     * @param startTime 开始时间
-     * @param endTime 结束时间
+     * 抓拍统计
+     *
+     * @param startTime    开始时间
+     * @param endTime      结束时间
      * @param deviceIdList 设备Id
      * @return 每天抓拍数
      */
-    public List<StatisticsBean> getStatisticsFace(String startTime, String endTime, List<Long> deviceIdList){
+    public List<StatisticsBean> getStatisticsFace(String startTime, String endTime, List<Long> deviceIdList) {
         List<StatisticsBean> statisticsBeanList = new ArrayList<>();
-        if(endTime != null && endTime.matches("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}")){
+        if (endTime != null && endTime.matches("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}")) {
             endTime = endTime + " 00:00:00";
         }
-        if(startTime != null && startTime.matches("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}")){
+        if (startTime != null && startTime.matches("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}")) {
             startTime = startTime + " 00:00:00";
         }
 
@@ -195,7 +199,7 @@ public class CaptureCountService {
         //调接口，将 deviceId 转换为IpcId
         List<String> ipcIdList = new ArrayList<>();
         Map<String, DeviceDTO> deviceDTOMap = deviceQueryService.getDeviceInfoByBatchId(deviceIdList);
-        for(Map.Entry<String, DeviceDTO> entry : deviceDTOMap.entrySet()){
+        for (Map.Entry<String, DeviceDTO> entry : deviceDTOMap.entrySet()) {
             ipcIdList.add(entry.getValue().getSerial());
         }
 
@@ -226,10 +230,11 @@ public class CaptureCountService {
 
     /**
      * 根据ftpurl获取图片
+     *
      * @param ftpUrl 图片地址
      * @return 图片数据
      */
-    public String getImageBase64(String ftpUrl){
+    public String getImageBase64(String ftpUrl) {
         int substart = 6;
         int offset = 1;
         FTPClient ftpClient = new FTPClient();

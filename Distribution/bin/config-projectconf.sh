@@ -41,40 +41,6 @@ SERVICE_SCRPIT=$COMMON_DIR/bin/config-service.sh ### 一键配置service脚本
 SPARKLOG_DIR=$SPARK_DIR/logs                          ### spark的log日志目录
 SERVICE_LOG_DIR=$SERVICE_DIR/logs                     ### service的log日志目录
 
-# 创建日志目录
-mkdir -p $LOG_DIR
-mkdir -p $SPARKLOG_DIR
-mkdir -p $SERVICE_LOG_DIR
-
-
-
-#####################################################################
-# 函数名: distribute_common
-# 描述: 将common文件夹分发到所有节点
-# 参数: N/A
-# 返回值: N/A
-# 其他: N/A
-#####################################################################
-function distribute_common()
-{
-    echo ""  | tee -a $LOG_FILE
-    echo "**********************************************" | tee -a $LOG_FILE
-    echo "" | tee -a $LOG_FILE
-    echo "分发common......"  | tee  -a  $LOG_FILE
-    
-	CLUSTER_HOSTNAME_LISTS=$(grep cluster_hostname ${CONF_FILE}|cut -d '=' -f2)
-	CLUSTER_HOSTNAME_ARRAY=(${CLUSTER_HOSTNAME_LISTS//;/ })
-    for hostname in ${CLUSTER_HOSTNAME_ARRAY[@]}
-    do
-        ssh root@${hostname} "if [ ! -x "${OBJECT_DIR}" ]; then mkdir "${OBJECT_DIR}"; fi"
-        rsync -rvl ${OBJECT_DIR}/common   root@${hostname}:${OBJECT_DIR}  >/dev/null
-        ssh root@${hostname}  "chmod -R 755   ${OBJECT_DIR}/common"
-        echo "${hostname}上分发common完毕......"  | tee  -a  $LOG_FILE
-    done 
-    
-    echo "配置完毕......"  | tee  -a  $LOG_FILE
-}
-
 #####################################################################
 # 函数名: distribute_service
 # 描述: 将service下各个组件分发到需要的节点下
@@ -221,7 +187,6 @@ function sh_service()
 #####################################################################
 function main()
 {
-	distribute_common
 	distribute_service
     sh_cluster
     sh_service

@@ -2,7 +2,10 @@ package com.hzgc.service.face.controller;
 
 import com.hzgc.common.attribute.bean.Attribute;
 import com.hzgc.common.attribute.service.AttributeService;
+import com.hzgc.common.util.json.JSONUtil;
+import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
+import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.PictureData;
 import com.hzgc.service.face.service.FaceExtractService;
 import com.hzgc.service.util.error.RestErrorCode;
@@ -79,5 +82,18 @@ public class FaceController {
         }
         PictureData pictureData = faceExtractService.getFeatureExtractByFtp(pictureUrl);
         return ResponseResult.init(pictureData);
+    }
+
+    //图片数组提取特征值
+    @ApiOperation(value = "根据图片数组提取图片特征值", response = ResponseResult.class)
+    @ApiImplicitParam(name = "bytes", value = "图片数组", required = true, dataType = "string", paramType = "form")
+    @RequestMapping(value = BigDataPath.FEATURE_EXTRACT_BYTES, method = RequestMethod.POST)
+    public PictureData getFeatureExtract(@RequestBody byte[] bytes){
+        if (null != bytes){
+            PictureData pictureData = faceExtractService.featureExtractByImage(bytes);
+            return pictureData;
+        }
+        log.info("Bytes param is null");
+        return null;
     }
 }

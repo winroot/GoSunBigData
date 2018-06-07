@@ -64,7 +64,7 @@ function create_kafka_topic()
     zkpro=''    
     for zk_host in ${zk_arr[@]}
     do
-        zkpro=$zkpro$zk_host":2181"
+        zkpro=$zkpro$zk_host":2181,"
     done
     zkpro=${zkpro%?}
     
