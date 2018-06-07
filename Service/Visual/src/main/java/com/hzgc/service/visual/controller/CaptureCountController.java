@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-//@FeignClient(name = "visual")
 @Api(tags = "大数据可视化服务")
 public class CaptureCountController {
 

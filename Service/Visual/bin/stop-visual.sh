@@ -15,7 +15,7 @@ VISUAL_DIR=`pwd`                       ##visual目录地址
 LIB_DIR=${VISUAL_DIR}/lib              ##lib目录地址
 CONF_DIR=${VISUAL_DIR}/CONF            ##conf目录地址
 VISUAL_JAR_NAME=`ls ${LIB_DIR} | grep ^visual-[0-9].[0-9].[0-9].jar$`
-VISUAL_JAR_PID=`jps | grep $VISUAL_JAR_NAME} | awk '{print $1}'`
+VISUAL_JAR_PID=`jps | grep ${VISUAL_JAR_NAME} | awk '{print $1}'`
 
 
 #---------------------------------------------------------------------#

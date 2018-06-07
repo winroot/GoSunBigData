@@ -7,6 +7,7 @@ import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.PictureData;
+import com.hzgc.service.starepo.bean.export.EmigrationCount;
 import com.hzgc.service.starepo.bean.export.PersonSingleResult;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
@@ -393,18 +394,23 @@ public class PhoenixDao implements Serializable {
         String sql = parseByOption.getPictureData();
         log.info("Get objectInfo photo and feature by rowkey SQL : " + sql);
         PictureData pictureData = new PictureData();
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, id);
-        while (sqlRowSet.next()) {
-            byte[] photo = (byte[]) sqlRowSet.getObject(ObjectInfoTable.PHOTO);
-            pictureData.setImageData(photo);
-            Array array = (Array) sqlRowSet.getObject(ObjectInfoTable.FEATURE);
-            try {
-                float[] feature = (float[]) array.getArray();
-                FaceAttribute faceAttribute = new FaceAttribute();
-                faceAttribute.setFeature(feature);
-                pictureData.setFeature(faceAttribute);
-            } catch (SQLException e) {
-                e.printStackTrace();
+        List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql, id);
+        if (mapList != null && mapList.size() > 0) {
+            Map<String, Object> map = mapList.get(0);
+            if (!map.isEmpty()) {
+                byte[] photo = (byte[]) map.get(ObjectInfoTable.PHOTO);
+                pictureData.setImageData(photo);
+                Array featureArray = (Array) map.get(ObjectInfoTable.FEATURE);
+                try {
+                    float[] feature = (float[]) featureArray.getArray();
+                    if (photo != null && photo.length > 0){
+                    FaceAttribute faceAttribute = new FaceAttribute();
+                    faceAttribute.setFeature(feature);
+                    pictureData.setFeature(faceAttribute);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return pictureData;
@@ -468,17 +474,21 @@ public class PhoenixDao implements Serializable {
         return count;
     }
 
-    public Map migrationCount(String month, Timestamp start_time, Timestamp end_time) {
-        log.info("Start count objectInfo migration number");
-        String sql = parseByOption.migrationCount();
-        log.info("Count objectInfo migration SQL : " + sql);
-        Map<String,Integer> map = new HashMap<>();
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, start_time, end_time);
+    public EmigrationCount emigrationCount(String month, Timestamp startTime, Timestamp endTime) {
+        log.info("Start count objectInfo emigration number");
+        String sql = parseByOption.emigrationCount();
+        log.info("Count objectInfo emigration SQL : " + sql);
+        EmigrationCount count = null;
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, startTime, endTime);
         while (sqlRowSet.next()) {
-            int count = sqlRowSet.getInt("num");
-            map.put(month,count);
+            count = new EmigrationCount();
+            count.setMonth(month);
+            int i = sqlRowSet.getInt("num");
+            count.setCount(i);
         }
-        log.info("Count objectInfo migration is: " + map.get(month));
-        return map;
+        if (count != null) {
+            log.info("Count objectInfo emigration count : [ month = " + count.getMonth() + ", count = " + count.getCount() + "]");
+        }
+        return count;
     }
 }

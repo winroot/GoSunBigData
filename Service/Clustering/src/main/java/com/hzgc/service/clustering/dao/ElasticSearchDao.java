@@ -24,10 +24,10 @@ public class ElasticSearchDao {
         this.esClient = ElasticSearchHelper.getEsClient(clusterName, esHost, Integer.parseInt(esPort));
     }
 
-    public SearchHit[] detailClusteringSearch_v1(String clusterId, String time, int start, int limit) {
+    public SearchHit[] detailClusteringSearch_v1(String region, String time, int start, int limit) {
         BoolQueryBuilder totalBQ = QueryBuilders.boolQuery();
-        if (clusterId != null && time != null) {
-            totalBQ.must(QueryBuilders.matchPhraseQuery(DynamicTable.CLUSTERING_ID, time + "-" + clusterId));
+        if (region != null && time != null) {
+            totalBQ.must(QueryBuilders.matchPhraseQuery(DynamicTable.CLUSTERING_ID, time + "-" + region));
         }
 
         SearchRequestBuilder searchRequestBuilder = esClient

@@ -5,14 +5,9 @@ import com.hzgc.common.table.starepo.ObjectInfoTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.jni.FaceFunction;
 import com.hzgc.jni.PictureData;
 import com.hzgc.service.starepo.bean.StaticSortParam;
-import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
-import com.hzgc.service.starepo.bean.export.PersonObject;
-import com.hzgc.service.starepo.bean.export.PersonObjectGroupByPkey;
-import com.hzgc.service.starepo.bean.export.PersonSingleResult;
+import com.hzgc.service.starepo.bean.export.*;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.SearchRecordParam;
@@ -26,10 +21,12 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -53,6 +50,8 @@ public class ObjectInfoHandlerService {
     private ObjectInfoHandlerTool objectInfoHandlerTool;
     @Autowired
     private ParseByOption parseByOption;
+    @Autowired
+    private RestTemplate restTemplate;
 
     public ObjectInfoHandlerService() {
     }
@@ -184,7 +183,7 @@ public class ObjectInfoHandlerService {
                 hbaseDao.saveSearchRecord(param, objectSearchResult);
             }
         } else {
-            log.info("Starg get object info not search picture");
+            log.info("Start get object info not search picture");
             //封装personSingleResult
             String searchId = UuidUtil.getUuid();
             objectSearchResult = new ObjectSearchResult();
@@ -385,12 +384,12 @@ public class ObjectInfoHandlerService {
         //查询搜索记录
         String searchId = opts.getTotalSearchId();
         byte[] bytes = hbaseDao.get(searchId, SearchResultTable.STAREPO_COLUMN_SEARCHMESSAGE);
-        if (bytes == null || bytes.length <= 0){
+        if (bytes == null || bytes.length <= 0) {
             log.info("Get file faild !");
             return null;
         }
         ObjectSearchResult objectSearchResult = JSONUtil.toObject(new String(bytes), ObjectSearchResult.class);
-        if (objectSearchResult == null || objectSearchResult.getSingleSearchResults() == null){
+        if (objectSearchResult == null || objectSearchResult.getSingleSearchResults() == null) {
             log.info("Get file faild !");
             return null;
         }
@@ -562,11 +561,12 @@ public class ObjectInfoHandlerService {
         if (pictureData != null) {
             byte[] photo = pictureData.getImageData();
             float[] feature = pictureData.getFeature().getFeature();
-            FaceAttribute faceAttribute = FaceFunction.featureExtract(photo);
-            faceAttribute.setFeature(feature);
-            pictureData.setFeature(faceAttribute);
+            pictureData = restTemplate.postForObject("http://FACETEST/extract_bytes", photo, PictureData.class);
+            if (pictureData != null) {
+                pictureData.getFeature().setFeature(feature);
+            }
         }
-        log.info("Get objectInfo feature by rowkey result : " + pictureData.toString());
+        log.info("Get objectInfo feature by rowkey result : " + (pictureData != null ? pictureData.toString() : null));
         return pictureData;
     }
 
@@ -589,19 +589,74 @@ public class ObjectInfoHandlerService {
         return phoenixDao.countStatus();
     }
 
-    public Map migrationCount(String start_time, String end_time) {
+    public List<EmigrationCount> emigrationCount(String start_time, String end_time) {
+        List<EmigrationCount> emigrationCountList = new ArrayList<>();
+        List<String> monthList = getMonthsInRange(start_time, end_time);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        for (String month : monthList) {
+            String start = month + "-" + "01";
+            int dates = getActualMaximum(month);
+            String end = month + "-" + dates;
+            Timestamp startTime = null;
+            Timestamp endTime = null;
+            try {
+                Date startDate = sdf.parse(start);
+                Date endDate = sdf.parse(end);
+                startTime = new Timestamp(startDate.getTime());
+                endTime = new Timestamp(endDate.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            EmigrationCount emigrationCount = phoenixDao.emigrationCount(month, startTime, endTime);
+            emigrationCountList.add(emigrationCount);
+        }
+        return emigrationCountList;
+    }
+
+    /**
+     * 获取某段时间内所有的月份值
+     *
+     * @param startTime 起始时间
+     * @param endTime   结束时间
+     * @return 月份列表
+     */
+    private static List<String> getMonthsInRange(String startTime, String endTime) {
+        List<String> monthList = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-        Timestamp startTime = null;
-        Timestamp endTime = null;
         try {
-            Date start = sdf.parse(start_time);
-            Date end = sdf.parse(end_time);
-            startTime = new Timestamp(start.getTime());
-            endTime = new Timestamp(end.getTime());
+            Calendar start = Calendar.getInstance();
+            start.setTime(sdf.parse(startTime));
+            Calendar end = Calendar.getInstance();
+            end.setTime(sdf.parse(endTime));
+            Long startTimeL = start.getTimeInMillis();
+            Long endTimeL = end.getTimeInMillis();
+            while (startTimeL <= endTimeL) {
+                Date everyTime = new Date(startTimeL);
+                monthList.add(sdf.format(everyTime));
+
+                start.add(Calendar.MONTH, 1);
+                startTimeL = start.getTimeInMillis();
+            }
+            return monthList;
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return phoenixDao.migrationCount(start_time, startTime, endTime);
+        return monthList;
+    }
+
+    /**
+     * 获取当前月份共有多少天
+     *
+     * @param date 时间 格式：2018-09
+     * @return 当月天数
+     */
+    public static int getActualMaximum(String date) {
+        int year = Integer.parseInt(String.valueOf(date.charAt(0)) + date.charAt(1) + date.charAt(2) + date.charAt(3));
+        int month = Integer.parseInt(String.valueOf(date.charAt(5)) + date.charAt(6));
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month - 1);             // 当前月份减1
+        return cal.getActualMaximum(Calendar.DATE);
     }
 }
 
