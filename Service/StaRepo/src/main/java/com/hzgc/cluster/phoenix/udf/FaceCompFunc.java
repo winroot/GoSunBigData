@@ -1,4 +1,4 @@
-package com.hzgc.service.staticrepo;
+package com.hzgc.cluster.phoenix.udf;
 
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.phoenix.expression.Expression;
@@ -18,6 +18,7 @@ import java.util.List;
         @FunctionParseNode.Argument(allowedTypes = {PVarchar.class})})
 
 public class FaceCompFunc extends ScalarFunction {
+
     public static final String NAME = "FACECOMP";
 
     private List<float[]> thePassfeatures = new ArrayList<>();
@@ -101,6 +102,9 @@ public class FaceCompFunc extends ScalarFunction {
 
 
     public static float featureCompare(float[] currentFeature, float[] historyFeature) {
+        if (currentFeature.length != 512 || historyFeature.length != 512) {
+            return 0;
+        }
         double similarityDegree = 0;
         double currentFeatureMultiple = 0;
         double historyFeatureMultiple = 0;

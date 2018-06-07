@@ -169,11 +169,7 @@ function distribute_service()
     ZK_HOSTS=$(grep zookeeper_installnode $CONF_FILE | cut -d '=' -f2)
     zk_arr=(${ZK_HOSTS//;/ })
     zkpro=''
-    for zk_host in ${zk_arr[@]}
-    do
-      zkpro=${zkpro}${zk_host}":2181,"
-    done
-    zkpro=${zkpro%?}
+    zkpro=$zkpro${zk_arr[0]}":2181"
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${ADDRESS_START_FILE}

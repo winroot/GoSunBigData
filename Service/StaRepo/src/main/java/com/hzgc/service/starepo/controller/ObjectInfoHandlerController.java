@@ -4,12 +4,12 @@ import com.hzgc.common.table.seachres.SearchResultTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.jni.PictureData;
-import com.hzgc.service.starepo.bean.export.EmigrationCount;
 import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.SearchRecordParam;
 import com.hzgc.service.starepo.service.ObjectInfoHandlerService;
+import com.hzgc.service.util.bean.PeopleManagerCount;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
@@ -300,7 +300,7 @@ public class ObjectInfoHandlerController {
      * @return List<EmigrationCount> 统计列表
      */
     @RequestMapping(value = BigDataPath.STAREPO_COUNT_EMIGRATION, method = RequestMethod.GET)
-    public List<EmigrationCount> emigrationCount(String start_time, String end_time) {
+    public List<PeopleManagerCount> emigrationCount(String start_time, String end_time) {
         log.info("Start count emigration population, param is : start_time = " + start_time + ", end_time = " + end_time);
         return objectInfoHandlerService.emigrationCount(start_time, end_time);
     }

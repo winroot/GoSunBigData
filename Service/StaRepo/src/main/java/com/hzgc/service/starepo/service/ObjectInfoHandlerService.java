@@ -15,6 +15,7 @@ import com.hzgc.service.starepo.bean.param.SubQueryParam;
 import com.hzgc.service.starepo.dao.HBaseDao;
 import com.hzgc.service.starepo.dao.PhoenixDao;
 import com.hzgc.service.starepo.util.DocHandlerUtil;
+import com.hzgc.service.util.bean.PeopleManagerCount;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -565,7 +566,7 @@ public class ObjectInfoHandlerService {
         if (pictureData != null) {
             byte[] photo = pictureData.getImageData();
             float[] feature = pictureData.getFeature().getFeature();
-            pictureData = restTemplate.postForObject("http://FACETEST/extract_bytes", photo, PictureData.class);
+            pictureData = restTemplate.postForObject("http://face/extract_bytes", photo, PictureData.class);
             if (pictureData != null) {
                 pictureData.getFeature().setFeature(feature);
             }
@@ -593,8 +594,8 @@ public class ObjectInfoHandlerService {
         return phoenixDao.countStatus();
     }
 
-    public List<EmigrationCount> emigrationCount(String start_time, String end_time) {
-        List<EmigrationCount> emigrationCountList = new ArrayList<>();
+    public List<PeopleManagerCount> emigrationCount(String start_time, String end_time) {
+        List<PeopleManagerCount> emigrationCountList = new ArrayList<>();
         List<String> monthList = getMonthsInRange(start_time, end_time);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for (String month : monthList) {
@@ -611,7 +612,7 @@ public class ObjectInfoHandlerService {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            EmigrationCount emigrationCount = phoenixDao.emigrationCount(month, startTime, endTime);
+            PeopleManagerCount emigrationCount = phoenixDao.emigrationCount(month, startTime, endTime);
             emigrationCountList.add(emigrationCount);
         }
         return emigrationCountList;

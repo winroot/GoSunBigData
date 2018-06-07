@@ -1,4 +1,4 @@
-package com.hzgc.cluster.spark.phoenix.udf;
+package com.hzgc.cluster.phoenix.udf;
 
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.phoenix.expression.Expression;
