@@ -8,15 +8,14 @@ import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -41,11 +40,11 @@ public class ObjectTypeController {
             log.error("Start add object type, but param is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-        if (StringUtils.isBlank(objectTypeParam.getObjectTypeName())){
+        if (StringUtils.isBlank(objectTypeParam.getObjectTypeName())) {
             log.error("Start add object type, but object type name is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-            log.info("Start add object type, param is:" + JSONUtil.toJson(objectTypeParam));
+        log.info("Start add object type, param is:" + JSONUtil.toJson(objectTypeParam));
         boolean success = objectTypeService.addObjectType(objectTypeParam);
         return ResponseResult.init(success);
     }
