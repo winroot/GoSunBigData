@@ -12,6 +12,7 @@ import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -68,6 +69,7 @@ public class WarnRuleController {
             Map dispatchMap = IpcIdsUtil.toDispatchMap(dispatch);
             ResponseResult<String> responseResult = warnRuleService.saveOriginData(dispatchMap);
             //调用大数据接口
+            ipcIDs.removeAll(Collections.singleton(null));
             log.info("Bigdata param , ipcIDs is "+JSONUtil.toJson(ipcIDs)+" warn list is "+JSONUtil.toJson(warnList));
             if (null != ipcIDs && ipcIDs.size()>0 && null != warnList && warnList.size()>0){
                 warnRuleService.configRules(ipcIDs,warnList);
@@ -93,6 +95,7 @@ public class WarnRuleController {
             warnList = dispatch.getRule().getWarns();
             ResponseResult<Boolean> responseResult = warnRuleService.updateRule(dispatch);
             //调用大数据接口
+            ipcIDs.removeAll(Collections.singleton(null));
             log.info("Bigdata param , ipcIDs is "+JSONUtil.toJson(ipcIDs)+" warn list is "+JSONUtil.toJson(warnList));
             if (null != ipcIDs && ipcIDs.size()>0 && null != warnList && warnList.size()>0){
                 warnRuleService.configRules(ipcIDs,warnList);
@@ -114,6 +117,7 @@ public class WarnRuleController {
             for (String s:map.keySet()){
                 ipcIDs.add(map.get(s).getSerial());
             }
+            ipcIDs.removeAll(Collections.singleton(null));
             //调用大数据接口
             log.info("Bigdata param , ipcIDs is "+JSONUtil.toJson(ipcIDs));
             warnRuleService.deleteRules(ipcIDs);
