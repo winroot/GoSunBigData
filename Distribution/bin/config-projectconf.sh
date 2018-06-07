@@ -41,6 +41,8 @@ SERVICE_SCRPIT=$COMMON_DIR/bin/config-service.sh ### 一键配置service脚本
 SPARKLOG_DIR=$SPARK_DIR/logs                          ### spark的log日志目录
 SERVICE_LOG_DIR=$SERVICE_DIR/logs                     ### service的log日志目录
 
+
+
 #####################################################################
 # 函数名: distribute_service
 # 描述: 将service下各个组件分发到需要的节点下
