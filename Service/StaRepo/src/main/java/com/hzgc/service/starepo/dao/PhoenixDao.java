@@ -8,12 +8,12 @@ import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.PictureData;
-import com.hzgc.service.starepo.bean.export.EmigrationCount;
 import com.hzgc.service.starepo.bean.export.PersonSingleResult;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectTypeParam;
 import com.hzgc.service.starepo.service.ParseByOption;
+import com.hzgc.service.util.bean.PeopleManagerCount;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -469,21 +469,21 @@ public class PhoenixDao implements Serializable {
         return count;
     }
 
-    public EmigrationCount emigrationCount(String month, Timestamp startTime, Timestamp endTime) {
+    public PeopleManagerCount emigrationCount(String month, Timestamp startTime, Timestamp endTime) {
         log.info("Start count emigration population, param is : month = " + month
                 + ", startTime = " + startTime + ", endTime = " + endTime);
         String sql = parseByOption.emigrationCount();
         log.info("Start count emigration population, SQL is: " + sql);
-        EmigrationCount count = null;
+        PeopleManagerCount count = null;
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, startTime, endTime);
         while (sqlRowSet.next()) {
-            count = new EmigrationCount();
+            count = new PeopleManagerCount();
             count.setMonth(month);
             int i = sqlRowSet.getInt("num");
-            count.setCount(i);
+            count.setRemovePeople(i);
         }
         if (count != null) {
-            log.info("Count emigration population is : [ month = " + count.getMonth() + ", count = " + count.getCount() + "]");
+            log.info("Count emigration population is : [ month = " + count.getMonth() + ", count = " + count.getRemovePeople() + "]");
         }
         return count;
     }

@@ -1,8 +1,7 @@
 package com.hzgc.service.visual.service;
 
 import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.service.clustering.bean.ClusterStatistics;
-import com.hzgc.service.starepo.bean.export.EmigrationCount;
+import com.hzgc.service.util.bean.PeopleManagerCount;
 import com.hzgc.service.util.rest.BigDataPath;
 import com.hzgc.service.visual.bean.PeopleManager;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -23,51 +22,49 @@ public class PeopleManagerService {
     private RestTemplate restTemplate;
 
     public List<PeopleManager> peopleCount(String start_time, String end_time) {
-        List<EmigrationCount> emigrationCounts = emigrationCount(start_time, end_time);
-        List<ClusterStatistics> clusterStatistics = clusteringCount(start_time, end_time);
-        System.out.println(JSONUtil.toJson(emigrationCounts));
-        System.out.println(JSONUtil.toJson(clusterStatistics));
-        Map<String, ClusterStatistics> statisticsMapping =
-                clusterStatistics.stream().collect(Collectors.toMap(ClusterStatistics::getMonth, data -> data));
+        List<PeopleManagerCount> staRepo = emigrationCount(start_time, end_time);
+        List<PeopleManagerCount> clustering = clusteringCount(start_time, end_time);
+        Map<String, PeopleManagerCount> statisticsMapping =
+                clustering.stream().collect(Collectors.toMap(PeopleManagerCount::getMonth, data -> data));
 
         List<PeopleManager> peopleManagers = new ArrayList<>();
-        emigrationCounts.forEach(x -> {
+        staRepo.forEach(x -> {
             PeopleManager peopleManager = new PeopleManager();
-            peopleManager.setMoveOutCount(x.getCount());
+            peopleManager.setMoveOutCount(x.getRemovePeople());
             peopleManager.setMonth(x.getMonth());
-            peopleManager.setMoveInCount(statisticsMapping.get(x.getMonth()).getNum());
+            peopleManager.setMoveInCount(statisticsMapping.get(x.getMonth()).getAddPeople());
             peopleManagers.add(peopleManager);
         });
         return peopleManagers;
     }
 
     @HystrixCommand(fallbackMethod = "emigrationCountError")
-    private List<EmigrationCount> emigrationCount(String start_time, String end_time) {
-        ResponseEntity<EmigrationCount[]> responseEntity = restTemplate.getForEntity(
+    private List<PeopleManagerCount> emigrationCount(String start_time, String end_time) {
+        ResponseEntity<PeopleManagerCount[]> responseEntity = restTemplate.getForEntity(
                 "http://starepo/" + BigDataPath.STAREPO_COUNT_EMIGRATION
                         + "?start_time=" + start_time + "&end_time=" + end_time,
-                EmigrationCount[].class
+                PeopleManagerCount[].class
         );
         return Arrays.asList(responseEntity.getBody());
     }
 
     @SuppressWarnings("unused")
-    private List<EmigrationCount> emigrationCountError(String start_time, String end_time) {
+    private List<PeopleManagerCount> emigrationCountError(String start_time, String end_time) {
         log.error("Emigration count faild");
         return null;
     }
 
     @HystrixCommand(fallbackMethod = "clusteringCountError")
-    private List<ClusterStatistics> clusteringCount(String start_time, String end_time) {
-        ResponseEntity<ClusterStatistics[]> responseEntity = restTemplate.getForEntity(
+    private List<PeopleManagerCount> clusteringCount(String start_time, String end_time) {
+        ResponseEntity<PeopleManagerCount[]> responseEntity = restTemplate.getForEntity(
                 "http://clustering/" + BigDataPath.CLUSTERING_TOTLE
                         + "?start_time=" + start_time + "&end_time=" + end_time,
-                ClusterStatistics[].class);
+                PeopleManagerCount[].class);
         return Arrays.asList(responseEntity.getBody());
     }
 
     @SuppressWarnings("unused")
-    private List<ClusterStatistics> clusteringCountError(String start_time, String end_time) {
+    private List<PeopleManagerCount> clusteringCountError(String start_time, String end_time) {
         log.error("Clustering count error");
         return null;
     }
