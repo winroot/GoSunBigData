@@ -304,7 +304,7 @@ public class ParseByOption {
 
         // 关于人员类型列表的查询
         List<String> pkeys = param.getObjectTypeKeyList();
-        if (pkeys != null) {
+        if (pkeys != null && pkeys.size() > 0) {
             if (pkeys.size() == 1) {
                 if (isChanged) {
                     whereQuery.append(" and ").append(ObjectInfoTable.PKEY)
