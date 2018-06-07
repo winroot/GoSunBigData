@@ -304,7 +304,7 @@ public class ParseByOption {
 
         // 关于人员类型列表的查询
         List<String> pkeys = param.getObjectTypeKeyList();
-        if (pkeys != null) {
+        if (pkeys != null && pkeys.size() > 0) {
             if (pkeys.size() == 1) {
                 if (isChanged) {
                     whereQuery.append(" and ").append(ObjectInfoTable.PKEY)
@@ -556,7 +556,7 @@ public class ParseByOption {
                 + ") values ('" + objectId + "', " + status + ")";
     }
 
-    public String migrationCount() {
+    public String emigrationCount() {
         return "select count(*) as num from "
                 + ObjectInfoTable.TABLE_NAME + " where "
                 + ObjectInfoTable.STATUS + " = 1 and "

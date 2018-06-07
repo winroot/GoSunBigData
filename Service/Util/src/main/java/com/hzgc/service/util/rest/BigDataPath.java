@@ -73,7 +73,7 @@ public class BigDataPath {
     public static final String STAREPO_CREATE_WORD = "/create_word";
     public static final String STAREPO_EXPORT_WORD = "/export_word";
     public static final String OBJECTINFO_COUNT_STATUS = "/count_status";
-    public static final String STAREPO_COUNT_MIGRATION = "/count_migration";
+    public static final String STAREPO_COUNT_EMIGRATION = "/count_emigration";
 
     public static final String TYPE_ADD = "/type_add";
     public static final String TYPE_DELETE = "/type_delete";
@@ -87,6 +87,7 @@ public class BigDataPath {
     public static final String CAPTURECOUNT_DYNREPO = "/capture_day_count";
     public static final String CAPTURECOUNT_IPCIDS_TIME = "/face_hours";
     public static final String CAPTURECOUNT_IPCIDS = "/face";
+    public static final String PEOPLE_COUNT="/people_count";
     public static final String GET_PICTURE = "/image";
 
     /**

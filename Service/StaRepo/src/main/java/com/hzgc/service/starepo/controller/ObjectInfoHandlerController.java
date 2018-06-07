@@ -6,9 +6,10 @@ import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.jni.PictureData;
 import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
-import com.hzgc.service.starepo.bean.param.SearchRecordParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
+import com.hzgc.service.starepo.bean.param.SearchRecordParam;
 import com.hzgc.service.starepo.service.ObjectInfoHandlerService;
+import com.hzgc.service.util.bean.PeopleManagerCount;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
@@ -26,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -47,7 +47,7 @@ public class ObjectInfoHandlerController {
     @RequestMapping(value = BigDataPath.OBJECTINFO_ADD, method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public ResponseResult<Integer> addObjectInfo(@RequestBody @ApiParam(value = "添加对象") ObjectInfoParam param) {
         if (param == null) {
-            log.error("Starg add object info, but param is null");
+            log.error("Start add object info, but param is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
         if (StringUtils.isBlank(param.getObjectTypeKey())) {
@@ -75,7 +75,7 @@ public class ObjectInfoHandlerController {
             log.error("Start delete object info, but rowkey list is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-        log.info("Start delete object info, rowkey list is:" + JSONUtil.toJson(rowkeyList));
+        log.info("Start delete object info, rowkey list is:" + rowkeyList);
         Integer succeed = objectInfoHandlerService.deleteObjectInfo(rowkeyList);
         return ResponseResult.init(succeed);
     }
@@ -94,12 +94,12 @@ public class ObjectInfoHandlerController {
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
         if (StringUtils.isBlank(param.getId())) {
-            log.error("Start update object info, but id is error");
+            log.error("Start update object info, but id is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
 
         if (StringUtils.isBlank(param.getObjectTypeKey())) {
-            log.error("Start update object info, but object type key is error");
+            log.error("Start update object info, but object type key is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
         log.info("Start update object info, param is:" + JSONUtil.toJson(param));
@@ -122,8 +122,10 @@ public class ObjectInfoHandlerController {
     @RequestMapping(value = BigDataPath.OBJECTINFO_UPDATE_STATUS, method = RequestMethod.GET)
     public ResponseResult<Integer> updateObjectInfo_status(String objectId, int status) {
         if (StringUtils.isBlank(objectId)) {
+            log.error("Start update object status, but object id is  null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
+        log.info("Start update object status, param is : objectId = " + objectId + ", status = " + status);
         int result = objectInfoHandlerService.updateObjectInfo_status(objectId, status);
         return ResponseResult.init(result);
     }
@@ -138,7 +140,7 @@ public class ObjectInfoHandlerController {
     @RequestMapping(value = BigDataPath.OBJECTINFO_SEARCH, method = RequestMethod.POST)
     public ResponseResult<ObjectSearchResult> getObjectInfo(@RequestBody @ApiParam(value = "查询条件") GetObjectInfoParam param) {
         if (param == null) {
-            log.error("Start get object info, param is null");
+            log.error("Start get object info, but param is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
         log.info("Start get object info, param is:" + JSONUtil.toJson(param));
@@ -157,10 +159,10 @@ public class ObjectInfoHandlerController {
     @RequestMapping(value = BigDataPath.OBJECTINFO_GET_PHOTOBYKEY, method = RequestMethod.GET)
     public ResponseEntity<byte[]> getObjectPhoto(String objectID) {
         if (StringUtils.isBlank(objectID)) {
-            log.error("Start get object photo, but object id error");
+            log.error("Start get object photo, but object id null");
             return ResponseEntity.badRequest().contentType(MediaType.IMAGE_JPEG).body(null);
         }
-        log.info("Starg get photo by rowkey. rowkey is:" + objectID);
+        log.info("Start get object photo, param is : " + objectID);
         byte[] photo = objectInfoHandlerService.getPhotoByKey(objectID);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(photo);
     }
@@ -176,8 +178,10 @@ public class ObjectInfoHandlerController {
     @RequestMapping(value = BigDataPath.OBJECTINFO_GET_FEATURE, method = RequestMethod.GET)
     public ResponseResult<PictureData> getFeature(String id) {
         if (!IsEmpty.strIsRight(id)) {
-            return null;
+            log.error("Start get object picture data, but object id is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
+        log.info("Start get object picture data, param is : " + id);
         PictureData result = objectInfoHandlerService.getFeature(id);
         return ResponseResult.init(result);
     }
@@ -207,10 +211,27 @@ public class ObjectInfoHandlerController {
     @ApiOperation(value = "生成重点人员Word", response = String.class)
     @RequestMapping(value = BigDataPath.STAREPO_CREATE_WORD, method = RequestMethod.POST)
     public ResponseResult<String> createPeoplesWord(@RequestBody @ApiParam(value = "历史查询参数") SearchRecordParam param) {
-        if (param == null || param.getSize() == 0 || param.getStart() == 0
-                || StringUtils.isBlank(param.getTotalSearchId()) || param.getSubQueryParamList() == null) {
+        if (param == null) {
+            log.error("Start create emphasis personnel word, but param error");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
+        if (param.getStart() == 0){
+            log.error("Start create emphasis personnel word, but start = 0");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        if (param.getSize() == 0){
+            log.error("Start create emphasis personnel word, but size = 0");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        if (StringUtils.isBlank(param.getTotalSearchId())){
+            log.error("Start create emphasis personnel word, but total search id is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        if (param.getSubQueryParamList() == null){
+            log.error("Start create emphasis personnel word, but search result list is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        log.info("Start create emphasis personnel word, param is : " + JSONUtil.toJson(param));
         String rowkey_file = objectInfoHandlerService.exportPeoples(param);
         return ResponseResult.init(rowkey_file);
     }
@@ -226,8 +247,10 @@ public class ObjectInfoHandlerController {
     @RequestMapping(value = BigDataPath.STAREPO_EXPORT_WORD, method = RequestMethod.GET)
     public ResponseEntity<byte[]> exportPeoplesWord(@ApiParam(value = "文件地址") String fileAddress) {
         if (fileAddress == null) {
+            log.error("Start export emphasis personnel word, but file address error");
             return null;
         }
+        log.info("Start export emphasis personnel word, param is : " + fileAddress);
         byte[] file = objectInfoHandlerService.getDataFromHBase(fileAddress, SearchResultTable.STAREPO_COLUMN_FILE);
         HttpHeaders headers = new HttpHeaders();
         try {
@@ -264,21 +287,21 @@ public class ObjectInfoHandlerController {
     @ApiOperation(value = "统计常住人口", response = ResponseResult.class)
     @RequestMapping(value = BigDataPath.OBJECTINFO_COUNT_STATUS, method = RequestMethod.GET)
     public ResponseResult<Integer> permanentPopulationCount() {
+        log.info("Start count permanent population");
         int count = objectInfoHandlerService.permanentPopulationCount();
         return ResponseResult.init(count);
     }
 
     /**
-     * 每月迁出人口数量统计
+     * 迁出人口数量统计
      *
      * @param start_time 起始统计时间
-     * @param end_time  结束统计时间
-     * @return Map key:月份 value：数量
+     * @param end_time   结束统计时间
+     * @return List<EmigrationCount> 统计列表
      */
-    @ApiOperation(value = "迁出人口数量统计", response = ResponseResult.class)
-    @RequestMapping(value = BigDataPath.STAREPO_COUNT_MIGRATION, method = RequestMethod.GET)
-    public ResponseResult<Map>migrationCount(String start_time, String end_time) {
-        Map map = objectInfoHandlerService.migrationCount(start_time, end_time);
-        return ResponseResult.init(map);
+    @RequestMapping(value = BigDataPath.STAREPO_COUNT_EMIGRATION, method = RequestMethod.GET)
+    public List<PeopleManagerCount> emigrationCount(String start_time, String end_time) {
+        log.info("Start count emigration population, param is : start_time = " + start_time + ", end_time = " + end_time);
+        return objectInfoHandlerService.emigrationCount(start_time, end_time);
     }
 }

@@ -5,14 +5,9 @@ import com.hzgc.common.table.starepo.ObjectInfoTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.jni.FaceFunction;
 import com.hzgc.jni.PictureData;
 import com.hzgc.service.starepo.bean.StaticSortParam;
-import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
-import com.hzgc.service.starepo.bean.export.PersonObject;
-import com.hzgc.service.starepo.bean.export.PersonObjectGroupByPkey;
-import com.hzgc.service.starepo.bean.export.PersonSingleResult;
+import com.hzgc.service.starepo.bean.export.*;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.SearchRecordParam;
@@ -20,6 +15,7 @@ import com.hzgc.service.starepo.bean.param.SubQueryParam;
 import com.hzgc.service.starepo.dao.HBaseDao;
 import com.hzgc.service.starepo.dao.PhoenixDao;
 import com.hzgc.service.starepo.util.DocHandlerUtil;
+import com.hzgc.service.util.bean.PeopleManagerCount;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -95,10 +91,13 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示删除成功，返回值为1，表示删除失败
      */
     public int deleteObjectInfo(List<String> rowkeyList) {
-        for (String rowkey : rowkeyList) {
-            staticProducer.sendKafkaMessage(INNERTOPIC, DELETE, rowkey);
+        int i = phoenixDao.deleteObjectInfo(rowkeyList);
+        if (i == 0) {
+            for (String rowkey : rowkeyList) {
+                staticProducer.sendKafkaMessage(INNERTOPIC, DELETE, rowkey);
+            }
         }
-        return phoenixDao.deleteObjectInfo(rowkeyList);
+        return i;
     }
 
     /**
@@ -179,12 +178,14 @@ public class ObjectInfoHandlerService {
                 objectSearchResult = getObjectInfoNotOnePerson(sqlRowSet, photosMap);
                 //存储搜索结果
                 hbaseDao.saveSearchRecord(param, objectSearchResult);
+                log.info("Get object info successfull, save search result to 'searchRes' table successfull");
             } else {
                 //同一个人的情况下
                 log.info("Start get object info, according to the same person");
                 objectSearchResult = getObjectInfoOnePerson(sqlRowSet, photosMap);
                 //存储搜索结果
                 hbaseDao.saveSearchRecord(param, objectSearchResult);
+                log.info("Get object info successfull, save search result to 'searchRes' table successfull");
             }
         } else {
             log.info("Start get object info not search picture");
@@ -201,9 +202,11 @@ public class ObjectInfoHandlerService {
             objectSearchResult.setSingleSearchResults(singleResults);
             objectSearchResult.setSearchId(UuidUtil.getUuid());
             hbaseDao.saveSearchRecord(param, objectSearchResult);
+            log.info("Get object info successfull, save search result to 'searchRes' table successfull");
         }
         //返回分页结果
         objectInfoHandlerTool.formatTheObjectSearchResult(objectSearchResult, param.getStart(), param.getLimit());
+        log.info("Get object info successfull, object info search result : " + JSONUtil.toJson(objectSearchResult));
         return objectSearchResult;
     }
 
@@ -284,11 +287,11 @@ public class ObjectInfoHandlerService {
     /**
      * 根据rowkey 返回人员的照片
      *
-     * @param rowkey 人员在对象信息库中的唯一标志。
+     * @param objectId 人员在对象信息库中的唯一标志。
      * @return 图片的byte[] 数组
      */
-    public byte[] getPhotoByKey(String rowkey) {
-        return phoenixDao.getPhotoByObjectId(rowkey);
+    public byte[] getPhotoByKey(String objectId) {
+        return phoenixDao.getPhotoByObjectId(objectId);
     }
 
     /**
@@ -372,9 +375,6 @@ public class ObjectInfoHandlerService {
         int pageSize = searchRecordParam.getSize();
         int start = searchRecordParam.getStart();
         objectInfoHandlerTool.formatTheObjectSearchResult(finnalObjectSearchResult, start, pageSize);
-        log.info("***********************");
-        log.info(finnalObjectSearchResult.toString());
-        log.info("***********************");
         return finnalObjectSearchResult;
     }
 
@@ -388,13 +388,13 @@ public class ObjectInfoHandlerService {
         //查询搜索记录
         String searchId = opts.getTotalSearchId();
         byte[] bytes = hbaseDao.get(searchId, SearchResultTable.STAREPO_COLUMN_SEARCHMESSAGE);
-        if (bytes == null || bytes.length <= 0){
-            log.info("Get file faild !");
+        if (bytes == null || bytes.length <= 0) {
+            log.info("Start create emphasis personnel word, but get search result is null from 'searchRes' table");
             return null;
         }
         ObjectSearchResult objectSearchResult = JSONUtil.toObject(new String(bytes), ObjectSearchResult.class);
-        if (objectSearchResult == null || objectSearchResult.getSingleSearchResults() == null){
-            log.info("Get file faild !");
+        if (objectSearchResult == null || objectSearchResult.getSingleSearchResults() == null) {
+            log.info("Start create emphasis personnel word, but search result is null");
             return null;
         }
         PersonSingleResult result = objectSearchResult.getSingleSearchResults().get(0);
@@ -419,9 +419,10 @@ public class ObjectInfoHandlerService {
             String rowkey = "file_" + data + "_" + UuidUtil.getUuid().substring(0, 4) + ".doc";
             hbaseDao.insert_word(rowkey, buff);
             //返回文件Id
+            log.info("create emphasis personnel word successfull");
             return rowkey;
         }
-        log.info("Get file faild !");
+        log.info("create emphasis personnel word failed");
         return null;
     }
 
@@ -565,12 +566,12 @@ public class ObjectInfoHandlerService {
         if (pictureData != null) {
             byte[] photo = pictureData.getImageData();
             float[] feature = pictureData.getFeature().getFeature();
-            pictureData = restTemplate.postForObject("http://FACETEST/extract_bytes", photo, PictureData.class);
-            if (pictureData != null){
-            pictureData.getFeature().setFeature(feature);
+            pictureData = restTemplate.postForObject("http://face/extract_bytes", photo, PictureData.class);
+            if (pictureData != null) {
+                pictureData.getFeature().setFeature(feature);
             }
         }
-        log.info("Get objectInfo feature by rowkey result : " + (pictureData != null ? pictureData.toString() : null));
+        log.info("Get object picture data successfull, picture data : " + JSONUtil.toJson(pictureData));
         return pictureData;
     }
 
@@ -593,19 +594,74 @@ public class ObjectInfoHandlerService {
         return phoenixDao.countStatus();
     }
 
-    public Map migrationCount(String start_time, String end_time) {
+    public List<PeopleManagerCount> emigrationCount(String start_time, String end_time) {
+        List<PeopleManagerCount> emigrationCountList = new ArrayList<>();
+        List<String> monthList = getMonthsInRange(start_time, end_time);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        for (String month : monthList) {
+            String start = month + "-" + "01";
+            int dates = getActualMaximum(month);
+            String end = month + "-" + dates;
+            Timestamp startTime = null;
+            Timestamp endTime = null;
+            try {
+                Date startDate = sdf.parse(start);
+                Date endDate = sdf.parse(end);
+                startTime = new Timestamp(startDate.getTime());
+                endTime = new Timestamp(endDate.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            PeopleManagerCount emigrationCount = phoenixDao.emigrationCount(month, startTime, endTime);
+            emigrationCountList.add(emigrationCount);
+        }
+        return emigrationCountList;
+    }
+
+    /**
+     * 获取某段时间内所有的月份值
+     *
+     * @param startTime 起始时间
+     * @param endTime   结束时间
+     * @return 月份列表
+     */
+    private static List<String> getMonthsInRange(String startTime, String endTime) {
+        List<String> monthList = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-        Timestamp startTime = null;
-        Timestamp endTime = null;
         try {
-            Date start = sdf.parse(start_time);
-            Date end = sdf.parse(end_time);
-            startTime = new Timestamp(start.getTime());
-            endTime = new Timestamp(end.getTime());
+            Calendar start = Calendar.getInstance();
+            start.setTime(sdf.parse(startTime));
+            Calendar end = Calendar.getInstance();
+            end.setTime(sdf.parse(endTime));
+            Long startTimeL = start.getTimeInMillis();
+            Long endTimeL = end.getTimeInMillis();
+            while (startTimeL <= endTimeL) {
+                Date everyTime = new Date(startTimeL);
+                monthList.add(sdf.format(everyTime));
+
+                start.add(Calendar.MONTH, 1);
+                startTimeL = start.getTimeInMillis();
+            }
+            return monthList;
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return phoenixDao.migrationCount(start_time, startTime, endTime);
+        return monthList;
+    }
+
+    /**
+     * 获取当前月份共有多少天
+     *
+     * @param date 时间 格式：2018-09
+     * @return 当月天数
+     */
+    public static int getActualMaximum(String date) {
+        int year = Integer.parseInt(String.valueOf(date.charAt(0)) + date.charAt(1) + date.charAt(2) + date.charAt(3));
+        int month = Integer.parseInt(String.valueOf(date.charAt(5)) + date.charAt(6));
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month - 1);             // 当前月份减1
+        return cal.getActualMaximum(Calendar.DATE);
     }
 }
 

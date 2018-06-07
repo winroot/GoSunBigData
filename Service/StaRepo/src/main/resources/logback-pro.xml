@@ -6,7 +6,7 @@
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>/opt/%d{yyyy-MM-dd}.starepo.%i.log</FileNamePattern>
+            <FileNamePattern>log/%d{yyyy-MM-dd}.starepo.%i.log</FileNamePattern>
             <!--日志文件保留天数-->
             <MaxHistory>10</MaxHistory>
             <!-- 除按日志记录之外，还配置了日志文件不能超过2M，若超过2M，日志文件会以索引0开始，
@@ -23,12 +23,12 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
             <charset>utf-8</charset>
         </encoder>
-        <!-- 此日志文件只记录info级别的 -->
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
+        <!--&lt;!&ndash; 此日志文件只记录info级别的 &ndash;&gt;-->
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+            <!--<level>INFO</level>-->
+            <!--<onMatch>ACCEPT</onMatch>-->
+            <!--<onMismatch>DENY</onMismatch>-->
+        <!--</filter>-->
     </appender>
 
     <!-- 按照每天生成日志文件 -->
@@ -37,7 +37,7 @@
         <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>/opt/%d{yyyy-MM-dd}.starepoError.log</FileNamePattern>
+            <FileNamePattern>log/%d{yyyy-MM-dd}.starepoError.log</FileNamePattern>
             <!--日志文件保留天数<MaxHistory>10</MaxHistory>-->
             <!-- 除按日志记录之外，还配置了日志文件不能超过2M，若超过2M，日志文件会以索引0开始，
                 命名日志文件，例如log-error-2013-12-21.0.log

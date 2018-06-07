@@ -20,3 +20,4 @@ javadocs/
 *.lib
 *.sn.ini
 *.tmp
+log/

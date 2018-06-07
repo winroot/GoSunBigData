@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
 import java.util.List;
@@ -85,8 +86,7 @@ public class FaceController {
     }
 
     //图片数组提取特征值
-    @ApiOperation(value = "根据图片数组提取图片特征值", response = ResponseResult.class)
-    @ApiImplicitParam(name = "bytes", value = "图片数组", required = true, dataType = "string", paramType = "form")
+    @ApiIgnore
     @RequestMapping(value = BigDataPath.FEATURE_EXTRACT_BYTES, method = RequestMethod.POST)
     public PictureData getFeatureExtract(@RequestBody byte[] bytes){
         if (null != bytes){

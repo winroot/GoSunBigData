@@ -1,11 +1,11 @@
 package com.hzgc.service.clustering.controller;
 
 import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.service.clustering.bean.ClusterStatistics;
 import com.hzgc.service.clustering.bean.ClusteringInfo;
 import com.hzgc.service.clustering.bean.ClusteringSaveParam;
 import com.hzgc.service.clustering.bean.ClusteringSearchParam;
 import com.hzgc.service.clustering.service.ClusteringSearchService;
+import com.hzgc.service.util.bean.PeopleManagerCount;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -58,21 +59,20 @@ public class ClusteringController {
             @ApiImplicitParam(name = "endTime", value = "结束时间", paramType = "query")
     })
     @RequestMapping(value = BigDataPath.CLUSTERING_TOTLE, method = RequestMethod.GET)
-    public ResponseResult<List<ClusterStatistics>> getTotleNum(String startTime, String endTime) {
-        if(StringUtils.isBlank(startTime) || !startTime.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")){
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
-                    "Start time does not conform to the format: yyyy-MM-dd");
+    public List<PeopleManagerCount> getTotleNum(String start_ime, String end_time) {
+        if(StringUtils.isBlank(start_ime) || !start_ime.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")){
+            log.error("Start time does not conform to the format: yyyy-MM-dd");
+                    return new ArrayList<>();
         }
-        if(StringUtils.isBlank(endTime) || !endTime.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")){
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
-                    "End time does not conform to the format: yyyy-MM-dd");
+        if(StringUtils.isBlank(start_ime) || !end_time.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")){
+            log.error("End time does not conform to the format: yyyy-MM-dd");
+            return new ArrayList<>();
         }
-        if(endTime.compareTo(startTime) < 0){
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
-                    "End time mast be larger than start time.");
+        if(end_time.compareTo(start_ime) < 0){
+            log.error("End time mast be larger than start time.");
+            return new ArrayList<>();
         }
-        List<ClusterStatistics> res = clusteringSearchService.getTotleNum(startTime, endTime);
-        return ResponseResult.init(res);
+        return clusteringSearchService.getTotleNum(start_ime, end_time);
     }
 
     @ApiOperation(value = "单个聚类信息详细查询(告警ID)", response = Integer.class, responseContainer = "List")

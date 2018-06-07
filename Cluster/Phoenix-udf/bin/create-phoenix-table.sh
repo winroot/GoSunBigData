@@ -14,13 +14,13 @@
 cd `dirname $0`
 BIN_DIR=`pwd`                           ### bin
 cd ..
-PHONIX_DIR=`pwd`                        ### phonix
+PHOENIX_DIR=`pwd`                        ### phonix
 cd ..
 CLUSTER_DIR=`pwd`                       ### cluster
 cd ..
 OBJECT_DIR=`pwd`                        ### RealTimeFaceCompare
 
-LOG_DIR=${PHONIX_DIR}/log              ### 集群Log日志
+LOG_DIR=${PHOENIX_DIR}/log              ### 集群Log日志
 LOG_FILE=${LOG_DIR}/create-static-table.log
 
 ## bigdata cluster path
@@ -32,7 +32,7 @@ HADOOP_PATH=${BIGDATA_CLUSTER_PATH}/Hadoop/hadoop
 ## hdfs udf  path
 HDFS_UDF_PATH=/user/phoenix/udf/facecomp
 
-UDF_VERSION=`ls ${PHONIX_DIR}/lib | grep ^phonix-udf-[0-9].[0-9].[0-9].jar$`
+UDF_VERSION=`ls ${PHOENIX_DIR}/lib | grep ^phoenix-udf-[0-9].[0-9].[0-9].jar$`
 ## hdfs udf Absolute path
 HDFS_UDF_ABSOLUTE_PATH=hdfs://hzgc/${HDFS_UDF_PATH}/${UDF_VERSION}
 
@@ -53,7 +53,7 @@ fi
 function create_static_repo() {
     ## 创建person_table
     source /opt/hzgc/env_bigdata.sh
-    ${PHOENIX_PATH}/bin/psql.py  ${PHONIX_DIR}/sql/staticrepo.sql
+    ${PHOENIX_PATH}/bin/psql.py  ${PHOENIX_DIR}/sql/phoenix.sql
 
     if [ $? == 0 ];then
             echo "===================================="
@@ -106,7 +106,7 @@ function create_phoenix_udf() {
         echo "=================================="
         echo "${HDFS_UDF_PATH}/${UDF_VERSION}不存在,正在上传"
         echo "=================================="
-        ${HADOOP_PATH}/bin/hdfs dfs -put ${PHONIX_DIR}/lib/${UDF_VERSION} ${HDFS_UDF_PATH}
+        ${HADOOP_PATH}/bin/hdfs dfs -put ${PHOENIX_DIR}/lib/${UDF_VERSION} ${HDFS_UDF_PATH}
         if [ $? == 0 ];then
             echo "===================================="
             echo "上传udf函数成功......"
@@ -119,7 +119,7 @@ function create_phoenix_udf() {
     fi
 
     ## 在hive中添加并注册udf函数
-    ${PHOENIX_PATH}/bin/psql.py ${CONF_CLUSTER_DIR}/sql/phoenix-udf.sql
+    ${PHOENIX_PATH}/bin/psql.py ${PHOENIX_DIR}/sql/phoenix-udf.sql
 }
 
 #####################################################################
