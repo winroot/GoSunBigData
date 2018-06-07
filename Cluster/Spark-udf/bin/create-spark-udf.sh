@@ -14,7 +14,7 @@
 
 cd `dirname $0`
 cd ..
-SPARK_DIR= `pwd`                         ### spark 目录
+SPARK_DIR=`pwd`                         ### spark 目录
 cd ..
 CLUSTER_DIR=`pwd`                        ### 集群根目录
 cd ..
@@ -41,6 +41,7 @@ HDFS_UDF_PATH=/user/hive/udf
 ## hdfs udf Absolute path
 HDFS_UDF_ABSOLUTE_PATH=hdfs://hzgc/${HDFS_UDF_PATH}/${UDF_VERSION}
 
+source /opt/hzgc/env_bigdata.sh
 ## 判断hdfs上/user/hive/udf目录是否存在
 ${HADOOP_PATH}/bin/hdfs dfs -test -e ${HDFS_UDF_PATH}
 if [ $? -eq 0 ] ;then

@@ -53,7 +53,7 @@ fi
 function create_static_repo() {
     ## 创建person_table
     source /opt/hzgc/env_bigdata.sh
-    ${PHOENIX_PATH}/bin/psql.py  ${PHOENIX_DIR}/sql/staticrepo.sql
+    ${PHOENIX_PATH}/bin/psql.py  ${PHOENIX_DIR}/sql/phoenix.sql
 
     if [ $? == 0 ];then
             echo "===================================="
