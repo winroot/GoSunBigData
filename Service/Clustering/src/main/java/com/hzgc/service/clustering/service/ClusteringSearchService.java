@@ -4,6 +4,7 @@ import com.hzgc.common.clustering.ClusteringAttribute;
 import com.hzgc.common.table.clustering.ClusteringTable;
 import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
+import com.hzgc.service.clustering.bean.ClusterStatistics;
 import com.hzgc.service.clustering.bean.ClusteringInfo;
 import com.hzgc.service.clustering.bean.SortParam;
 import com.hzgc.service.clustering.dao.ElasticSearchDao;
@@ -14,9 +15,10 @@ import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 告警聚类结果查询接口实现(彭聪)
@@ -90,11 +92,12 @@ public class ClusteringSearchService {
      * @return 返回该类下面所以告警信息
      */
     public List<Integer> detailClusteringSearch_v1(String clusterId, String time, int start, int limit) {
-        SearchHit[] results = elasticSearchDao.detailClusteringSearch_v1(clusterId, time, start, limit);
+        String region = clusterId.split("-")[0];
+        SearchHit[] results = elasticSearchDao.detailClusteringSearch_v1(region, time, start, limit);
         List<Integer> alarmIdList = new ArrayList<>();
         if (results != null && results.length > 0) {
             for (SearchHit result : results) {
-                int alarmTime = (int) result.getSource().get(DynamicTable.ALARM_ID);
+                int alarmTime = Integer.parseInt((String) result.getSource().get(DynamicTable.ALARM_ID));
                 alarmIdList.add(alarmTime);
             }
         } else {
@@ -212,5 +215,68 @@ public class ClusteringSearchService {
             log.info("Start must bigger than -1");
             return null;
         }
+    }
+
+    /**
+     *  统计时间段内，每个月份的聚类数量
+     * @param startTime 查询起始时间
+     * @param endTime 查询结束时间
+     * @return 每个月份的聚类数量
+     */
+    public List<ClusterStatistics> getTotleNum(String startTime, String endTime){
+        HBaseDao hBaseDao = new HBaseDao();
+        List<ClusterStatistics> statisticsList = new ArrayList<>();
+        //起止时间处理
+        startTime = startTime.substring(0 , startTime.lastIndexOf("-"));
+        endTime = endTime.substring(0 , endTime.lastIndexOf("-"));
+        //查询每个rowkey对应的聚类（不忽略）数量
+        Map<String, Integer> map = hBaseDao.getTotleNum(startTime, endTime + "-" + "zzzzzzzzzzzzzzzz");
+        //获取时间段内的所有月份
+        List<String> timeList = getMonthesInRange(startTime, endTime);
+        //循环计算每个月的所有聚类数量
+        for(String time : timeList){
+            ClusterStatistics statistics = new ClusterStatistics();
+            int num = 0;
+            for(String key : map.keySet()){
+                if(key.startsWith(time)){
+                    num += map.get(key);
+                }
+            }
+            statistics.setMonth(time);
+            statistics.setNum(num);
+            statisticsList.add(statistics);
+        }
+        return statisticsList;
+    }
+
+    /**
+     *  返回时间区域内所有月份
+     * @param startTime 起始时间
+     * @param endTime 结束时间
+     * @return 所有月份
+     */
+    private static List<String> getMonthesInRange(String startTime, String endTime){
+        List<String> timeList = new ArrayList<>();
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM");
+        try {
+            Calendar start = Calendar.getInstance();
+            start.setTime(df.parse(startTime));
+            Calendar end = Calendar.getInstance();
+            end.setTime(df.parse(endTime));
+            Long startTimeL = start.getTimeInMillis();
+            Long endTimeL = end.getTimeInMillis();
+            while (startTimeL <= endTimeL) {
+                Date everyTime = new Date(startTimeL);
+                timeList.add(df.format(everyTime));
+
+                start.add(Calendar.MONTH, 1);
+                startTimeL = start.getTimeInMillis();
+            }
+            return timeList;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return timeList;
     }
 }

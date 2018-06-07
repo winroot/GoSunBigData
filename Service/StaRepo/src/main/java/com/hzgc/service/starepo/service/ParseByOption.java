@@ -317,26 +317,22 @@ public class ParseByOption {
                     isChanged = true;
                 }
             } else {
+                int count = 0;
+                if (isChanged) {
+                    whereQuery.append(" and ");
+                }
+                whereQuery.append(ObjectInfoTable.PKEY).append(" in (");
                 for (int i = 0; i < pkeys.size(); i++) {
-                    if (i == pkeys.size() - 1) {
-                        whereQuery.append(" or ");
-                        whereQuery.append(ObjectInfoTable.PKEY)
-                                .append(" = ?)");
+                    if (count < pkeys.size() - 1) {
+                        whereQuery.append("?, ");
                         setArgsList.add(pkeys.get(i));
-                    } else if (i == 0) {
-                        if (isChanged) {
-                            whereQuery.append(" and (");
-                        }
-                        whereQuery.append(ObjectInfoTable.PKEY)
-                                .append(" = ?");
-                        setArgsList.add(pkeys.get(i));
-                        isChanged = true;
+                        count++;
                     } else {
-                        whereQuery.append(" or ").append(ObjectInfoTable.PKEY)
-                                .append(" = ?");
+                        whereQuery.append("?)");
                         setArgsList.add(pkeys.get(i));
                     }
                 }
+                isChanged = true;
             }
         }
 
@@ -377,6 +373,13 @@ public class ParseByOption {
             whereQuery.append(" = ?");
             setArgsList.add(param.getFollowLevel());
         }
+
+        //查询人员状态值
+        if (isChanged) {
+            whereQuery.append(" and ");
+        }
+        whereQuery.append(ObjectInfoTable.STATUS).append(" = ?");
+        setArgsList.add(param.getStatus());
         return whereQuery;
     }
 
@@ -550,10 +553,10 @@ public class ParseByOption {
     public String updateObjectInfo_status(String objectId, int status) {
         return "upsert into " + ObjectInfoTable.TABLE_NAME + "( "
                 + ObjectInfoTable.ROWKEY + ", " + ObjectInfoTable.STATUS
-                + ") values ('" +objectId + "', " + status + ")";
+                + ") values ('" + objectId + "', " + status + ")";
     }
 
-    public String migrationCount() {
+    public String emigrationCount() {
         return "select count(*) as num from "
                 + ObjectInfoTable.TABLE_NAME + " where "
                 + ObjectInfoTable.STATUS + " = 1 and "

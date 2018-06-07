@@ -22,10 +22,12 @@
         <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-clustering</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-hbase</artifactId>
+            <optional>true</optional>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -64,10 +66,12 @@
         <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-table</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-es</artifactId>
+            <optional>true</optional>
             <exclusions>
                 <exclusion>
                     <artifactId>commons-cli</artifactId>
@@ -86,24 +90,29 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.hzgc.service</groupId>
             <artifactId>util</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
             <version>4.1.11.Final</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
             <version>5.5.0</version>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

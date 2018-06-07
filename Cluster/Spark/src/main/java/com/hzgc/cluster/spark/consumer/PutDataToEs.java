@@ -69,16 +69,12 @@ public class PutDataToEs implements Serializable {
         map.put(DynamicTable.IPCID, ipcid);
         map.put(DynamicTable.TIMESLOT, timeslot);
         if (ftpurl != null) {
-            System.out.println("Start index");
             indexResponse = esClient.prepareIndex(DynamicTable.DYNAMIC_INDEX,
                     DynamicTable.PERSON_INDEX_TYPE, ftpurl).setSource(map).get();
-            System.out.println("Stop index");
         }
         if (indexResponse.getVersion() == 1) {
-            System.out.println("code 1");
             return 1;
         } else {
-            System.out.println("code 2");
             return 0;
         }
     }
