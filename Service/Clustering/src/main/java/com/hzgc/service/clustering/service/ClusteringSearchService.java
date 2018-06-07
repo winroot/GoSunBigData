@@ -4,11 +4,11 @@ import com.hzgc.common.clustering.ClusteringAttribute;
 import com.hzgc.common.table.clustering.ClusteringTable;
 import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
-import com.hzgc.service.clustering.bean.ClusterStatistics;
 import com.hzgc.service.clustering.bean.ClusteringInfo;
 import com.hzgc.service.clustering.bean.SortParam;
 import com.hzgc.service.clustering.dao.ElasticSearchDao;
 import com.hzgc.service.clustering.dao.HBaseDao;
+import com.hzgc.service.util.bean.PeopleManagerCount;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.search.SearchHit;
@@ -223,9 +223,9 @@ public class ClusteringSearchService {
      * @param endTime 查询结束时间
      * @return 每个月份的聚类数量
      */
-    public List<ClusterStatistics> getTotleNum(String startTime, String endTime){
+    public List<PeopleManagerCount> getTotleNum(String startTime, String endTime){
         HBaseDao hBaseDao = new HBaseDao();
-        List<ClusterStatistics> statisticsList = new ArrayList<>();
+        List<PeopleManagerCount> statisticsList = new ArrayList<>();
         //起止时间处理
         startTime = startTime.substring(0 , startTime.lastIndexOf("-"));
         endTime = endTime.substring(0 , endTime.lastIndexOf("-"));
@@ -235,7 +235,7 @@ public class ClusteringSearchService {
         List<String> timeList = getMonthesInRange(startTime, endTime);
         //循环计算每个月的所有聚类数量
         for(String time : timeList){
-            ClusterStatistics statistics = new ClusterStatistics();
+            PeopleManagerCount statistics = new PeopleManagerCount();
             int num = 0;
             for(String key : map.keySet()){
                 if(key.startsWith(time)){
@@ -243,7 +243,7 @@ public class ClusteringSearchService {
                 }
             }
             statistics.setMonth(time);
-            statistics.setNum(num);
+            statistics.setAddPeople(num);
             statisticsList.add(statistics);
         }
         return statisticsList;

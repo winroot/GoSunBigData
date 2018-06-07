@@ -29,25 +29,25 @@ SERVICE_BIN_DIR=/opt/RealTimeFaceCompare/cluster/es/bin
 AZKABAN_BIN_DIR=/opt/RealTimeFaceCompare/cluster/azkaban/bin
 
 cd ${CLUSTER_BIN_DIR}  ##进入cluster的bin目录
-mkdir -p midTableAndPersonTableNow
+mkdir -p schema-parquet-one-hour
 if [ ! -f "$SCHEMA_FILE" ]; then
    echo "The schema-merge-parquet-file.sh is not exist!!!"
 else
-   touch midtable.job     ##创建midtable.job文件
-   echo "type=command" >> midtable.job
-   echo "cluster_home=/opt/RealTimeFaceCompare/cluster/spark/bin" >> midtable.job
-   echo "command=sh \${cluster_home}/schema-merge-parquet-file.sh mid_table" >> midtable.job
+   touch mid_table-one-hour.job     ##创建mid_table-one-hour.job文件
+   echo "type=command" >> mid_table-one-hour.job
+   echo "cluster_home=/opt/RealTimeFaceCompare/cluster/spark/bin" >> mid_table-one-hour.job
+   echo "command=sh \${cluster_home}/schema-merge-parquet-file.sh mid_table" >> mid_table-one-hour.job
 
-   touch person_table_now.job  ##创建person_table_now.job文件
-   echo "type=command" >> person_table_now.job
-   echo "cluster_home=/opt/RealTimeFaceCompare/cluster/spark/bin" >> person_table_now.job
-   echo "command=sh \${cluster_home}/schema-merge-parquet-file.sh person_table now" >> person_table_now.job
-   echo "dependencies=midtable" >> person_table_now.job
+   touch person_table-one-hour.job  ##创建person_table-one-hour.job文件
+   echo "type=command" >> person_table-one-hour.job
+   echo "cluster_home=/opt/RealTimeFaceCompare/cluster/spark/bin" >> person_table-one-hour.job
+   echo "command=sh \${cluster_home}/schema-merge-parquet-file.sh person_table now" >> person_table-one-hour.job
+   echo "dependencies=mid_table-one-hour" >> person_table-one-hour.job
 
-   touch person_table_before.job  ##创建person_table_before.job文件
-   echo "type=command" >> person_table_before.job
-   echo "cluster_home=/opt/RealTimeFaceCompare/cluster/spark/bin" >> person_table_before.job
-   echo "command=sh \${cluster_home}/schema-merge-parquet-file.sh person_table before" >> person_table_before.job
+   touch person_table_one-day.job  ##创建person_table_one-day.job文件
+   echo "type=command" >> person_table_one-day.job
+   echo "cluster_home=/opt/RealTimeFaceCompare/cluster/spark/bin" >> person_table_one-day.job
+   echo "command=sh \${cluster_home}/schema-merge-parquet-file.sh person_table before" >> person_table_one-day.job
 
 fi
 if [ ! -f "$OFFLINE_FILE" ]; then
@@ -59,29 +59,13 @@ else
    echo "command=sh \${cluster_home}/start-face-offline-alarm-job.sh" >> start-face-offline-alarm-job.job
 fi
 
-cd ${SERVICE_BIN_DIR}
-if [ ! -f "$DYNAMICSHOW_TABLE" ]; then
-   echo "The get-dynamicshow-table-run.sh is not exist!!!"
-else
-   touch get-dynamicshow-table-run.job ##创建get-dynamicshow-table-run.job文件
-   echo "type=command" >> get-dynamicshow-table-run.job
-echo "service_home=/opt/RealTimeFaceCompare/service/dynRepo/bin" >> get-dynamicshow-table-run.job
-   echo "command=sh \${service_home}/get-dynamicshow-table-run.sh" >> get-dynamicshow-table-run.job
-fi
-
 cd ${CLUSTER_BIN_DIR}
-mv midtable.job person_table_now.job midTableAndPersonTableNow
-zip person_table_before_oneday.job.zip person_table_before.job
+mv mid_table-one-hour.job person_table-one-hour.job  schema-parquet-one-hour
+zip schema-parquet-one-hour.zip schema-parquet-one-hour/*
+zip person_table_one-day.job.zip person_table_one-day.job
 zip start-face-offline-alarm-job_oneday.job.zip start-face-offline-alarm-job.job
-mv person_table_before_oneday.job.zip start-face-offline-alarm-job_oneday.job.zip midTableAndPersonTableNow
-rm -rf person_table_before.job start-face-offline-alarm-job.job
-cd ${SERVICE_BIN_DIR}
-zip get-dynamicshow-table-run_onehour.job.zip get-dynamicshow-table-run.job
-mv get-dynamicshow-table-run_onehour.job.zip ${CLUSTER_BIN_DIR}/midTableAndPersonTableNow
-rm -rf get-dynamicshow-table-run.job
+rm -rf person_table_one-day.job start-face-offline-alarm-job.job schema-parquet-one-hour
+
 cd ${AZKABAN_DIR}
 mkdir -p zip
-cd zip
-mkdir -p midTableAndPersonTableNow
-mv ${CLUSTER_BIN_DIR}/midTableAndPersonTableNow/* midTableAndPersonTableNow
-rm -rf ${CLUSTER_BIN_DIR}/midTableAndPersonTableNow
+mv ${CLUSTER_BIN_DIR}/schema-parquet-one-hour.zip ${CLUSTER_BIN_DIR}/person_table_one-day.job.zip ${CLUSTER_BIN_DIR}/start-face-offline-alarm-job_oneday.job.zip zip

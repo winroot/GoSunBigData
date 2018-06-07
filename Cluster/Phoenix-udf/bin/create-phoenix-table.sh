@@ -32,7 +32,7 @@ HADOOP_PATH=${BIGDATA_CLUSTER_PATH}/Hadoop/hadoop
 ## hdfs udf  path
 HDFS_UDF_PATH=/user/phoenix/udf/facecomp
 
-UDF_VERSION=`ls ${PHOENIX_DIR}/lib | grep ^phonix-udf-[0-9].[0-9].[0-9].jar$`
+UDF_VERSION=`ls ${PHOENIX_DIR}/lib | grep ^phoenix-udf-[0-9].[0-9].[0-9].jar$`
 ## hdfs udf Absolute path
 HDFS_UDF_ABSOLUTE_PATH=hdfs://hzgc/${HDFS_UDF_PATH}/${UDF_VERSION}
 
@@ -53,7 +53,7 @@ fi
 function create_static_repo() {
     ## 创建person_table
     source /opt/hzgc/env_bigdata.sh
-    ${PHOENIX_PATH}/bin/psql.py  ${PHOENIX_DIR}/sql/staticrepo.sql
+    ${PHOENIX_PATH}/bin/psql.py  ${PHOENIX_DIR}/sql/phoenix.sql
 
     if [ $? == 0 ];then
             echo "===================================="
