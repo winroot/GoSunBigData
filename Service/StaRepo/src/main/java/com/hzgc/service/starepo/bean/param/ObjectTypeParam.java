@@ -27,12 +27,4 @@ public class ObjectTypeParam implements Serializable {
 
     @ApiModelProperty(value = "备注")
     private String remark;
-
-    public static boolean ValidateParam_add(ObjectTypeParam param) {
-        return param != null && param.getObjectTypeName()!= null;
-    }
-
-    public static boolean ValidateParam_update(ObjectTypeParam param) {
-        return param != null && IsEmpty.strIsRight(param.getObjectTypeKey()) && IsEmpty.strIsRight(param.getObjectTypeName());
-    }
 }

@@ -4,6 +4,7 @@ import com.hzgc.common.table.dynrepo.SearchRecordTable;
 import com.hzgc.common.table.starepo.ObjectInfoTable;
 import com.hzgc.common.table.starepo.ObjectTypeTable;
 import com.hzgc.common.util.empty.IsEmpty;
+import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.PictureData;
@@ -14,6 +15,7 @@ import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectTypeParam;
 import com.hzgc.service.starepo.service.ParseByOption;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,7 +26,10 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -48,24 +53,22 @@ public class PhoenixDao implements Serializable {
      * @return boolean
      */
     public boolean addObjectType(String name, String creator, String remark) {
-        log.info("Add objectType param : name=" + name + "; creator=" + creator + "; remark=" + remark + ".");
-        if (!IsEmpty.strIsRight(name)) {
-            log.info("Add objectType param ：name is null.");
+        if (StringUtils.isBlank(name)) {
+            log.info("Start add object type, but name is null.");
             return false;
         }
         long start = System.currentTimeMillis();
         String typeId = "type_" + start + UuidUtil.getUuid().substring(0, 8);
-        log.info("Add objectType id : " + typeId);
+        log.info("Start add object type, id = " + typeId);
         String sql = parseByOption.addObjectType();
-        log.info("Add objectType SQL : " + sql);
+        log.info("Start add object type, SQL is : " + sql);
         try {
             jdbcTemplate.update(sql, typeId, name, creator, remark, new Timestamp(System.currentTimeMillis()));
         } catch (Exception e) {
-            log.info("Add objectType failed!");
-            log.error(e.getMessage());
+            e.printStackTrace();
             return false;
         }
-        log.info("Add objectType takes time ：" + (System.currentTimeMillis() - start));
+        log.info("add object type successfull");
         return true;
     }
 
@@ -76,25 +79,25 @@ public class PhoenixDao implements Serializable {
      * @return boolean
      */
     public boolean deleteObjectType(List<String> objectTypeKeyList) {
-        log.info("Delete objectType param : List<id> = " + objectTypeKeyList.toString());
         String sql_select = parseByOption.deleteObjectType_select();
+        log.info("Start delete object type, select SQL is : " + sql_select);
         String sql_delete = parseByOption.deleteObjectType_delete();
+        log.info("Start delete object type, delete SQL is : " + sql_delete);
         try {
             for (String id : objectTypeKeyList) {
                 SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql_select, id);
                 if (sqlRowSet.next()) {
-                    log.info("此 objectType : id = [" + id + "]下存在有 objectInfo ;不能删除此对象类型!");
+                    log.info("Object info exists under this object type, so can't delete this object type : " + id);
                     return false;
                 } else {
                     jdbcTemplate.update(sql_delete, id);
                 }
             }
         } catch (Exception e) {
-            log.info("Delete objectType failed!");
-            log.error(e.getMessage());
+            e.printStackTrace();
             return false;
         }
-        log.info("Delete List<objectType> = [" + objectTypeKeyList.toString() + "]");
+        log.info("delete object type list successfull");
         return true;
     }
 
@@ -108,36 +111,27 @@ public class PhoenixDao implements Serializable {
      * @return boolean
      */
     public boolean updateObjectType(String id, String name, String creator, String remark) {
-        log.info("Update objectType param : id=" + id + "; name=" + name + "; creator=" + creator + "; remark=" + remark + ".");
-        if (id == null || "".equals(id)) {
-            log.info("Update objectType param ：id is null.");
-            return false;
-        }
-        if (name == null || "".equals(name)) {
-            log.info("Update objectType param ：name is null.");
-            return false;
-        }
-        if (!IsEmpty.strIsRight(creator) || !IsEmpty.strIsRight(remark)) {
-            log.info("Update objectType param ：creator or remark is null, the database needs to be queried!");
+        if (StringUtils.isBlank(creator) || StringUtils.isBlank(remark)) {
+            log.info("Start update object type, but creator or remark is null, the database needs to be queried");
             ObjectTypeParam objectType = getObjectTypeByObjectId(id);
             if (!IsEmpty.strIsRight(creator)) {
                 creator = objectType.getCreator();
-                log.info("Update objectType param ：creator is null, Query Database set creator = " + creator);
+                log.info("update object type param ：creator is null, query database creator = " + creator);
             }
             if (!IsEmpty.strIsRight(remark)) {
                 remark = objectType.getRemark();
-                log.info("Update objectType param ：remark is null, Query Database set remark = " + remark);
+                log.info("update object type param ：remark is null, query database remark = " + remark);
             }
         }
         String sql = parseByOption.updateObjectType();
-        log.info("Update objectType SQL : " + sql);
+        log.info("Start update object type, SQL is : " + sql);
         try {
             jdbcTemplate.update(sql, id, name, creator, remark, new Timestamp(System.currentTimeMillis()));
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        log.info("Update objectType successful");
+        log.info("update object type successfull");
         return true;
     }
 
@@ -166,15 +160,16 @@ public class PhoenixDao implements Serializable {
      * @return Map
      */
     public Map<String, String> searchTypeNames(List<String> personKey) {
-        log.info("Search object types:" + Arrays.toString(personKey.toArray()));
         Map<String, String> map = new HashMap<>();
         String sql = parseByOption.getTypeNameMapping(personKey);
+        log.info("Start search object type names, SQL is : " + sql);
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql);
         while (sqlRowSet.next()) {
             String name = sqlRowSet.getString(ObjectTypeTable.TYPE_NAME);
             String typeKey = sqlRowSet.getString(ObjectTypeTable.ROWKEY);
             map.put(typeKey, name);
         }
+        log.info("search object type names result : " + JSONUtil.toJson(map));
         return map;
     }
 
@@ -186,9 +181,8 @@ public class PhoenixDao implements Serializable {
      * @return List<ObjectTypeParam>
      */
     public List<ObjectTypeParam> searchObjectType(int start, int limit) {
-        log.info("Search objectType Param : start=" + start + "; limit=" + limit + ".");
         String sql = parseByOption.searchObjectType();
-        log.info("Search objectType SQL: " + sql);
+        log.info("Start search object type, SQL is : " + sql);
         List<ObjectTypeParam> result = null;
         SqlRowSet sqlRowSet;
         try {
@@ -202,11 +196,9 @@ public class PhoenixDao implements Serializable {
                 result = getResult(sqlRowSet);
             }
         } catch (SQLException e) {
-            log.info("Search objectType failed!");
-            log.error(e.getMessage());
             e.printStackTrace();
         }
-        log.info("Search objectType result: " + (result != null ? result.toString() : null));
+        log.info("search object type result : " + JSONUtil.toJson(result));
         return result;
     }
 
@@ -244,6 +236,7 @@ public class PhoenixDao implements Serializable {
      */
     public Integer addObjectInfo(ObjectInfoParam objectInfo) {
         String sql = parseByOption.addObjectInfo(objectInfo);
+        log.info("Start add object info, SQL is : " + sql);
         try {
             Timestamp createTime = new Timestamp(System.currentTimeMillis());
             if (objectInfo.getPictureDatas().getFeature() != null) {
@@ -292,7 +285,7 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return 1;
         }
-        log.info("Add object info successfull");
+        log.info("add object info successfull");
         return 0;
     }
 
@@ -305,6 +298,7 @@ public class PhoenixDao implements Serializable {
     public Integer deleteObjectInfo(List<String> rowkeys) {
         // 获取table 对象，通过封装HBaseHelper 来获取
         String sql = parseByOption.deleteObjectInfo(rowkeys);
+        log.info("Start delete object info, SQL is : " + sql);
         try {
             List<Object[]> batchArgs = new ArrayList<>();
             for (String rowkey : rowkeys) {
@@ -315,6 +309,7 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return 1;
         }
+        log.info("delete object info successfull");
         return 0;
     }
 
@@ -333,6 +328,7 @@ public class PhoenixDao implements Serializable {
                 sql = entry.getKey();
                 setValues = entry.getValue();
             }
+            log.info("Start update object info, SQL is : " + sql);
             List<Object[]> batchArgs = new ArrayList<>();
             Object[] objects = new Object[setValues.size()];
             for (int i = 0; i < setValues.size(); i++) {
@@ -340,11 +336,11 @@ public class PhoenixDao implements Serializable {
             }
             batchArgs.add(objects);
             jdbcTemplate.batchUpdate(sql, batchArgs);
-            log.info("Update object info successfull");
         } catch (Exception e) {
             e.printStackTrace();
             return 1;
         }
+        log.info("update object info successfull");
         return 0;
     }
 
@@ -356,16 +352,15 @@ public class PhoenixDao implements Serializable {
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
     public Integer updateObjectInfo_status(String objectId, int status) {
-        log.info("Update objectInfo status param : objectId = " + objectId + ", status = " + status);
         String sql = parseByOption.updateObjectInfo_status(objectId, status);
-        log.info("Update objectInfo status SQL : " + sql);
+        log.info("Start update object status, SQL is : " + sql);
         try {
             jdbcTemplate.update(sql);
         } catch (Exception e) {
             e.printStackTrace();
             return 1;
         }
-        log.info("Update object info status successfull");
+        log.info("update object status successfull");
         return 0;
     }
 
@@ -383,16 +378,15 @@ public class PhoenixDao implements Serializable {
             log.warn("Start get object info, generate sql failed");
             return null;
         }
-        log.info("Start get object info, generate sql successfull, sql is:");
-        log.info(sqlAndArgs.getSql());
-        log.info(sqlAndArgs.getArgs().toString());
+        log.info("Start get object info, generate sql successfull");
+        log.info("Start get object info, SQL is : " + sqlAndArgs.getSql());
+        log.info("Start get object info, SQL args is : " + sqlAndArgs.getArgs().toString());
         return jdbcTemplate.queryForRowSet(sqlAndArgs.getSql(), sqlAndArgs.getArgs().toArray());
     }
 
     public PictureData getPictureData(String id) {
-        log.info("Get objectInfo photo and feature by rowkey param : " + id);
         String sql = parseByOption.getPictureData();
-        log.info("Get objectInfo photo and feature by rowkey SQL : " + sql);
+        log.info("Start get objectInfo PictureData, SQL is : " + sql);
         PictureData pictureData = new PictureData();
         List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql, id);
         if (mapList != null && mapList.size() > 0) {
@@ -403,10 +397,10 @@ public class PhoenixDao implements Serializable {
                 Array featureArray = (Array) map.get(ObjectInfoTable.FEATURE);
                 try {
                     float[] feature = (float[]) featureArray.getArray();
-                    if (photo != null && photo.length > 0){
-                    FaceAttribute faceAttribute = new FaceAttribute();
-                    faceAttribute.setFeature(feature);
-                    pictureData.setFeature(faceAttribute);
+                    if (photo != null && photo.length > 0) {
+                        FaceAttribute faceAttribute = new FaceAttribute();
+                        faceAttribute.setFeature(feature);
+                        pictureData.setFeature(faceAttribute);
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -424,6 +418,7 @@ public class PhoenixDao implements Serializable {
      */
     public byte[] getPhotoByObjectId(String objectId) {
         String sql = parseByOption.getPhotoByObjectId();
+        log.info("Start get object photo, SQL is : " + sql);
         byte[] photo = null;
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, objectId);
         while (sqlRowSet.next()) {
@@ -464,20 +459,21 @@ public class PhoenixDao implements Serializable {
     public int countStatus() {
         log.info("Start count objectInfo person.status from " + ObjectInfoTable.TABLE_NAME + "table.");
         String sql = parseByOption.countStatus();
-        log.info("Count objectInfo person.status SQL : " + sql);
+        log.info("Start count permanent population, SQL is : " + sql);
         int count = 0;
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql);
         while (sqlRowSet.next()) {
             count = sqlRowSet.getInt("num");
         }
-        log.info("Count objectInfo person.status is: " + count);
+        log.info("Count permanent population is: " + count);
         return count;
     }
 
     public EmigrationCount emigrationCount(String month, Timestamp startTime, Timestamp endTime) {
-        log.info("Start count objectInfo emigration number");
+        log.info("Start count emigration population, param is : month = " + month
+                + ", startTime = " + startTime + ", endTime = " + endTime);
         String sql = parseByOption.emigrationCount();
-        log.info("Count objectInfo emigration SQL : " + sql);
+        log.info("Start count emigration population, SQL is: " + sql);
         EmigrationCount count = null;
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, startTime, endTime);
         while (sqlRowSet.next()) {
@@ -487,7 +483,7 @@ public class PhoenixDao implements Serializable {
             count.setCount(i);
         }
         if (count != null) {
-            log.info("Count objectInfo emigration count : [ month = " + count.getMonth() + ", count = " + count.getCount() + "]");
+            log.info("Count emigration population is : [ month = " + count.getMonth() + ", count = " + count.getCount() + "]");
         }
         return count;
     }
