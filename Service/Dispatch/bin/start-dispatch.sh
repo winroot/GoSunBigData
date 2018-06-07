@@ -56,7 +56,7 @@ function start_springCloud()
 function prepare_resource_file()
 {
   cp ${CONF_DIR}/hbase-site.xml .
-  jar -uf ${DYNREPO_JAR} hbase-site.xml
+  jar -uf ${DISPATCH_JAR} hbase-site.xml
   rm -rf hbase-site.xml
 }
 #####################################################################

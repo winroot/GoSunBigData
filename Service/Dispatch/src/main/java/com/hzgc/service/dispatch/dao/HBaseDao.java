@@ -266,13 +266,13 @@ public class HBaseDao {
         String originId;
         String oldId;
         //从Hbase数据库中读dispatchTable表
-        Table dispatchTable = HBaseHelper.getTable("dispatchTable");
+        Table dispatchTable = HBaseHelper.getTable(DispatchTable.TABLE_DEVICE);
         Get get = new Get(Bytes.toBytes("ruleId"));
-        get.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"));
+        get.addColumn(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"));
         Result result = dispatchTable.get(get);
-        byte[] dispatchObj = result.getValue(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"));
+        byte[] dispatchObj = result.getValue(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"));
         if(null != dispatchObj){
-            String hbaseMapString = (String)ObjectUtil.byteToObject(dispatchObj);
+            String hbaseMapString = Bytes.toString(dispatchObj);
             LinkedHashMap<String,Dispatch> hbaseMap = JsonToMap.dispatchStringToMap(hbaseMapString);
             //进行id对比是否存在新添加的id
             for (String newRuleId:originMap.keySet()){
@@ -302,14 +302,14 @@ public class HBaseDao {
             }
             //把新数据同步到数据库中
             Put put = new Put(Bytes.toBytes("ruleId"));
-            put.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"), Bytes.toBytes(JSONUtil.toJson(hbaseMap)));
+            put.addColumn(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"), Bytes.toBytes(JSONUtil.toJson(hbaseMap)));
             dispatchTable.put(put);
             log.info("Hbase map " + JSON.toJSONString(hbaseMap));
             return ResponseResult.init("规则添加成功");
         }else{
             //数据库为空表示第一次增加，直接存到数据库中
             Put put = new Put(Bytes.toBytes("ruleId"));
-            put.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"), Bytes.toBytes(JSONUtil.toJson(originMap)));
+            put.addColumn(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"), Bytes.toBytes(JSONUtil.toJson(originMap)));
             dispatchTable.put(put);
             log.info("This is first add originMap is "+ JSONUtil.toJson(originMap));
             return ResponseResult.init("规则添加成功");
@@ -318,13 +318,13 @@ public class HBaseDao {
 
     //根据ruleId进行全部参数查询
     public Map<String,Dispatch> searchByRuleId() throws IOException {
-            Table dispatchTable = HBaseHelper.getTable("dispatchTable");
+            Table dispatchTable = HBaseHelper.getTable(DispatchTable.TABLE_DEVICE);
             Get get = new Get(Bytes.toBytes("ruleId"));
-            get.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"));
+            get.addColumn(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"));
             Result result = dispatchTable.get(get);
-            byte[] bytes = result.getValue(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"));
+            byte[] bytes = result.getValue(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"));
             if (null != bytes){
-                String hbaseMapString = (String)ObjectUtil.byteToObject(bytes);
+                String hbaseMapString = Bytes.toString(bytes);
                 LinkedHashMap<String,Dispatch> map = JsonToMap.dispatchStringToMap(hbaseMapString);
                 if (null == map){
                     return null;
@@ -338,13 +338,13 @@ public class HBaseDao {
 
     //修改规则
     public ResponseResult<Boolean> updateRule(Dispatch dispatch) throws IOException {
-        Table dispatchTable = HBaseHelper.getTable("dispatchTable");
+        Table dispatchTable = HBaseHelper.getTable(DispatchTable.TABLE_DEVICE);
         Get get = new Get(Bytes.toBytes("ruleId"));
-        get.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"));
+        get.addColumn(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"));
         Result result = dispatchTable.get(get);
-        byte[] bytes = result.getValue(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"));
+        byte[] bytes = result.getValue(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"));
         if (null != bytes){
-            String hbaseMapString = (String)ObjectUtil.byteToObject(bytes);
+            String hbaseMapString = Bytes.toString(bytes);
             LinkedHashMap<String,Dispatch> map = JsonToMap.dispatchStringToMap(hbaseMapString);
             log.info("Before update map is "+ JSONUtil.toJson(map));
             //需要修改的规则id
@@ -353,7 +353,7 @@ public class HBaseDao {
                 if (rule_id.equals(ruleId)){
                     map.put(rule_id,dispatch);
                     Put put = new Put(Bytes.toBytes("ruleId"));
-                    put.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"), Bytes.toBytes(JSONUtil.toJson(map)));
+                    put.addColumn(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"), Bytes.toBytes(JSONUtil.toJson(map)));
                     dispatchTable.put(put);
                     log.info("Later update map is "+ JSONUtil.toJson(map));
                     return ResponseResult.init(true);
@@ -368,14 +368,14 @@ public class HBaseDao {
     @SuppressWarnings("UnnecessaryLocalVariable")
     public List<Long> delRules(IdsType<String> idsType) throws IOException {
         if (null != idsType){
-            Table dispatchTable = HBaseHelper.getTable("dispatchTable");
+            Table dispatchTable = HBaseHelper.getTable(DispatchTable.TABLE_DEVICE);
             Get get = new Get(Bytes.toBytes("ruleId"));
-            get.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"));
+            get.addColumn(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"));
             Result result = dispatchTable.get(get);
-            byte[] bytes = result.getValue(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"));
+            byte[] bytes = result.getValue(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"));
             if (null != bytes){
                 List<Long> ids = new ArrayList<>();
-                String hbaseMapString = (String)ObjectUtil.byteToObject(bytes);
+                String hbaseMapString = Bytes.toString(bytes);
                 LinkedHashMap<String,Dispatch> map = JsonToMap.dispatchStringToMap(hbaseMapString);
                 log.info("Before delete map is "+ JSONUtil.toJson(map));
                 //判断是否存在需要删除的ruleID
@@ -391,7 +391,7 @@ public class HBaseDao {
                     }
                 }
                 Put put = new Put(Bytes.toBytes("ruleId"));
-                put.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"), Bytes.toBytes(JSONUtil.toJson(map)));
+                put.addColumn(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"), Bytes.toBytes(JSONUtil.toJson(map)));
                 dispatchTable.put(put);
                 log.info("Later delete map is "+ JSONUtil.toJson(map));
                 return ids;
@@ -404,14 +404,14 @@ public class HBaseDao {
     //分页获取规则列表
     public ResponseResult<List> getRuleList(PageBean pageBean) throws IOException {
         List<Rule> list = new ArrayList<>();
-        Table dispatchTable = HBaseHelper.getTable("dispatchTable");
+        Table dispatchTable = HBaseHelper.getTable(DispatchTable.TABLE_DEVICE);
         Get get = new Get(Bytes.toBytes("ruleId"));
-        get.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"));
+        get.addColumn(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"));
         Result result = dispatchTable.get(get);
-        byte[] bytes = result.getValue(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"));
+        byte[] bytes = result.getValue(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"));
         if (null != bytes){
             List<Rule> cutList = null;
-            String hbaseMapString = (String)ObjectUtil.byteToObject(bytes);
+            String hbaseMapString = Bytes.toString(bytes);
             LinkedHashMap<String,Dispatch> map = JsonToMap.dispatchStringToMap(hbaseMapString);
             for (String ruleId:map.keySet()){
                 Rule rule = map.get(ruleId).getRule();
@@ -432,31 +432,29 @@ public class HBaseDao {
                 }
                 log.info("Like query data is "+ JSONUtil.toJson(likeList));
                 // 分页
-                if (null != pageBean.getStart() && null != pageBean.getLimit() && likeList.size()>0 && likeList.size()>pageBean.getStart() && likeList.size()>(list.size()+pageBean.getLimit())){
-                        cutList = likeList.subList(pageBean.getStart(),pageBean.getLimit());
+                if (null != pageBean.getStart() && null != pageBean.getLimit() && likeList.size()>0 && likeList.size()>pageBean.getStart() && likeList.size()>(pageBean.getStart()+pageBean.getLimit())){
+                        cutList = likeList.subList(pageBean.getStart(),pageBean.getStart()+pageBean.getLimit());
                         log.info("Cutpage data is "+ JSONUtil.toJson(cutList));
                         ResponseResult<List> responseResult = ResponseResult.init(cutList,(long) likeList.size());
                         return responseResult;
-                } else if (null != pageBean.getStart() && null != pageBean.getLimit() && likeList.size()<pageBean.getStart() || likeList.size()==pageBean.getStart()){
-                    log.info("Query data is null");
-                    return ResponseResult.init(new ArrayList(),0L);
-                }else if (null != pageBean.getStart() && null != pageBean.getLimit() && likeList.size()>0 && likeList.size()>pageBean.getStart() && likeList.size()<(likeList.size()+pageBean.getLimit())){
+                }else if (null != pageBean.getStart() && null != pageBean.getLimit() && likeList.size()>0 && likeList.size()>pageBean.getStart() && likeList.size()<(pageBean.getStart()+pageBean.getLimit()) || likeList.size()==(pageBean.getStart()+pageBean.getLimit())){
                         cutList = likeList.subList(pageBean.getStart(),likeList.size());
                         log.info("Cutpage data is "+ JSONUtil.toJson(cutList));
                         ResponseResult<List> responseResult = ResponseResult.init(cutList,(long) likeList.size());
                         return responseResult;
+                }else {
+                    log.info("Query data is null");
+                    return ResponseResult.init(new ArrayList(),0L);
                 }
             }
             // 分页
-            if (null != pageBean.getStart() && null != pageBean.getLimit() && list.size()>0 && list.size()>pageBean.getStart() && list.size()>(list.size()+pageBean.getLimit())){
-                cutList = list.subList(pageBean.getStart(),pageBean.getLimit());
-            } else if (null != pageBean.getStart() && null != pageBean.getLimit() && list.size()<pageBean.getStart() || list.size()==pageBean.getStart()){
-                log.info("Query data is null");
-                return ResponseResult.init(new ArrayList(),0L);
-            }else if (null != pageBean.getStart() && null != pageBean.getLimit() && list.size()>0 && list.size()>pageBean.getStart() && list.size()<(list.size()+pageBean.getLimit())){
+            if (null != pageBean.getStart() && null != pageBean.getLimit() && list.size()>0 && list.size()>pageBean.getStart() && list.size()>(pageBean.getStart()+pageBean.getLimit())){
+                cutList = list.subList(pageBean.getStart(),pageBean.getStart()+pageBean.getLimit());
+            }else if (null != pageBean.getStart() && null != pageBean.getLimit() && list.size()>0 && list.size()>pageBean.getStart() && list.size()<(pageBean.getStart()+pageBean.getLimit()) || list.size()==(pageBean.getStart()+pageBean.getLimit())){
                 cutList = list.subList(pageBean.getStart(),list.size());
             }else {
-                log.info("Pagebean param is error");
+                log.info("Query data is null");
+                return ResponseResult.init(new ArrayList(),0L);
             }
             log.info("Cutpage data is "+ JSONUtil.toJson(cutList));
             ResponseResult<List> responseResult = ResponseResult.init(cutList,(long) list.size());
@@ -468,13 +466,13 @@ public class HBaseDao {
 
     //获取某个规则绑定的所有设备
     public ResponseResult<List> getDeviceList(String rule_id) throws IOException {
-        Table dispatchTable = HBaseHelper.getTable("dispatchTable");
+        Table dispatchTable = HBaseHelper.getTable(DispatchTable.TABLE_DEVICE);
         Get get = new Get(Bytes.toBytes("ruleId"));
-        get.addColumn(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"));
+        get.addColumn(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"));
         Result result = dispatchTable.get(get);
-        byte[] bytes = result.getValue(Bytes.toBytes("dispatch"),Bytes.toBytes("dispatchObj"));
+        byte[] bytes = result.getValue(DispatchTable.CF_DEVICE,Bytes.toBytes("dispatchObj"));
         if (null != bytes){
-            String hbaseMapString = (String)ObjectUtil.byteToObject(bytes);
+            String hbaseMapString = Bytes.toString(bytes);
             LinkedHashMap<String,Dispatch> map = JsonToMap.dispatchStringToMap(hbaseMapString);
             List<Device> deviceList = map.get(rule_id).getDevices();
             log.info("One ruleID all Devices is "+ JSON.toJSONString(deviceList));
