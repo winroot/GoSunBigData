@@ -26,7 +26,6 @@ import org.springframework.web.client.RestTemplate;
 import java.io.File;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -91,10 +90,13 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示删除成功，返回值为1，表示删除失败
      */
     public int deleteObjectInfo(List<String> rowkeyList) {
-        for (String rowkey : rowkeyList) {
-            staticProducer.sendKafkaMessage(INNERTOPIC, DELETE, rowkey);
+        int i = phoenixDao.deleteObjectInfo(rowkeyList);
+        if (i == 0) {
+            for (String rowkey : rowkeyList) {
+                staticProducer.sendKafkaMessage(INNERTOPIC, DELETE, rowkey);
+            }
         }
-        return phoenixDao.deleteObjectInfo(rowkeyList);
+        return i;
     }
 
     /**
@@ -175,12 +177,14 @@ public class ObjectInfoHandlerService {
                 objectSearchResult = getObjectInfoNotOnePerson(sqlRowSet, photosMap);
                 //存储搜索结果
                 hbaseDao.saveSearchRecord(param, objectSearchResult);
+                log.info("Get object info successfull, save search result to 'searchRes' table successfull");
             } else {
                 //同一个人的情况下
                 log.info("Start get object info, according to the same person");
                 objectSearchResult = getObjectInfoOnePerson(sqlRowSet, photosMap);
                 //存储搜索结果
                 hbaseDao.saveSearchRecord(param, objectSearchResult);
+                log.info("Get object info successfull, save search result to 'searchRes' table successfull");
             }
         } else {
             log.info("Start get object info not search picture");
@@ -197,9 +201,11 @@ public class ObjectInfoHandlerService {
             objectSearchResult.setSingleSearchResults(singleResults);
             objectSearchResult.setSearchId(UuidUtil.getUuid());
             hbaseDao.saveSearchRecord(param, objectSearchResult);
+            log.info("Get object info successfull, save search result to 'searchRes' table successfull");
         }
         //返回分页结果
         objectInfoHandlerTool.formatTheObjectSearchResult(objectSearchResult, param.getStart(), param.getLimit());
+        log.info("Get object info successfull, object info search result : " + JSONUtil.toJson(objectSearchResult));
         return objectSearchResult;
     }
 
@@ -280,11 +286,11 @@ public class ObjectInfoHandlerService {
     /**
      * 根据rowkey 返回人员的照片
      *
-     * @param rowkey 人员在对象信息库中的唯一标志。
+     * @param objectId 人员在对象信息库中的唯一标志。
      * @return 图片的byte[] 数组
      */
-    public byte[] getPhotoByKey(String rowkey) {
-        return phoenixDao.getPhotoByObjectId(rowkey);
+    public byte[] getPhotoByKey(String objectId) {
+        return phoenixDao.getPhotoByObjectId(objectId);
     }
 
     /**
@@ -368,9 +374,6 @@ public class ObjectInfoHandlerService {
         int pageSize = searchRecordParam.getSize();
         int start = searchRecordParam.getStart();
         objectInfoHandlerTool.formatTheObjectSearchResult(finnalObjectSearchResult, start, pageSize);
-        log.info("***********************");
-        log.info(finnalObjectSearchResult.toString());
-        log.info("***********************");
         return finnalObjectSearchResult;
     }
 
@@ -385,12 +388,12 @@ public class ObjectInfoHandlerService {
         String searchId = opts.getTotalSearchId();
         byte[] bytes = hbaseDao.get(searchId, SearchResultTable.STAREPO_COLUMN_SEARCHMESSAGE);
         if (bytes == null || bytes.length <= 0) {
-            log.info("Get file faild !");
+            log.info("Start create emphasis personnel word, but get search result is null from 'searchRes' table");
             return null;
         }
         ObjectSearchResult objectSearchResult = JSONUtil.toObject(new String(bytes), ObjectSearchResult.class);
         if (objectSearchResult == null || objectSearchResult.getSingleSearchResults() == null) {
-            log.info("Get file faild !");
+            log.info("Start create emphasis personnel word, but search result is null");
             return null;
         }
         PersonSingleResult result = objectSearchResult.getSingleSearchResults().get(0);
@@ -415,9 +418,10 @@ public class ObjectInfoHandlerService {
             String rowkey = "file_" + data + "_" + UuidUtil.getUuid().substring(0, 4) + ".doc";
             hbaseDao.insert_word(rowkey, buff);
             //返回文件Id
+            log.info("create emphasis personnel word successfull");
             return rowkey;
         }
-        log.info("Get file faild !");
+        log.info("create emphasis personnel word failed");
         return null;
     }
 
@@ -566,7 +570,7 @@ public class ObjectInfoHandlerService {
                 pictureData.getFeature().setFeature(feature);
             }
         }
-        log.info("Get objectInfo feature by rowkey result : " + (pictureData != null ? pictureData.toString() : null));
+        log.info("Get object picture data successfull, picture data : " + JSONUtil.toJson(pictureData));
         return pictureData;
     }
 
