@@ -26,6 +26,7 @@ public class PeopleManagerController {
     @ApiOperation(value = "获取迁入迁出人口统计", response = PeopleManager.class, responseContainer = "List")
     @RequestMapping(value = BigDataPath.PEOPLE_COUNT, method = RequestMethod.GET)
     public ResponseResult<List<PeopleManager>> peopleCount(String start_time, String end_time) {
+        log.info("Param are start_time: " + start_time + "  , end_time: " + end_time);
         if (StringUtils.isBlank(start_time) || StringUtils.isBlank(end_time)) {
             log.error("Start people count, but start_time or end_time is error");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
