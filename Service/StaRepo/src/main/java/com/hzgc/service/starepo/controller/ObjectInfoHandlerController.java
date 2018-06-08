@@ -4,6 +4,7 @@ import com.hzgc.common.table.seachres.SearchResultTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.jni.PictureData;
+import com.hzgc.service.starepo.bean.export.ObjectInfo;
 import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
@@ -131,6 +132,25 @@ public class ObjectInfoHandlerController {
     }
 
     /**
+     * 根据id查询对象
+     *
+     * @param objectId 对象ID
+     * @return ObjectInfo
+     */
+    @ApiOperation(value = "根据id查询对象", response = ResponseResult.class)
+    @ApiImplicitParam(name = "objectId", value = "对象ID", dataType = "String", paramType = "query")
+    @RequestMapping(value = BigDataPath.OBJECTINFO_GET, method = RequestMethod.GET)
+    public ResponseResult<ObjectInfo> getObjectInfo(String objectId) {
+        if (StringUtils.isBlank(objectId)) {
+            log.error("Start get object info, but object id is  null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        log.info("Start get object info, param is : " + objectId);
+        ObjectInfo objectInfo = objectInfoHandlerService.getObjectInfo(objectId);
+        return ResponseResult.init(objectInfo);
+    }
+
+    /**
      * 查询对象
      *
      * @param param 查询条件封装
@@ -138,13 +158,13 @@ public class ObjectInfoHandlerController {
      */
     @ApiOperation(value = "对象查询", response = ObjectSearchResult.class)
     @RequestMapping(value = BigDataPath.OBJECTINFO_SEARCH, method = RequestMethod.POST)
-    public ResponseResult<ObjectSearchResult> getObjectInfo(@RequestBody @ApiParam(value = "查询条件") GetObjectInfoParam param) {
+    public ResponseResult<ObjectSearchResult> searchObjectInfo(@RequestBody @ApiParam(value = "查询条件") GetObjectInfoParam param) {
         if (param == null) {
             log.error("Start get object info, but param is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
         log.info("Start get object info, param is:" + JSONUtil.toJson(param));
-        ObjectSearchResult result = objectInfoHandlerService.getObjectInfo(param);
+        ObjectSearchResult result = objectInfoHandlerService.searchObjectInfo(param);
         return ResponseResult.init(result);
     }
 
