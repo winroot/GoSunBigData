@@ -1,4 +1,4 @@
-package com.hzgc.cluster.spark.udf.custom;
+package com.hzgc.cluster.spark.udf;
 
 import java.math.BigDecimal;
 

@@ -1,6 +1,5 @@
-package com.hzgc.cluster.spark.udf.spark;
+package com.hzgc.cluster.spark.udf;
 
-import com.hzgc.cluster.spark.udf.custom.CustomFunction;
 import org.apache.hadoop.hive.ql.exec.UDF;
 
 public class FaceCompare extends UDF {
