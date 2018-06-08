@@ -390,19 +390,21 @@ public class PhoenixDao implements Serializable {
             objectInfo.setFollowLevel(sqlRowSet.getInt(ObjectInfoTable.IMPORTANT));
             objectInfo.setStatus(sqlRowSet.getInt(ObjectInfoTable.STATUS));
         }
-        if (StringUtils.isBlank(objectTypeKey) || createTime == null || updateTime == null){
-            log.info("get object info result : " + JSONUtil.toJson(objectInfo));
-            return objectInfo;
-        }
-        String objectTypeName = getObjectTypeNameById(objectTypeKey);
-        objectInfo.setObjectTypeName(objectTypeName);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        if (createTime != null){
         java.util.Date createTime_data = new java.util.Date(createTime.getTime());
         String createTime_str = sdf.format(createTime_data);
         objectInfo.setCreateTime(createTime_str);
+        }
+        if (updateTime != null){
         java.util.Date updateTime_data = new java.util.Date(updateTime.getTime());
         String updateTime_str = sdf.format(updateTime_data);
         objectInfo.setUpdateTime(updateTime_str);
+        }
+        if (!StringUtils.isBlank(objectTypeKey)){
+        String objectTypeName = getObjectTypeNameById(objectTypeKey);
+        objectInfo.setObjectTypeName(objectTypeName);
+        }
         log.info("get object info result : " + JSONUtil.toJson(objectInfo));
         return objectInfo;
     }
