@@ -1,6 +1,7 @@
 package com.hzgc.service.address.controller;
 
 import com.hzgc.service.address.service.FtpAddressService;
+import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
@@ -41,7 +42,10 @@ public class FtpAddressController {
     @ApiResponses(value = {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.FTP_GET_IP, method = RequestMethod.GET)
     public ResponseResult<String> getIPAddress(@ApiParam(value = "主机名") String hostname) {
-        String ip = ftpAddressService.getIPAddress(hostname);
-        return ResponseResult.init(ip);
+        if (null != hostname) {
+            String ip = ftpAddressService.getIPAddress(hostname);
+            return ResponseResult.init(ip);
+        }
+        return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
     }
 }
