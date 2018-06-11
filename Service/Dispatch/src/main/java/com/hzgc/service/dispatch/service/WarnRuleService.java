@@ -61,7 +61,9 @@ public class WarnRuleService {
                 for (Warn warn : warnList) {
                     for (String s:m.keySet()){
                         if (warn.getObjectType().equals(s)){
-                            warn.setObjectTypeName(m.get(s));
+                            if (null != m.get(s)) {
+                                warn.setObjectTypeName(m.get(s));
+                            }
                         }
                     }
                 }
