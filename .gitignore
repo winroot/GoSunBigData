@@ -21,3 +21,4 @@ javadocs/
 *.sn.ini
 *.tmp
 log/
+hbase-site.xml
