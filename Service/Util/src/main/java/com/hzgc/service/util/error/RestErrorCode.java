@@ -67,4 +67,8 @@ public interface RestErrorCode {
      * 数据库记录已经存在
      */
     int RECORD_ALREADY_EXIST = 15;
+    /**
+     * 设备已经配置了识别规则
+     */
+    int ERR_DEVICE_ALREADY_BIND_RULE = 2200;
 }
