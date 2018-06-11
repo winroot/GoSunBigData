@@ -8,6 +8,7 @@ import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.PictureData;
+import com.hzgc.service.starepo.bean.export.ObjectInfo;
 import com.hzgc.service.starepo.bean.export.PersonSingleResult;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
@@ -26,10 +27,8 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -113,7 +112,7 @@ public class PhoenixDao implements Serializable {
     public boolean updateObjectType(String id, String name, String creator, String remark) {
         if (StringUtils.isBlank(creator) || StringUtils.isBlank(remark)) {
             log.info("Start update object type, but creator or remark is null, the database needs to be queried");
-            ObjectTypeParam objectType = getObjectTypeByObjectId(id);
+            ObjectTypeParam objectType = getObjectTypeById(id);
             if (!IsEmpty.strIsRight(creator)) {
                 creator = objectType.getCreator();
                 log.info("update object type param ：creator is null, query database creator = " + creator);
@@ -138,18 +137,18 @@ public class PhoenixDao implements Serializable {
     /**
      * 查询单个objectType(创建人、备注)  (内)
      *
-     * @param objectId 对象类型Key
+     * @param id 对象类型Key
      * @return ObjectTypeParam
      */
-    private ObjectTypeParam getObjectTypeByObjectId(String objectId) {
-        String sql = parseByOption.getOBjectTypeByObjectId(objectId);
+    private ObjectTypeParam getObjectTypeById(String id) {
+        String sql = parseByOption.getObjectTypeById(id);
         ObjectTypeParam objectType = new ObjectTypeParam();
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql);
         while (sqlRowSet.next()) {
             objectType.setCreator(sqlRowSet.getString(ObjectTypeTable.TYPE_CREATOR));
             objectType.setRemark(sqlRowSet.getString(ObjectTypeTable.TYPE_REMARK));
         }
-        log.info("Get objectType by rowkey result: " + objectType.toString());
+        log.info("Get object type by id result : " + objectType.toString());
         return objectType;
     }
 
@@ -235,7 +234,7 @@ public class PhoenixDao implements Serializable {
      * @return 返回值为0，表示插入成功，返回值为1，表示插入失败
      */
     public Integer addObjectInfo(ObjectInfoParam objectInfo) {
-        String sql = parseByOption.addObjectInfo(objectInfo);
+        String sql = parseByOption.addObjectInfo();
         log.info("Start add object info, SQL is : " + sql);
         try {
             Timestamp createTime = new Timestamp(System.currentTimeMillis());
@@ -297,7 +296,7 @@ public class PhoenixDao implements Serializable {
      */
     public Integer deleteObjectInfo(List<String> rowkeys) {
         // 获取table 对象，通过封装HBaseHelper 来获取
-        String sql = parseByOption.deleteObjectInfo(rowkeys);
+        String sql = parseByOption.deleteObjectInfo();
         log.info("Start delete object info, SQL is : " + sql);
         try {
             List<Object[]> batchArgs = new ArrayList<>();
@@ -365,12 +364,68 @@ public class PhoenixDao implements Serializable {
     }
 
     /**
+     * 根据id查询对象
+     *
+     * @param objectId 对象ID
+     * @return ObjectInfo
+     */
+    public ObjectInfo getObjectInfo(String objectId){
+        String sql = parseByOption.getObjectInfo();
+        log.info("Start get object info, SQL is : " + sql);
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, objectId);
+        ObjectInfo objectInfo = new ObjectInfo();
+        String objectTypeKey = null;
+        Timestamp createTime = null;
+        Timestamp updateTime = null;
+        while (sqlRowSet.next()) {
+            objectInfo.setName(sqlRowSet.getString(ObjectInfoTable.NAME));
+            objectTypeKey = sqlRowSet.getString(ObjectInfoTable.PKEY);
+            objectInfo.setIdCardNumber(sqlRowSet.getString(ObjectInfoTable.IDCARD));
+            objectInfo.setSex(sqlRowSet.getInt(ObjectInfoTable.SEX));
+            objectInfo.setCreatedReason(sqlRowSet.getString(ObjectInfoTable.REASON));
+            objectInfo.setCreator(sqlRowSet.getString(ObjectInfoTable.CREATOR));
+            objectInfo.setCreatorPhone(sqlRowSet.getString(ObjectInfoTable.CPHONE));
+            createTime = (Timestamp) sqlRowSet.getObject(ObjectInfoTable.CREATETIME);
+            updateTime = (Timestamp) sqlRowSet.getObject(ObjectInfoTable.UPDATETIME);
+            objectInfo.setFollowLevel(sqlRowSet.getInt(ObjectInfoTable.IMPORTANT));
+            objectInfo.setStatus(sqlRowSet.getInt(ObjectInfoTable.STATUS));
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        if (createTime != null){
+        java.util.Date createTime_data = new java.util.Date(createTime.getTime());
+        String createTime_str = sdf.format(createTime_data);
+        objectInfo.setCreateTime(createTime_str);
+        }
+        if (updateTime != null){
+        java.util.Date updateTime_data = new java.util.Date(updateTime.getTime());
+        String updateTime_str = sdf.format(updateTime_data);
+        objectInfo.setUpdateTime(updateTime_str);
+        }
+        if (!StringUtils.isBlank(objectTypeKey)){
+        String objectTypeName = getObjectTypeNameById(objectTypeKey);
+        objectInfo.setObjectTypeName(objectTypeName);
+        }
+        log.info("get object info result : " + JSONUtil.toJson(objectInfo));
+        return objectInfo;
+    }
+
+    private String getObjectTypeNameById(String objectTypeId){
+        String sql = parseByOption.getObjectTypeNameById();
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, objectTypeId);
+        String objectTypeName = "";
+        while (sqlRowSet.next()) {
+            objectTypeName = sqlRowSet.getString(ObjectTypeTable.TYPE_NAME);
+        }
+        return objectTypeName;
+    }
+
+    /**
      * 可以匹配精确查找，以图搜索人员信息，模糊查找   （外）（李第亮）
      *
      * @param param 查询参数
      * @return 返回搜索所需要的结果封装成的对象，包含搜索id，成功与否标志，记录数，记录信息，照片id
      */
-    public SqlRowSet getObjectInfo(GetObjectInfoParam param) {
+    public SqlRowSet searchObjectInfo(GetObjectInfoParam param) {
         //封装的sql 以及需要设置的值
         SqlAndArgs sqlAndArgs = parseByOption.getSqlFromGetObjectInfoParm(param);
         // 取出封装的sql 以及需要设置的值，进行sql 查询
