@@ -1,6 +1,7 @@
 package com.hzgc.service.util.auth.scan;
 
 import com.hzgc.service.util.auth.annotation.ResourceProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
@@ -19,6 +20,7 @@ import java.util.Set;
 /**
  * 资源提供者注解扫描器
  */
+@Slf4j
 public class ResourceProviderAnnotationScanner {
     private static Logger logger = LoggerFactory.getLogger(ResourceProviderAnnotationScanner.class);
 

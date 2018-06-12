@@ -3,13 +3,12 @@ package com.hzgc.service.util.journal.aop;
 import com.hzgc.service.util.journal.annotation.SysOperateLog;
 import com.hzgc.service.util.journal.helper.OperateLogWriterHelper;
 import com.hzgc.service.util.response.ResponseResult;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.expression.AnnotatedElementKey;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.util.StringUtils;
@@ -25,10 +24,9 @@ import java.util.List;
  * @author liuzk
  */
 @Aspect
+@Slf4j
 @SuppressWarnings("rawtypes")
 public class SysOperateLogAspect {
-    private static final Logger logger = LoggerFactory.getLogger(SysOperateLogAspect.class);
-
     private ExpressionEvaluator<String> evaluator = new ExpressionEvaluator<>();
 
     /**
@@ -99,7 +97,7 @@ public class SysOperateLogAspect {
         try {
             OperateLogWriterHelper.success(serviceType, operateType, description);
         } catch (Exception e) {
-            logger.error("Write operate log error ", e);
+            log.error("Write operate log error ", e);
         }
     }
 
@@ -107,7 +105,7 @@ public class SysOperateLogAspect {
         try {
             OperateLogWriterHelper.fail(serviceType, operateType, description, reason);
         } catch (Exception e) {
-            logger.error("Write operate log error ", e);
+            log.error("Write operate log error ", e);
         }
     }
 }

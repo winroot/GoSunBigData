@@ -2,6 +2,7 @@ package com.hzgc.service.util.journal.helper;
 
 import com.hzgc.service.util.journal.dto.OperateLogDTO;
 import com.hzgc.service.util.journal.service.OperateLogWriterService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,8 +12,8 @@ import java.util.Date;
 /**
  * @author qirongyu
  */
+@Slf4j
 public class OperateLogWriterHelper {
-    private static final Logger logger = LoggerFactory.getLogger(OperateLogWriterHelper.class);
 
     private static OperateLogWriterService operateLogWriterService;
 
@@ -53,8 +54,8 @@ public class OperateLogWriterHelper {
             operateLogWriterService.writeLog(operLog);
         } catch (Exception e) {
             //写日志失败时，记录到本地的log日志中
-            logger.warn("Write operate log to local, {}", operLog.toString());
-            logger.error(e.getMessage());
+            log.warn("Write operate log to local, {}", operLog.toString());
+            log.error(e.getMessage());
         }
     }
 }

@@ -1,10 +1,9 @@
 package com.hzgc.service.util.auth.scan;
 
 import com.hzgc.service.util.auth.annotation.AuthorizeCode;
+import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.scanners.FieldAnnotationsScanner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -20,9 +19,8 @@ import java.util.Set;
  *
  * @author liuzhikun
  */
+@Slf4j
 public class AuthorizeCodeAnnotationScanner {
-    private static Logger logger = LoggerFactory.getLogger(AuthorizeCodeAnnotationScanner.class);
-
     private List<String> basePackages;
 
     private Set<DefaultAuthorizeDefination> authorizeDefinationSetCache = new LinkedHashSet<>();
@@ -77,7 +75,7 @@ public class AuthorizeCodeAnnotationScanner {
                 }
             }
 
-            logger.info("Found new authorize code, {}", defaultAuthorizeDefination);
+            log.info("Found new authorize code, {}", defaultAuthorizeDefination);
 
             return defaultAuthorizeDefination;
         } catch (Exception e) {
