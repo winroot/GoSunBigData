@@ -39,6 +39,7 @@
         <scala.version>2.11.8</scala.version>
         <hive.version>2.3.0</hive.version>
         <jni.version>1.0</jni.version>
+        <reflections.version>0.9.10</reflections.version>
     </properties>
 
 
@@ -89,6 +90,11 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>${reflections.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
