@@ -10,6 +10,7 @@ import com.hzgc.service.dynrepo.service.CaptureServiceHelper;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
+import com.hzgc.service.util.rest.BigDataPermission;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -18,6 +19,7 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -54,6 +56,7 @@ public class CaptureSearchController {
     @ApiOperation(value = "以图搜图", response = SearchResult.class)
     @RequestMapping(value = BigDataPath.DYNREPO_SEARCH, method = RequestMethod.POST)
     @SuppressWarnings("unused")
+    @PreAuthorize("hasAuthority('" + BigDataPermission.FACE_SEARCH + "')")
     public ResponseResult<SearchResult> searchPicture(
             @RequestBody @ApiParam(value = "以图搜图查询参数") SearchOption searchOption) throws SQLException {
         SearchResult searchResult;
@@ -95,6 +98,7 @@ public class CaptureSearchController {
     @ApiOperation(value = "获取原图", produces = "image/jpeg")
     @ApiImplicitParam(name = "image_name", value = "原图ID", paramType = "query")
     @RequestMapping(value = BigDataPath.DYNREPO_GETPICTURE, method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('" + BigDataPermission.FACE_SEARCH + "')")
     public ResponseEntity<byte[]> getSearchPicture(String image_name) {
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
@@ -111,6 +115,7 @@ public class CaptureSearchController {
     @RequestMapping(value = BigDataPath.DYNREPO_SEARCHRESULT, method = RequestMethod.POST)
     @ApiImplicitParam(name = "searchResultOption", value = "历史结果查询参数", paramType = "body")
     @SuppressWarnings("unused")
+    @PreAuthorize("hasAuthority('" + BigDataPermission.FACE_SEARCH + "')")
     public ResponseResult<SearchResult> getSearchResult(
             @RequestBody SearchResultOption searchResultOption) {
         SearchResult searchResult;
@@ -142,6 +147,7 @@ public class CaptureSearchController {
     })
     @SuppressWarnings("unused")
     @RequestMapping(value = BigDataPath.DYNREPO_SEARCHHISTORY, method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('" + BigDataPermission.FACE_SEARCH + "')")
     public ResponseResult<List<SearchHisotry>> getSearchHistory(
             String start_time,
             String end_time,
@@ -180,6 +186,7 @@ public class CaptureSearchController {
     @ApiImplicitParam(name = "searchOption", value = "抓拍历史查询参数", paramType = "body")
     @RequestMapping(value = BigDataPath.DYNREPO_HISTORY, method = RequestMethod.POST)
     @SuppressWarnings("unused")
+    @PreAuthorize("hasAuthority('" + BigDataPermission.HISTORY_FACE_SEARCH + "')")
     public ResponseResult<List<SingleCaptureResult>> getCaptureHistory(
             @RequestBody @ApiParam(value = "以图搜图入参") CaptureOption captureOption) {
         if (captureOption == null) {
