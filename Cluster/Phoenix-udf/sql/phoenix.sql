@@ -13,6 +13,7 @@ create table objectinfo(
       cphone varchar,
       createtime TIMESTAMP,
       updatetime TIMESTAMP,
+      statustime TIMESTAMP,
       important integer,
       status integer,
       location varchar);

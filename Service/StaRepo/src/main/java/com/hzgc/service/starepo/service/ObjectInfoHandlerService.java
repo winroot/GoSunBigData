@@ -76,11 +76,7 @@ public class ObjectInfoHandlerService {
         //数据库操作
         Integer i = phoenixDao.addObjectInfo(objectInfo);
         //向告警中同步数据
-        StaticRepoObject object = new StaticRepoObject();
-        object.setFeature(objectInfo.getPictureDatas().getFeature().getFeature());
-        object.setPkey(objectInfo.getObjectTypeKey());
-        object.setRowkey(objectInfo.getId());
-        staticProducer.sendKafkaMessage(INNERTOPIC, ADD, JSONUtil.toJson(object));
+        sendKafka(objectInfo, ADD);
         return i;
     }
 
@@ -107,6 +103,7 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
     public Integer updateObjectInfo(ObjectInfoParam param) {
+        Integer a = 1;
         //判断身份证格式是否正确
         if (!StringUtils.isBlank(param.getIdcard())) {
             if (!idCodeAuthentication(param.getIdcard())) {
@@ -115,18 +112,36 @@ public class ObjectInfoHandlerService {
                 return 1;
             }
         }
-        //数据库更新操作
+        // 查询更新对象当前状态值
+        String objectId = param.getId();
+        int status = phoenixDao.getObjectInfo_status(objectId);
+        //数据库更新操作(状态值暂时不更新)
         Integer i = phoenixDao.updateObjectInfo(param);
+        // 根据入参状态值与更新前对象状态值比较，判断是否更新statustime（状态更新时间）字段
+        if (param.getStatus() != status) {
+            Integer ii = phoenixDao.updateObjectInfo_status(objectId, param.getStatus());
+            if (i == 0 && ii == 0){
+                sendKafka(param, UPDATE);
+                a = 0;
+            }
+        }else {
+            if (i == 0){
+                sendKafka(param, UPDATE);
+                a = 0;
+            }
+        }
+        return a;
+    }
+
+    private void sendKafka(ObjectInfoParam param, String option){
         StaticRepoObject object = new StaticRepoObject();
         if (param.getPictureDatas() != null && param.getPictureDatas().getFeature() != null) {
             object.setFeature(param.getPictureDatas().getFeature().getFeature());
         }
-
         //向告警同步数据
         object.setPkey(param.getObjectTypeKey());
         object.setRowkey(param.getId());
-        staticProducer.sendKafkaMessage(INNERTOPIC, UPDATE, JSONUtil.toJson(object));
-        return i;
+        staticProducer.sendKafkaMessage(INNERTOPIC, option, JSONUtil.toJson(object));
     }
 
     /**
@@ -163,9 +178,10 @@ public class ObjectInfoHandlerService {
      * @param objectId 对象ID
      * @return ObjectInfo
      */
-    public ObjectInfo getObjectInfo(String objectId){
+    public ObjectInfo getObjectInfo(String objectId) {
         return phoenixDao.getObjectInfo(objectId);
     }
+
     /**
      * 可以匹配精确查找，以图搜索人员信息，模糊查找   （外）（李第亮）
      *
