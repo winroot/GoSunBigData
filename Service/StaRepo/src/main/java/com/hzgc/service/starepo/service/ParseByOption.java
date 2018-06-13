@@ -502,7 +502,7 @@ public class ParseByOption {
         return sql.toString();
     }
 
-    public String addObjectInfo(ObjectInfoParam objectInfo) {
+    public String addObjectInfo() {
         return "upsert into " + ObjectInfoTable.TABLE_NAME + "("
                 + ObjectInfoTable.ROWKEY + ", "
                 + ObjectInfoTable.NAME + ", "
@@ -521,16 +521,38 @@ public class ParseByOption {
                 + ") values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     }
 
-    public String deleteObjectInfo(List<String> rowkeys) {
+    public String deleteObjectInfo() {
         return "delete from " + ObjectInfoTable.TABLE_NAME + " where " + ObjectInfoTable.ROWKEY + " = ?";
     }
 
-    public String getOBjectTypeByObjectId(String objectId) {
+    public String getObjectTypeById(String id) {
         return "select " + ObjectTypeTable.ROWKEY + ", "
                 + ObjectTypeTable.TYPE_CREATOR + ", "
                 + ObjectTypeTable.TYPE_REMARK + " from "
                 + ObjectTypeTable.TABLE_NAME + " where "
-                + ObjectTypeTable.ROWKEY + " = '" + objectId + "'";
+                + ObjectTypeTable.ROWKEY + " = '" + id + "'";
+    }
+
+    public String getObjectInfo() {
+        return "select " + ObjectInfoTable.NAME + ", "
+                + ObjectInfoTable.PKEY + ", "
+                + ObjectInfoTable.IDCARD + ", "
+                + ObjectInfoTable.SEX + ", "
+                + ObjectInfoTable.REASON + ", "
+                + ObjectInfoTable.CREATOR + ", "
+                + ObjectInfoTable.CPHONE + ", "
+                + ObjectInfoTable.CREATETIME + ", "
+                + ObjectInfoTable.UPDATETIME + ", "
+                + ObjectInfoTable.IMPORTANT + ", "
+                + ObjectInfoTable.STATUS + " from "
+                + ObjectInfoTable.TABLE_NAME + " where "
+                + ObjectInfoTable.ROWKEY + " = ?";
+    }
+
+    public String getObjectTypeNameById() {
+        return "select " + ObjectTypeTable.TYPE_NAME + " from "
+                + ObjectTypeTable.TABLE_NAME + " where "
+                + ObjectTypeTable.ROWKEY + " = ?";
     }
 
     public String getPictureData() {

@@ -32,7 +32,12 @@ public class PeopleManagerService {
             PeopleManager peopleManager = new PeopleManager();
             peopleManager.setMoveOutCount(x.getRemovePeople());
             peopleManager.setMonth(x.getMonth());
-            peopleManager.setMoveInCount(statisticsMapping.get(x.getMonth()).getAddPeople());
+            PeopleManagerCount clusterCount = statisticsMapping.get(x.getMonth());
+            if(clusterCount != null){
+                peopleManager.setMoveInCount(clusterCount.getAddPeople());
+            } else{
+                peopleManager.setMoveInCount(0);
+            }
             peopleManagers.add(peopleManager);
         });
         return peopleManagers;

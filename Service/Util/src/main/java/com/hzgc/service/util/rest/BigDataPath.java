@@ -65,6 +65,7 @@ public class BigDataPath {
     public static final String OBJECTINFO_DELETE = "/object_delete";
     public static final String OBJECTINFO_UPDATE = "/object_update";
     public static final String OBJECTINFO_UPDATE_STATUS = "/object_update_status";
+    public static final String OBJECTINFO_GET = "/object_get";
     public static final String OBJECTINFO_SEARCH = "/object_search";
     public static final String OBJECTINFO_GET_PHOTOBYKEY = "/get_object_photo";
     public static final String OBJECTINFO_GET_FEATURE = "/get_feature";

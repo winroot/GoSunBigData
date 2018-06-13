@@ -13,6 +13,7 @@ import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -59,20 +60,20 @@ public class ClusteringController {
             @ApiImplicitParam(name = "endTime", value = "结束时间", paramType = "query")
     })
     @RequestMapping(value = BigDataPath.CLUSTERING_TOTLE, method = RequestMethod.GET)
-    public List<PeopleManagerCount> getTotleNum(String start_ime, String end_time) {
-        if(StringUtils.isBlank(start_ime) || !start_ime.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")){
+    public List<PeopleManagerCount> getTotleNum(String start_time, String end_time) {
+        if(StringUtils.isBlank(start_time) || !start_time.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")){
             log.error("Start time does not conform to the format: yyyy-MM-dd");
                     return new ArrayList<>();
         }
-        if(StringUtils.isBlank(start_ime) || !end_time.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")){
+        if(StringUtils.isBlank(start_time) || !end_time.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")){
             log.error("End time does not conform to the format: yyyy-MM-dd");
             return new ArrayList<>();
         }
-        if(end_time.compareTo(start_ime) < 0){
+        if(end_time.compareTo(start_time) < 0){
             log.error("End time mast be larger than start time.");
             return new ArrayList<>();
         }
-        return clusteringSearchService.getTotleNum(start_ime, end_time);
+        return clusteringSearchService.getTotleNum(start_time, end_time);
     }
 
     @ApiOperation(value = "单个聚类信息详细查询(告警ID)", response = Integer.class, responseContainer = "List")
@@ -83,9 +84,6 @@ public class ClusteringController {
                 clusteringSearchParam.getTime() != null) {
             int start = clusteringSearchParam.getStart();
             int limit = clusteringSearchParam.getLimit();
-            if(start == 0){
-                start = 1;
-            }
             if(limit == 0){
                 limit = Integer.MAX_VALUE;
             }

@@ -92,8 +92,7 @@ public class ClusteringSearchService {
      * @return 返回该类下面所以告警信息
      */
     public List<Integer> detailClusteringSearch_v1(String clusterId, String time, int start, int limit) {
-        String region = clusterId.split("-")[0];
-        SearchHit[] results = elasticSearchDao.detailClusteringSearch_v1(region, time, start, limit);
+        SearchHit[] results = elasticSearchDao.detailClusteringSearch_v1(clusterId, time, start, limit);
         List<Integer> alarmIdList = new ArrayList<>();
         if (results != null && results.length > 0) {
             for (SearchHit result : results) {

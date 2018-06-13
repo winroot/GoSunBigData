@@ -158,15 +158,24 @@ public class ObjectInfoHandlerService {
     }
 
     /**
+     * 根据id查询对象
+     *
+     * @param objectId 对象ID
+     * @return ObjectInfo
+     */
+    public ObjectInfo getObjectInfo(String objectId){
+        return phoenixDao.getObjectInfo(objectId);
+    }
+    /**
      * 可以匹配精确查找，以图搜索人员信息，模糊查找   （外）（李第亮）
      *
      * @param param 搜索参数的封装
      * @return 返回搜索所需要的结果封装成的对象，包含搜索id，成功与否标志，记录数，记录信息，照片id
      */
-    public ObjectSearchResult getObjectInfo(GetObjectInfoParam param) {
+    public ObjectSearchResult searchObjectInfo(GetObjectInfoParam param) {
         // setSearchTotalId
         ObjectSearchResult objectSearchResult;
-        SqlRowSet sqlRowSet = phoenixDao.getObjectInfo(param);
+        SqlRowSet sqlRowSet = phoenixDao.searchObjectInfo(param);
         if (sqlRowSet == null) {
             return new ObjectSearchResult();
         }

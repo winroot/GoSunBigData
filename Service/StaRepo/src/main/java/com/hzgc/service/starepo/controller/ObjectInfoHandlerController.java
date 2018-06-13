@@ -4,6 +4,7 @@ import com.hzgc.common.table.seachres.SearchResultTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.jni.PictureData;
+import com.hzgc.service.starepo.bean.export.ObjectInfo;
 import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
@@ -13,6 +14,7 @@ import com.hzgc.service.util.bean.PeopleManagerCount;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
+import com.hzgc.service.util.rest.BigDataPermission;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,6 +48,7 @@ public class ObjectInfoHandlerController {
      */
     @ApiOperation(value = "添加对象", response = ResponseResult.class)
     @RequestMapping(value = BigDataPath.OBJECTINFO_ADD, method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_OPERATION + "')")
     public ResponseResult<Integer> addObjectInfo(@RequestBody @ApiParam(value = "添加对象") ObjectInfoParam param) {
         if (param == null) {
             log.error("Start add object info, but param is null");
@@ -70,6 +74,7 @@ public class ObjectInfoHandlerController {
      */
     @ApiOperation(value = "删除对象", response = ResponseResult.class)
     @RequestMapping(value = BigDataPath.OBJECTINFO_DELETE, method = RequestMethod.DELETE)
+    @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_OPERATION + "')")
     public ResponseResult<Integer> deleteObjectInfo(@RequestBody @ApiParam(value = "删除列表") List<String> rowkeyList) {
         if (rowkeyList == null || rowkeyList.size() == 0) {
             log.error("Start delete object info, but rowkey list is null");
@@ -88,6 +93,7 @@ public class ObjectInfoHandlerController {
      */
     @ApiOperation(value = "修改对象", response = ResponseResult.class)
     @RequestMapping(value = BigDataPath.OBJECTINFO_UPDATE, method = RequestMethod.PUT)
+    @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_OPERATION + "')")
     public ResponseResult<Integer> updateObjectInfo(@RequestBody @ApiParam(value = "修改对象") ObjectInfoParam param) {
         if (param == null) {
             log.error("Start update object info, but param is null");
@@ -120,6 +126,7 @@ public class ObjectInfoHandlerController {
             @ApiImplicitParam(name = "status", value = "状态码", dataType = "Integer", paramType = "query")
     })
     @RequestMapping(value = BigDataPath.OBJECTINFO_UPDATE_STATUS, method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_OPERATION + "')")
     public ResponseResult<Integer> updateObjectInfo_status(String objectId, int status) {
         if (StringUtils.isBlank(objectId)) {
             log.error("Start update object status, but object id is  null");
@@ -131,6 +138,26 @@ public class ObjectInfoHandlerController {
     }
 
     /**
+     * 根据id查询对象
+     *
+     * @param objectId 对象ID
+     * @return ObjectInfo
+     */
+    @ApiOperation(value = "根据id查询对象", response = ResponseResult.class)
+    @ApiImplicitParam(name = "objectId", value = "对象ID", dataType = "String", paramType = "query")
+    @RequestMapping(value = BigDataPath.OBJECTINFO_GET, method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_VIEW + "')")
+    public ResponseResult<ObjectInfo> getObjectInfo(String objectId) {
+        if (StringUtils.isBlank(objectId)) {
+            log.error("Start get object info, but object id is  null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+        }
+        log.info("Start get object info, param is : " + objectId);
+        ObjectInfo objectInfo = objectInfoHandlerService.getObjectInfo(objectId);
+        return ResponseResult.init(objectInfo);
+    }
+
+    /**
      * 查询对象
      *
      * @param param 查询条件封装
@@ -138,13 +165,14 @@ public class ObjectInfoHandlerController {
      */
     @ApiOperation(value = "对象查询", response = ObjectSearchResult.class)
     @RequestMapping(value = BigDataPath.OBJECTINFO_SEARCH, method = RequestMethod.POST)
-    public ResponseResult<ObjectSearchResult> getObjectInfo(@RequestBody @ApiParam(value = "查询条件") GetObjectInfoParam param) {
+    @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_VIEW + "')")
+    public ResponseResult<ObjectSearchResult> searchObjectInfo(@RequestBody @ApiParam(value = "查询条件") GetObjectInfoParam param) {
         if (param == null) {
             log.error("Start get object info, but param is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
         log.info("Start get object info, param is:" + JSONUtil.toJson(param));
-        ObjectSearchResult result = objectInfoHandlerService.getObjectInfo(param);
+        ObjectSearchResult result = objectInfoHandlerService.searchObjectInfo(param);
         return ResponseResult.init(result);
     }
 
@@ -194,6 +222,7 @@ public class ObjectInfoHandlerController {
      */
 //    @ApiOperation(value = "获取更多对象", response = ObjectSearchResult.class)
     @RequestMapping(value = BigDataPath.STAREPO_GET_SEARCHRESULT, method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_VIEW + "')")
     public ResponseResult<ObjectSearchResult> getRocordOfObjectInfo(@RequestBody @ApiParam(value = "查询记录") SearchRecordParam param) {
         if (param == null) {
             return null;
@@ -210,24 +239,25 @@ public class ObjectInfoHandlerController {
      */
     @ApiOperation(value = "生成重点人员Word", response = String.class)
     @RequestMapping(value = BigDataPath.STAREPO_CREATE_WORD, method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_OPERATION + "')")
     public ResponseResult<String> createPeoplesWord(@RequestBody @ApiParam(value = "历史查询参数") SearchRecordParam param) {
         if (param == null) {
             log.error("Start create emphasis personnel word, but param error");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-        if (param.getStart() == 0){
+        if (param.getStart() == 0) {
             log.error("Start create emphasis personnel word, but start = 0");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-        if (param.getSize() == 0){
+        if (param.getSize() == 0) {
             log.error("Start create emphasis personnel word, but size = 0");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-        if (StringUtils.isBlank(param.getTotalSearchId())){
+        if (StringUtils.isBlank(param.getTotalSearchId())) {
             log.error("Start create emphasis personnel word, but total search id is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
-        if (param.getSubQueryParamList() == null){
+        if (param.getSubQueryParamList() == null) {
             log.error("Start create emphasis personnel word, but search result list is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
@@ -245,6 +275,7 @@ public class ObjectInfoHandlerController {
     @ApiOperation(value = "导出重点人员Word", response = byte[].class)
     @ApiImplicitParam(name = "fileAddress", value = "文件地址", dataType = "String", paramType = "query")
     @RequestMapping(value = BigDataPath.STAREPO_EXPORT_WORD, method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_OPERATION + "')")
     public ResponseEntity<byte[]> exportPeoplesWord(@ApiParam(value = "文件地址") String fileAddress) {
         if (fileAddress == null) {
             log.error("Start export emphasis personnel word, but file address error");
@@ -271,6 +302,7 @@ public class ObjectInfoHandlerController {
 //    @ApiOperation(value = " 获取搜索原图", produces = "image/jpeg")
     @ApiImplicitParam(name = "picID", value = "图片ID", dataType = "String", paramType = "query")
     @RequestMapping(value = BigDataPath.STAREPO_GET_SEARCHPHOTO, method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_VIEW + "')")
     public ResponseEntity<byte[]> getSearchPhots(@ApiParam(value = "图片ID") String picID) {
         if (!IsEmpty.strIsRight(picID)) {
             return null;

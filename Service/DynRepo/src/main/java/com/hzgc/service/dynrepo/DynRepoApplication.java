@@ -1,6 +1,7 @@
 package com.hzgc.service.dynrepo;
 
 import com.hzgc.common.attribute.service.AttributeService;
+import com.hzgc.service.util.api.config.EnableDeviceQueryService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -16,8 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableEurekaClient
 @SpringBootApplication
 @EnableHystrix
-@PropertySource("application.properties")
-@ComponentScan(basePackages = {"com.hzgc.service.dynrepo", "com.hzgc.service.util"})
+@EnableDeviceQueryService
 public class DynRepoApplication {
 
     public static void main(String[] args) {
