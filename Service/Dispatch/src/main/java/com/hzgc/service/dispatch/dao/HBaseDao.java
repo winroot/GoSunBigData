@@ -11,6 +11,7 @@ import com.hzgc.service.dispatch.bean.Device;
 import com.hzgc.service.dispatch.bean.IdsType;
 import com.hzgc.service.dispatch.bean.PageBean;
 import com.hzgc.service.dispatch.bean.Warn;
+import com.hzgc.service.util.error.BusinessException;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -278,8 +279,9 @@ public class HBaseDao {
             for (String newRuleId:originMap.keySet()){
                 //拿到新添加的设备集合
                 List<Device> newDeviceList = originMap.get(newRuleId).getDevices();
+                Rule rule = originMap.get(newRuleId).getRule();
                 for (Device newDevice:newDeviceList){
-                    //拿到新添加的ipcId
+                    //拿到新添加的Id
                     originId = newDevice.getId();
                     for (String oldRuleId:hbaseMap.keySet()){
                         //拿到数据库中的设备集合
@@ -291,7 +293,7 @@ public class HBaseDao {
                             if (oldId.equals(originId)){
                                 String name = newDevice.getName();
                                 log.info("This deviceId is already binded");
-                                ResponseResult<String> responseResult = ResponseResult.init(name+"已经绑定了规则");
+                                ResponseResult responseResult = ResponseResult.error(RestErrorCode.ERR_DEVICE_ALREADY_BIND_RULE,name+"已经绑定了识别规则");
                                 return responseResult;
                             }
                         }

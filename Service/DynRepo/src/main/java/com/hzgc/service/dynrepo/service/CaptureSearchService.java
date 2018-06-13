@@ -42,11 +42,12 @@ public class CaptureSearchService {
             } else {
                 searchResult = captureServiceHelper.parseResultNotOnePerson(resultSet, option, searchId);
             }
+            //存储搜索历史记录
+            SearchCollection collection = new SearchCollection();
+            collection.setSearchOption(option);
+            collection.setSearchResult(searchResult);
+            boolean flag = hBaseDao.insertSearchRes(collection);
             if (searchResult.getSingleResults().size() > 0) {
-                SearchCollection collection = new SearchCollection();
-                collection.setSearchOption(option);
-                collection.setSearchResult(searchResult);
-                boolean flag = hBaseDao.insertSearchRes(collection);
                 if (flag) {
                     log.info("The search history saved successful, search id is:" + searchId);
                 } else {
