@@ -10,6 +10,7 @@ import com.hzgc.cluster.spark.rocmq.RocketMQProducer
 import com.hzgc.cluster.spark.starepo.StaticRepoUtil
 import com.hzgc.cluster.spark.util.PropertiesUtil
 import com.hzgc.common.table.dispatch.DispatchTable
+import com.hzgc.common.table.dynrepo.AlarmTable
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.JavaConverters
@@ -27,7 +28,10 @@ object FaceOffLineAlarmJob {
     val mqTopic = properties.getProperty("rocketmq.topic.name")
     val nameServer = properties.getProperty("rocketmq.nameserver")
     val grouId = properties.getProperty("rocketmq.group.id")
-    val conf = new SparkConf().setAppName(appName)
+    val esHost = properties.getProperty("es.hosts")
+    val esPort = properties.getProperty("es.web.port")
+    val conf = new SparkConf().setAppName(appName).setMaster("local")
+    conf.set("es.nodes", esHost).set("es.port", esPort)
     val sc = new SparkContext(conf)
     val deviceUtilImpl = new DeviceUtilImpl()
     val offLineAlarmRule = deviceUtilImpl.getThreshold
@@ -52,9 +56,25 @@ object FaceOffLineAlarmJob {
           map(getDaysElem => (getDaysElem._1, getDaysElem._2, getDaysElem._3, PropertiesUtil.timeTransition(getDaysElem._3), getDaysElem._4)).
           filter(ff => ff._4 != null && ff._4.length != 0).
           filter(filter => filter._4 > filter._5.toString)
+
+        val df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        import org.elasticsearch.spark._
+        val mapRdd = filterResult.map(record => {
+          val pkey = record._2
+          val alarmType = DispatchTable.OFFLINE
+          val static_id = record._1
+          val alarmTime = df.format(new Date())
+          val map = Map(AlarmTable.ALARM_TYPE -> alarmType,
+            AlarmTable.STATIC_ID -> static_id, AlarmTable.OBJECT_TYPE -> pkey,
+            AlarmTable.LAST_APPEARANCE_TIME -> record._3,
+            AlarmTable.ALARM_TIME -> alarmTime,
+            AlarmTable.FLAG -> 0,
+            AlarmTable.CONFIRM -> 1)
+          map
+        })
+        mapRdd.saveToEs(AlarmTable.ALARM_INDEX + "/" + AlarmTable.OFF_ALARM_TYPE)
         //将离线告警信息推送到MQ()
         filterResult.foreach(filterResultElem => {
-          val df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
           val dateStr = df.format(new Date())
           val rocketMQProducer = RocketMQProducer.getInstance(nameServer, mqTopic, grouId)
           val offLineAlarmMessage = new OffLineAlarmMessage()
@@ -67,7 +87,7 @@ object FaceOffLineAlarmJob {
           //离线告警信息推送的时候，平台id为对象类型字符串的前4个字节。
           //          val platID = filterResultElem._2.substring(0, 4)
           //由于平台那边取消了平台ID的概念,以后默认为0001
-          rocketMQProducer.send("0001", "alarm_" + DispatchTable.OFFLINE.toString, filterResultElem._1 + dateStr, alarmStr.getBytes(), null);
+          rocketMQProducer.send("0001", "alarm_" + DispatchTable.OFFLINE.toString, filterResultElem._1 + dateStr, alarmStr.getBytes(), null)
         })
       } else {
         println("No data was received from the static repository,the task is not running！")
