@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.hzgc.common.hbase.HBaseHelper;
 import com.hzgc.common.table.dispatch.DispatchTable;
 import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.service.dispatch.bean.*;
 import com.hzgc.service.dispatch.util.JsonToMap;
 import com.hzgc.service.dispatch.bean.Device;
@@ -29,7 +28,7 @@ import java.util.*;
 public class HBaseDao {
 
     @Autowired
-    private RestTemplate restTemplate = null;
+    private RestTemplate restTemplate;
 
     public HBaseDao() {
         HBaseHelper.getHBaseConnection();
@@ -278,8 +277,9 @@ public class HBaseDao {
             for (String newRuleId:originMap.keySet()){
                 //拿到新添加的设备集合
                 List<Device> newDeviceList = originMap.get(newRuleId).getDevices();
+                Rule rule = originMap.get(newRuleId).getRule();
                 for (Device newDevice:newDeviceList){
-                    //拿到新添加的ipcId
+                    //拿到新添加的Id
                     originId = newDevice.getId();
                     for (String oldRuleId:hbaseMap.keySet()){
                         //拿到数据库中的设备集合
@@ -291,7 +291,7 @@ public class HBaseDao {
                             if (oldId.equals(originId)){
                                 String name = newDevice.getName();
                                 log.info("This deviceId is already binded");
-                                ResponseResult<String> responseResult = ResponseResult.init(name+"已经绑定了规则");
+                                ResponseResult responseResult = ResponseResult.error(RestErrorCode.ERR_DEVICE_ALREADY_BIND_RULE,name+"已经绑定了识别规则");
                                 return responseResult;
                             }
                         }
