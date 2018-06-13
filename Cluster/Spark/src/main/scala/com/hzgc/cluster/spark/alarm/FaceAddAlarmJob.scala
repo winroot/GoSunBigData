@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import com.google.gson.Gson
+import com.hzgc.cluster.spark.consumer.PutDataToEs
 import com.hzgc.cluster.spark.dispatch.DeviceUtilImpl
 import com.hzgc.cluster.spark.message.AddAlarmMessage
 import com.hzgc.cluster.spark.rocmq.RocketMQProducer
@@ -84,6 +85,18 @@ object FaceAddAlarmJob {
       }).filter(jsonResultFilter => jsonResultFilter._3 != null)
 
     jsonResult.foreachRDD(resultRDD => {
+      resultRDD.foreachPartition(parData => {
+        val putDataToEs = PutDataToEs.getInstance()
+        parData.foreach(data => {
+          if (data._4 == null || data._4.isEmpty) {
+            val status = putDataToEs.alarmToEs(data._1, data._2, data._3, null,
+              null, null, DispatchTable.ADDED.toString)
+            if (status != 1) {
+              println("Put alarm to es failed! And the failed ipc id is " + data._2)
+            }
+          }
+        })
+      })
       resultRDD.foreachPartition(parRDD => {
         val rocketMQProducer = RocketMQProducer.getInstance(nameServer, mqTopic, grouId)
         val gson = new Gson()

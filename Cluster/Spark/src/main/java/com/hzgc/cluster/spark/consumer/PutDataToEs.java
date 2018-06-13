@@ -2,8 +2,10 @@ package com.hzgc.cluster.spark.consumer;
 
 import com.hzgc.cluster.spark.util.PropertiesUtil;
 import com.hzgc.common.es.ElasticSearchHelper;
+import com.hzgc.common.table.dynrepo.AlarmTable;
 import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.jni.FaceAttribute;
+import jodd.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.update.UpdateResponse;
@@ -11,11 +13,14 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.rest.RestStatus;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 public class PutDataToEs implements Serializable {
+    private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static Logger LOG = Logger.getLogger(PutDataToEs.class);
     private TransportClient esClient;
 
@@ -93,6 +98,36 @@ public class PutDataToEs implements Serializable {
             return RestStatus.OK.getStatus();
         } else {
             return RestStatus.CREATED.getStatus();
+        }
+    }
+
+    public int alarmToEs(FaceObject obj, String ipcId, String paltId, String staticId,
+                         String sim, String staticObjectType, String alarmType){
+        Map<String, Object> map = new HashMap<>();
+        map.put(AlarmTable.IPC_ID, ipcId);
+        map.put(AlarmTable.ALARM_TYPE, alarmType);
+        map.put(AlarmTable.HOST_NAME, obj.getHostname());
+        map.put(AlarmTable.BIG_PICTURE_URL, obj.getBurl());
+        map.put(AlarmTable.SMALL_PICTURE, obj.getSurl());
+        if(! StringUtil.isBlank(staticId)){
+            map.put(AlarmTable.STATIC_ID, staticId);
+        }
+        if(! StringUtil.isBlank(sim)) {
+            map.put(AlarmTable.SIMILARITY, sim);
+        }
+        if(! StringUtil.isBlank(staticObjectType)) {
+            map.put(AlarmTable.OBJECT_TYPE, staticObjectType);
+        }
+        map.put(AlarmTable.ALARM_TIME, df.format(new Date()));
+        map.put(AlarmTable.FLAG, 0);
+        map.put(AlarmTable.CONFIRM, 1);
+        IndexResponse indexResponse =
+                esClient.prepareIndex(AlarmTable.ALARM_INDEX,
+                        AlarmTable.RECOGENIZE_ALARM_TYPE).setSource(map).get();
+        if (indexResponse.getVersion() == 1) {
+            return 1;
+        } else {
+            return 0;
         }
     }
 }
