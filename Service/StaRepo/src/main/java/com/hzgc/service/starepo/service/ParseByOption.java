@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -400,9 +401,8 @@ public class ParseByOption {
 
         String name = objectInfo.getName();
         if (name != null) {
-            sql.append(", ")
-
-                    .append(ObjectInfoTable.NAME);
+            sql.append(", ");
+            sql.append(ObjectInfoTable.NAME);
             setValues.add(name);
         }
         String pkey = objectInfo.getObjectTypeKey();
@@ -452,13 +452,6 @@ public class ParseByOption {
             setValues.add(important);
         }
 
-        int status = objectInfo.getStatus();
-        if (status != 0) {
-            sql.append(", ");
-            sql.append(ObjectInfoTable.STATUS);
-            setValues.add(status);
-        }
-
         sql.append(") values(?");
         StringBuilder tmp = new StringBuilder("");
         for (int i = 0; i <= setValues.size() - 2; i++) {
@@ -469,6 +462,12 @@ public class ParseByOption {
         ConcurrentHashMap<String, CopyOnWriteArrayList<Object>> sqlAndSetValues = new ConcurrentHashMap<>();
         sqlAndSetValues.put(new String(sql), setValues);
         return sqlAndSetValues;
+    }
+
+    public String getObjectInfo_status() {
+        return "select " + ObjectInfoTable.STATUS
+                + " from " + ObjectInfoTable.TABLE_NAME
+                + " where " + ObjectInfoTable.ROWKEY + " = ?";
     }
 
     public String getPhotoByObjectId() {
@@ -572,17 +571,19 @@ public class ParseByOption {
                 + ") as num from " + ObjectTypeTable.TABLE_NAME;
     }
 
-    public String updateObjectInfo_status(String objectId, int status) {
-        return "upsert into " + ObjectInfoTable.TABLE_NAME + "( "
-                + ObjectInfoTable.ROWKEY + ", " + ObjectInfoTable.STATUS
-                + ") values ('" + objectId + "', " + status + ")";
+    public String updateObjectInfo_status() {
+        return "upsert into " + ObjectInfoTable.TABLE_NAME + "("
+                + ObjectInfoTable.ROWKEY + ","
+                + ObjectInfoTable.STATUS + ","
+                + ObjectInfoTable.STATUSTIME
+                + ") values (?,?,?)";
     }
 
     public String emigrationCount() {
         return "select count(*) as num from "
                 + ObjectInfoTable.TABLE_NAME + " where "
                 + ObjectInfoTable.STATUS + " = 1 and "
-                + ObjectInfoTable.UPDATETIME + " > ? AND "
-                + ObjectInfoTable.UPDATETIME + " < ?";
+                + ObjectInfoTable.STATUSTIME + " > ? AND "
+                + ObjectInfoTable.STATUSTIME + " < ?";
     }
 }

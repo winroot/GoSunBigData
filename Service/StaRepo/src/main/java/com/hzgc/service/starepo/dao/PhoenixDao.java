@@ -343,6 +343,17 @@ public class PhoenixDao implements Serializable {
         return 0;
     }
 
+    public int getObjectInfo_status(String objectId){
+        String sql = parseByOption.getObjectInfo_status();
+        log.info("Search object status, SQL is : " + sql);
+        int status = 0;
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, objectId);
+        while (sqlRowSet.next()) {
+            status = sqlRowSet.getInt(ObjectInfoTable.STATUS);
+        }
+        return status;
+    }
+
     /**
      * 更新人员信息状态值
      *
@@ -351,10 +362,10 @@ public class PhoenixDao implements Serializable {
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
     public Integer updateObjectInfo_status(String objectId, int status) {
-        String sql = parseByOption.updateObjectInfo_status(objectId, status);
+        String sql = parseByOption.updateObjectInfo_status();
         log.info("Start update object status, SQL is : " + sql);
         try {
-            jdbcTemplate.update(sql);
+            jdbcTemplate.update(sql, objectId, status, new Timestamp(System.currentTimeMillis()));
         } catch (Exception e) {
             e.printStackTrace();
             return 1;

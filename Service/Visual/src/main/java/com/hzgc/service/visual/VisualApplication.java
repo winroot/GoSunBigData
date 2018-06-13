@@ -1,5 +1,6 @@
 package com.hzgc.service.visual;
 
+import com.hzgc.service.util.api.config.EnableDeviceQueryService;
 import com.netflix.ribbon.proxy.annotation.Hystrix;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,17 +15,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @EnableEurekaClient
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.hzgc.service.visual", "com.hzgc.service.util"})
 @EnableHystrix
+@EnableDeviceQueryService
 public class VisualApplication {
     public static void main(String[] args) {
         SpringApplication.run(VisualApplication.class, args);
-    }
-
-    @Bean
-    @LoadBalanced
-    RestTemplate restTemplate() {
-        return new RestTemplate();
     }
 }
 

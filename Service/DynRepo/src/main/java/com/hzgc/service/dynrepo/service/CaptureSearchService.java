@@ -1,7 +1,7 @@
 package com.hzgc.service.dynrepo.service;
 
 import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.common.util.uuid.UuidUtil;
+import com.hzgc.jni.PictureData;
 import com.hzgc.service.dynrepo.bean.*;
 import com.hzgc.service.dynrepo.dao.HBaseDao;
 import com.hzgc.service.dynrepo.dao.SparkJDBCDao;
@@ -90,7 +90,7 @@ public class CaptureSearchService {
      * @return 返回查询结果
      */
     public List<SearchHisotry> getSearchHistory(String start_time, String end_time, String sort, int start, int limit) {
-            return hBaseDao.getSearchHistory(start_time, end_time, sort, start, limit);
+        return hBaseDao.getSearchHistory(start_time, end_time, sort, start, limit);
     }
 
     /**
@@ -107,9 +107,29 @@ public class CaptureSearchService {
             if (searchResult != null) {
                 if (resultOption.getSort() != null && resultOption.getSort().size() > 0) {
                     captureServiceHelper.sortByParamsAndPageSplit(searchResult, resultOption);
+                    for (SingleSearchResult singleSearchResult : searchResult.getSingleResults()) {
+                        if (singleSearchResult.getDevicePictures() != null) {
+                            for (GroupByIpc groupByIpc : singleSearchResult.getDevicePictures()) {
+                                for (CapturedPicture capturedPicture : groupByIpc.getPictures()) {
+                                    capturedPicture.setSurl(captureServiceHelper.getFtpUrl(capturedPicture.getSurl()));
+                                    capturedPicture.setBurl(captureServiceHelper.getFtpUrl(capturedPicture.getBurl()));
+                                }
+                            }
+                        }
+                        for (CapturedPicture capturedPicture : singleSearchResult.getPictures()) {
+                            capturedPicture.setSurl(captureServiceHelper.getFtpUrl(capturedPicture.getSurl()));
+                            capturedPicture.setBurl(captureServiceHelper.getFtpUrl(capturedPicture.getBurl()));
+                        }
+                    }
                 } else {
                     for (SingleSearchResult singleSearchResult : searchResult.getSingleResults()) {
                         captureServiceHelper.pageSplit(singleSearchResult.getPictures(), resultOption);
+                    }
+                    for (SingleSearchResult singleSearchResult : searchResult.getSingleResults()) {
+                        for (CapturedPicture capturedPicture : singleSearchResult.getPictures()) {
+                            capturedPicture.setSurl(captureServiceHelper.getFtpUrl(capturedPicture.getSurl()));
+                            capturedPicture.setBurl(captureServiceHelper.getFtpUrl(capturedPicture.getBurl()));
+                        }
                     }
                 }
                 if (resultOption.getSingleSearchResultOptions() != null
@@ -129,7 +149,6 @@ public class CaptureSearchService {
                     }
                     singleList.removeAll(tempList);
                 }
-
             } else {
                 log.error("Get query history failure, SearchResultOption is " + resultOption);
             }
