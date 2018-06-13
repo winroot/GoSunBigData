@@ -53,7 +53,7 @@ public class DeviceUtilImpl implements Serializable {
             if (result.containsColumn(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL)) {
                 byte[] map = result.getValue(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL);
                 if (map != null) {
-                    String jsonString = JSON.toJSONString(map);
+                    String jsonString = Bytes.toString(map);
                     Map<String,Map<String,Integer>> thresholdMap = JSON.parseObject(jsonString,Map.class);
                     for (String t:thresholdMap.keySet()) {
                         String str = JSON.toJSONString(thresholdMap.get(t));
