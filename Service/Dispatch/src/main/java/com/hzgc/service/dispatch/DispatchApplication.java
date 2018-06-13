@@ -1,5 +1,6 @@
 package com.hzgc.service.dispatch;
 
+import com.hzgc.service.util.api.config.EnableDeviceQueryService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -14,16 +15,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableEurekaClient
 @EnableSwagger2
 @EnableHystrix
-@ComponentScan(basePackages = {"com.hzgc.service.dispatch", "com.hzgc.service.util"})
+@EnableDeviceQueryService
 public class DispatchApplication {
 
     public static void main(String [] args){
         SpringApplication.run(DispatchApplication.class,args);
-    }
-
-    @Bean
-    @LoadBalanced
-    RestTemplate restTemplate(){
-        return new RestTemplate();
     }
 }
