@@ -65,19 +65,18 @@ public class WarnRuleController {
             List<String> ipcIDs = new ArrayList<>();
             List<Warn> warnList;
             log.info("Add rule , param is " + JSONUtil.toJson(dispatch));
-            List list = IpcIdsUtil.toDeviceIdList(dispatch.getDevices());
-
+            List<Long> list = IpcIdsUtil.toDeviceIdList(dispatch.getDevices());
             Map<String, DeviceDTO> map = deviceQueryService.getDeviceInfoByBatchId(list);
             for (String s : map.keySet()) {
                 ipcIDs.add(map.get(s).getSerial());
             }
             warnList = dispatch.getRule().getWarns();
-            Map dispatchMap = IpcIdsUtil.toDispatchMap(dispatch);
+            Map<String, Dispatch> dispatchMap = IpcIdsUtil.toDispatchMap(dispatch);
             ResponseResult<String> responseResult = warnRuleService.saveOriginData(dispatchMap);
             //调用大数据接口
             ipcIDs.removeAll(Collections.singleton(null));
             log.info("Bigdata param , ipcIDs is " + JSONUtil.toJson(ipcIDs) + " warn list is " + JSONUtil.toJson(warnList));
-            if (null != ipcIDs && ipcIDs.size() > 0 && null != warnList && warnList.size() > 0) {
+            if (ipcIDs.size() > 0 && null != warnList && warnList.size() > 0) {
                 warnRuleService.configRules(ipcIDs, warnList);
             }
             return responseResult;
@@ -94,7 +93,7 @@ public class WarnRuleController {
             List<String> ipcIDs = new ArrayList<>();
             List<Warn> warnList;
             log.info("Update rule , param is " + JSONUtil.toJson(dispatch));
-            List list = IpcIdsUtil.toDeviceIdList(dispatch.getDevices());
+            List<Long> list = IpcIdsUtil.toDeviceIdList(dispatch.getDevices());
             Map<String, DeviceDTO> map = deviceQueryService.getDeviceInfoByBatchId(list);
             for (String s : map.keySet()) {
                 ipcIDs.add(map.get(s).getSerial());
@@ -104,7 +103,7 @@ public class WarnRuleController {
             //调用大数据接口
             ipcIDs.removeAll(Collections.singleton(null));
             log.info("Bigdata param , ipcIDs is " + JSONUtil.toJson(ipcIDs) + " warn list is " + JSONUtil.toJson(warnList));
-            if (null != ipcIDs && ipcIDs.size() > 0 && null != warnList && warnList.size() > 0) {
+            if (ipcIDs.size() > 0 && null != warnList && warnList.size() > 0) {
                 warnRuleService.configRules(ipcIDs, warnList);
             }
             return responseResult;
@@ -146,8 +145,7 @@ public class WarnRuleController {
     public ResponseResult<List> getRuleList(PageBean pageBean) throws IOException {
         if (null != pageBean) {
             log.info("Get rule list , param is " + JSONUtil.toJson(pageBean));
-            ResponseResult<List> responseResult = warnRuleService.getRuleList(pageBean);
-            return responseResult;
+            return warnRuleService.getRuleList(pageBean);
         }
         log.info("Get rule list , param is null");
         return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
@@ -160,8 +158,7 @@ public class WarnRuleController {
     public ResponseResult<List> getDeviceList(String rule_id) throws IOException {
         if (null != rule_id) {
             log.info("Get device list , param is" + rule_id);
-            ResponseResult<List> responseResult = warnRuleService.getDeviceList(rule_id);
-            return responseResult;
+            return warnRuleService.getDeviceList(rule_id);
         }
         log.info("Get device list , param is null");
         return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
