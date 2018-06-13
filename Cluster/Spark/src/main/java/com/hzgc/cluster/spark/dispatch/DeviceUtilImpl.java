@@ -26,7 +26,7 @@ public class DeviceUtilImpl implements Serializable {
                 if (result.containsColumn(DispatchTable.CF_DEVICE, DispatchTable.WARN)) {
                     byte[] map = result.getValue(DispatchTable.CF_DEVICE, DispatchTable.WARN);
                     if (map != null) {
-                        String jsonString = JSON.toJSONString(map);
+                        String jsonString = Bytes.toString(map);
                         Map<Integer,Map<String,Integer>> warnMap = JSON.parseObject(jsonString,Map.class);
                         for (Integer t:warnMap.keySet()) {
                             String str = JSON.toJSONString(warnMap.get(t));
