@@ -21,7 +21,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(new Http401AuthenticationEntryPoint("Bearer realm=\"webrealm\""))
                 .and()
-                .authorizeRequests().antMatchers("**").authenticated()
+                .authorizeRequests().antMatchers("**").permitAll()
                 .and()
                 .httpBasic();
     }
