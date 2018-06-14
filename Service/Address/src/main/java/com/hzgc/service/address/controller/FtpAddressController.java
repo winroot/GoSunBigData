@@ -23,8 +23,6 @@ public class FtpAddressController {
      * @return ftp相关配置参数
      */
     @ApiOperation(value = "获取可绑定ftp地址信息", response = Map.class, responseContainer = "List")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "successful response")})
-    @ResponseBody
     @RequestMapping(value = BigDataPath.FTP_GET_PROPERTIES, method = RequestMethod.GET)
     public ResponseResult<Map> getFtpAddress() {
         Map map = ftpAddressService.getProperties();
@@ -39,7 +37,6 @@ public class FtpAddressController {
      */
     @ApiOperation(value = "ftp服务器主机名转IP", response = String.class, responseContainer = "List")
     @ApiImplicitParam(name = "hostname", value = "主机名", required = true, dataType = "String",paramType = "query")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "successful response")})
     @RequestMapping(value = BigDataPath.FTP_GET_IP, method = RequestMethod.GET)
     public ResponseResult<String> getIPAddress(@ApiParam(value = "主机名") String hostname) {
         if (null != hostname) {

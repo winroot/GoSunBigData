@@ -1,14 +1,11 @@
 package com.hzgc.service.dynrepo.bean;
 
 import com.hzgc.common.attribute.bean.Attribute;
-import com.hzgc.service.util.api.DeviceDTO;
-import lombok.Data;
+import com.hzgc.service.util.api.bean.DeviceDTO;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class CaptureOption implements Serializable {
     //搜索的设备ID列表
