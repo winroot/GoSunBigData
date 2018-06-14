@@ -90,8 +90,7 @@ public class FaceController {
     @RequestMapping(value = BigDataPath.FEATURE_EXTRACT_BYTES, method = RequestMethod.POST)
     public PictureData getFeatureExtract(@RequestBody byte[] bytes){
         if (null != bytes){
-            PictureData pictureData = faceExtractService.featureExtractByImage(bytes);
-            return pictureData;
+            return faceExtractService.featureExtractByImage(bytes);
         }
         log.info("Bytes param is null");
         return null;
