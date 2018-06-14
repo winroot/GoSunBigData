@@ -1,5 +1,6 @@
-package com.hzgc.service.util.api;
+package com.hzgc.service.util.api.service;
 
+import com.hzgc.service.util.api.bean.DeviceDTO;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -76,10 +77,9 @@ public class DeviceQueryService {
     }
 
     @HystrixCommand(fallbackMethod = "getDeviceInfoByBatchIdError")
-    @SuppressWarnings("unchecked")
     public Map<String, DeviceDTO> getDeviceInfoByBatchId(List<Long> idList) {
         if (idList != null && idList.size() > 0) {
-            ParameterizedTypeReference
+            ParameterizedTypeReference<Map<String, DeviceDTO>>
                     parameterizedTypeReference = new ParameterizedTypeReference<Map<String, DeviceDTO>>() {
             };
             ResponseEntity<Map<String, DeviceDTO>> responseEntity =

@@ -16,12 +16,12 @@ public class Warn implements Serializable {
     /**
      * 相似度阈值（0-100）
      */
-    private int threshold;
+    private String threshold;
 
     /**
      * 天数阈值，只对离线告警起作用
      */
-    private int offlineDayThreshold;
+    private String offlineDayThreshold;
 
     /**
      * 告警类型
@@ -31,7 +31,7 @@ public class Warn implements Serializable {
      * 需要产生离线告警，告警信息中需要有对比库 id ，以及离线数据的信息，时间段只对识别告警与新增告警起作用，离线告
      * 警需要全天匹配。
      */
-    private int alarmType;
+    private String alarmType;
 
     //对象类型的名字
     private String objectTypeName;
