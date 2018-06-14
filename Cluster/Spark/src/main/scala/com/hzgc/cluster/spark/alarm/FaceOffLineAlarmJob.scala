@@ -22,7 +22,6 @@ import scala.collection.JavaConverters
 object FaceOffLineAlarmJob {
 
   def main(args: Array[String]): Unit = {
-    val offLineAlarmMessage = new OffLineAlarmMessage()
     val properties = PropertiesUtil.getProperties
     val appName = properties.getProperty("job.offLine.appName")
     val mqTopic = properties.getProperty("rocketmq.topic.name")
@@ -30,7 +29,7 @@ object FaceOffLineAlarmJob {
     val grouId = properties.getProperty("rocketmq.group.id")
     val esHost = properties.getProperty("es.hosts")
     val esPort = properties.getProperty("es.web.port")
-    val conf = new SparkConf().setAppName(appName).setMaster("local")
+    val conf = new SparkConf().setAppName(appName)
     conf.set("es.nodes", esHost).set("es.port", esPort)
     val sc = new SparkContext(conf)
     val deviceUtilImpl = new DeviceUtilImpl()

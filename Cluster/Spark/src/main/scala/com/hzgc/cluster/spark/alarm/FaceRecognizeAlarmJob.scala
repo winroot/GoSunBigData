@@ -5,13 +5,13 @@ import java.util
 import java.util.Date
 
 import com.google.gson.Gson
-import com.hzgc.cluster.spark.consumer.PutDataToEs
 import com.hzgc.cluster.spark.dispatch.DeviceUtilImpl
 import com.hzgc.cluster.spark.message.{Item, RecognizeAlarmMessage}
 import com.hzgc.cluster.spark.rocmq.RocketMQProducer
 import com.hzgc.cluster.spark.starepo.StaticRepoUtil
 import com.hzgc.cluster.spark.util.{FaceObjectUtil, PropertiesUtil}
 import com.hzgc.common.table.dispatch.DispatchTable
+import com.hzgc.common.table.dynrepo.AlarmTable
 import com.hzgc.jni.FaceFunction
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf
@@ -39,9 +39,11 @@ object FaceRecognizeAlarmJob {
     val nameServer = properties.getProperty("rocketmq.nameserver")
     val grouId = properties.getProperty("rocketmq.group.id")
     val itemNum = properties.getProperty("job.recognizeAlarm.items.num").toInt
+    val esHost = properties.getProperty("es.hosts")
+    val esPort = properties.getProperty("es.web.port")
     val timeInterval = Durations.seconds(properties.getProperty("job.recognizeAlarm.timeInterval").toLong)
-    val conf = new SparkConf()
-      .setAppName(appName)
+    val conf = new SparkConf().setAppName(appName)
+    conf.set("es.nodes", esHost).set("es.port", esPort)
     val ssc = new StreamingContext(conf, timeInterval)
 
     val kafkaGroupId = properties.getProperty("kafka.FaceRecognizeAlarmJob.group.id")
@@ -96,18 +98,7 @@ object FaceRecognizeAlarmJob {
         //由于平台那边取消了平台ID的概念,以后默认为0001
         (message._2, ipcID, "0001", finalResult)
       }).filter(record => record._4.nonEmpty)
-
     jsonResult.foreachRDD(resultRDD => {
-      resultRDD.foreachPartition(parData => {
-        val putDataToEs = PutDataToEs.getInstance()
-        parData.foreach(data => {
-          val status = putDataToEs.alarmToEs(data._1, data._2, data._3, data._4(0).staticID,
-            data._4(0).sim.toString, data._4(0).staticObjectType, DispatchTable.IDENTIFY.toString)
-          if (status != 1) {
-            println("Put alarm to es failed! And the failed ipc id is " + data._2)
-          }
-        })
-      })
       resultRDD.foreachPartition(parRDD => {
         val rocketMQProducer = RocketMQProducer.getInstance(nameServer, mqTopic, grouId)
         val gson = new Gson()
@@ -137,7 +128,31 @@ object FaceRecognizeAlarmJob {
             null)
         })
       })
+      val resultRDD2 = resultRDD.map(record => {
+        val obj = record._1
+        val ipcId = record._2
+        val staticId = record._4(0).staticID
+        val sim = record._4(0).sim.toString
+        val staticObjectType = record._4(0).staticObjectType
+        val alarmType = DispatchTable.IDENTIFY.toString
+        val map = Map(AlarmTable.IPC_ID -> ipcId,
+          AlarmTable.ALARM_TYPE -> alarmType,
+          AlarmTable.ALARM_TIME -> df.format(new Date()),
+          AlarmTable.HOST_NAME -> obj.getHostname,
+          AlarmTable.BIG_PICTURE_URL -> obj.getBurl,
+          AlarmTable.SMALL_PICTURE -> obj.getSurl,
+          AlarmTable.STATIC_ID -> staticId,
+          AlarmTable.SIMILARITY -> sim,
+          AlarmTable.OBJECT_TYPE -> staticObjectType,
+          AlarmTable.FLAG -> 0,
+          AlarmTable.CONFIRM -> 1
+        )
+        map
+      })
+      resultRDD2
     })
+    import org.elasticsearch.spark.streaming._
+    jsonResult.saveToEs(AlarmTable.ALARM_INDEX + "/" + AlarmTable.RECOGENIZE_ALARM_TYPE)
     ssc.start()
     ssc.awaitTermination()
   }

@@ -100,34 +100,4 @@ public class PutDataToEs implements Serializable {
             return RestStatus.CREATED.getStatus();
         }
     }
-
-    public int alarmToEs(FaceObject obj, String ipcId, String paltId, String staticId,
-                         String sim, String staticObjectType, String alarmType){
-        Map<String, Object> map = new HashMap<>();
-        map.put(AlarmTable.IPC_ID, ipcId);
-        map.put(AlarmTable.ALARM_TYPE, alarmType);
-        map.put(AlarmTable.HOST_NAME, obj.getHostname());
-        map.put(AlarmTable.BIG_PICTURE_URL, obj.getBurl());
-        map.put(AlarmTable.SMALL_PICTURE, obj.getSurl());
-        if(! StringUtil.isBlank(staticId)){
-            map.put(AlarmTable.STATIC_ID, staticId);
-        }
-        if(! StringUtil.isBlank(sim)) {
-            map.put(AlarmTable.SIMILARITY, sim);
-        }
-        if(! StringUtil.isBlank(staticObjectType)) {
-            map.put(AlarmTable.OBJECT_TYPE, staticObjectType);
-        }
-        map.put(AlarmTable.ALARM_TIME, df.format(new Date()));
-        map.put(AlarmTable.FLAG, 0);
-        map.put(AlarmTable.CONFIRM, 1);
-        IndexResponse indexResponse =
-                esClient.prepareIndex(AlarmTable.ALARM_INDEX,
-                        AlarmTable.RECOGENIZE_ALARM_TYPE).setSource(map).get();
-        if (indexResponse.getVersion() == 1) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
 }
