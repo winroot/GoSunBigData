@@ -5,6 +5,7 @@ import java.util.Properties
 
 import com.google.common.base.Stopwatch
 import com.hzgc.cluster.spark.util.{FaceObjectUtil, PropertiesUtil}
+import com.hzgc.common.table.dynrepo.DynamicTable
 import kafka.common.TopicAndPartition
 import kafka.message.MessageAndMetadata
 import kafka.serializer.StringDecoder
@@ -13,9 +14,9 @@ import org.I0Itec.zkclient.ZkClient
 import org.apache.log4j.Logger
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{SaveMode, SparkSession}
-import org.apache.spark.streaming.{Duration, Durations, StreamingContext}
 import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.streaming.kafka.{HasOffsetRanges, KafkaUtils}
+import org.apache.spark.streaming.{Duration, Durations, StreamingContext}
 object KafkaToParquet {
   val LOG: Logger = Logger.getLogger(KafkaToParquet.getClass)
   val properties: Properties = PropertiesUtil.getProperties
@@ -46,7 +47,10 @@ object KafkaToParquet {
     val brokers: String = getItem("job.faceObjectConsumer.broker.list", properties)
     val kafkaGroupId: String = getItem("job.faceObjectConsumer.group.id", properties)
     val topics = Set(getItem("job.faceObjectConsumer.topic.name", properties))
-    val spark = SparkSession.builder().appName(appname).getOrCreate()
+    val esHost = properties.getProperty("es.hosts")
+    val esPort = properties.getProperty("es.web.port")
+    val spark = SparkSession.builder().config("es.nodes", esHost).config("es.port", esPort)
+      .appName(appname).getOrCreate()
     val kafkaParams = Map(
       "metadata.broker.list" -> brokers,
       "group.id" -> kafkaGroupId
@@ -72,20 +76,36 @@ object KafkaToParquet {
         faceobject._2.getAttribute.getHairColor, faceobject._2.getAttribute.getHairStyle, faceobject._2.getAttribute.getHat,
         faceobject._2.getAttribute.getHuzi, faceobject._2.getAttribute.getTie, faceobject._2.getAttribute.getSharpness), faceobject._1, faceobject._2)
     })
-    kafkaDF.foreachRDD(rdd => {
+    kafkaDF.foreachRDD(rdd =>{
       import spark.implicits._
       rdd.map(rdd => rdd._1).repartition(1).toDF().write.mode(SaveMode.Append)
         .parquet(storeAddress)
-      rdd.foreachPartition(parData => {
-        val putDataToEs = PutDataToEs.getInstance()
-        parData.foreach(data => {
-          val status = putDataToEs.putDataToEs(data._2, data._3)
-          if (status != 1) {
-            println("Put data to es failed! And the failed ftpurl is " + data._2)
-          }
-        })
-      })
+
+      val rdd2 = rdd.map(record => {
+        val ftpurl = record._2
+        val faceObject = record._3
+        val attr = faceObject.getAttribute
+        val map = Map(DynamicTable.FTPURL -> ftpurl,
+          DynamicTable.HAIRCOLOR -> attr.getHairColor,
+          DynamicTable.EYEGLASSES -> attr.getEyeglasses,
+          DynamicTable.GENDER -> attr.getGender,
+          DynamicTable.HAIRSTYLE -> attr.getHairStyle,
+          DynamicTable.HAT -> attr.getHat,
+          DynamicTable.HUZI -> attr.getHuzi,
+          DynamicTable.SHARPNESS -> attr.getSharpness,
+          DynamicTable.TIE -> attr.getTie,
+          DynamicTable.DATE -> faceObject.getDate,
+          DynamicTable.TIMESTAMP -> faceObject.getTimeStamp,
+          DynamicTable.IPCID -> faceObject.getIpcId,
+          DynamicTable.TIMESLOT -> faceObject.getTimeSlot
+        )
+        map
+      }).filter(map => {map.get(DynamicTable.FTPURL) != null})
+      rdd2
     })
+    import org.elasticsearch.spark.streaming._
+    kafkaDF.saveToEs(DynamicTable.DYNAMIC_INDEX + "/" + DynamicTable.PERSON_INDEX_TYPE,
+      Map("es.mapping.id" -> DynamicTable.FTPURL))
     messages.foreachRDD(rdd => saveOffsets(zKClient, zkHosts, zKPaths, rdd))
     ssc
   }
