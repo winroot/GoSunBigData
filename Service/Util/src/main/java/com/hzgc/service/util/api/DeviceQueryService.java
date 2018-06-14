@@ -76,10 +76,9 @@ public class DeviceQueryService {
     }
 
     @HystrixCommand(fallbackMethod = "getDeviceInfoByBatchIdError")
-    @SuppressWarnings("unchecked")
     public Map<String, DeviceDTO> getDeviceInfoByBatchId(List<Long> idList) {
         if (idList != null && idList.size() > 0) {
-            ParameterizedTypeReference
+            ParameterizedTypeReference<Map<String, DeviceDTO>>
                     parameterizedTypeReference = new ParameterizedTypeReference<Map<String, DeviceDTO>>() {
             };
             ResponseEntity<Map<String, DeviceDTO>> responseEntity =

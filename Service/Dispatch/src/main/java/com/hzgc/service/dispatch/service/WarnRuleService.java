@@ -1,7 +1,6 @@
 package com.hzgc.service.dispatch.service;
 
 import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.service.dispatch.bean.Device;
 import com.hzgc.service.dispatch.bean.Dispatch;
 import com.hzgc.service.dispatch.bean.IdsType;
 import com.hzgc.service.dispatch.bean.PageBean;
@@ -10,7 +9,6 @@ import com.hzgc.service.dispatch.dao.HBaseDao;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -22,21 +20,21 @@ import org.springframework.stereotype.Service;
 public class WarnRuleService {
 
     @Autowired
+    @SuppressWarnings("unused")
     private HBaseDao hBaseDao;
 
-    public Map<String, Boolean> configRules(List<String> ipcIDs,List<Warn> warns) {
-        return hBaseDao.configRules(ipcIDs, warns);
+    public void configRules(List<String> ipcIDs, List<Warn> warns) {
+        hBaseDao.configRules(ipcIDs, warns);
     }
 
     /**
      * 删除设备的布控规则
      *
      * @param ipcIDs 设备 ipcID 列表
-     * @return channelId 是否删除成功的 map
      */
-    public Map<String, Boolean> deleteRules(List<String> ipcIDs)
+    public void deleteRules(List<String> ipcIDs)
     {
-        return hBaseDao.deleteRules(ipcIDs);
+        hBaseDao.deleteRules(ipcIDs);
     }
 
     //存储原数据

@@ -3,7 +3,6 @@ package com.hzgc.service.dynrepo.service;
 import com.hzgc.collect.zk.register.RegisterWatcher;
 import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
-import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.jni.PictureData;
 import com.hzgc.service.dynrepo.bean.*;
 import com.hzgc.service.util.api.DeviceDTO;

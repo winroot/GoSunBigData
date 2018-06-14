@@ -65,7 +65,7 @@ object FaceAddAlarmJob {
             totalList.foreach(record => {
               if (addWarnRule.containsKey(record(1))) {
                 val threshold = FaceFunction.featureCompare(record(2).asInstanceOf[Array[Float]], faceObj.getAttribute.getFeature)
-                if (threshold > addWarnRule.get(record(1))) {
+                if (threshold > addWarnRule.get(record(1)).toFloat) {
                   filterResult += Json(record(0).asInstanceOf[String], record(1).asInstanceOf[String], threshold)
                 }
               }
