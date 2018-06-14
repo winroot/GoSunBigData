@@ -1,5 +1,6 @@
-package com.hzgc.service.util.api;
+package com.hzgc.service.util.api.service;
 
+import com.hzgc.service.util.api.bean.DeviceDTO;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;

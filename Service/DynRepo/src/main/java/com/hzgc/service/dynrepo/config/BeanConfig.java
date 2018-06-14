@@ -10,7 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class Config {
+public class BeanConfig {
     @Autowired
     @SuppressWarnings("unused")
     private Environment environment;

@@ -1,6 +1,6 @@
 package com.hzgc.service.util.api.config;
 
-import com.hzgc.service.util.api.DeviceQueryService;
+import com.hzgc.service.util.api.service.DeviceQueryService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
