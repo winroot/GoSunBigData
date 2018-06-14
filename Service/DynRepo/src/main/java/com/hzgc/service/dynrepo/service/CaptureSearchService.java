@@ -51,7 +51,7 @@ public class CaptureSearchService {
                 if (flag) {
                     log.info("The search history saved successful, search id is:" + searchId);
                 } else {
-                    log.error("The search history saved failure, search id is:" + searchId);
+                    log.warn("The search history saved failure, search id is:" + searchId);
                 }
                 for (SingleSearchResult singleResult : searchResult.getSingleResults()) {
                     singleResult.setPictures(captureServiceHelper.pageSplit(singleResult.getPictures(),
