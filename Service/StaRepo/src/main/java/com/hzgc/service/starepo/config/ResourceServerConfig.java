@@ -1,5 +1,6 @@
 package com.hzgc.service.starepo.config;
 
+import com.hzgc.service.util.rest.BigDataPath;
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,7 +22,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(new Http401AuthenticationEntryPoint("Bearer realm=\"webrealm\""))
                 .and()
-                .authorizeRequests().antMatchers("**").authenticated()
+                .authorizeRequests()
+                .antMatchers(BigDataPath.TYPE_SEARCH_NAMES + "/**",
+                        BigDataPath.STAREPO_COUNT_EMIGRATION + "/**",
+                        BigDataPath.OBJECTINFO_GET_PHOTOBYKEY + "/**").permitAll()
+                .antMatchers("**").authenticated()
                 .and()
                 .httpBasic();
     }

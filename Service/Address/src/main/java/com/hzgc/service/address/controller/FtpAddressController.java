@@ -22,10 +22,10 @@ public class FtpAddressController {
      *
      * @return ftp相关配置参数
      */
-    @ApiOperation(value = "获取可绑定ftp地址信息", response = Map.class, responseContainer = "List")
+    @ApiOperation(value = "获取可绑定ftp地址信息")
     @RequestMapping(value = BigDataPath.FTP_GET_PROPERTIES, method = RequestMethod.GET)
-    public ResponseResult<Map> getFtpAddress() {
-        Map map = ftpAddressService.getProperties();
+    public ResponseResult<Map<String, String>> getFtpAddress() {
+        Map<String, String> map = ftpAddressService.getProperties();
         return ResponseResult.init(map);
     }
 
