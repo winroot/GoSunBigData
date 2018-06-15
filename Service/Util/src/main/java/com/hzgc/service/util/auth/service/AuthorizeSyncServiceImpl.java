@@ -4,6 +4,7 @@ import com.hzgc.service.util.auth.scan.DefaultAuthorizeDefination;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Set;
@@ -25,6 +26,7 @@ public class AuthorizeSyncServiceImpl implements AuthorizeSyncService {
         this.restTemplate = restTemplate;
     }
 
+    @Async
     @Override
     public void sync(Set<DefaultAuthorizeDefination> authorizeDefinations) {
         HttpHeaders headers = new HttpHeaders();

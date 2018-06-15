@@ -1,5 +1,6 @@
 package com.hzgc.service.dispatch;
 
+import com.hzgc.service.util.auth.config.EnableAuthSynchronize;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -15,6 +16,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @EnableHystrix
 @ComponentScan(basePackages = {"com.hzgc.service.dispatch", "com.hzgc.service.util"})
+@EnableAuthSynchronize
 public class DispatchApplication {
 
     public static void main(String [] args){
