@@ -52,8 +52,6 @@ public class HBaseDao {
                     SearchResultTable.SEARCHRES_COLUM_SEARCHTIME, Bytes.toBytes(searchTime));
             putList.add(put);
             for (int i = 0; i < collection.getSearchOption().getImages().size(); i++) {
-                put.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY,
-                        Bytes.toBytes(i + ""), collection.getSearchOption().getImages().get(i).getImageData());
                 Put putimage = new Put(Bytes.toBytes(collection.getSearchOption().getImages().get(i).getImageID()));
                 putimage.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY,
                         SearchResultTable.SEARCHRES_COLUM_PICTURE,
@@ -68,8 +66,8 @@ public class HBaseDao {
                 return false;
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("Save search result failed");
+            log.info(e.getMessage());
+            log.warn("Save search result failed");
         } finally {
             HBaseHelper.closeTable(searchRes);
         }

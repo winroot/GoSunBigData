@@ -11,10 +11,11 @@ import java.util.*;
 
 public class PropertiesUtil implements Serializable {
 
-    public static Integer getSimilarity(Map<String, Integer> map) {
+    public static Integer getSimilarity(Map<String, String> map) {
         for (String key : map.keySet()) {
             if (map.get(key) != null) {
-                return map.get(key);
+                return Integer.parseInt(map.get(key)
+                );
             }
         }
         return null;

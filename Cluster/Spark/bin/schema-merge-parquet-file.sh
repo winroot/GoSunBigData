@@ -79,7 +79,7 @@ function merge_parquet()
         --driver-memory 4g \
         ${SPARK_DIR}/lib/${CLUSTER_VERSION} ${hdfsClusterName} ${tmpTableHdfsPath} ${hisTableHdfsPath} ${tableName} ${dateString}
     fi
-    if [ $? -eq 0 ];thenhad
+    if [ $? -eq 0 ];then
         echo "==================================================="  | tee -a ${LOG_FILE}
         echo "$(date "+%Y-%m-%d  %H:%M:%S")  Schema merge parquet file Success!"  | tee  -a  ${LOG_FILE}
     else

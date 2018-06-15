@@ -1,4 +1,4 @@
-package com.hzgc.service.address.service;
+package com.hzgc.service.address.config;
 
 import com.hzgc.collect.zk.register.RegisterWatcher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 @Configuration
-public class Config {
+public class BeanConfig {
     @Autowired
     private Environment environment;
 

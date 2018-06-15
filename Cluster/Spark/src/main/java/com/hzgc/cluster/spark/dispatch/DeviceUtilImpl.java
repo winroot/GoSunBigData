@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.hzgc.common.hbase.HBaseHelper;
 import com.hzgc.common.table.dispatch.DispatchTable;
 import com.hzgc.common.util.empty.IsEmpty;
-import com.hzgc.common.util.object.ObjectUtil;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Table;
@@ -16,7 +15,7 @@ import java.util.Map;
 
 public class DeviceUtilImpl implements Serializable {
 
-    public Map<Integer, Map<String, Integer>> isWarnTypeBinding(String ipcID) {
+    public Map<String, Map<String, String>> isWarnTypeBinding(String ipcID) {
         Table table = null;
         if (IsEmpty.strIsRight(ipcID)) {
             try {
@@ -26,12 +25,12 @@ public class DeviceUtilImpl implements Serializable {
                 if (result.containsColumn(DispatchTable.CF_DEVICE, DispatchTable.WARN)) {
                     byte[] map = result.getValue(DispatchTable.CF_DEVICE, DispatchTable.WARN);
                     if (map != null) {
-                        String jsonString = JSON.toJSONString(map);
-                        Map<Integer,Map<String,Integer>> warnMap = JSON.parseObject(jsonString,Map.class);
-                        for (Integer t:warnMap.keySet()) {
+                        String jsonString = Bytes.toString(map);
+                        Map<String, Map<String, String>> warnMap = JSON.parseObject(jsonString, Map.class);
+                        for (String t : warnMap.keySet()) {
                             String str = JSON.toJSONString(warnMap.get(t));
-                            Map<String,Integer> map1 = JSON.parseObject(str,Map.class);
-                            warnMap.put(t,map1);
+                            Map<String, String> map1 = JSON.parseObject(str, Map.class);
+                            warnMap.put(t, map1);
                         }
                         return warnMap;
                     }
@@ -45,7 +44,7 @@ public class DeviceUtilImpl implements Serializable {
         return null;
     }
 
-    public Map<String, Map<String, Integer>> getThreshold() {
+    public Map<String, Map<String, String>> getThreshold() {
         try {
             Table table = HBaseHelper.getTable(DispatchTable.TABLE_DEVICE);
             Get get = new Get(DispatchTable.OFFLINERK);
@@ -53,12 +52,12 @@ public class DeviceUtilImpl implements Serializable {
             if (result.containsColumn(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL)) {
                 byte[] map = result.getValue(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL);
                 if (map != null) {
-                    String jsonString = JSON.toJSONString(map);
-                    Map<String,Map<String,Integer>> thresholdMap = JSON.parseObject(jsonString,Map.class);
-                    for (String t:thresholdMap.keySet()) {
+                    String jsonString = Bytes.toString(map);
+                    Map<String, Map<String, String>> thresholdMap = JSON.parseObject(jsonString, Map.class);
+                    for (String t : thresholdMap.keySet()) {
                         String str = JSON.toJSONString(thresholdMap.get(t));
-                        Map<String,Integer> map1 = JSON.parseObject(str,Map.class);
-                        thresholdMap.put(t,map1);
+                        Map<String, String> map1 = JSON.parseObject(str, Map.class);
+                        thresholdMap.put(t, map1);
                     }
                     return thresholdMap;
                 }

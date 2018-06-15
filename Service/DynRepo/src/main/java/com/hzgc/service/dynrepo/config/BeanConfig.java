@@ -1,4 +1,4 @@
-package com.hzgc.service.dynrepo.service;
+package com.hzgc.service.dynrepo.config;
 
 import com.hzgc.collect.zk.register.RegisterWatcher;
 import com.hzgc.common.attribute.service.AttributeService;
@@ -10,16 +10,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class Config {
+public class BeanConfig {
     @Autowired
     @SuppressWarnings("unused")
     private Environment environment;
-
-    @Bean
-    @LoadBalanced
-    RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
 
     @Bean
     AttributeService attributeService() {

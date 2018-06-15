@@ -42,6 +42,7 @@ function start_springCloud()
       echo "Dispatch service already started!!"
    else
       nohup java -jar ${DISPATCH_JAR} --spring.profiles.active=pro \
+      --spring.cloud.config.enabled=false \
       --eureka.ip=${EUREKA_IP} \
       --eureka.port=${EUREKA_PORT}  2>&1 &
    fi

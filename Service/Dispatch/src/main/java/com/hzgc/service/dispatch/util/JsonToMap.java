@@ -13,23 +13,23 @@ import java.util.Map;
 public class JsonToMap {
 
     //大数据jsonString转换成Map
-    public static<T> Map<T,Map<String,Integer>> stringToMap(String jsonString){
-        Map<T,Map<String,Integer>> map = JSON.parseObject(jsonString,Map.class);
-        for (T t:map.keySet()) {
+    public static <T> Map<T, Map<String, String>> stringToMap(String jsonString) {
+        Map<T, Map<String, String>> map = JSON.parseObject(jsonString, Map.class);
+        for (T t : map.keySet()) {
             String str = JSON.toJSONString(map.get(t));
-            Map<String,Integer> map1 = JSON.parseObject(str,Map.class);
-            map.put(t,map1);
+            Map<String, String> map1 = JSON.parseObject(str, Map.class);
+            map.put(t, map1);
         }
         return map;
     }
 
     //平台jsonString转换成Map
-    public  static LinkedHashMap<String,Dispatch> dispatchStringToMap(String hbaseString){
-        LinkedHashMap<String,Dispatch> map = JSON.parseObject(hbaseString,LinkedHashMap.class);
-        for (String s:map.keySet()){
+    public static LinkedHashMap<String, Dispatch> dispatchStringToMap(String hbaseString) {
+        LinkedHashMap<String, Dispatch> map = JSON.parseObject(hbaseString, LinkedHashMap.class);
+        for (String s : map.keySet()) {
             String str = JSON.toJSONString(map.get(s));
-            Dispatch dispatch = JSON.parseObject(str,Dispatch.class);
-            map.put(s,dispatch);
+            Dispatch dispatch = JSON.parseObject(str, Dispatch.class);
+            map.put(s, dispatch);
         }
         return map;
     }

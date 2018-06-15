@@ -1,8 +1,8 @@
 package com.hzgc.service.visual.service;
 
 import com.hzgc.common.util.empty.IsEmpty;
-import com.hzgc.service.util.api.DeviceDTO;
-import com.hzgc.service.util.api.DeviceQueryService;
+import com.hzgc.service.util.api.bean.DeviceDTO;
+import com.hzgc.service.util.api.service.DeviceQueryService;
 import com.hzgc.service.visual.bean.CaptureCountBean;
 import com.hzgc.service.visual.bean.FaceDayStatistic;
 import com.hzgc.service.visual.bean.StatisticsBean;

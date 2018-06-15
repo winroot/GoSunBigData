@@ -84,9 +84,6 @@ public class ClusteringController {
                 clusteringSearchParam.getTime() != null) {
             int start = clusteringSearchParam.getStart();
             int limit = clusteringSearchParam.getLimit();
-            if(start == 0){
-                start = 1;
-            }
             if(limit == 0){
                 limit = Integer.MAX_VALUE;
             }

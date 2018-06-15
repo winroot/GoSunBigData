@@ -8,7 +8,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableEurekaClient
-@EnableSwagger2
 @EnableAuthSynchronize
 public class FtpApplication {
 

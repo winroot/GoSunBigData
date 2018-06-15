@@ -1,7 +1,6 @@
 package com.hzgc.service.dispatch.service;
 
 import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.service.dispatch.bean.Device;
 import com.hzgc.service.dispatch.bean.Dispatch;
 import com.hzgc.service.dispatch.bean.IdsType;
 import com.hzgc.service.dispatch.bean.PageBean;
@@ -9,10 +8,11 @@ import com.hzgc.service.dispatch.bean.Warn;
 import com.hzgc.service.dispatch.dao.HBaseDao;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
+
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,21 +22,20 @@ import org.springframework.stereotype.Service;
 public class WarnRuleService {
 
     @Autowired
+    @SuppressWarnings("unused")
     private HBaseDao hBaseDao;
 
-    public Map<String, Boolean> configRules(List<String> ipcIDs,List<Warn> warns) {
-        return hBaseDao.configRules(ipcIDs, warns);
+    public void configRules(List<String> ipcIDs, List<Warn> warns) {
+        hBaseDao.configRules(ipcIDs, warns);
     }
 
     /**
      * 删除设备的布控规则
      *
      * @param ipcIDs 设备 ipcID 列表
-     * @return channelId 是否删除成功的 map
      */
-    public Map<String, Boolean> deleteRules(List<String> ipcIDs)
-    {
-        return hBaseDao.deleteRules(ipcIDs);
+    public void deleteRules(List<String> ipcIDs) {
+        hBaseDao.deleteRules(ipcIDs);
     }
 
     //存储原数据
@@ -46,7 +45,7 @@ public class WarnRuleService {
 
     //根据ruleId进行全部参数查询
     public ResponseResult<Dispatch> searchByRuleId(String id) throws IOException {
-        Map<String,Dispatch> map = hBaseDao.searchByRuleId();
+        Map<String, Dispatch> map = hBaseDao.searchByRuleId();
         for (String ruleId : map.keySet()) {
             if (ruleId.equals(id)) {
                 Dispatch dispatch = map.get(ruleId);
@@ -56,11 +55,11 @@ public class WarnRuleService {
                     strings[i] = (warnList.get(i)).getObjectType();
                 }
                 log.info("Strings is " + JSONUtil.toJson(strings));
-                Map<String,Map<String,String>> responseResult = hBaseDao.getObjectTypeName(strings);
-                Map<String,String> m = responseResult.get("restbody");
+                Map<String, Map<String, String>> responseResult = hBaseDao.getObjectTypeName(strings);
+                Map<String, String> m = responseResult.get("restbody");
                 for (Warn warn : warnList) {
-                    for (String s:m.keySet()){
-                        if (warn.getObjectType().equals(s)){
+                    for (String s : m.keySet()) {
+                        if (warn.getObjectType().equals(s)) {
                             if (null != m.get(s)) {
                                 warn.setObjectTypeName(m.get(s));
                             }
