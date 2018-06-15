@@ -9,6 +9,7 @@ import com.hzgc.service.util.auth.service.AuthorizeSyncServiceImpl;
 import com.hzgc.service.util.auth.service.ResourceProviderSyncService;
 import com.hzgc.service.util.auth.service.ResourceProviderSyncServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,7 @@ import java.util.Arrays;
  */
 @Configuration
 @EnableConfigurationProperties(AuthSyncProperties.class)
+@ConditionalOnProperty(prefix = AuthSyncProperties.AUTH_SYNC, name = "enable", havingValue = "true", matchIfMissing = true)
 @Import(ResttemplateConfiguration.class)
 public class AuthSyncConfiguration {
     @Autowired
