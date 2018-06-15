@@ -93,11 +93,12 @@ object FaceAddAlarmJob {
             val dateStr = df.format(new Date())
             val addAlarmMessage = new AddAlarmMessage()
             val surl = result._1.getRelativePath
+            val burl = surl.substring(0, surl.length - 5) + "0.jpg"
             addAlarmMessage.setAlarmTime(dateStr)
             addAlarmMessage.setAlarmType(DispatchTable.ADDED.toString)
 
             addAlarmMessage.setSmallPictureURL(surl)
-            addAlarmMessage.setBigPictureURL(result._1.getBurl)
+            addAlarmMessage.setBigPictureURL(burl)
             addAlarmMessage.setDynamicDeviceID(result._2)
             addAlarmMessage.setHostName(result._1.getHostname)
             rocketMQProducer.send(result._3,

@@ -483,7 +483,7 @@ public class HBaseDao {
     }
 
     //获取对象类型名称
-    @HystrixCommand(fallbackMethod = "getObjectTypeNameError")
+//    @HystrixCommand(fallbackMethod = "getObjectTypeNameError")
     @SuppressWarnings("unchecked")
     public Map<String, Map<String, String>> getObjectTypeName(String[] strings) {
         if (null != strings && strings.length > 0) {

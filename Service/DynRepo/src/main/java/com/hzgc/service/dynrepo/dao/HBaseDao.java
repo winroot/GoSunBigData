@@ -66,8 +66,8 @@ public class HBaseDao {
                 return false;
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("Save search result failed");
+            log.info(e.getMessage());
+            log.warn("Save search result failed");
         } finally {
             HBaseHelper.closeTable(searchRes);
         }

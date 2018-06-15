@@ -105,11 +105,12 @@ object FaceRecognizeAlarmJob {
           val items = new ArrayBuffer[Item]()
           val dateStr = df.format(new Date())
           val surl = result._1.getRelativePath
+          val burl = surl.substring(0, surl.length - 5) + "0.jpg"
           recognizeAlarmMessage.setAlarmType(DispatchTable.IDENTIFY.toString)
           recognizeAlarmMessage.setDynamicDeviceID(result._2)
           recognizeAlarmMessage.setSmallPictureURL(surl)
           recognizeAlarmMessage.setAlarmTime(dateStr)
-          recognizeAlarmMessage.setBigPictureURL(result._1.getBurl)
+          recognizeAlarmMessage.setBigPictureURL(burl)
           recognizeAlarmMessage.setHostName(result._1.getHostname)
           result._4.foreach(record => {
             val item = new Item()
