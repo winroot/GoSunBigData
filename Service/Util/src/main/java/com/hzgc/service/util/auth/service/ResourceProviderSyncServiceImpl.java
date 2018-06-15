@@ -4,6 +4,7 @@ import com.hzgc.service.util.auth.scan.ResourceProviderDefination;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Set;
@@ -21,6 +22,7 @@ public class ResourceProviderSyncServiceImpl implements ResourceProviderSyncServ
         this.restTemplate = restTemplate;
     }
 
+    @Async
     @Override
     public void sync(Set<ResourceProviderDefination> resourceProviderSyncServices) {
         HttpHeaders headers = new HttpHeaders();
