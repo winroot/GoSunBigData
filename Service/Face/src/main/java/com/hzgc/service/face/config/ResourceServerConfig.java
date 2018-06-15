@@ -1,5 +1,6 @@
 package com.hzgc.service.face.config;
 
+import com.hzgc.service.util.rest.BigDataPath;
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,7 +22,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(new Http401AuthenticationEntryPoint("Bearer realm=\"webrealm\""))
                 .and()
-                .authorizeRequests().antMatchers("**").authenticated()
+                .authorizeRequests()
+                .antMatchers(BigDataPath.FEATURE_EXTRACT_BYTES + "/**").permitAll()
+                .antMatchers("**").authenticated()
                 .and()
                 .httpBasic();
     }
