@@ -15,6 +15,8 @@ public class BigDataPath {
      */
     public static final String FTP_GET_PROPERTIES = "/ftp_info";
     public static final String FTP_GET_IP = "/hostname_convert";
+    public static final String FTP_SUBSCRIPTION_OPEN = "/subscribe_open";
+    public static final String FTP_SUBSCRIPTION_CLOSE = "/subscribe_close";
 
     /**
      * Clustering模块请求路径
