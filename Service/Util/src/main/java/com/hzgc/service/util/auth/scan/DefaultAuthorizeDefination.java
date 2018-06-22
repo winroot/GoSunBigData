@@ -12,6 +12,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode(of = {"permission"})
 public class DefaultAuthorizeDefination {
+    private Integer id;
     private String name;
     private String menu;
     private String permission;

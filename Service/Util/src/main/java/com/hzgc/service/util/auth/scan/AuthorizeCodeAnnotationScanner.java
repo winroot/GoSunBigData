@@ -72,6 +72,8 @@ public class AuthorizeCodeAnnotationScanner {
                     defaultAuthorizeDefination.setMenu((String) entry.getValue());
                 } else if ("description".equals(entry.getKey())) {
                     defaultAuthorizeDefination.setDescription((String) entry.getValue());
+                } else if("id".equals(entry.getKey())){
+                    defaultAuthorizeDefination.setId((Integer)entry.getValue());
                 }
             }
 
