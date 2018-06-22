@@ -12,6 +12,14 @@ import java.lang.annotation.*;
 @Inherited
 @Documented
 public @interface AuthorizeCode {
+
+
+    /**
+     * 权限id
+     *
+     * @return id
+     */
+    int id();
     /**
      * 权限名称
      *
