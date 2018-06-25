@@ -56,6 +56,14 @@ public class ObjectTypeService {
     public boolean updateObjectType(ObjectTypeParam param) {
         String id = param.getObjectTypeKey();
         String name = param.getObjectTypeName();
+        // 对象类型名称唯一性判断
+        List<String> names = phoenixDao.getAllObjectTypeNames();
+        log.info("Start add object type, get all the object type names in the database first: "
+                + JSONUtil.toJson(names));
+        if (names.contains(name)){
+            log.error("Start add object type, but the object type name already exists");
+            return false;
+        }
         String creator = param.getCreator();
         String remark = param.getRemark();
         return phoenixDao.updateObjectType(id, name, creator, remark);
