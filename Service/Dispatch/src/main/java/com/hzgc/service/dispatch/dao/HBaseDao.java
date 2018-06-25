@@ -261,16 +261,24 @@ public class HBaseDao {
         if (null != dispatchObj) {
             String hbaseMapString = Bytes.toString(dispatchObj);
             LinkedHashMap<String, Dispatch> hbaseMap = JsonToMap.dispatchStringToMap(hbaseMapString);
+
             //进行id对比是否存在新添加的id
             for (String newRuleId : originMap.keySet()) {
                 //拿到新添加的设备集合
                 List<Device> newDeviceList = originMap.get(newRuleId).getDevices();
+                String newName = originMap.get(newRuleId).getRule().getName();
                 for (Device newDevice : newDeviceList) {
                     //拿到新添加的Id
                     originId = newDevice.getId();
                     for (String oldRuleId : hbaseMap.keySet()) {
                         //拿到数据库中的设备集合
                         List<Device> oldDeviceList = hbaseMap.get(oldRuleId).getDevices();
+                        //拿到数据库中的规则名称
+                        String oldName = hbaseMap.get(oldRuleId).getRule().getName();
+                        if (newName.equals(oldName)){
+                            log.info("This ruleID is already exists");
+                            return ResponseResult.error(RestErrorCode.DB_DUPLICAET_KEY,"规则名称" + newName + "已经存在");
+                        }
                         for (Device oldDevice : oldDeviceList) {
                             //拿到旧的ipcId
                             oldId = oldDevice.getId();
