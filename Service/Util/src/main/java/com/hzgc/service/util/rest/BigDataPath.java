@@ -89,6 +89,7 @@ public class BigDataPath {
      */
     public static final String CAPTURECOUNT_DYNREPO = "/capture_day_count";
     public static final String CAPTURECOUNT_IPCIDS_TIME = "/face_hours";
+    public static final String CAPTURECOUNT_SIX_HOUR = "/sixhours_count";
     public static final String CAPTURECOUNT_IPCIDS = "/face";
     public static final String PEOPLE_COUNT="/people_count";
     public static final String GET_PICTURE = "/image";

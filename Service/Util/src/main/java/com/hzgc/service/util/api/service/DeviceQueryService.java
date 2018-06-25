@@ -61,6 +61,14 @@ public class DeviceQueryService {
         return new HashMap<>();
     }
 
+    @SuppressWarnings("unused")
+    public List<Long> query_device_id(Long areaId, String level){
+        if (areaId != null){
+            return  restTemplate.getForObject("http://region/internal/region/query_device_id/" + areaId + "/" + level, List.class);
+        }
+        return null;
+    }
+
     @HystrixCommand(fallbackMethod = "getDeviceInfoByIdError")
     @SuppressWarnings("unused")
     public DeviceDTO getDeviceInfoById(Long id) {
