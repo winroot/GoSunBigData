@@ -22,6 +22,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 public class ParseByOption {
 
+    public String getAllObjectTypeNames() {
+        return "select " + ObjectTypeTable.TYPE_NAME + " from " + ObjectTypeTable.TABLE_NAME;
+    }
+
     public String addObjectType() {
         return "upsert into " + ObjectTypeTable.TABLE_NAME + "( "
                 + ObjectTypeTable.ROWKEY + ", "
@@ -275,8 +279,8 @@ public class ParseByOption {
 
         // 关于姓名的搜索
         if (!StringUtils.isBlank(param.getObjectName())) {
-            whereQuery.append(ObjectInfoTable.NAME).append(" = ?");
-            setArgsList.add(param.getObjectName());
+            whereQuery.append(ObjectInfoTable.NAME)
+                    .append(" like '%").append(param.getObjectName()).append("%'");
             isChanged = true;
         }
 
@@ -286,8 +290,7 @@ public class ParseByOption {
                 whereQuery.append(" and ");
             }
             whereQuery.append(ObjectInfoTable.IDCARD)
-                    .append(" = ?");
-            setArgsList.add(param.getIdcard());
+                    .append(" like '%").append(param.getIdcard()).append("%'");
             isChanged = true;
         }
 
@@ -345,8 +348,7 @@ public class ParseByOption {
             }
             whereQuery
                     .append(ObjectInfoTable.CREATOR)
-                    .append(" = ?");
-            setArgsList.add(creator);
+                    .append(" like '%").append(creator).append("%'");
             isChanged = true;
         }
 
@@ -359,8 +361,7 @@ public class ParseByOption {
             }
             whereQuery
                     .append(ObjectInfoTable.CPHONE)
-                    .append(" = ?");
-            setArgsList.add(param.getCreatorConractWay());
+                    .append(" like '%").append(param.getCreatorConractWay()).append("%'");
             isChanged = true;
         }
 
@@ -499,6 +500,14 @@ public class ParseByOption {
             }
         }
         return sql.toString();
+    }
+
+    public String getAllObjectIdcard() {
+        return "select " + ObjectInfoTable.IDCARD + " from " + ObjectInfoTable.TABLE_NAME;
+    }
+
+    public String getAllObjectTypeKeys() {
+        return "select " + ObjectTypeTable.ROWKEY + " from " + ObjectTypeTable.TABLE_NAME;
     }
 
     public String addObjectInfo() {
