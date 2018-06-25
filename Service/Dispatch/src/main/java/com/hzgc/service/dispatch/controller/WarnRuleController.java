@@ -73,6 +73,10 @@ public class WarnRuleController {
             warnList = dispatch.getRule().getWarns();
             Map<String, Dispatch> dispatchMap = IpcIdsUtil.toDispatchMap(dispatch);
             ResponseResult<String> responseResult = warnRuleService.saveOriginData(dispatchMap);
+            if (responseResult.getHead().getErrorCode() == RestErrorCode.DB_DUPLICAET_KEY ||
+                    responseResult.getHead().getErrorCode() == RestErrorCode.ERR_DEVICE_ALREADY_BIND_RULE) {
+                return responseResult;
+            }
             //调用大数据接口
             ipcIDs.removeAll(Collections.singleton(null));
             log.info("Bigdata param , ipcIDs is " + JSONUtil.toJson(ipcIDs) + " warn list is " + JSONUtil.toJson(warnList));
