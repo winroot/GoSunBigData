@@ -25,7 +25,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(BigDataPath.TYPE_SEARCH_NAMES + "/**",
                         BigDataPath.STAREPO_COUNT_EMIGRATION + "/**",
-                        BigDataPath.OBJECTINFO_GET_PHOTOBYKEY + "/**").permitAll()
+                        BigDataPath.OBJECTINFO_GET_PHOTOBYKEY + "/**",
+                        BigDataPath.STAREPO_EXPORT_WORD + "/**").permitAll()
                 .antMatchers("**").authenticated()
                 .and()
                 .httpBasic();

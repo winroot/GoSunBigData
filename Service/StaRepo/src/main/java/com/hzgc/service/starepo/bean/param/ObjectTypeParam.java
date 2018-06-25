@@ -1,6 +1,5 @@
 package com.hzgc.service.starepo.bean.param;
 
-import com.hzgc.common.util.empty.IsEmpty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

@@ -100,7 +100,7 @@ public class ObjectInfoHandlerController {
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
         if (StringUtils.isBlank(param.getId())) {
-            log.error("Start update object info, but id is null");
+            log.error("Start update object info, but object id is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
 

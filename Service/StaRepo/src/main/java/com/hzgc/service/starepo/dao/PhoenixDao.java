@@ -43,6 +43,17 @@ public class PhoenixDao implements Serializable {
     @SuppressWarnings("unused")
     private ParseByOption parseByOption;
 
+    public List<String> getAllObjectTypeNames() {
+        List<String> names = new ArrayList<>();
+        String sql = parseByOption.getAllObjectTypeNames();
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql);
+        while (sqlRowSet.next()) {
+            String name = sqlRowSet.getString(ObjectTypeTable.TYPE_NAME);
+            names.add(name);
+        }
+        return names;
+    }
+
     /**
      * 添加 objectType
      *
@@ -52,10 +63,6 @@ public class PhoenixDao implements Serializable {
      * @return boolean
      */
     public boolean addObjectType(String name, String creator, String remark) {
-        if (StringUtils.isBlank(name)) {
-            log.info("Start add object type, but name is null.");
-            return false;
-        }
         long start = System.currentTimeMillis();
         String typeId = "type_" + start + UuidUtil.getUuid().substring(0, 8);
         log.info("Start add object type, id = " + typeId);
@@ -226,6 +233,28 @@ public class PhoenixDao implements Serializable {
             lastRowKey = sqlRowSet.getString(ObjectTypeTable.ROWKEY);
         }
         return lastRowKey;
+    }
+
+    public List<String> getAllObjectIdcard() {
+        List<String> idcardList = new ArrayList<>();
+        String sql = parseByOption.getAllObjectIdcard();
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql);
+        while (sqlRowSet.next()) {
+            String idcard = sqlRowSet.getString(ObjectInfoTable.IDCARD);
+            idcardList.add(idcard);
+        }
+        return idcardList;
+    }
+
+    public List<String> getAllObjectTypeKeys() {
+        List<String> typeList = new ArrayList<>();
+        String sql = parseByOption.getAllObjectTypeKeys();
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql);
+        while (sqlRowSet.next()) {
+            String typeKey = sqlRowSet.getString(ObjectTypeTable.ROWKEY);
+            typeList.add(typeKey);
+        }
+        return typeList;
     }
 
     /**

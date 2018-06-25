@@ -63,13 +63,24 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示插入成功，返回值为1，表示插入失败
      */
     public Integer addObjectInfo(ObjectInfoParam objectInfo) {
-        //判断身份证格式是否正确
         if (!StringUtils.isBlank(objectInfo.getIdcard())) {
+            // 判断身份证格式是否正确
             if (!idCodeAuthentication(objectInfo.getIdcard())) {
-                // 身份证格式不正确。
-                log.info("Start add object info, but the id card format is error");
+                log.error("Start add object info, but the idcard format is error");
                 return 1;
             }
+            // 身份证唯一性判断
+            List<String> idcards = phoenixDao.getAllObjectIdcard();
+            if (idcards.contains(objectInfo.getIdcard())){
+                log.error("Start add object info, but the idcard already exists");
+                return 1;
+            }
+        }
+        // 判断ObjectTypeKey是否存在
+        List<String> objectTypeKeys = phoenixDao.getAllObjectTypeKeys();
+        if (!objectTypeKeys.contains(objectInfo.getObjectTypeKey())){
+        log.error("Start add object info, but the object type key doesn't exists");
+            return 1;
         }
         objectInfo.setId(UuidUtil.getUuid());
         log.info("Start add object info, object id is:" + objectInfo.getId());
@@ -103,34 +114,44 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
     public Integer updateObjectInfo(ObjectInfoParam param) {
-        Integer a = 1;
-        //判断身份证格式是否正确
         if (!StringUtils.isBlank(param.getIdcard())) {
+            // 判断身份证格式是否正确
             if (!idCodeAuthentication(param.getIdcard())) {
-                // 身份证格式不正确。
                 log.info("Start update object info, but the id card format is error");
                 return 1;
             }
+            // 身份证唯一性判断
+            List<String> idcards = phoenixDao.getAllObjectIdcard();
+            if (idcards.contains(param.getIdcard())){
+                log.error("Start update object info, but the idcard already exists");
+                return 1;
+            }
+        }
+        // 判断ObjectTypeKey是否存在
+        List<String> objectTypeKeys = phoenixDao.getAllObjectTypeKeys();
+        if (!objectTypeKeys.contains(param.getObjectTypeKey())){
+            log.error("Start update object info, but the object type key doesn't exists");
+            return 1;
         }
         // 查询更新对象当前状态值
         String objectId = param.getId();
         int status = phoenixDao.getObjectInfo_status(objectId);
         //数据库更新操作(状态值暂时不更新)
         Integer i = phoenixDao.updateObjectInfo(param);
-        // 根据入参状态值与更新前对象状态值比较，判断是否更新statustime（状态更新时间）字段
+        // 根据入参状态值与数据库中对象状态值比较，判断是否更新statustime（状态更新时间）字段
         if (param.getStatus() != status) {
             Integer ii = phoenixDao.updateObjectInfo_status(objectId, param.getStatus());
             if (i == 0 && ii == 0){
                 sendKafka(param, UPDATE);
-                a = 0;
+                return 0;
             }
         }else {
             if (i == 0){
                 sendKafka(param, UPDATE);
-                a = 0;
+                return 0;
             }
         }
-        return a;
+        return 1;
     }
 
     private void sendKafka(ObjectInfoParam param, String option){
@@ -151,7 +172,7 @@ public class ObjectInfoHandlerService {
      * @return false 身份证不正确 true 身份证正确
      */
     private boolean idCodeAuthentication(String idCode) {
-        if (idCode == null || idCode.isEmpty()) {
+        if (idCode == null || idCode.isEmpty() || idCode.length() != 18) {
             return false;
         }
         String regEX = "^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$";
@@ -168,6 +189,13 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
     public int updateObjectInfo_status(String objectId, int status) {
+        // 查询更新对象当前状态值
+        int info_status = phoenixDao.getObjectInfo_status(objectId);
+        if (info_status == status){
+            log.error("Start update object status, but object status is the same as in the database, " +
+                    "so doesn't need to be updated");
+            return 1;
+        }
         //数据库更新操作
         return phoenixDao.updateObjectInfo_status(objectId, status);
     }
@@ -189,7 +217,6 @@ public class ObjectInfoHandlerService {
      * @return 返回搜索所需要的结果封装成的对象，包含搜索id，成功与否标志，记录数，记录信息，照片id
      */
     public ObjectSearchResult searchObjectInfo(GetObjectInfoParam param) {
-        // setSearchTotalId
         ObjectSearchResult objectSearchResult;
         SqlRowSet sqlRowSet = phoenixDao.searchObjectInfo(param);
         if (sqlRowSet == null) {
