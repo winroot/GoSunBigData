@@ -54,7 +54,9 @@ public class HBaseDao {
             //对于每一条规则
             for (Warn rule : rules) {
                 //解析离线告警：在离线告警offlineMap中添加相应的对象类型、ipcID和规则中的离线天数阈值DayThreshold
-                parseOfflineWarn(rule, ipcID, offlineMap);
+                if ("102".equals(rule.getAlarmType())) {
+                    parseOfflineWarn(rule, ipcID, offlineMap);
+                }
             }
         }
         try {
@@ -164,7 +166,7 @@ public class HBaseDao {
                     }
                 }
                 Put offlinePut = new Put(DispatchTable.OFFLINERK);
-                offlineString = JSONUtil.toJson(offlineMap);
+                offlineString = JSONUtil.toJson(tempMap);
                 offlinePut.addColumn(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL, Bytes.toBytes(offlineString));
                 deviceTable.put(offlinePut);
             } else {
