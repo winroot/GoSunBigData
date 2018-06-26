@@ -67,5 +67,4 @@ public class DeviceUtilImpl implements Serializable {
         }
         return null;
     }
-
 }

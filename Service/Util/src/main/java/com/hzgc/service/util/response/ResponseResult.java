@@ -153,8 +153,6 @@ public class ResponseResult<T> implements Serializable {
         head.setMessage(message);
     }
 
-
-
     /**
      * 设置总数(分页时使用)
      *
