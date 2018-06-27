@@ -3,10 +3,7 @@ package com.hzgc.service.visual.controller;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.hzgc.service.util.rest.BigDataPath;
-import com.hzgc.service.visual.bean.CaptureCountBean;
-import com.hzgc.service.visual.bean.StatisticsBean;
-import com.hzgc.service.visual.bean.TimeSlotNumber;
-import com.hzgc.service.visual.bean.TotalAndTodayCount;
+import com.hzgc.service.visual.bean.*;
 import com.hzgc.service.visual.service.CaptureCountService;
 import com.hzgc.service.visual.util.DateUtils;
 import io.swagger.annotations.Api;
@@ -63,6 +60,32 @@ public class CaptureCountController {
         }
         TimeSlotNumber count = captureCountService.timeSoltNumber(new ArrayList<>(), startTime, endTime);
         return ResponseResult.init(count);
+
+    }
+
+    /**
+     * 某地区某段日期每天固定时间段抓拍统计
+     *
+     * @param startData 开始日期
+     * @param endData 结束日期
+     * @return
+     */
+    @ApiOperation(value = "多设备抓拍统计（每六小时）", response = TimeSlotNumber.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startData", value = "开始日期", paramType = "query"),
+            @ApiImplicitParam(name = "endData", value = "结束日期", paramType = "query"),
+            @ApiImplicitParam(name = "areaId", value = "区域ID", paramType = "query"),
+            @ApiImplicitParam(name = "level", value = "level", paramType = "query")
+    })
+    @RequestMapping(value = BigDataPath.CAPTURECOUNT_SIX_HOUR, method = RequestMethod.GET)
+    public ResponseResult<List<CaptureCountSixHour>> captureCountSixHour(String startData, String endData, Long areaId, String level) {
+        //时间格式检测
+        if(!DateUtils.checkForm(startData) || !DateUtils.checkForm(endData)){
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
+                    "Time does not conform to the format: yyyy-MM-dd");
+        }
+        List<CaptureCountSixHour> list = captureCountService.captureCountSixHour(startData, endData, areaId, level);
+        return ResponseResult.init(list);
 
     }
 
