@@ -277,32 +277,33 @@ public class ParseByOption {
         StringBuilder whereQuery = new StringBuilder();
         boolean isChanged = false;
 
-        // 关于姓名的搜索
-        if (!StringUtils.isBlank(param.getObjectName())) {
+        // 关于姓名的搜索\
+        String objectName = param.getObjectName();
+        if (!StringUtils.isBlank(objectName)) {
             whereQuery.append(ObjectInfoTable.NAME)
-                    .append(" like '%").append(param.getObjectName()).append("%'");
+                    .append(" like '%").append(objectName).append("%'");
             isChanged = true;
         }
 
         // 关于身份证号的查询
-        if (!StringUtils.isBlank(param.getIdcard())) {
+        String idcard = param.getIdcard();
+        if (!StringUtils.isBlank(idcard)) {
             if (isChanged) {
                 whereQuery.append(" and ");
             }
             whereQuery.append(ObjectInfoTable.IDCARD)
-                    .append(" like '%").append(param.getIdcard()).append("%'");
+                    .append(" like '%").append(idcard).append("%'");
             isChanged = true;
         }
 
         // 关于性别的查询
-        if (param.getSex() != 0) {
+        int sex = param.getSex();
+        if (sex == 0 || sex == 1 || sex == 2) {
             if (isChanged) {
                 whereQuery.append(" and ");
             }
-            whereQuery
-                    .append(ObjectInfoTable.SEX)
-                    .append(" = ?");
-            setArgsList.add(param.getSex());
+            whereQuery.append(ObjectInfoTable.SEX).append(" = ?");
+            setArgsList.add(sex);
             isChanged = true;
         }
 
@@ -346,42 +347,40 @@ public class ParseByOption {
             if (isChanged) {
                 whereQuery.append(" and ");
             }
-            whereQuery
-                    .append(ObjectInfoTable.CREATOR)
-                    .append(" like '%").append(creator).append("%'");
+            whereQuery.append(ObjectInfoTable.CREATOR).append(" like '%").append(creator).append("%'");
             isChanged = true;
         }
 
         // 关于布控人手机号的查询
-        if (!StringUtils.isBlank(param.getCreatorConractWay()))
-
-        {
+        String creatorConractWay = param.getCreatorConractWay();
+        if (!StringUtils.isBlank(creatorConractWay)){
             if (isChanged) {
                 whereQuery.append(" and ");
             }
-            whereQuery
-                    .append(ObjectInfoTable.CPHONE)
-                    .append(" like '%").append(param.getCreatorConractWay()).append("%'");
+            whereQuery.append(ObjectInfoTable.CPHONE).append(" like '%").append(creatorConractWay).append("%'");
             isChanged = true;
         }
 
         // 关于是否是重点人员的查询
-        if (param.getFollowLevel() != 0) {
+        int followLevel = param.getFollowLevel();
+        if (followLevel == 1 || followLevel == 2) {
             if (isChanged) {
                 whereQuery.append(" and ");
             }
-            whereQuery
-                    .append(ObjectInfoTable.IMPORTANT);
-            whereQuery.append(" = ?");
-            setArgsList.add(param.getFollowLevel());
+            whereQuery.append(ObjectInfoTable.IMPORTANT).append(" = ?");
+            setArgsList.add(followLevel);
+            isChanged = true;
         }
 
         //查询人员状态值
-        if (isChanged) {
-            whereQuery.append(" and ");
+        int status = param.getStatus();
+        if (status == 0 || status == 1){
+            if (isChanged) {
+                whereQuery.append(" and ");
+            }
+            whereQuery.append(ObjectInfoTable.STATUS).append(" = ?");
+            setArgsList.add(status);
         }
-        whereQuery.append(ObjectInfoTable.STATUS).append(" = ?");
-        setArgsList.add(param.getStatus());
         return whereQuery;
     }
 
