@@ -105,7 +105,7 @@ public class CaptureCountController {
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
                     "Param: areaId or level error");
         }
-        log.error("Start count capture every six hours, param is: areaId = " + areaId + ", level = " + level);
+        log.info("Start count capture every six hours, param is: areaId = " + areaId + ", level = " + level);
         List<CaptureCountSixHour> list = captureCountService.captureCountSixHour(startData, endData, areaId, level);
         return ResponseResult.init(list);
 
