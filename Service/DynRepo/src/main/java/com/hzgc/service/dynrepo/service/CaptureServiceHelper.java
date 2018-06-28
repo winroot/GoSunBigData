@@ -301,9 +301,7 @@ public class CaptureServiceHelper {
         List<Long> devices = new ArrayList<>();
         devices.add(Long.valueOf(deviceId));
         Map<String, DeviceDTO> result = queryService.getDeviceInfoByBatchId(devices);
-        log.info("----------------------------1 " + JSONUtil.toJson(result));
         if (!result.values().isEmpty() && result.values().size() > 0) {
-            log.info("--------------------------2 " + result.get(deviceId).getSerial());
             return result.get(deviceId).getSerial();
         } else {
             log.error("Failed to find device id");

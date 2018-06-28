@@ -171,8 +171,11 @@ public class CaptureSearchService {
      */
     public String getLastCaptureTime(String deviceId){
         String ipcId = captureServiceHelper.deviceIdToIpcId(deviceId);
+        log.info("Start query last capture time, get ipcId is:" + ipcId);
         if (!StringUtils.isBlank(ipcId)){
-            return esDao.getLastCaptureTime(ipcId);
+            String time  = esDao.getLastCaptureTime(ipcId);
+            log.info("Get query last capture time successful, time is:" + time);
+            return time;
         }
         log.info("Get query last capture time failure, ipcId is null");
         return null;

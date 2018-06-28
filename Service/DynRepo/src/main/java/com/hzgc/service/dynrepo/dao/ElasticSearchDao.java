@@ -151,7 +151,6 @@ public class ElasticSearchDao {
                 .addSort(DynamicTable.TIMESTAMP, SortOrder.DESC)
                 .get();
         SearchHits hits =  searchResponse.getHits();
-        System.out.println("  ================================== " + hits.getTotalHits()+"  ==================================");
         SearchHit[] searchHits = hits.getHits();
         String lastTime = "";
         for (SearchHit hit : searchHits){
