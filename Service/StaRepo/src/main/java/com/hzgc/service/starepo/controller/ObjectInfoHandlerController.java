@@ -52,21 +52,22 @@ public class ObjectInfoHandlerController {
     public ResponseResult<Integer> addObjectInfo(@RequestBody @ApiParam(value = "添加对象") ObjectInfoParam param) {
         if (param == null) {
             log.error("Start add object info, but param is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param is null");
         }
         if (StringUtils.isBlank(param.getObjectTypeKey())) {
-            log.error("Start add object info ,but object type key is error");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            log.error("Start add object info ,but object type key is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: object type key is null");
         }
         if (param.getPictureDatas() == null || param.getPictureDatas().getImageData() != null) {
             log.error("Start add object info, but picture data is error");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: picture data is error");
         }
         log.info("Start add object info, param is:" + JSONUtil.toJson(param));
         Integer succeed = objectInfoHandlerService.addObjectInfo(param);
         if (succeed == 0) {
             return ResponseResult.init(succeed);
         } else {
-            return ResponseResult.error(succeed);
+            return ResponseResult.error(succeed, "add object info failed");
         }
     }
 
@@ -82,14 +83,14 @@ public class ObjectInfoHandlerController {
     public ResponseResult<Integer> deleteObjectInfo(@RequestBody @ApiParam(value = "删除列表") List<String> rowkeyList) {
         if (rowkeyList == null || rowkeyList.size() == 0) {
             log.error("Start delete object info, but rowkey list is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: rowkey list is null");
         }
         log.info("Start delete object info, rowkey list is:" + rowkeyList);
         Integer succeed = objectInfoHandlerService.deleteObjectInfo(rowkeyList);
         if (succeed == 0) {
             return ResponseResult.init(succeed);
         } else {
-            return ResponseResult.error(succeed);
+            return ResponseResult.error(succeed, "delete object info failed");
         }
     }
 
@@ -105,23 +106,23 @@ public class ObjectInfoHandlerController {
     public ResponseResult<Integer> updateObjectInfo(@RequestBody @ApiParam(value = "修改对象") ObjectInfoParam param) {
         if (param == null) {
             log.error("Start update object info, but param is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param is null");
         }
         if (StringUtils.isBlank(param.getId())) {
             log.error("Start update object info, but object id is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: object id is null");
         }
 
         if (StringUtils.isBlank(param.getObjectTypeKey())) {
             log.error("Start update object info, but object type key is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: object type key is null");
         }
         log.info("Start update object info, param is:" + JSONUtil.toJson(param));
         Integer succeed = objectInfoHandlerService.updateObjectInfo(param);
         if (succeed == 0) {
             return ResponseResult.init(succeed);
         } else {
-            return ResponseResult.error(succeed);
+            return ResponseResult.error(succeed, "update object info failed");
         }
     }
 
@@ -141,15 +142,15 @@ public class ObjectInfoHandlerController {
     @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_OPERATION + "')")
     public ResponseResult<Integer> updateObjectInfo_status(String objectId, int status) {
         if (StringUtils.isBlank(objectId)) {
-            log.error("Start update object status, but object id is  null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            log.error("Start update object status, but object id is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: object id is null");
         }
         log.info("Start update object status, param is : objectId = " + objectId + ", status = " + status);
         int succeed = objectInfoHandlerService.updateObjectInfo_status(objectId, status);
         if (succeed == 0) {
             return ResponseResult.init(succeed);
         } else {
-            return ResponseResult.error(succeed);
+            return ResponseResult.error(succeed, "update object status failed");
         }
     }
 
@@ -165,8 +166,8 @@ public class ObjectInfoHandlerController {
     @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_VIEW + "')")
     public ResponseResult<ObjectInfo> getObjectInfo(String objectId) {
         if (StringUtils.isBlank(objectId)) {
-            log.error("Start get object info, but object id is  null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            log.error("Start get object info, but object id is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: object id is null");
         }
         log.info("Start get object info, param is : " + objectId);
         ObjectInfo objectInfo = objectInfoHandlerService.getObjectInfo(objectId);
@@ -185,7 +186,7 @@ public class ObjectInfoHandlerController {
     public ResponseResult<ObjectSearchResult> searchObjectInfo(@RequestBody @ApiParam(value = "查询条件") GetObjectInfoParam param) {
         if (param == null) {
             log.error("Start get object info, but param is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param is null");
         }
         log.info("Start get object info, param is:" + JSONUtil.toJson(param));
         ObjectSearchResult result = objectInfoHandlerService.searchObjectInfo(param);
@@ -223,7 +224,7 @@ public class ObjectInfoHandlerController {
     public ResponseResult<PictureData> getFeature(String id) {
         if (!IsEmpty.strIsRight(id)) {
             log.error("Start get object picture data, but object id is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: object id is null");
         }
         log.info("Start get object picture data, param is : " + id);
         PictureData result = objectInfoHandlerService.getFeature(id);
@@ -259,23 +260,23 @@ public class ObjectInfoHandlerController {
     public ResponseResult<String> createPeoplesWord(@RequestBody @ApiParam(value = "历史查询参数") SearchRecordParam param) {
         if (param == null) {
             log.error("Start create emphasis personnel word, but param error");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param is null");
         }
         if (param.getStart() == 0) {
             log.error("Start create emphasis personnel word, but start = 0");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: start = 0");
         }
         if (param.getSize() == 0) {
             log.error("Start create emphasis personnel word, but size = 0");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: size = 0");
         }
         if (StringUtils.isBlank(param.getTotalSearchId())) {
             log.error("Start create emphasis personnel word, but total search id is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: total search id is null");
         }
         if (param.getSubQueryParamList() == null) {
             log.error("Start create emphasis personnel word, but search result list is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: search result list is null");
         }
         log.info("Start create emphasis personnel word, param is : " + JSONUtil.toJson(param));
         String rowkey_file = objectInfoHandlerService.exportPeoples(param);

@@ -96,13 +96,16 @@ public class CaptureCountController {
     public ResponseResult<List<CaptureCountSixHour>> captureCountSixHour(String startData, String endData, Long areaId, String level) {
         //时间格式检测
         if(!DateUtils.checkForm(startData) || !DateUtils.checkForm(endData)){
+            log.error("Start count capture every six hours, but time does not conform to the format: yyyy-MM-dd");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
                     "Time does not conform to the format: yyyy-MM-dd");
         }
         if (areaId == null || StringUtils.isBlank(level)){
+            log.error("Start count capture every six hours, but param: areaId or level error");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
                     "Param: areaId or level error");
         }
+        log.error("Start count capture every six hours, param is: areaId = " + areaId + ", level = " + level);
         List<CaptureCountSixHour> list = captureCountService.captureCountSixHour(startData, endData, areaId, level);
         return ResponseResult.init(list);
 
