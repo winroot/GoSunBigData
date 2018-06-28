@@ -206,4 +206,22 @@ public class CaptureSearchController {
                 captureHistoryService.getCaptureHistory(captureOption);
         return ResponseResult.init(searchResultList);
     }
+
+    /**
+     * 查询设备最后一次抓拍时间
+     *
+     * @param deviceId 设备ID
+     * @return 最后抓拍时间
+     */
+    @ApiOperation(value = "查询设备最后一次抓拍时间", response = String.class)
+    @ApiImplicitParam(name = "deviceId", value = "设备ID", paramType = "query")
+    @RequestMapping(value = BigDataPath.DYNREPO_CAPTURE_LASTTIME, method = RequestMethod.GET)
+    public ResponseResult<String> getLastCaptureTime(@RequestParam("deviceId") String deviceId) {
+        if (StringUtils.isBlank(deviceId)) {
+            log.error("Start query last capture time, deviceId option is null");
+        }
+        log.info("Start query last capture time, deviceId option is:" + deviceId);
+        String time = captureSearchService.getLastCaptureTime(deviceId);
+        return ResponseResult.init(time);
+    }
 }

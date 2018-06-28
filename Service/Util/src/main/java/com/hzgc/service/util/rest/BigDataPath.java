@@ -51,6 +51,7 @@ public class BigDataPath {
     public static final String DYNREPO_GETPICTURE = "/origin_picture";
     public static final String DYNREPO_HISTORY = "/capture_history";
     public static final String DYNREPO_SEARCHHISTORY="/search_history";
+    public static final String DYNREPO_CAPTURE_LASTTIME="/capture_last_time";
 
     /**
      * Face模块请求路径

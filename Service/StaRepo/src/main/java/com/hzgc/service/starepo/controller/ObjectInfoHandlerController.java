@@ -63,7 +63,11 @@ public class ObjectInfoHandlerController {
         }
         log.info("Start add object info, param is:" + JSONUtil.toJson(param));
         Integer succeed = objectInfoHandlerService.addObjectInfo(param);
-        return ResponseResult.init(succeed);
+        if (succeed == 0) {
+            return ResponseResult.init(succeed);
+        } else {
+            return ResponseResult.error(succeed);
+        }
     }
 
     /**
@@ -82,7 +86,11 @@ public class ObjectInfoHandlerController {
         }
         log.info("Start delete object info, rowkey list is:" + rowkeyList);
         Integer succeed = objectInfoHandlerService.deleteObjectInfo(rowkeyList);
-        return ResponseResult.init(succeed);
+        if (succeed == 0) {
+            return ResponseResult.init(succeed);
+        } else {
+            return ResponseResult.error(succeed);
+        }
     }
 
     /**
@@ -110,7 +118,11 @@ public class ObjectInfoHandlerController {
         }
         log.info("Start update object info, param is:" + JSONUtil.toJson(param));
         Integer succeed = objectInfoHandlerService.updateObjectInfo(param);
-        return ResponseResult.init(succeed);
+        if (succeed == 0) {
+            return ResponseResult.init(succeed);
+        } else {
+            return ResponseResult.error(succeed);
+        }
     }
 
     /**
@@ -133,8 +145,12 @@ public class ObjectInfoHandlerController {
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT);
         }
         log.info("Start update object status, param is : objectId = " + objectId + ", status = " + status);
-        int result = objectInfoHandlerService.updateObjectInfo_status(objectId, status);
-        return ResponseResult.init(result);
+        int succeed = objectInfoHandlerService.updateObjectInfo_status(objectId, status);
+        if (succeed == 0) {
+            return ResponseResult.init(succeed);
+        } else {
+            return ResponseResult.error(succeed);
+        }
     }
 
     /**
