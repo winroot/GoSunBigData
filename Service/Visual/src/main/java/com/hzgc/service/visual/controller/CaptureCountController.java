@@ -10,6 +10,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +22,7 @@ import java.util.List;
 
 @RestController
 @Api(tags = "大数据可视化服务")
+@Slf4j
 public class CaptureCountController {
 
     @Autowired
@@ -29,13 +32,25 @@ public class CaptureCountController {
      * 抓拍统计与今日抓拍统计
      * 查询es的动态库，返回总抓拍数量和今日抓拍数量
      *
-     * @return 今日抓拍数和总抓拍数
+     * @param areaId 区域ID
+     * @param level 区域等级
+     * @return 总抓拍数量和今日抓拍数量
      */
     @ApiOperation(value = "抓拍统计与今日抓拍统计", response = TotalAndTodayCount.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "areaId", value = "区域ID", paramType = "query"),
+            @ApiImplicitParam(name = "level", value = "区域等级", paramType = "query")
+    })
     @RequestMapping(value = BigDataPath.CAPTURECOUNT_DYNREPO, method = RequestMethod.GET)
-    public ResponseResult<CaptureCountBean> dynaicNumberService() {
-
-        CaptureCountBean count = captureCountService.dynamicNumberService(new ArrayList<>());
+    public ResponseResult<CaptureCountBean> dynaicNumberService(Long areaId, String level) {
+        if (areaId == null || StringUtils.isBlank(level)){
+            log.error("Start count capture total and today capture count, but param error");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
+                    "Param: areaId or level error");
+        }
+        log.info("Start count capture total and today capture count, param is: areaId = "
+                + areaId + ", level = " + level);
+        CaptureCountBean count = captureCountService.dynamicNumberService(areaId, level);
         return ResponseResult.init(count);
     }
 
@@ -68,14 +83,14 @@ public class CaptureCountController {
      *
      * @param startData 开始日期
      * @param endData 结束日期
-     * @return
+     * @return List<CaptureCountSixHour> 每六小时抓拍统计
      */
     @ApiOperation(value = "多设备抓拍统计（每六小时）", response = TimeSlotNumber.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startData", value = "开始日期", paramType = "query"),
             @ApiImplicitParam(name = "endData", value = "结束日期", paramType = "query"),
             @ApiImplicitParam(name = "areaId", value = "区域ID", paramType = "query"),
-            @ApiImplicitParam(name = "level", value = "level", paramType = "query")
+            @ApiImplicitParam(name = "level", value = "区域等级", paramType = "query")
     })
     @RequestMapping(value = BigDataPath.CAPTURECOUNT_SIX_HOUR, method = RequestMethod.GET)
     public ResponseResult<List<CaptureCountSixHour>> captureCountSixHour(String startData, String endData, Long areaId, String level) {
@@ -83,6 +98,10 @@ public class CaptureCountController {
         if(!DateUtils.checkForm(startData) || !DateUtils.checkForm(endData)){
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
                     "Time does not conform to the format: yyyy-MM-dd");
+        }
+        if (areaId == null || StringUtils.isBlank(level)){
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,
+                    "Param: areaId or level error");
         }
         List<CaptureCountSixHour> list = captureCountService.captureCountSixHour(startData, endData, areaId, level);
         return ResponseResult.init(list);
