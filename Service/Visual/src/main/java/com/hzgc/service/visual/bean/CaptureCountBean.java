@@ -24,13 +24,4 @@ public class CaptureCountBean {
     public void setTotal(Integer total) {
         this.total = total;
     }
-
-    public void save(CaptureCountBean captureCountBean) {
-        if (this.today < captureCountBean.getToday()) {
-            setToday(captureCountBean.getToday());
-        }
-        if (this.total < captureCountBean.getTotal()) {
-            setTotal(captureCountBean.getTotal());
-        }
-    }
 }

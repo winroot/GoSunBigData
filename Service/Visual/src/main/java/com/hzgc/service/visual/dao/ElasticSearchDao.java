@@ -56,6 +56,24 @@ public class ElasticSearchDao {
         return searchRequestBuilder.execute().actionGet();
     }
 
+    public SearchResponse CaptureCountSixHour(List<String> ipcIds, String startTime, String endTime) {
+        BoolQueryBuilder ipcIdBQ = QueryBuilders.boolQuery();
+        if (ipcIds != null && ipcIds.size() > 0) {
+            for (String ipcId : ipcIds) {
+                ipcIdBQ.should(QueryBuilders.matchQuery(DynamicTable.IPCID, ipcId).analyzer("standard"));
+            }
+        }
+        SearchRequestBuilder searchRequestBuilder = esClient.prepareSearch(DynamicTable.DYNAMIC_INDEX)
+                .setTypes(DynamicTable.PERSON_INDEX_TYPE)
+                .setQuery(QueryBuilders.boolQuery()
+                        .must(ipcIdBQ)
+                        .must(QueryBuilders.rangeQuery(DynamicTable.TIMESTAMP).gte(startTime).lte(endTime)))
+                .setSize(0);
+        TermsAggregationBuilder teamAgg = AggregationBuilders.terms("ipc_count").field(DynamicTable.IPCID_KEYWORD);
+        searchRequestBuilder.addAggregation(teamAgg);
+        return searchRequestBuilder.execute().actionGet();
+    }
+
     public SearchResponse getCaptureCount(String startTime, String endTime, List<String> ipcId) {
         BoolQueryBuilder totalBQ = QueryBuilders.boolQuery();
         // 开始时间和结束时间存在的时候的处理

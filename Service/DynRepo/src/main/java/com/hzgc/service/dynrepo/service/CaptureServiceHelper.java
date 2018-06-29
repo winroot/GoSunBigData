@@ -3,6 +3,7 @@ package com.hzgc.service.dynrepo.service;
 import com.hzgc.collect.zk.register.RegisterWatcher;
 import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
+import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.jni.PictureData;
 import com.hzgc.service.dynrepo.bean.*;
 import com.hzgc.service.util.api.bean.DeviceDTO;
@@ -288,6 +289,24 @@ public class CaptureServiceHelper {
         }
         option.setDeviceIpcs(ipcList);
         option.setIpcMappingDevice(ipcListMapping);
+    }
+
+    /**
+     * 设备id转ipcId
+     *
+     * @param deviceId 设备id
+     * @return ipcId
+     */
+    public String deviceIdToIpcId(String deviceId) {
+        List<Long> devices = new ArrayList<>();
+        devices.add(Long.valueOf(deviceId));
+        Map<String, DeviceDTO> result = queryService.getDeviceInfoByBatchId(devices);
+        if (!result.values().isEmpty() && result.values().size() > 0) {
+            return result.get(deviceId).getSerial();
+        } else {
+            log.error("Failed to find device id");
+        }
+        return null;
     }
 
     /**
