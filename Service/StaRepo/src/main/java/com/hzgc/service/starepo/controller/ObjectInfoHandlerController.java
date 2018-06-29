@@ -58,7 +58,7 @@ public class ObjectInfoHandlerController {
             log.error("Start add object info ,but object type key is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: object type key is null");
         }
-        if (param.getPictureDatas() == null || param.getPictureDatas().getImageData() != null) {
+        if (param.getPictureDatas() == null || param.getPictureDatas().getImageData() == null) {
             log.error("Start add object info, but picture data is error");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: picture data is error");
         }
