@@ -103,5 +103,4 @@ public class BigDataPath {
     public static final String DISPATCH_SEARCH_BYID = "/rule_info";
     public static final String DISPATCH_CUTPAGE_RULE = "/get_rule";
 
-
 }
