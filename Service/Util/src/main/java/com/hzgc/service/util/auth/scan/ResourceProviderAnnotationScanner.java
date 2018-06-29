@@ -7,6 +7,7 @@ import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -25,6 +26,9 @@ public class ResourceProviderAnnotationScanner {
     private static Logger logger = LoggerFactory.getLogger(ResourceProviderAnnotationScanner.class);
 
     private List<String> basePackages;
+
+    @Value("${spring.application.name}")
+    private String providerName;
 
     private Set<ResourceProviderDefination> resourceProviderDefinationSet = new LinkedHashSet<>();
 
@@ -56,6 +60,7 @@ public class ResourceProviderAnnotationScanner {
     private ResourceProviderDefination parseResourceProvider(Class<?> resource) {
         try {
             ResourceProviderDefination resourceProviderDefination = new ResourceProviderDefination();
+            resourceProviderDefination.setName(providerName);
             Map<String, Object> providerInfo = AnnotationUtils.getAnnotationAttributes(resource.getAnnotation(ResourceProvider.class));
             if (null == providerInfo || providerInfo.isEmpty()) {
                 throw new IllegalArgumentException("资源提供者参数配置错误");
