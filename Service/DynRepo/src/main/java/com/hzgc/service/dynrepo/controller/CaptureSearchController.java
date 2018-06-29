@@ -186,7 +186,9 @@ public class CaptureSearchController {
     @ApiImplicitParam(name = "searchOption", value = "抓拍历史查询参数", paramType = "body")
     @RequestMapping(value = BigDataPath.DYNREPO_HISTORY, method = RequestMethod.POST)
     @SuppressWarnings("unused")
-    @PreAuthorize("hasAuthority('" + BigDataPermission.HISTORY_FACE_SEARCH + "')")
+    @PreAuthorize("hasAuthority('" + BigDataPermission.HISTORY_FACE_SEARCH + "') OR " +
+            "hasAuthority('" + BigDataPermission.FACE_CTRL + "') OR " +
+            "hasAuthority('" + BigDataPermission.FEATURE_SEARCH + "')")
     public ResponseResult<List<SingleCaptureResult>> getCaptureHistory(
             @RequestBody @ApiParam(value = "以图搜图入参") CaptureOption captureOption) {
         if (captureOption == null) {
