@@ -361,17 +361,6 @@ public class ParseByOption {
             isChanged = true;
         }
 
-        // 关于是否是重点人员的查询
-        int followLevel = param.getFollowLevel();
-        if (followLevel == 1 || followLevel == 2) {
-            if (isChanged) {
-                whereQuery.append(" and ");
-            }
-            whereQuery.append(ObjectInfoTable.IMPORTANT).append(" = ?");
-            setArgsList.add(followLevel);
-            isChanged = true;
-        }
-
         //查询人员状态值
         int status = param.getStatus();
         if (status == 0 || status == 1){
@@ -380,6 +369,19 @@ public class ParseByOption {
             }
             whereQuery.append(ObjectInfoTable.STATUS).append(" = ?");
             setArgsList.add(status);
+            isChanged = true;
+        }
+
+        // 关于是否是重点人员的查询
+        int followLevel = param.getFollowLevel();
+        if (followLevel == 1 || followLevel == 2) {
+            if (isChanged) {
+                whereQuery.append(" and ");
+            }
+            whereQuery.append(ObjectInfoTable.IMPORTANT).append(" = ?");
+            setArgsList.add(followLevel);
+        }else {
+            whereQuery.append(" order by ").append(ObjectInfoTable.IMPORTANT).append(" desc");
         }
         return whereQuery;
     }
