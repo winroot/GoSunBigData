@@ -4,7 +4,6 @@ import com.hzgc.service.util.auth.annotation.AuthorizeCode;
 
 public class BigDataPermission {
 
-
     /**
      * DynRepo模块权限颗粒
      */
@@ -27,7 +26,6 @@ public class BigDataPermission {
     public static final String RULE_VIEW = "dispatch/menu/rule_view";
     @AuthorizeCode(id = 2202, name = "操作", menu = "22", description = "识别规则操作")
     public static final String RULE_OPERATION = "dispatch/menu/rule_operation";
-
 
 
 }
