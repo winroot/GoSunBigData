@@ -25,6 +25,19 @@ public class DateUtils {
         return time + " 00:00:00";
     }
 
+    /**
+     * 将时间整理成当天最后一刻
+     *
+     * @param time 时间
+     * @return 整点时间
+     */
+    public static String checkEndTime(String time) {
+        if (time.indexOf(COLON) > 0) {
+            return time.substring(0, time.indexOf(" ")) + " 23:59:59";
+        }
+        return time + " 23:59:59";
+    }
+
 
     /**
      * 获得指定日期的后几天
