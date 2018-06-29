@@ -14,19 +14,10 @@ public class ResourceProviderAutoSyncRunner implements ApplicationRunner {
 
     private ResourceProviderAnnotationScanner resourceProviderAnnotationScanner;
 
-    @Value("${spring.application.name}")
-    private String providerName;
-
     @Override
     public void run(ApplicationArguments applicationArguments) throws Exception {
         Set<ResourceProviderDefination> resourceProviderDefinations = resourceProviderAnnotationScanner.scan();
         if (resourceProviderDefinations != null && !resourceProviderDefinations.isEmpty()) {
-            resourceProviderDefinations = resourceProviderDefinations.stream().map(s -> {
-                {
-                    s.setName(providerName);
-                    return s;
-                }
-            }).collect(Collectors.toSet());
             resourceProviderSyncService.sync(resourceProviderDefinations);
         }
     }

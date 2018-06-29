@@ -17,4 +17,5 @@ public class DefaultAuthorizeDefination {
     private String menu;
     private String permission;
     private String description;
+    private String applicationName;
 }
