@@ -57,31 +57,51 @@ public class ObjectInfoHandlerService {
     }
 
     /**
+     * 判断身份证格式是否正确
+     *
+     * @param objectInfo
+     * @return true:正确,false:不正确
+     */
+    public boolean authentication_idCode(ObjectInfoParam objectInfo) {
+        if (!StringUtils.isBlank(objectInfo.getIdcard())) {
+            return idCodeAuthentication(objectInfo.getIdcard());
+        }
+        return true;
+    }
+
+    /**
+     * 身份证唯一性判断
+     *
+     * @param objectInfo
+     * @return true:不存在,false:存在
+     */
+    public boolean isExists_idCode(ObjectInfoParam objectInfo) {
+        if (!StringUtils.isBlank(objectInfo.getIdcard())) {
+            List<String> idcards = phoenixDao.getAllObjectIdcard();
+            return !idcards.contains(objectInfo.getIdcard());
+        }
+        return true;
+    }
+
+    /**
+     * 判断ObjectTypeKey是否存在
+     *
+     * @param objectInfo
+     * @return true:存在,false:不存在
+     */
+    public boolean isExists_objectTypeKey(ObjectInfoParam objectInfo) {
+        List<String> objectTypeKeys = phoenixDao.getAllObjectTypeKeys();
+        return objectTypeKeys.contains(objectInfo.getObjectTypeKey());
+    }
+
+
+    /**
      * Add objectInfo
      *
      * @param objectInfo 添加对象信息
      * @return 返回值为0，表示插入成功，返回值为1，表示插入失败
      */
     public Integer addObjectInfo(ObjectInfoParam objectInfo) {
-        if (!StringUtils.isBlank(objectInfo.getIdcard())) {
-            // 判断身份证格式是否正确
-            if (!idCodeAuthentication(objectInfo.getIdcard())) {
-                log.error("Start add object info, but the idcard format is error");
-                return 1;
-            }
-            // 身份证唯一性判断
-            List<String> idcards = phoenixDao.getAllObjectIdcard();
-            if (idcards.contains(objectInfo.getIdcard())){
-                log.error("Start add object info, but the idcard already exists");
-                return 1;
-            }
-        }
-        // 判断ObjectTypeKey是否存在
-        List<String> objectTypeKeys = phoenixDao.getAllObjectTypeKeys();
-        if (!objectTypeKeys.contains(objectInfo.getObjectTypeKey())){
-        log.error("Start add object info, but the object type key doesn't exists");
-            return 1;
-        }
         objectInfo.setId(UuidUtil.getUuid());
         log.info("Start add object info, object id is:" + objectInfo.getId());
         //数据库操作
@@ -122,14 +142,14 @@ public class ObjectInfoHandlerService {
             }
             // 身份证唯一性判断
             List<String> idcards = phoenixDao.getAllObjectIdcard();
-            if (idcards.contains(param.getIdcard())){
+            if (idcards.contains(param.getIdcard())) {
                 log.error("Start update object info, but the idcard already exists");
                 return 1;
             }
         }
         // 判断ObjectTypeKey是否存在
         List<String> objectTypeKeys = phoenixDao.getAllObjectTypeKeys();
-        if (!objectTypeKeys.contains(param.getObjectTypeKey())){
+        if (!objectTypeKeys.contains(param.getObjectTypeKey())) {
             log.error("Start update object info, but the object type key doesn't exists");
             return 1;
         }
@@ -141,12 +161,12 @@ public class ObjectInfoHandlerService {
         // 根据入参状态值与数据库中对象状态值比较，判断是否更新statustime（状态更新时间）字段
         if (param.getStatus() != status) {
             Integer ii = phoenixDao.updateObjectInfo_status(objectId, param.getStatus());
-            if (i == 0 && ii == 0){
+            if (i == 0 && ii == 0) {
                 sendKafka(param, UPDATE);
                 return 0;
             }
-        }else {
-            if (i == 0){
+        } else {
+            if (i == 0) {
                 sendKafka(param, UPDATE);
                 return 0;
             }
@@ -154,7 +174,7 @@ public class ObjectInfoHandlerService {
         return 1;
     }
 
-    private void sendKafka(ObjectInfoParam param, String option){
+    private void sendKafka(ObjectInfoParam param, String option) {
         StaticRepoObject object = new StaticRepoObject();
         if (param.getPictureDatas() != null && param.getPictureDatas().getFeature() != null) {
             object.setFeature(param.getPictureDatas().getFeature().getFeature());
@@ -191,7 +211,7 @@ public class ObjectInfoHandlerService {
     public int updateObjectInfo_status(String objectId, int status) {
         // 查询更新对象当前状态值
         int info_status = phoenixDao.getObjectInfo_status(objectId);
-        if (info_status == status){
+        if (info_status == status) {
             log.error("Start update object status, but object status is the same as in the database, " +
                     "so doesn't need to be updated");
             return 1;

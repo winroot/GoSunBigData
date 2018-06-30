@@ -113,15 +113,19 @@ public class ObjectTypeController {
     @RequestMapping(value = BigDataPath.TYPE_SEARCH, method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_VIEW + "')")
     public ResponseResult<List<ObjectTypeParam>> searchObjectType(Integer start, Integer limit) {
-        if (start == null || start == 0) {
-            start = 1;
+        log.info("Start search object type, receive param is : start = " + start + "; limit = " + limit);
+        if (start == null) {
+            start = 0;
         }
         if (limit == null || limit == 0) {
             limit = 20;
+        } else {
+            limit = start + limit;
         }
-        log.info("Start search object type, param is : start = " + start + "; limit = " + limit + ".");
+        log.info("Start search object type, param is : start = " + start + "; end = " + limit);
         List<ObjectTypeParam> objectTypeParamList = objectTypeService.searchObjectType(start, limit);
-        return ResponseResult.init(objectTypeParamList);
+        int count = objectTypeService.countObjectType();
+        return ResponseResult.init(objectTypeParamList, count);
     }
 
     /**

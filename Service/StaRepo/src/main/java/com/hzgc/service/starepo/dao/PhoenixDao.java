@@ -183,22 +183,22 @@ public class PhoenixDao implements Serializable {
      * 查询objectType
      *
      * @param start 查询起始位置
-     * @param limit 查询数量
+     * @param end 查询结束位置
      * @return List<ObjectTypeParam>
      */
-    public List<ObjectTypeParam> searchObjectType(int start, int limit) {
+    public List<ObjectTypeParam> searchObjectType(int start, int end) {
         String sql = parseByOption.searchObjectType();
         log.info("Start search object type, SQL is : " + sql);
         List<ObjectTypeParam> result = null;
         SqlRowSet sqlRowSet;
         try {
-            if (start == 1) {
-                sqlRowSet = jdbcTemplate.queryForRowSet(sql, "0", limit);
+            if (start == 0) {
+                sqlRowSet = jdbcTemplate.queryForRowSet(sql, "0", end);
                 result = getResult(sqlRowSet);
             } else {
-                sqlRowSet = jdbcTemplate.queryForRowSet(sql, "0", start - 1);
+                sqlRowSet = jdbcTemplate.queryForRowSet(sql, "0", start);
                 String lastRowkey = getLastRowkey(sqlRowSet);
-                sqlRowSet = jdbcTemplate.queryForRowSet(sql, lastRowkey, limit);
+                sqlRowSet = jdbcTemplate.queryForRowSet(sql, lastRowkey, end);
                 result = getResult(sqlRowSet);
             }
         } catch (SQLException e) {
@@ -233,6 +233,21 @@ public class PhoenixDao implements Serializable {
             lastRowKey = sqlRowSet.getString(ObjectTypeTable.ROWKEY);
         }
         return lastRowKey;
+    }
+
+    /**
+     * 统计对象类型数量
+     *
+     * @return 对象类型数量
+     */
+    public int countObjectType() {
+        String sql = parseByOption.countObjectType();
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql);
+        int count = 0;
+        while (sqlRowSet.next()) {
+            count = sqlRowSet.getInt("num");
+        }
+        return count;
     }
 
     public List<String> getAllObjectIdcard() {
@@ -372,7 +387,7 @@ public class PhoenixDao implements Serializable {
         return 0;
     }
 
-    public int getObjectInfo_status(String objectId){
+    public int getObjectInfo_status(String objectId) {
         String sql = parseByOption.getObjectInfo_status();
         log.info("Search object status, SQL is : " + sql);
         int status = 0;
@@ -409,7 +424,7 @@ public class PhoenixDao implements Serializable {
      * @param objectId 对象ID
      * @return ObjectInfo
      */
-    public ObjectInfo getObjectInfo(String objectId){
+    public ObjectInfo getObjectInfo(String objectId) {
         String sql = parseByOption.getObjectInfo();
         log.info("Start get object info, SQL is : " + sql);
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, objectId);
@@ -431,25 +446,25 @@ public class PhoenixDao implements Serializable {
             objectInfo.setStatus(sqlRowSet.getInt(ObjectInfoTable.STATUS));
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        if (createTime != null){
-        java.util.Date createTime_data = new java.util.Date(createTime.getTime());
-        String createTime_str = sdf.format(createTime_data);
-        objectInfo.setCreateTime(createTime_str);
+        if (createTime != null) {
+            java.util.Date createTime_data = new java.util.Date(createTime.getTime());
+            String createTime_str = sdf.format(createTime_data);
+            objectInfo.setCreateTime(createTime_str);
         }
-        if (updateTime != null){
-        java.util.Date updateTime_data = new java.util.Date(updateTime.getTime());
-        String updateTime_str = sdf.format(updateTime_data);
-        objectInfo.setUpdateTime(updateTime_str);
+        if (updateTime != null) {
+            java.util.Date updateTime_data = new java.util.Date(updateTime.getTime());
+            String updateTime_str = sdf.format(updateTime_data);
+            objectInfo.setUpdateTime(updateTime_str);
         }
-        if (!StringUtils.isBlank(objectTypeKey)){
-        String objectTypeName = getObjectTypeNameById(objectTypeKey);
-        objectInfo.setObjectTypeName(objectTypeName);
+        if (!StringUtils.isBlank(objectTypeKey)) {
+            String objectTypeName = getObjectTypeNameById(objectTypeKey);
+            objectInfo.setObjectTypeName(objectTypeName);
         }
         log.info("get object info result : " + JSONUtil.toJson(objectInfo));
         return objectInfo;
     }
 
-    private String getObjectTypeNameById(String objectTypeId){
+    private String getObjectTypeNameById(String objectTypeId) {
         String sql = parseByOption.getObjectTypeNameById();
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, objectTypeId);
         String objectTypeName = "";

@@ -64,6 +64,10 @@ public class ParseByOption {
                 + " where " + ObjectTypeTable.ROWKEY + " > ?" + " LIMIT ?";
     }
 
+    public String countObjectType() {
+        return "select count(*) as num from " + ObjectTypeTable.TABLE_NAME;
+    }
+
     public SqlAndArgs getSqlFromGetObjectInfoParm(GetObjectInfoParam param) {
         StringBuilder sql = new StringBuilder();
         List<Object> setValues = new ArrayList<>();

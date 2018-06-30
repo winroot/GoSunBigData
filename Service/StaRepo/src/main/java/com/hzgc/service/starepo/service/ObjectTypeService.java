@@ -72,12 +72,21 @@ public class ObjectTypeService {
     /**
      * 查询objectType
      *
-     * @param pageIndex 页码
-     * @param pageSize  每页行数
+     * @param start 查询起始位置
+     * @param end  查询结束位置
      * @return List<ObjectTypeParam>
      */
-    public List<ObjectTypeParam> searchObjectType(int pageIndex, int pageSize) {
-        return phoenixDao.searchObjectType(pageIndex, pageSize);
+    public List<ObjectTypeParam> searchObjectType(int start, int end) {
+        return phoenixDao.searchObjectType(start, end);
+    }
+
+    /**
+     * 统计对象类型数量
+     *
+     * @return 对象类型数量
+     */
+    public int countObjectType() {
+        return phoenixDao.countObjectType();
     }
 
     /**
