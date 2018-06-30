@@ -52,22 +52,37 @@ public class ObjectInfoHandlerController {
     public ResponseResult<Integer> addObjectInfo(@RequestBody @ApiParam(value = "添加对象") ObjectInfoParam param) {
         if (param == null) {
             log.error("Start add object info, but param is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "添加对象信息为空，请检查！");
         }
         if (StringUtils.isBlank(param.getObjectTypeKey())) {
             log.error("Start add object info ,but object type key is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: object type key is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "添加对象类型为空，请检查！");
+        }
+        boolean isExists_objectTypeKey = objectInfoHandlerService.isExists_objectTypeKey(param);
+        if (!isExists_objectTypeKey){
+            log.error("Start add object info, but the object type key doesn't exists");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "添加对象类型不存在，请检查！");
         }
         if (param.getPictureDatas() == null || param.getPictureDatas().getImageData() == null) {
             log.error("Start add object info, but picture data is error");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: picture data is error");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "添加对象照片数据为空，请检查！");
+        }
+        boolean authentication_idCode = objectInfoHandlerService.authentication_idCode(param);
+        if (!authentication_idCode){
+            log.error("Start add object info, but the idcard format is error");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证格式错误，请检查！");
+        }
+        boolean isExists_idCode = objectInfoHandlerService.isExists_idCode(param);
+        if (!isExists_idCode){
+            log.error("Start add object info, but the idcard already exists");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证已存在，请检查！");
         }
         log.info("Start add object info, param is:" + JSONUtil.toJson(param));
         Integer succeed = objectInfoHandlerService.addObjectInfo(param);
         if (succeed == 0) {
             return ResponseResult.init(succeed);
         } else {
-            return ResponseResult.error(succeed, "add object info failed");
+            return ResponseResult.error(succeed, "添加对象失败");
         }
     }
 
@@ -75,7 +90,7 @@ public class ObjectInfoHandlerController {
      * 删除对象
      *
      * @param rowkeyList 对象ID列表
-     * @return 成功状态【0：插入成功；1：插入失败】
+     * @return 成功状态【0：删除成功；1：删除失败】
      */
     @ApiOperation(value = "删除对象", response = ResponseResult.class)
     @RequestMapping(value = BigDataPath.OBJECTINFO_DELETE, method = RequestMethod.DELETE)
@@ -83,14 +98,14 @@ public class ObjectInfoHandlerController {
     public ResponseResult<Integer> deleteObjectInfo(@RequestBody @ApiParam(value = "删除列表") List<String> rowkeyList) {
         if (rowkeyList == null || rowkeyList.size() == 0) {
             log.error("Start delete object info, but rowkey list is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: rowkey list is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "删除列表为空，请检查！");
         }
         log.info("Start delete object info, rowkey list is:" + rowkeyList);
         Integer succeed = objectInfoHandlerService.deleteObjectInfo(rowkeyList);
         if (succeed == 0) {
             return ResponseResult.init(succeed);
         } else {
-            return ResponseResult.error(succeed, "delete object info failed");
+            return ResponseResult.error(succeed, "删除对象失败");
         }
     }
 
@@ -106,34 +121,34 @@ public class ObjectInfoHandlerController {
     public ResponseResult<Integer> updateObjectInfo(@RequestBody @ApiParam(value = "修改对象") ObjectInfoParam param) {
         if (param == null) {
             log.error("Start update object info, but param is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "修改对象为空，请检查！");
         }
         if (StringUtils.isBlank(param.getId())) {
             log.error("Start update object info, but object id is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: object id is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "修改对象ID为空，请检查！");
         }
 
         if (StringUtils.isBlank(param.getObjectTypeKey())) {
             log.error("Start update object info, but object type key is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: object type key is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "修改对象类型为空，请检查！");
         }
         log.info("Start update object info, param is:" + JSONUtil.toJson(param));
         Integer succeed = objectInfoHandlerService.updateObjectInfo(param);
         if (succeed == 0) {
             return ResponseResult.init(succeed);
         } else {
-            return ResponseResult.error(succeed, "update object info failed");
+            return ResponseResult.error(succeed, "修改对象失败");
         }
     }
 
     /**
-     * 更新人员信息状态值
+     * 更新对象状态值
      *
      * @param objectId 对象ID
      * @param status   状态值
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
-    @ApiOperation(value = "更新人员信息状态值", response = ResponseResult.class)
+    @ApiOperation(value = "更新对象状态值", response = ResponseResult.class)
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "objectId", value = "对象ID", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "status", value = "状态码", dataType = "Integer", paramType = "query")
@@ -143,14 +158,14 @@ public class ObjectInfoHandlerController {
     public ResponseResult<Integer> updateObjectInfo_status(String objectId, int status) {
         if (StringUtils.isBlank(objectId)) {
             log.error("Start update object status, but object id is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: object id is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "修改对象ID为空，请检查！");
         }
         log.info("Start update object status, param is : objectId = " + objectId + ", status = " + status);
         int succeed = objectInfoHandlerService.updateObjectInfo_status(objectId, status);
         if (succeed == 0) {
             return ResponseResult.init(succeed);
         } else {
-            return ResponseResult.error(succeed, "update object status failed");
+            return ResponseResult.error(succeed, "更新对象状态值失败");
         }
     }
 
@@ -167,7 +182,7 @@ public class ObjectInfoHandlerController {
     public ResponseResult<ObjectInfo> getObjectInfo(String objectId) {
         if (StringUtils.isBlank(objectId)) {
             log.error("Start get object info, but object id is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: object id is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "查询对象ID为空，请检查！");
         }
         log.info("Start get object info, param is : " + objectId);
         ObjectInfo objectInfo = objectInfoHandlerService.getObjectInfo(objectId);
@@ -186,7 +201,7 @@ public class ObjectInfoHandlerController {
     public ResponseResult<ObjectSearchResult> searchObjectInfo(@RequestBody @ApiParam(value = "查询条件") GetObjectInfoParam param) {
         if (param == null) {
             log.error("Start get object info, but param is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "查询对象参数为空，请检查！");
         }
         log.info("Start get object info, param is:" + JSONUtil.toJson(param));
         ObjectSearchResult result = objectInfoHandlerService.searchObjectInfo(param);
@@ -224,7 +239,7 @@ public class ObjectInfoHandlerController {
     public ResponseResult<PictureData> getFeature(String id) {
         if (!IsEmpty.strIsRight(id)) {
             log.error("Start get object picture data, but object id is null");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "Param: object id is null");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "查询对象ID为空，请检查！");
         }
         log.info("Start get object picture data, param is : " + id);
         PictureData result = objectInfoHandlerService.getFeature(id);
