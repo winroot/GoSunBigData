@@ -4,6 +4,7 @@ import com.hzgc.service.util.auth.annotation.AuthorizeCode;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.scanners.FieldAnnotationsScanner;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -22,6 +23,9 @@ import java.util.Set;
 @Slf4j
 public class AuthorizeCodeAnnotationScanner {
     private List<String> basePackages;
+
+    @Value("${spring.application.name}")
+    private String applicationName;
 
     private Set<DefaultAuthorizeDefination> authorizeDefinationSetCache = new LinkedHashSet<>();
 
@@ -59,7 +63,7 @@ public class AuthorizeCodeAnnotationScanner {
 
             DefaultAuthorizeDefination defaultAuthorizeDefination = new DefaultAuthorizeDefination();
             defaultAuthorizeDefination.setPermission((String) authField.get(null));
-
+            defaultAuthorizeDefination.setApplicationName(applicationName);
             Map<String, Object> authorizeInfo = AnnotationUtils.getAnnotationAttributes(authField.getAnnotation(AuthorizeCode.class));
             if (null == authorizeInfo || authorizeInfo.isEmpty()) {
                 throw new IllegalArgumentException("权限颗参数配置错误");
