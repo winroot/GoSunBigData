@@ -1,6 +1,6 @@
 package com.hzgc.service.dynrepo.config;
 
-import com.hzgc.collect.zk.register.RegisterWatcher;
+import com.hzgc.common.collect.facedis.RegisterWatcher;
 import com.hzgc.common.faceattribute.service.AttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

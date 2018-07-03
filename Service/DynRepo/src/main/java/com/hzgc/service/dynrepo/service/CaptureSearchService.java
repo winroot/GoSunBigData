@@ -1,7 +1,6 @@
 package com.hzgc.service.dynrepo.service;
 
 import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.jni.PictureData;
 import com.hzgc.service.dynrepo.bean.*;
 import com.hzgc.service.dynrepo.dao.ElasticSearchDao;
 import com.hzgc.service.dynrepo.dao.HBaseDao;

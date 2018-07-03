@@ -38,9 +38,9 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.hzgc.collect</groupId>
-            <artifactId>collect-zookeeper</artifactId>
-            <version>1.0</version>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-collect</artifactId>
+            <version>${bigdata-common.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
