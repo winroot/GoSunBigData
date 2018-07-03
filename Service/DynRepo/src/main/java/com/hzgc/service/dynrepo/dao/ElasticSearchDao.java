@@ -1,14 +1,13 @@
 package com.hzgc.service.dynrepo.dao;
 
-import com.hzgc.common.attribute.bean.Attribute;
-import com.hzgc.common.attribute.bean.AttributeValue;
+import com.hzgc.common.faceattribute.bean.Attribute;
+import com.hzgc.common.faceattribute.bean.AttributeValue;
 import com.hzgc.common.es.ElasticSearchHelper;
-import com.hzgc.common.table.dynrepo.DynamicTable;
+import com.hzgc.common.facedynrepo.DynamicTable;
 import com.hzgc.service.dynrepo.bean.*;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.cluster.node.DiscoveryNode;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;

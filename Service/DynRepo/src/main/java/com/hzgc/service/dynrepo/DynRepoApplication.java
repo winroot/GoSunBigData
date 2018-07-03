@@ -1,6 +1,5 @@
 package com.hzgc.service.dynrepo;
 
-import com.hzgc.common.attribute.service.AttributeService;
 import com.hzgc.service.util.auth.config.EnableAuthSynchronize;
 import com.hzgc.service.util.api.config.EnableDeviceQueryService;
 import org.springframework.boot.SpringApplication;

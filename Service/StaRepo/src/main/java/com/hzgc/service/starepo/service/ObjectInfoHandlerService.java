@@ -1,17 +1,15 @@
 package com.hzgc.service.starepo.service;
 
-import com.hzgc.common.table.seachres.SearchResultTable;
-import com.hzgc.common.table.starepo.ObjectInfoTable;
+import com.hzgc.common.facestarepo.table.table.ObjectInfoTable;
+import com.hzgc.common.facestarepo.table.table.SearchResultTable;
+import com.hzgc.common.jni.PictureData;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
-import com.hzgc.jni.PictureData;
-import com.hzgc.service.starepo.bean.StaticSortParam;
 import com.hzgc.service.starepo.bean.export.*;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.SearchRecordParam;
-import com.hzgc.service.starepo.bean.param.SubQueryParam;
 import com.hzgc.service.starepo.dao.HBaseDao;
 import com.hzgc.service.starepo.dao.PhoenixDao;
 import com.hzgc.service.starepo.util.DocHandlerUtil;
@@ -367,90 +365,6 @@ public class ObjectInfoHandlerService {
     }
 
     /**
-     * 根据传过来的搜索rowkey 返回搜索记录 （外） （李第亮）
-     *
-     * @param searchRecordParam 历史查询参数
-     * @return 返回一个ObjectSearchResult 对象，
-     * @author 李第亮
-     * 里面包含了本次查询ID，查询成功标识，
-     * 查询照片ID（无照片，此参数为空），结果数，人员信息列表
-     */
-    public ObjectSearchResult getRocordOfObjectInfo(SearchRecordParam searchRecordParam) {
-        log.info("searchRecordParam: " + searchRecordParam);
-        // 传过来的参数中为空，或者子查询为空，或者子查询大小为0，都返回查询错误。
-        if (searchRecordParam == null) {
-            log.info("SearchRecordParam 为空，请确认参数是否正确.");
-            return null;
-        }
-        // 总的searchId
-        List<SubQueryParam> subQueryParamList = searchRecordParam.getSubQueryParamList();
-        if (subQueryParamList == null || subQueryParamList.size() == 0) {
-            log.info("子查询列表为空，请确认参数是否正确.");
-            return null;
-        }
-
-        SubQueryParam subQueryParam = subQueryParamList.get(0);
-        if (subQueryParam == null) {
-            log.info("子查询对象SubQueryOpts 对象为空，请确认参数是否正确.");
-            return null;
-        }
-
-        // 子查询Id
-        String subQueryId = subQueryParam.getQueryId();
-        if (subQueryId == null) {
-            log.info("子查询Id 为空");
-            return null;
-        }
-        PersonSingleResult personSingleResult = phoenixDao.getRocordOfObjectInfo(subQueryId);
-        // 需要分组的pkeys
-        List<String> pkeys = subQueryParamList.get(0).getObjectTypekeyList();
-        // 排序参数
-        List<StaticSortParam> staticSortParams = searchRecordParam.getStaticSortParams();
-        ObjectSearchResult finnalObjectSearchResult = new ObjectSearchResult();
-        List<PersonSingleResult> personSingleResults = new ArrayList<>();
-        if (personSingleResult != null) {
-            List<PersonObject> personObjects = personSingleResult.getObjectInfoBeans();
-            List<PersonObjectGroupByPkey> personObjectGroupByPkeyList = new ArrayList<>();
-            if (personObjects != null && staticSortParams != null && staticSortParams.contains(StaticSortParam.PEKEY)) {
-                Map<String, List<PersonObject>> groupingByPkeys = personObjects.stream()
-                        .collect(Collectors.groupingBy(PersonObject::getObjectTypeKey));
-                for (Map.Entry<String, List<PersonObject>> entry : groupingByPkeys.entrySet()) {
-                    PersonObjectGroupByPkey personObjectGroupByPkey = new PersonObjectGroupByPkey();
-                    String pkey = entry.getKey();
-                    personObjectGroupByPkey.setObjectTypeKey(pkey);
-                    personObjectGroupByPkey.setObjectTypeName(entry.getValue().get(0).getObjectTypeName());
-                    List<PersonObject> personObjectList = entry.getValue();
-                    // 对结果进行排序
-                    objectInfoHandlerTool.sortPersonObject(personObjectList, staticSortParams);
-
-                    // 如果指定了需要返回的Pkey
-                    if (pkeys != null && pkeys.size() > 0 && pkeys.contains(pkey)) {
-                        personObjectGroupByPkey.setPersonObjectList(personObjectList);
-                        personObjectGroupByPkeyList.add(personObjectGroupByPkey);
-                        continue;
-                    }
-                    if (pkeys == null || pkeys.size() == 0) {
-                        personObjectGroupByPkey.setPersonObjectList(personObjectList);
-                        personObjectGroupByPkeyList.add(personObjectGroupByPkey);
-                    }
-                }
-                personSingleResult.setSingleObjKeyResults(personObjectGroupByPkeyList);
-                personSingleResult.setObjectInfoBeans(null);
-            } else if (personObjects != null && staticSortParams != null && !staticSortParams.contains(StaticSortParam.PEKEY)) {
-                personSingleResult.setSingleObjKeyResults(null);
-                objectInfoHandlerTool.sortPersonObject(personObjects, staticSortParams);
-                personSingleResult.setObjectInfoBeans(personObjects);
-            }
-        }
-        personSingleResults.add(personSingleResult);
-        finnalObjectSearchResult.setSingleSearchResults(personSingleResults);
-        int pageSize = searchRecordParam.getSize();
-        int start = searchRecordParam.getStart();
-        objectInfoHandlerTool.formatTheObjectSearchResult(finnalObjectSearchResult, start, pageSize);
-        return finnalObjectSearchResult;
-    }
-
-    /**
      * 根据传过来的rowkey查询并生成结果文件并保存
      *
      * @param opts 历史查询参数
@@ -496,44 +410,6 @@ public class ObjectInfoHandlerService {
         }
         log.info("create emphasis personnel word failed");
         return null;
-    }
-
-    /**
-     * 根据传过来的搜索rowkey 返回一个子查询
-     *
-     * @param opts 历史查询参数
-     * @return 返回一个PersonSingleResult 对象
-     * @author 李第亮
-     * 里面包含了本次查询ID，查询成功标识，
-     * 查询照片ID（无照片，此参数为空），结果数，人员信息列表
-     */
-    private PersonSingleResult getSearchResult(SearchRecordParam opts) {
-        log.info("searchRecordOpts: " + opts);
-        // 传过来的参数中为空，或者子查询为空，或者子查询大小为0，都返回查询错误。
-        if (opts == null) {
-            log.info("SearchRecordParam 为空，请确认参数是否正确.");
-            return null;
-        }
-        // 总的searchId
-        List<SubQueryParam> subQueryParamList = opts.getSubQueryParamList();
-        if (subQueryParamList == null || subQueryParamList.size() == 0) {
-            log.info("子查询列表为空，请确认参数是否正确.");
-            return null;
-        }
-
-        SubQueryParam subQueryParam = subQueryParamList.get(0);
-        if (subQueryParam == null) {
-            log.info("子查询对象SubQueryOpts 对象为空，请确认参数是否正确.");
-            return null;
-        }
-
-        // 子查询Id
-        String subQueryId = subQueryParam.getQueryId();
-        if (subQueryId == null) {
-            log.info("子查询Id 为空");
-            return null;
-        }
-        return phoenixDao.getRocordOfObjectInfo(subQueryId);
     }
 
     /**

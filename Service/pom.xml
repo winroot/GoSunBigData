@@ -88,37 +88,52 @@
             <dependency>
                 <groupId>com.hzgc.common</groupId>
                 <artifactId>common-jni</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${bigdata-common.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hzgc.common</groupId>
-                <artifactId>common-attribute</artifactId>
-                <version>${project.parent.version}</version>
+                <artifactId>common-faceattribute</artifactId>
+                <version>${bigdata-common.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hzgc.common</groupId>
                 <artifactId>common-util</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${bigdata-common.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hzgc.common</groupId>
-                <artifactId>common-clustering</artifactId>
-                <version>${project.parent.version}</version>
+                <artifactId>common-facedynrepo</artifactId>
+                <version>${bigdata-common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzgc.common</groupId>
+                <artifactId>common-facedispatch</artifactId>
+                <version>${bigdata-common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzgc.common</groupId>
+                <artifactId>common-facestarepo</artifactId>
+                <version>${bigdata-common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzgc.common</groupId>
+                <artifactId>common-faceclustering</artifactId>
+                <version>${bigdata-common.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hzgc.common</groupId>
                 <artifactId>common-hbase</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${bigdata-common.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hzgc.common</groupId>
                 <artifactId>common-table</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${bigdata-common.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hzgc.common</groupId>
                 <artifactId>common-es</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${bigdata-common.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hzgc.service</groupId>

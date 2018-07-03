@@ -4,12 +4,12 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import com.google.gson.Gson
-import com.hzgc.cluster.spark.dispatch.DeviceUtilImpl
 import com.hzgc.cluster.spark.message.OffLineAlarmMessage
-import com.hzgc.cluster.spark.rocmq.RocketMQProducer
-import com.hzgc.cluster.spark.starepo.StaticRepoUtil
 import com.hzgc.cluster.spark.util.PropertiesUtil
-import com.hzgc.common.table.dispatch.DispatchTable
+import com.hzgc.common.facedispatch.DeviceUtilImpl
+import com.hzgc.common.facedispatch.table.DispatchTable
+import com.hzgc.common.facestarepo.table.alarm.StaticRepoUtil
+import com.hzgc.common.rocketmq.RocketMQProducer
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.JavaConverters
@@ -29,13 +29,17 @@ object FaceOffLineAlarmJob {
     val grouId = properties.getProperty("rocketmq.group.id")
     val conf = new SparkConf().setAppName(appName)
     val sc = new SparkContext(conf)
+    val kafkaBootStrapBroadCast = sc.broadcast(properties.getProperty("kafka.metadata.broker.list"))
+    val jdbcUrlBroadCast = sc.broadcast(properties.getProperty("phoenix.jdbc.url"))
     val deviceUtilImpl = new DeviceUtilImpl()
     val offLineAlarmRule = deviceUtilImpl.getThreshold
     val separator = "ZHONGXIAN"
     if (offLineAlarmRule != null && !offLineAlarmRule.isEmpty) {
       println("Start offline alarm task data processing ...")
       val objTypeList = PropertiesUtil.getOffLineArarmObjType(offLineAlarmRule)
-      val returnResult = StaticRepoUtil.getInstance().searchByPkeysUpdateTime(objTypeList)
+      val returnResult = StaticRepoUtil
+        .getInstance(kafkaBootStrapBroadCast.value, kafkaBootStrapBroadCast.value)
+        .searchByPkeysUpdateTime(objTypeList)
       if (returnResult != null && !returnResult.isEmpty) {
         val totalData = sc.parallelize(JavaConverters.asScalaBufferConverter(returnResult).asScala)
         val splitResult = totalData.map(totailDataElem => (totailDataElem.split(separator)(0), totailDataElem.split(separator)(1), totailDataElem.split(separator)(2)))
@@ -59,7 +63,7 @@ object FaceOffLineAlarmJob {
           val rocketMQProducer = RocketMQProducer.getInstance(nameServer, mqTopic, grouId)
           val offLineAlarmMessage = new OffLineAlarmMessage()
           val gson = new Gson()
-          offLineAlarmMessage.setAlarmType(DispatchTable.OFFLINE.toString)
+          offLineAlarmMessage.setAlarmType(DispatchTable.OFFLINE)
           offLineAlarmMessage.setStaticID(filterResultElem._1)
           offLineAlarmMessage.setUpdateTime(filterResultElem._3)
           offLineAlarmMessage.setAlarmTime(dateStr)
@@ -67,7 +71,8 @@ object FaceOffLineAlarmJob {
           //离线告警信息推送的时候，平台id为对象类型字符串的前4个字节。
           //          val platID = filterResultElem._2.substring(0, 4)
           //由于平台那边取消了平台ID的概念,以后默认为0001
-          rocketMQProducer.send("0001", "alarm_" + DispatchTable.OFFLINE.toString, filterResultElem._1 + dateStr, alarmStr.getBytes(), null);
+          rocketMQProducer.
+            send("0001", "alarm_" + DispatchTable.OFFLINE, filterResultElem._1 + dateStr, alarmStr.getBytes(), null)
         })
       } else {
         println("No data was received from the static repository,the task is not running！")

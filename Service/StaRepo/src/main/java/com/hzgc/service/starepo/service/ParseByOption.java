@@ -1,10 +1,10 @@
 package com.hzgc.service.starepo.service;
 
-import com.hzgc.common.table.starepo.ObjectInfoTable;
-import com.hzgc.common.table.starepo.ObjectTypeTable;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.jni.FaceFunction;
-import com.hzgc.jni.PictureData;
+import com.hzgc.common.facestarepo.table.table.ObjectInfoTable;
+import com.hzgc.common.facestarepo.table.table.ObjectTypeTable;
+import com.hzgc.common.jni.FaceAttribute;
+import com.hzgc.common.jni.FaceFunction;
+import com.hzgc.common.jni.PictureData;
 import com.hzgc.service.starepo.bean.*;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;

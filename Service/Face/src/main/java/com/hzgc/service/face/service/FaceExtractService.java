@@ -1,10 +1,10 @@
 package com.hzgc.service.face.service;
 
+import com.hzgc.common.jni.FaceAttribute;
+import com.hzgc.common.jni.FaceFunction;
+import com.hzgc.common.jni.NativeFunction;
+import com.hzgc.common.jni.PictureData;
 import com.hzgc.common.util.uuid.UuidUtil;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.jni.FaceFunction;
-import com.hzgc.jni.NativeFunction;
-import com.hzgc.jni.PictureData;
 import com.hzgc.service.face.util.FtpDownloadUtils;
 import com.hzgc.service.util.response.ResponseResult;
 import lombok.extern.slf4j.Slf4j;

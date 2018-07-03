@@ -1,11 +1,10 @@
 package com.hzgc.service.starepo.dao;
 
+import com.hzgc.common.facestarepo.table.table.SearchResultTable;
 import com.hzgc.common.hbase.HBaseHelper;
-import com.hzgc.common.table.dynrepo.DynamicTable;
-import com.hzgc.common.table.seachres.SearchResultTable;
+import com.hzgc.common.jni.PictureData;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.object.ObjectUtil;
-import com.hzgc.jni.PictureData;
 import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import lombok.extern.slf4j.Slf4j;

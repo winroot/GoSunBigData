@@ -1,9 +1,10 @@
 package com.hzgc.cluster.spark.consumer;
 
 import com.hzgc.cluster.spark.util.PropertiesUtil;
+import com.hzgc.common.collect.bean.FaceObject;
 import com.hzgc.common.es.ElasticSearchHelper;
-import com.hzgc.common.table.dynrepo.DynamicTable;
-import com.hzgc.jni.FaceAttribute;
+import com.hzgc.common.facedynrepo.DynamicTable;
+import com.hzgc.common.jni.FaceAttribute;
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.update.UpdateResponse;

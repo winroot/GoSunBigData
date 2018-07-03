@@ -7,7 +7,7 @@ import java.util.{Calendar, Date, Properties, UUID}
 
 import com.hzgc.cluster.spark.consumer.PutDataToEs
 import com.hzgc.cluster.spark.util.{FtpDownloadUtils, PropertiesUtil}
-import com.hzgc.common.clustering.ClusteringAttribute
+import com.hzgc.common.faceclustering.ClusteringAttribute
 import edu.berkeley.cs.amplab.spark.indexedrdd.IndexedRDD
 import edu.berkeley.cs.amplab.spark.indexedrdd.IndexedRDD._
 import org.apache.log4j.Logger

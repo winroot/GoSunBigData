@@ -1,8 +1,8 @@
 package com.hzgc.service.clustering.dao;
 
-import com.hzgc.common.clustering.ClusteringAttribute;
+import com.hzgc.common.faceclustering.ClusteringAttribute;
 import com.hzgc.common.hbase.HBaseHelper;
-import com.hzgc.common.table.clustering.ClusteringTable;
+import com.hzgc.common.faceclustering.table.ClusteringTable;
 import com.hzgc.common.util.object.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.hbase.client.*;

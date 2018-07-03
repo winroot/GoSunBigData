@@ -1,9 +1,9 @@
 package com.hzgc.service.starepo.controller;
 
-import com.hzgc.common.table.seachres.SearchResultTable;
+import com.hzgc.common.facestarepo.table.table.SearchResultTable;
+import com.hzgc.common.jni.PictureData;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.jni.PictureData;
 import com.hzgc.service.starepo.bean.export.ObjectInfo;
 import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
@@ -243,23 +243,6 @@ public class ObjectInfoHandlerController {
         }
         log.info("Start get object picture data, param is : " + id);
         PictureData result = objectInfoHandlerService.getFeature(id);
-        return ResponseResult.init(result);
-    }
-
-    /**
-     * 获取更多对象
-     *
-     * @param param 查询条件封装
-     * @return ObjectSearchResult
-     */
-//    @ApiOperation(value = "获取更多对象", response = ObjectSearchResult.class)
-    @RequestMapping(value = BigDataPath.STAREPO_GET_SEARCHRESULT, method = RequestMethod.POST)
-    @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_VIEW + "')")
-    public ResponseResult<ObjectSearchResult> getRocordOfObjectInfo(@RequestBody @ApiParam(value = "查询记录") SearchRecordParam param) {
-        if (param == null) {
-            return null;
-        }
-        ObjectSearchResult result = objectInfoHandlerService.getRocordOfObjectInfo(param);
         return ResponseResult.init(result);
     }
 

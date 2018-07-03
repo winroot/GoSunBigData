@@ -1,8 +1,8 @@
 package com.hzgc.service.dispatch.dao;
 
 import com.alibaba.fastjson.JSON;
+import com.hzgc.common.facedispatch.table.DispatchTable;
 import com.hzgc.common.hbase.HBaseHelper;
-import com.hzgc.common.table.dispatch.DispatchTable;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.dispatch.bean.*;
 import com.hzgc.service.dispatch.util.JsonToMap;
@@ -12,7 +12,6 @@ import com.hzgc.service.dispatch.bean.PageBean;
 import com.hzgc.service.dispatch.bean.Warn;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;

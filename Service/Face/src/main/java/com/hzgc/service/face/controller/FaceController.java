@@ -1,12 +1,8 @@
 package com.hzgc.service.face.controller;
 
-import com.hzgc.common.attribute.bean.Attribute;
-import com.hzgc.common.attribute.service.AttributeService;
-import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.common.util.object.ObjectUtil;
-import com.hzgc.common.util.uuid.UuidUtil;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.jni.PictureData;
+import com.hzgc.common.faceattribute.bean.Attribute;
+import com.hzgc.common.faceattribute.service.AttributeService;
+import com.hzgc.common.jni.PictureData;
 import com.hzgc.service.face.service.FaceExtractService;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
@@ -14,7 +10,6 @@ import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;

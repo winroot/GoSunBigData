@@ -1,10 +1,8 @@
 package com.hzgc.service.dynrepo.dao;
 
+import com.hzgc.common.facedynrepo.SearchResultTable;
 import com.hzgc.common.hbase.HBaseHelper;
-import com.hzgc.common.table.dynrepo.DynamicTable;
-import com.hzgc.common.table.seachres.SearchResultTable;
 import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.service.dynrepo.bean.SearchCollection;
 import com.hzgc.service.dynrepo.bean.SearchHisotry;
 import com.hzgc.service.dynrepo.bean.SearchResult;

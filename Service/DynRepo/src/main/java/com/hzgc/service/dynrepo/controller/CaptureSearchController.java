@@ -1,6 +1,6 @@
 package com.hzgc.service.dynrepo.controller;
 
-import com.hzgc.common.attribute.service.AttributeService;
+import com.hzgc.common.faceattribute.service.AttributeService;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.service.dynrepo.bean.*;
@@ -15,8 +15,6 @@ import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

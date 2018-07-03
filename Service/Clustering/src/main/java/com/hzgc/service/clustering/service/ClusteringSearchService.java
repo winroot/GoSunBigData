@@ -1,8 +1,8 @@
 package com.hzgc.service.clustering.service;
 
-import com.hzgc.common.clustering.ClusteringAttribute;
-import com.hzgc.common.table.clustering.ClusteringTable;
-import com.hzgc.common.table.dynrepo.DynamicTable;
+import com.hzgc.common.faceclustering.ClusteringAttribute;
+import com.hzgc.common.faceclustering.table.ClusteringTable;
+import com.hzgc.common.facedynrepo.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.service.clustering.bean.ClusteringInfo;
 import com.hzgc.service.clustering.bean.SortParam;

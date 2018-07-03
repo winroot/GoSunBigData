@@ -1,7 +1,6 @@
 package com.hzgc.service.starepo.bean.param;
 
-import com.hzgc.common.util.empty.IsEmpty;
-import com.hzgc.jni.PictureData;
+import com.hzgc.common.jni.PictureData;
 import com.hzgc.service.starepo.bean.StaticSortParam;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

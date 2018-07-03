@@ -1,6 +1,6 @@
 package com.hzgc.service.starepo.service;
 
-import com.hzgc.common.table.starepo.ObjectInfoTable;
+import com.hzgc.common.facestarepo.table.table.ObjectInfoTable;
 import com.hzgc.service.starepo.bean.*;
 import com.hzgc.service.starepo.bean.export.PersonObjectGroupByPkey;
 import com.hzgc.service.starepo.bean.export.ObjectSearchResult;

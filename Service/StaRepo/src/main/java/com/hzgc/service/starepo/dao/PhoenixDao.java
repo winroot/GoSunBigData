@@ -1,15 +1,13 @@
 package com.hzgc.service.starepo.dao;
 
-import com.hzgc.common.table.dynrepo.SearchRecordTable;
-import com.hzgc.common.table.starepo.ObjectInfoTable;
-import com.hzgc.common.table.starepo.ObjectTypeTable;
+import com.hzgc.common.facestarepo.table.table.ObjectInfoTable;
+import com.hzgc.common.facestarepo.table.table.ObjectTypeTable;
+import com.hzgc.common.jni.FaceAttribute;
+import com.hzgc.common.jni.PictureData;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.jni.PictureData;
 import com.hzgc.service.starepo.bean.export.ObjectInfo;
-import com.hzgc.service.starepo.bean.export.PersonSingleResult;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectTypeParam;
@@ -18,17 +16,21 @@ import com.hzgc.service.util.bean.PeopleManagerCount;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.sql.*;
+import java.sql.Array;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -535,30 +537,6 @@ public class PhoenixDao implements Serializable {
             photo = (byte[]) sqlRowSet.getObject(ObjectInfoTable.PHOTO);
         }
         return photo;
-    }
-
-    /**
-     * 根据传过来的搜索rowkey 返回搜索记录 （外） （李第亮）
-     *
-     * @param subQueryId 子查询Id
-     * @return 返回一个ObjectSearchResult 对象，
-     * @author 李第亮
-     */
-    public PersonSingleResult getRocordOfObjectInfo(String subQueryId) {
-        // sql 查询语句
-        String sql = "select " + SearchRecordTable.ID + ", " + SearchRecordTable.RESULT + " from "
-                + SearchRecordTable.TABLE_NAME + " where " + SearchRecordTable.ID + " = ?";
-        PersonSingleResult personSingleResult = null;
-
-        try {
-            RowMapper<PersonSingleResult> rowMapper = new BeanPropertyRowMapper<>(PersonSingleResult.class);
-            personSingleResult = jdbcTemplate.queryForObject(sql, rowMapper, subQueryId);
-            ResultSet resultSet = null;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return personSingleResult;
     }
 
     /**

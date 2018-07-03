@@ -1,6 +1,6 @@
 package com.hzgc.service.visual.bean;
 
-import com.hzgc.common.attribute.bean.Attribute;
+import com.hzgc.common.faceattribute.bean.Attribute;
 import lombok.Data;
 
 import java.io.Serializable;

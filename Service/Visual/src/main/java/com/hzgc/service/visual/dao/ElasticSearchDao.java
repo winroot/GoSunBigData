@@ -1,7 +1,7 @@
 package com.hzgc.service.visual.dao;
 
 import com.hzgc.common.es.ElasticSearchHelper;
-import com.hzgc.common.table.dynrepo.DynamicTable;
+import com.hzgc.common.facedynrepo.DynamicTable;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;

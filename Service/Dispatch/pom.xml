@@ -25,6 +25,10 @@
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>
+            <artifactId>common-facedispatch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.hzgc.common</groupId>
             <artifactId>common-hbase</artifactId>
             <exclusions>
                 <exclusion>
@@ -64,15 +68,6 @@
                     <groupId>org.codehaus.jackson</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.hzgc.common</groupId>
-            <artifactId>common-table</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.47</version>
         </dependency>
     </dependencies>
 
