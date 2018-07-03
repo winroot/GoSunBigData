@@ -118,10 +118,11 @@ public class CaptureSearchService {
                                     capturedPicture.setBurl(captureServiceHelper.getFtpUrl(capturedPicture.getBurl()));
                                 }
                             }
-                        }
-                        for (CapturedPicture capturedPicture : singleSearchResult.getPictures()) {
-                            capturedPicture.setSurl(captureServiceHelper.getFtpUrl(capturedPicture.getSurl()));
-                            capturedPicture.setBurl(captureServiceHelper.getFtpUrl(capturedPicture.getBurl()));
+                        } else {
+                            for (CapturedPicture capturedPicture : singleSearchResult.getPictures()) {
+                                capturedPicture.setSurl(captureServiceHelper.getFtpUrl(capturedPicture.getSurl()));
+                                capturedPicture.setBurl(captureServiceHelper.getFtpUrl(capturedPicture.getBurl()));
+                            }
                         }
                     }
                 } else {
@@ -168,11 +169,11 @@ public class CaptureSearchService {
      * @param deviceId 设备ID
      * @return 最后抓拍时间
      */
-    public String getLastCaptureTime(String deviceId){
+    public String getLastCaptureTime(String deviceId) {
         String ipcId = captureServiceHelper.deviceIdToIpcId(deviceId);
         log.info("Start query last capture time, get ipcId is:" + ipcId);
-        if (!StringUtils.isBlank(ipcId)){
-            String time  = esDao.getLastCaptureTime(ipcId);
+        if (!StringUtils.isBlank(ipcId)) {
+            String time = esDao.getLastCaptureTime(ipcId);
             log.info("Get query last capture time successful, time is:" + time);
             return time;
         }
