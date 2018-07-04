@@ -136,7 +136,7 @@ public class StaticRepoUtil implements Serializable {
                 if (array != null) {
                     feature = (float[]) array.getArray();
                 }
-                if (feature != null && feature.length > 0) {
+                if (feature != null && feature.length == 512) {
                     //将人员类型rowkey和特征值进行拼接
                     Object[] result1 = new Object[3];
                     result1[0] = rowKey;
