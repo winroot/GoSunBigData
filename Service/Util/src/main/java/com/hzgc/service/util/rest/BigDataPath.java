@@ -104,4 +104,8 @@ public class BigDataPath {
     public static final String DISPATCH_SEARCH_BYID = "/rule_info";
     public static final String DISPATCH_CUTPAGE_RULE = "/get_rule";
 
+    /**
+     * Dispatch模块请求路径
+     */
+    public static final String ALARM__QUERY = "/alarm_info";
 }
