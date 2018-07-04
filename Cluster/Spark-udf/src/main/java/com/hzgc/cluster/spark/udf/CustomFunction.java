@@ -15,7 +15,7 @@ public class CustomFunction {
     }
 
     private static float[] string2floatArray(String feature) {
-        if (feature != null && feature.length() == 512) {
+        if (feature != null && feature.length() > 0) {
             float[] featureFloat = new float[512];
             String[] strArr = feature.split(SPLIT);
             for (int i = 0; i < strArr.length; i++) {
