@@ -81,21 +81,28 @@ object KMeansClustering {
     sqlProper.setProperty("driver", driverClass)
     val dataSource = spark.read.jdbc(alarmUrl, preSql, sqlProper)
     val mysqlDataCount = dataSource.count()
+    LOG.info("mysql sql is   " + preSql)
     LOG.info("mysql data count :" + mysqlDataCount)
 
     if (parquetDataCount > 0 && mysqlDataCount > 0) {
       dataSource.map(data => {
+        LOG.info(data.getAs[Long](idField))
         Data(data.getAs[Long](idField), data.getAs[Timestamp](timeField), data.getAs[String](spicField).substring(1, data.getAs[String](spicField).indexOf("/", 1)), data.getAs[String](hostField), "ftp://" + data.getAs[String](hostField) + ":2121" + data.getAs[String](spicField), "ftp://" + data.getAs[String](hostField) + ":2121" + data.getAs[String](bpicField))
       }).createOrReplaceTempView("mysqlTable")
-
       //get the region and ipcIdList
       val region_Ipc_sql = "(select T1.region_id,GROUP_CONCAT(T2.serial_number) " + "as serial_numbers from t_region_department as T1 inner join " + "(select concat(dep.parent_ids,',',dep.id) as path ,T3.serial_number from " + "t_device as dev left join t_department as dep on dev.department_id = dep.id inner join " + "t_device_extra as T3 on dev.id = T3.device_id ) as T2 on T2.path " + "like concat('%',T1.department_id,'%') group by T1.region_id " + "order by T1.region_id,T2.serial_number ) as test"
       val region_Ipc_data = spark.read.jdbc(deviceUrl, region_Ipc_sql, sqlProper).collect()
+      val count = spark.read.jdbc(deviceUrl, region_Ipc_sql, sqlProper).count()
+      LOG.info("region data count : " + count)
       val region_IpcMap = mutable.HashMap[Int, String]()
-      region_Ipc_data.foreach(data => region_IpcMap.put(data.getAs[Int](0), data.getAs[String](1)))
+      region_Ipc_data.foreach(data => {
+        region_IpcMap.put(data.getAs[Int](0), data.getAs[String](1))
+      })
+      LOG.info("The region's Map is "+ region_IpcMap)
 
       //loops for each region
       for (region_Ipc <- region_IpcMap) {
+        LOG.info(region_Ipc._1 + "===========" + region_Ipc._2)
         val uuidString = UUID.randomUUID().toString
         val region = region_Ipc._1
         val ipcList = region_Ipc._2.split(",")
@@ -258,9 +265,10 @@ object KMeansClustering {
         LOG.info("write clustering info to HBase...")
         PutDataToHBase.putClusteringInfo(rowKey, table1List)
 
-        //update each clustering data to es
-        val putDataToEs = PutDataToEs.getInstance()
+
         finalData.foreachPartition(part => {
+          //update each clustering data to es
+          val putDataToEs = PutDataToEs.getInstance()
           conn = DriverManager.getConnection(capture_url, capture_data_table_user, capture_data_table_password)
           part.foreach(data => {
             val rowKey = yearMon + "-" + region + "-" + data._1 + "-" + uuidString

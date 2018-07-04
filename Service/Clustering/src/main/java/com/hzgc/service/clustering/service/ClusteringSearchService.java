@@ -96,7 +96,7 @@ public class ClusteringSearchService {
         List<Integer> alarmIdList = new ArrayList<>();
         if (results != null && results.length > 0) {
             for (SearchHit result : results) {
-                int alarmTime = Integer.parseInt((String) result.getSource().get(DynamicTable.ALARM_ID));
+                int alarmTime = (int)result.getSource().get(DynamicTable.ALARM_ID);
                 alarmIdList.add(alarmTime);
             }
         } else {
