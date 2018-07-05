@@ -9,7 +9,7 @@ import com.hzgc.cluster.spark.util.{FaceObjectUtil, PropertiesUtil}
 import com.hzgc.common.facedispatch.DeviceUtilImpl
 import com.hzgc.common.facedispatch.table.DispatchTable
 import com.hzgc.common.facestarepo.table.alarm.StaticRepoUtil
-import com.hzgc.common.jni.FaceFunction
+import com.hzgc.jni.FaceFunction
 import com.hzgc.common.rocketmq.RocketMQProducer
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf

@@ -1,7 +1,7 @@
 package com.hzgc.service.starepo.controller;
 
 import com.hzgc.common.facestarepo.table.table.SearchResultTable;
-import com.hzgc.common.jni.PictureData;
+import com.hzgc.jni.PictureData;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.starepo.bean.export.ObjectInfo;
