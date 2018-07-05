@@ -357,7 +357,7 @@ public class ParseByOption {
 
         // 关于布控人手机号的查询
         String creatorConractWay = param.getCreatorConractWay();
-        if (!StringUtils.isBlank(creatorConractWay)){
+        if (!StringUtils.isBlank(creatorConractWay)) {
             if (isChanged) {
                 whereQuery.append(" and ");
             }
@@ -367,7 +367,7 @@ public class ParseByOption {
 
         //查询人员状态值
         int status = param.getStatus();
-        if (status == 0 || status == 1){
+        if (status == 0 || status == 1) {
             if (isChanged) {
                 whereQuery.append(" and ");
             }
@@ -384,7 +384,7 @@ public class ParseByOption {
             }
             whereQuery.append(ObjectInfoTable.IMPORTANT).append(" = ?");
             setArgsList.add(followLevel);
-        }else {
+        } else {
             whereQuery.append(" order by ").append(ObjectInfoTable.IMPORTANT).append(" desc");
         }
         return whereQuery;
@@ -505,6 +505,12 @@ public class ParseByOption {
             }
         }
         return sql.toString();
+    }
+
+    public String getObjectIdCard() {
+        return "select " + ObjectInfoTable.IDCARD
+                + " from " + ObjectInfoTable.TABLE_NAME
+                + " where " + ObjectInfoTable.ROWKEY + " = ?";
     }
 
     public String getAllObjectIdcard() {

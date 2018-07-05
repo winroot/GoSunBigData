@@ -15,11 +15,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.hzgc</groupId>
-            <artifactId>jni</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-attribute</artifactId>
             <exclusions>
@@ -43,8 +38,8 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.hzgc.collect</groupId>
-            <artifactId>collect-zookeeper</artifactId>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-collect</artifactId>
             <version>1.0</version>
             <exclusions>
                 <exclusion>
