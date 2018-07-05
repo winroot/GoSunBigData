@@ -509,7 +509,7 @@ public class ParseByOption {
     public String getObjectIdCard() {
         return "select " + ObjectInfoTable.IDCARD
                 + " from " + ObjectInfoTable.TABLE_NAME
-                + "where " + ObjectInfoTable.ROWKEY + " = ?";
+                + " where " + ObjectInfoTable.ROWKEY + " = ?";
     }
 
     public String getAllObjectIdcard() {
