@@ -132,6 +132,24 @@ public class ObjectInfoHandlerController {
             log.error("Start update object info, but object type key is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "修改对象类型为空，请检查！");
         }
+        boolean isExists_objectTypeKey = objectInfoHandlerService.isExists_objectTypeKey(param);
+        if (!isExists_objectTypeKey){
+            log.error("Start update object info, but the object type key doesn't exists");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "修改对象类型不存在，请检查！");
+        }
+        boolean authentication_idCode = objectInfoHandlerService.authentication_idCode(param);
+        if (!authentication_idCode){
+            log.error("Start update object info, but the idcard format is error");
+            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证格式错误，请检查！");
+        }
+        String idCade_DB = objectInfoHandlerService.getObjectIdCard(param);
+        if (!StringUtils.isBlank(param.getIdcard()) && !idCade_DB.equals(param.getIdcard())){
+            boolean isExists_idCode = objectInfoHandlerService.isExists_idCode(param);
+            if (!isExists_idCode){
+                log.error("Start update object info, but the idcard already exists");
+                return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证已存在，请检查！");
+            }
+        }
         log.info("Start update object info, param is:" + JSONUtil.toJson(param));
         Integer succeed = objectInfoHandlerService.updateObjectInfo(param);
         if (succeed == 0) {

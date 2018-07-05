@@ -506,6 +506,12 @@ public class ParseByOption {
         return sql.toString();
     }
 
+    public String getObjectIdCard() {
+        return "select " + ObjectInfoTable.IDCARD
+                + " from " + ObjectInfoTable.TABLE_NAME
+                + "where " + ObjectInfoTable.ROWKEY + " = ?";
+    }
+
     public String getAllObjectIdcard() {
         return "select " + ObjectInfoTable.IDCARD + " from " + ObjectInfoTable.TABLE_NAME;
     }

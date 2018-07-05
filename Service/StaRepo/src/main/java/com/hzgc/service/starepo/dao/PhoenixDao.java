@@ -252,6 +252,16 @@ public class PhoenixDao implements Serializable {
         return count;
     }
 
+    public String getObjectIdCard(String id) {
+        String idCard = null;
+        String sql = parseByOption.getObjectIdCard();
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, id);
+        while (sqlRowSet.next()) {
+            idCard = sqlRowSet.getString(ObjectInfoTable.IDCARD);
+        }
+        return idCard;
+    }
+
     public List<String> getAllObjectIdcard() {
         List<String> idcardList = new ArrayList<>();
         String sql = parseByOption.getAllObjectIdcard();
