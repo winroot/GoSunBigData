@@ -2,7 +2,7 @@ package com.hzgc.service.face.controller;
 
 import com.hzgc.common.faceattribute.bean.Attribute;
 import com.hzgc.common.faceattribute.service.AttributeService;
-import com.hzgc.common.jni.PictureData;
+import com.hzgc.jni.PictureData;
 import com.hzgc.service.face.service.FaceExtractService;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;

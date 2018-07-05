@@ -2,7 +2,7 @@ package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.facestarepo.table.table.ObjectInfoTable;
 import com.hzgc.common.facestarepo.table.table.SearchResultTable;
-import com.hzgc.common.jni.PictureData;
+import com.hzgc.jni.PictureData;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
@@ -65,6 +65,16 @@ public class ObjectInfoHandlerService {
             return idCodeAuthentication(objectInfo.getIdcard());
         }
         return true;
+    }
+
+    /**
+     * 获取数据库中idCard
+     *
+     * @param objectInfo
+     * @return idCard
+     */
+    public String getObjectIdCard(ObjectInfoParam objectInfo) {
+        return phoenixDao.getObjectIdCard(objectInfo.getId());
     }
 
     /**
@@ -132,25 +142,6 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
     public Integer updateObjectInfo(ObjectInfoParam param) {
-        if (!StringUtils.isBlank(param.getIdcard())) {
-            // 判断身份证格式是否正确
-            if (!idCodeAuthentication(param.getIdcard())) {
-                log.info("Start update object info, but the id card format is error");
-                return 1;
-            }
-            // 身份证唯一性判断
-            List<String> idcards = phoenixDao.getAllObjectIdcard();
-            if (idcards.contains(param.getIdcard())) {
-                log.error("Start update object info, but the idcard already exists");
-                return 1;
-            }
-        }
-        // 判断ObjectTypeKey是否存在
-        List<String> objectTypeKeys = phoenixDao.getAllObjectTypeKeys();
-        if (!objectTypeKeys.contains(param.getObjectTypeKey())) {
-            log.error("Start update object info, but the object type key doesn't exists");
-            return 1;
-        }
         // 查询更新对象当前状态值
         String objectId = param.getId();
         int status = phoenixDao.getObjectInfo_status(objectId);

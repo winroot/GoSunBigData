@@ -59,6 +59,6 @@ public class DocHandlerUtil {
         } catch (TemplateException | IOException e) {
             log.error(e.getMessage());
         }
-        return FileUtil.getFile(exportDir + File.separator + fileName);
+        return FileUtil.fileToByteArray(exportDir + File.separator + fileName);
     }
 }

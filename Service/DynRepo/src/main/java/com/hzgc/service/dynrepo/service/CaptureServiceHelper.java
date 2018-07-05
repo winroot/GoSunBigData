@@ -2,7 +2,7 @@ package com.hzgc.service.dynrepo.service;
 
 import com.hzgc.common.collect.facedis.RegisterWatcher;
 import com.hzgc.common.facedynrepo.DynamicTable;
-import com.hzgc.common.jni.PictureData;
+import com.hzgc.jni.PictureData;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.service.dynrepo.bean.*;
 import com.hzgc.service.util.api.bean.DeviceDTO;

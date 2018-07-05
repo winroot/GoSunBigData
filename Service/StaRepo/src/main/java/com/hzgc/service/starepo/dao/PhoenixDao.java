@@ -2,8 +2,8 @@ package com.hzgc.service.starepo.dao;
 
 import com.hzgc.common.facestarepo.table.table.ObjectInfoTable;
 import com.hzgc.common.facestarepo.table.table.ObjectTypeTable;
-import com.hzgc.common.jni.FaceAttribute;
-import com.hzgc.common.jni.PictureData;
+import com.hzgc.jni.FaceAttribute;
+import com.hzgc.jni.PictureData;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
@@ -250,6 +250,16 @@ public class PhoenixDao implements Serializable {
             count = sqlRowSet.getInt("num");
         }
         return count;
+    }
+
+    public String getObjectIdCard(String id) {
+        String idCard = null;
+        String sql = parseByOption.getObjectIdCard();
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, id);
+        while (sqlRowSet.next()) {
+            idCard = sqlRowSet.getString(ObjectInfoTable.IDCARD);
+        }
+        return idCard;
     }
 
     public List<String> getAllObjectIdcard() {

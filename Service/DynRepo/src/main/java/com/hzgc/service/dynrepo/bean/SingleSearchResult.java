@@ -1,6 +1,6 @@
 package com.hzgc.service.dynrepo.bean;
 
-import com.hzgc.common.jni.PictureData;
+import com.hzgc.jni.PictureData;
 import lombok.Data;
 
 import java.io.Serializable;
