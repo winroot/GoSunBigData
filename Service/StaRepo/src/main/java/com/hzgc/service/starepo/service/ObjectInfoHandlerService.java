@@ -2,7 +2,7 @@ package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.facestarepo.table.table.ObjectInfoTable;
 import com.hzgc.common.facestarepo.table.table.SearchResultTable;
-import com.hzgc.common.jni.PictureData;
+import com.hzgc.jni.PictureData;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;

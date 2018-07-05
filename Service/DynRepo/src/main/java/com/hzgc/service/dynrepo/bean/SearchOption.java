@@ -1,7 +1,7 @@
 package com.hzgc.service.dynrepo.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hzgc.common.jni.PictureData;
+import com.hzgc.jni.PictureData;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
