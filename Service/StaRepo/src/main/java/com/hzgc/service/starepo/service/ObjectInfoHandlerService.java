@@ -634,7 +634,7 @@ public class ObjectInfoHandlerService {
                 pictureData.getFeature().setFeature(feature);
             }
         }
-        log.info("Get object picture data successfull, picture data : " + JSONUtil.toJson(pictureData));
+        log.info("Get object picture data successfully, picture data : " + JSONUtil.toJson(pictureData));
         return pictureData;
     }
 

@@ -338,7 +338,7 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return 1;
         }
-        log.info("add object info successfull");
+        log.info("add object info successfully");
         return 0;
     }
 
@@ -349,7 +349,6 @@ public class PhoenixDao implements Serializable {
      * @return 返回值为0，表示删除成功，返回值为1，表示删除失败
      */
     public Integer deleteObjectInfo(List<String> rowkeys) {
-        // 获取table 对象，通过封装HBaseHelper 来获取
         String sql = parseByOption.deleteObjectInfo();
         log.info("Start delete object info, SQL is : " + sql);
         try {
@@ -362,7 +361,7 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return 1;
         }
-        log.info("delete object info successfull");
+        log.info("delete object info successfully");
         return 0;
     }
 
@@ -393,7 +392,7 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return 1;
         }
-        log.info("update object info successfull");
+        log.info("update object info successfully");
         return 0;
     }
 
@@ -424,7 +423,7 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return 1;
         }
-        log.info("update object status successfull");
+        log.info("update object status successfully");
         return 0;
     }
 
@@ -470,14 +469,14 @@ public class PhoenixDao implements Serializable {
             String objectTypeName = getObjectTypeNameById(objectTypeKey);
             objectInfo.setObjectTypeName(objectTypeName);
         }
-        log.info("get object info result : " + JSONUtil.toJson(objectInfo));
+        log.info("Get object info successfully, result : " + JSONUtil.toJson(objectInfo));
         return objectInfo;
     }
 
     private String getObjectTypeNameById(String objectTypeId) {
         String sql = parseByOption.getObjectTypeNameById();
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, objectTypeId);
-        String objectTypeName = "";
+        String objectTypeName = null;
         while (sqlRowSet.next()) {
             objectTypeName = sqlRowSet.getString(ObjectTypeTable.TYPE_NAME);
         }
@@ -543,6 +542,9 @@ public class PhoenixDao implements Serializable {
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, objectId);
         while (sqlRowSet.next()) {
             photo = (byte[]) sqlRowSet.getObject(ObjectInfoTable.PHOTO);
+        }
+        if (photo != null && photo.length > 0){
+            log.info("Start get object photo successfully");
         }
         return photo;
     }
