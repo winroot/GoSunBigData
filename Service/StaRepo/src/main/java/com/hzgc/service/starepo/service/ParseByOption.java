@@ -300,7 +300,7 @@ public class ParseByOption {
         }
 
         // 关于性别的查询
-        int sex = param.getSex();
+        Integer sex = param.getSex();
         if (sex == 0 || sex == 1 || sex == 2) {
             if (isChanged) {
                 whereQuery.append(" and ");
@@ -365,7 +365,7 @@ public class ParseByOption {
         }
 
         //查询人员状态值
-        int status = param.getStatus();
+        Integer status = param.getStatus();
         if (status == 0 || status == 1){
             if (isChanged) {
                 whereQuery.append(" and ");
@@ -376,7 +376,7 @@ public class ParseByOption {
         }
 
         // 关于是否是重点人员的查询
-        int followLevel = param.getFollowLevel();
+        Integer followLevel = param.getFollowLevel();
         if (followLevel == 1 || followLevel == 2) {
             if (isChanged) {
                 whereQuery.append(" and ");
@@ -423,8 +423,8 @@ public class ParseByOption {
             setValues.add(idcard);
         }
 
-        int sex = objectInfo.getSex();
-        if (sex != 0) {
+        Integer sex = objectInfo.getSex();
+        if (sex != null) {
             sql.append(", ");
             sql.append(ObjectInfoTable.SEX);
             setValues.add(sex);
@@ -450,8 +450,8 @@ public class ParseByOption {
             setValues.add(cphone);
         }
 
-        int important = objectInfo.getFollowLevel();
-        if (important != 0) {
+        Integer important = objectInfo.getFollowLevel();
+        if (important != null) {
             sql.append(", ");
             sql.append(ObjectInfoTable.IMPORTANT);
             setValues.add(important);
