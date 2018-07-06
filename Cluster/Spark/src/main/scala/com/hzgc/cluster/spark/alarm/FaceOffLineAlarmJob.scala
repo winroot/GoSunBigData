@@ -38,7 +38,7 @@ object FaceOffLineAlarmJob {
       println("Start offline alarm task data processing ...")
       val objTypeList = PropertiesUtil.getOffLineArarmObjType(offLineAlarmRule)
       val returnResult = StaticRepoUtil
-        .getInstance(kafkaBootStrapBroadCast.value, kafkaBootStrapBroadCast.value)
+        .getInstance(kafkaBootStrapBroadCast.value, jdbcUrlBroadCast.value)
         .searchByPkeysUpdateTime(objTypeList)
       if (returnResult != null && !returnResult.isEmpty) {
         val totalData = sc.parallelize(JavaConverters.asScalaBufferConverter(returnResult).asScala)

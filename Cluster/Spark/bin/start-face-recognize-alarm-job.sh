@@ -40,13 +40,11 @@ BIGDATA_CLUSTER_PATH=/opt/hzgc/bigdata
 #---------------------------------------------------------------------#
 ## module version(模块)
 SPARK_API_VERSION=`ls ${SPARK_LIB_DIR} | grep ^spark-[0-9].[0-9].[0-9].jar$`
-JNI_VERSION=`ls ${SPARK_LIB_DIR}| grep ^jni-[0-9].[0-9].jar$`
-ADDRESS_VERSION=`ls /opt/RealTimeFaceCompare/service/address | grep ^address-[0-9].[0-9].[0-9].jar$`
-ALARM_VERSION=`ls /opt/RealTimeFaceCompare/service/alarm | grep ^alarm-[0-9].[0-9].[0-9].jar$`
-CLUSTERING_VERSION=`ls /opt/RealTimeFaceCompare/service/clustering | grep ^clustering-[0-9].[0-9].[0-9].jar$`
-COMMON_UTIL_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-util-[0-9].[0-9].[0-9].jar$`
-COMMON_HBASE_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-hbase-[0-9].[0-9].[0-9].jar$`
-COMMON_TABLE_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-table-[0-9].[0-9].[0-9].jar$`
+JNI_VERSION=`ls ${SPARK_LIB_DIR}| grep ^common-jni-[0-9].[0-9].jar$`
+COMMON_COLLECT_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-collect-[0-9].[0-9].jar$`
+COMMON_UTIL_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-util-[0-9].[0-9].jar$`
+COMMON_HBASE_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-hbase-[0-9].[0-9].jar$`
+COMMON_TABLE_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-table-[0-9].[0-9].jar$`
 
 ## quote version(引用)
 TWILL_API_VERSION=twill-api-0.8.0.jar
@@ -60,7 +58,7 @@ TEPHRA_CORE_VERSION=tephra-core-0.13.0-incubating.jar
 TEPHRA_API_VERSION=tephra-api-0.13.0-incubating.jar
 PHOENIX_HBASE_VERSION=phoenix-core-4.13.1-HBase-1.2.jar
 GSON_VERSION=gson-2.8.0.jar
-JACKSON_CORE_VERSION=jackson-core-2.8.6.jar
+JACKSON_CORE_VERSION=jackson-core-2.8.10.jar
 SPARK_STREAMING_KAFKA_VERSION=spark-streaming-kafka-0-8_2.11-2.2.0.jar
 HBASE_SERVER_VERSION=hbase-server-1.3.2.jar
 HBASE_CLIENT_VERSION=hbase-client-1.3.2.jar
@@ -71,7 +69,7 @@ ELASTICSEARCH_VERSION=elasticsearch-5.5.0.jar
 ROCKETMQ_CLIENT_VERSION=rocketmq-client-4.2.0.jar
 ROCKETMQ_COMMON_VERSION=rocketmq-common-4.2.0.jar
 ROCKETMQ_REMOTING_VERSION=rocketmq-remoting-4.2.0.jar
-FASTJSON_VERSION=fastjson-1.2.29.jar
+FASTJSON_VERSION=fastjson-1.2.47.jar
 KAFKA_CLIENTS_VERSION=kafka-clients-1.0.0.jar
 METRICS_CORE_VERSION=metrics-core-2.2.0.jar
 ZKCLIENT_VERSION=zkclient-0.3.jar
@@ -198,7 +196,8 @@ ${SPARK_LIB_DIR}/${PHOENIX_HBASE_VERSION},\
 ${SPARK_LIB_DIR}/${JACKSON_CORE_VERSION},\
 ${SPARK_LIB_DIR}/${COMMON_UTIL_VERSION},\
 ${SPARK_LIB_DIR}/${COMMON_HBASE_VERSION},\
-${SPARK_LIB_DIR}/${COMMON_TABLE_VERSION},\
+${SPARK_LIB_DIR}/${COMMON_COLLECT_VERSION},\
+${SPARK_LIB_DIR}/common-facestarepo-1.0.jar,\
 ${SPARK_LIB_DIR}/${SPARK_STREAMING_KAFKA_VERSION},\
 ${SPARK_LIB_DIR}/${HBASE_SERVER_VERSION},\
 ${SPARK_LIB_DIR}/${HBASE_CLIENT_VERSION},\
@@ -213,6 +212,9 @@ ${SPARK_LIB_DIR}/${ROCKETMQ_COMMON_VERSION},\
 ${SPARK_LIB_DIR}/${ROCKETMQ_REMOTING_VERSION},\
 ${SPARK_LIB_DIR}/${FASTJSON_VERSION},\
 ${SPARK_LIB_DIR}/${KAFKA_CLIENTS_VERSION},\
+${SPARK_LIB_DIR}/icu4j-60.1.jar,\
+${SPARK_LIB_DIR}/common-facedispatch-1.0.jar,\
+${SPARK_LIB_DIR}/common-rocketmq-1.0.jar,\
 ${SPARK_LIB_DIR}/${METRICS_CORE_VERSION} \
 --conf "spark.driver.extraJavaOptions=-Dlog4j.configuration=file:${SPARK_CONF_DIR}/log4j.properties" \
 --files ${SPARK_CONF_DIR}/sparkJob.properties,\
