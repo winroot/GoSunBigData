@@ -27,7 +27,7 @@ public class GetObjectInfoParam implements Serializable{
     @ApiModelProperty(value = "身份证")
     private String idcard;                        // 身份证
     @ApiModelProperty(value = "性别")
-    private int sex;                               // 性别 [ add、update、search: 0 = 未知（默认选项），1 = 男，2 = 女]
+    private Integer sex;                          // 性别 [0 = 未知（默认选项），1 = 男，2 = 女]
     @ApiModelProperty(value = "创建人")
     private String creator;                       // 创建人
     @ApiModelProperty(value = "布控人联系方式")
@@ -39,13 +39,13 @@ public class GetObjectInfoParam implements Serializable{
     @ApiModelProperty(value = "排序参数")
     private List<StaticSortParam> sortParamList;  // 排序参数
     @ApiModelProperty(value = "人员状态")
-    private int status;                             // 人员状态 [ add、update、search: 0 = 常住人口（默认选项），1 = 建议迁出]
+    private Integer status;                       // 人员状态 [0 = 常住人口（默认选项），1 = 建议迁出]
     @ApiModelProperty(value = "关注等级")
-    private int followLevel;                      // 关注等级 [add、update、search：1 = 非重点关注（默认选项），2 = 重点关注]
+    private Integer followLevel;                  // 关注等级 [1 = 非重点关注（默认选项），2 = 重点关注]
     @ApiModelProperty(value = "起始行数")
-    private int start;                            // 起始行数
+    private Integer start;                        // 起始行数
     @ApiModelProperty(value = "分页行数")
-    private int limit;                            // 分页行数
+    private Integer limit;                        // 分页行数
     @ApiModelProperty(value = "地址")
     private String location;                      // 地址
 }
