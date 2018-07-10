@@ -142,25 +142,11 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
     public Integer updateObjectInfo(ObjectInfoParam param) {
-        // 查询更新对象当前状态值
-        String objectId = param.getId();
-        int status = phoenixDao.getObjectInfo_status(objectId);
-        //数据库更新操作(状态值暂时不更新)
         Integer i = phoenixDao.updateObjectInfo(param);
-        // 根据入参状态值与数据库中对象状态值比较，判断是否更新statustime（状态更新时间）字段
-        if (param.getStatus() != status) {
-            Integer ii = phoenixDao.updateObjectInfo_status(objectId, param.getStatus());
-            if (i == 0 && ii == 0) {
-                sendKafka(param, UPDATE);
-                return 0;
-            }
-        } else {
-            if (i == 0) {
-                sendKafka(param, UPDATE);
-                return 0;
-            }
+        if (i == 0) {
+            sendKafka(param, UPDATE);
         }
-        return 1;
+        return i;
     }
 
     private void sendKafka(ObjectInfoParam param, String option) {
