@@ -63,6 +63,11 @@
             <artifactId>common-facestarepo</artifactId>
             <version>${bigdata-common.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-facealarm</artifactId>
+            <version>${bigdata-common.version}</version>
+        </dependency>
         <!-- third pary -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -119,11 +124,7 @@
             <artifactId>elasticsearch</artifactId>
             <version>${es.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.hzgc.common</groupId>
-            <artifactId>common-facealarm</artifactId>
-            <version>RELEASE</version>
-        </dependency>
+
     </dependencies>
 
     <repositories>
