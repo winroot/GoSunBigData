@@ -505,32 +505,6 @@ public class PhoenixDao implements Serializable {
         return jdbcTemplate.queryForRowSet(sqlAndArgs.getSql(), sqlAndArgs.getArgs().toArray());
     }
 
-    public PictureData getPictureData(String id) {
-        String sql = parseByOption.getPictureData();
-        log.info("Start get objectInfo PictureData, SQL is : " + sql);
-        PictureData pictureData = new PictureData();
-        List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql, id);
-        if (mapList != null && mapList.size() > 0) {
-            Map<String, Object> map = mapList.get(0);
-            if (!map.isEmpty()) {
-                byte[] photo = (byte[]) map.get(ObjectInfoTable.PHOTO);
-                pictureData.setImageData(photo);
-                Array featureArray = (Array) map.get(ObjectInfoTable.FEATURE);
-                try {
-                    float[] feature = (float[]) featureArray.getArray();
-                    if (photo != null && photo.length > 0) {
-                        FaceAttribute faceAttribute = new FaceAttribute();
-                        faceAttribute.setFeature(feature);
-                        pictureData.setFeature(faceAttribute);
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return pictureData;
-    }
-
     /**
      * 根据rowkey 返回人员的照片
      *

@@ -487,14 +487,11 @@ public class ObjectInfoHandlerService {
      * @return PictureData
      */
     public PictureData getFeature(String id) {
-        PictureData pictureData = phoenixDao.getPictureData(id);
-        if (pictureData != null) {
-            byte[] photo = pictureData.getImageData();
-            float[] feature = pictureData.getFeature().getFeature();
+        PictureData pictureData = null;
+        byte[] photo = phoenixDao.getPhotoByObjectId(id);
+        if (photo != null) {
             pictureData = restTemplate.postForObject("http://face/extract_bytes", photo, PictureData.class);
-            if (pictureData != null) {
-                pictureData.getFeature().setFeature(feature);
-            }
+
         }
         log.info("Get object picture data successfully, picture data : " + JSONUtil.toJson(pictureData));
         return pictureData;
