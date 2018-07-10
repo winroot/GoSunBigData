@@ -3,7 +3,7 @@ package com.hzgc.cluster.spark.alarm
 import java.util.Date
 
 import com.google.gson.Gson
-import com.hzgc.cluster.spark.message.{Item, RecognizeAlarmMessage}
+import com.hzgc.cluster.spark.message.{Item, AlarmMessage}
 import com.hzgc.cluster.spark.util.{FaceObjectUtil, PropertiesUtil}
 import com.hzgc.common.facedispatch.table.DispatchTable
 import com.hzgc.common.facedispatch.DeviceUtilImpl
@@ -102,13 +102,13 @@ object FaceRecognizeAlarmJob {
         val rocketMQProducer = RocketMQProducer.getInstance(nameServer, mqTopic, grouId)
         val gson = new Gson()
         parRDD.foreach(result => {
-          val recognizeAlarmMessage = new RecognizeAlarmMessage()
+          val recognizeAlarmMessage = new AlarmMessage()
           val items = new ArrayBuffer[Item]()
           val dateStr = df.format(new Date())
           val surl = result._1.getRelativePath
           val burl = surl.substring(0, surl.length - 5) + "0.jpg"
           recognizeAlarmMessage.setAlarmType(DispatchTable.IDENTIFY)
-          recognizeAlarmMessage.setDynamicDeviceID(result._2)
+          recognizeAlarmMessage.setIpcID(result._2)
           recognizeAlarmMessage.setSmallPictureURL(surl)
           recognizeAlarmMessage.setAlarmTime(dateStr)
           recognizeAlarmMessage.setBigPictureURL(burl)

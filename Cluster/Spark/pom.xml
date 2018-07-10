@@ -119,6 +119,11 @@
             <artifactId>elasticsearch</artifactId>
             <version>${es.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-facealarm</artifactId>
+            <version>RELEASE</version>
+        </dependency>
     </dependencies>
 
     <repositories>
