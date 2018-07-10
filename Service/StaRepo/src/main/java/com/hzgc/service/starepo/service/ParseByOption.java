@@ -582,12 +582,6 @@ public class ParseByOption {
                 + ObjectTypeTable.ROWKEY + " = ?";
     }
 
-    public String getPictureData() {
-        return "select " + ObjectInfoTable.PHOTO + ","
-                + ObjectInfoTable.FEATURE
-                + " from " + ObjectInfoTable.TABLE_NAME + " where id = ?";
-    }
-
     public String countStatus() {
         return "select count(*) as num from "
                 + ObjectInfoTable.TABLE_NAME + " where "
