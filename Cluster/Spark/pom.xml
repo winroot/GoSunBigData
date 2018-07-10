@@ -124,7 +124,6 @@
             <artifactId>elasticsearch</artifactId>
             <version>${es.version}</version>
         </dependency>
-
     </dependencies>
 
     <repositories>
