@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import com.google.gson.Gson
-import com.hzgc.cluster.spark.message.AddAlarmMessage
+import com.hzgc.cluster.spark.message.AlarmMessage
 import com.hzgc.cluster.spark.util.{FaceObjectUtil, PropertiesUtil}
 import com.hzgc.common.facedispatch.DeviceUtilImpl
 import com.hzgc.common.facedispatch.table.DispatchTable
@@ -95,7 +95,7 @@ object FaceAddAlarmJob {
           //识别集合为null，对该条数据进行新增告警。
           if (result._4 == null || result._4.isEmpty) {
             val dateStr = df.format(new Date())
-            val addAlarmMessage = new AddAlarmMessage()
+            val addAlarmMessage = new AlarmMessage()
             val surl = result._1.getRelativePath
             val burl = surl.substring(0, surl.length - 5) + "0.jpg"
             addAlarmMessage.setAlarmTime(dateStr)
@@ -103,7 +103,7 @@ object FaceAddAlarmJob {
 
             addAlarmMessage.setSmallPictureURL(surl)
             addAlarmMessage.setBigPictureURL(burl)
-            addAlarmMessage.setDynamicDeviceID(result._2)
+            addAlarmMessage.setIpcID(result._2)
             addAlarmMessage.setHostName(result._1.getHostname)
             rocketMQProducer.send(result._3,
               "alarm_" + DispatchTable.ADDED,
