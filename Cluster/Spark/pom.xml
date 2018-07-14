@@ -124,6 +124,11 @@
             <artifactId>elasticsearch</artifactId>
             <version>${es.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch-hadoop</artifactId>
+            <version>${es.spark.version}</version>
+        </dependency>
     </dependencies>
 
     <repositories>
