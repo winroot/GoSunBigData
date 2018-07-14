@@ -79,6 +79,7 @@ object FaceAlarmJob {
       resultRDD.foreachPartition(parRDD => {
         val rocketMQProducer = RocketMQProducer.getInstance(nameServer, mqTopic, grouId)
         val gson = new Gson()
+        val putDataToEs: PutDataToEs = PutDataToEs.getInstance()
         parRDD.foreach(result => {
           val alarmRule = deviceUtilI.isWarnTypeBinding(result._2)
           val recognizeWarnRule = alarmRule.get(DispatchTable.IDENTIFY)
@@ -143,7 +144,6 @@ object FaceAlarmJob {
             AlarmMessage.setObjectType(staticObjectType)
             AlarmMessage.setFlag(0)
             AlarmMessage.setConfirm(1)
-            val putDataToEs: PutDataToEs = PutDataToEs.getInstance()
             val status = putDataToEs.putAlarmDataToEs(surl, AlarmMessage)
             if (status != 1) {
               LOG.error("Put data to es failed! And the failed ftpurl is " + surl)
@@ -162,7 +162,6 @@ object FaceAlarmJob {
             AlarmMessage.setHostName(result._1.getHostname)
             AlarmMessage.setFlag(0)
             AlarmMessage.setConfirm(1)
-            val putDataToEs: PutDataToEs = PutDataToEs.getInstance()
             val status = putDataToEs.putAlarmDataToEs(surl, AlarmMessage)
             if (status != 1) {
               LOG.error("Put data to es failed! And the failed ftpurl is " + surl)
