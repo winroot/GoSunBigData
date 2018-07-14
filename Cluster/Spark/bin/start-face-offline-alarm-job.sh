@@ -72,6 +72,7 @@ FASTJSON_VERSION=fastjson-1.2.47.jar
 KAFKA_CLIENTS_VERSION=kafka-clients-1.0.0.jar
 METRICS_CORE_VERSION=metrics-core-2.2.0.jar
 ZKCLIENT_VERSION=zkclient-0.3.jar
+ES_SPARK_VERSION=elasticsearch-hadoop-6.2.4.jar
 
 
 ############ 创建long目录 ###############
@@ -235,7 +236,8 @@ ${SPARK_LIB_DIR}/${ROCKETMQ_COMMON_VERSION},\
 ${SPARK_LIB_DIR}/${ROCKETMQ_REMOTING_VERSION},\
 ${SPARK_LIB_DIR}/${FASTJSON_VERSION},\
 ${SPARK_LIB_DIR}/${KAFKA_CLIENTS_VERSION},\
-${SPARK_LIB_DIR}/${METRICS_CORE_VERSION} \
+${SPARK_LIB_DIR}/${METRICS_CORE_VERSION}, \
+${SPARK_LIB_DIR}/${ES_SPARK_VERSION} \
 --conf "spark.driver.extraJavaOptions=-Dlog4j.configuration=file:${SPARK_CONF_DIR}/log4j.properties" \
 --files ${SPARK_CONF_DIR}/sparkJob.properties,\
 /opt/hzgc/bigdata/HBase/hbase/conf/hbase-site.xml \
