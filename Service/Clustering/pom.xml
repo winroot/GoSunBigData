@@ -105,8 +105,8 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.hzgc.service</groupId>
-            <artifactId>util</artifactId>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-service</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>

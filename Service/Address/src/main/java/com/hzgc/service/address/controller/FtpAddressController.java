@@ -1,9 +1,9 @@
 package com.hzgc.service.address.controller;
 
+import com.hzgc.common.service.error.RestErrorCode;
+import com.hzgc.common.service.response.ResponseResult;
+import com.hzgc.common.service.rest.BigDataPath;
 import com.hzgc.service.address.service.FtpAddressService;
-import com.hzgc.service.util.error.RestErrorCode;
-import com.hzgc.service.util.response.ResponseResult;
-import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

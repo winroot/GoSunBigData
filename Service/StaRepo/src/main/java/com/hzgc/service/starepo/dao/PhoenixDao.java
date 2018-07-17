@@ -2,8 +2,7 @@ package com.hzgc.service.starepo.dao;
 
 import com.hzgc.common.facestarepo.table.table.ObjectInfoTable;
 import com.hzgc.common.facestarepo.table.table.ObjectTypeTable;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.jni.PictureData;
+import com.hzgc.common.service.bean.PeopleManagerCount;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
@@ -12,7 +11,6 @@ import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectTypeParam;
 import com.hzgc.service.starepo.service.ParseByOption;
-import com.hzgc.service.util.bean.PeopleManagerCount;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

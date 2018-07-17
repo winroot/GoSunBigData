@@ -1,8 +1,8 @@
 package com.hzgc.service.visual.controller;
 
-import com.hzgc.service.util.error.RestErrorCode;
-import com.hzgc.service.util.response.ResponseResult;
-import com.hzgc.service.util.rest.BigDataPath;
+import com.hzgc.common.service.error.RestErrorCode;
+import com.hzgc.common.service.response.ResponseResult;
+import com.hzgc.common.service.rest.BigDataPath;
 import com.hzgc.service.visual.bean.*;
 import com.hzgc.service.visual.service.CaptureCountService;
 import com.hzgc.service.visual.util.DateUtils;

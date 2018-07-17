@@ -1,12 +1,12 @@
 package com.hzgc.service.alarm.controller;
 
+import com.hzgc.common.service.error.RestErrorCode;
+import com.hzgc.common.service.response.ResponseResult;
+import com.hzgc.common.service.rest.BigDataPath;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.alarm.bean.AlarmBean;
 import com.hzgc.service.alarm.bean.UserAlarmMessage;
 import com.hzgc.service.alarm.service.AlarmService;
-import com.hzgc.service.util.error.RestErrorCode;
-import com.hzgc.service.util.response.ResponseResult;
-import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

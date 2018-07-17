@@ -2,10 +2,10 @@ package com.hzgc.service.alarm.dao;
 
 import com.hzgc.common.es.ElasticSearchHelper;
 import com.hzgc.common.facealarm.table.AlarmTable;
+import com.hzgc.common.service.response.ResponseResult;
 import com.hzgc.service.alarm.bean.AlarmBean;
 import com.hzgc.service.alarm.bean.AlarmData;
 import com.hzgc.service.alarm.bean.UserAlarmMessage;
-import com.hzgc.service.util.response.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;

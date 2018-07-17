@@ -30,8 +30,8 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.hzgc.service</groupId>
-            <artifactId>util</artifactId>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-service</artifactId>
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>

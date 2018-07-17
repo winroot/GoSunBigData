@@ -2,6 +2,7 @@ package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.facestarepo.table.table.ObjectInfoTable;
 import com.hzgc.common.facestarepo.table.table.SearchResultTable;
+import com.hzgc.common.service.bean.PeopleManagerCount;
 import com.hzgc.jni.PictureData;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
@@ -13,7 +14,6 @@ import com.hzgc.service.starepo.bean.param.SearchRecordParam;
 import com.hzgc.service.starepo.dao.HBaseDao;
 import com.hzgc.service.starepo.dao.PhoenixDao;
 import com.hzgc.service.starepo.util.DocHandlerUtil;
-import com.hzgc.service.util.bean.PeopleManagerCount;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
