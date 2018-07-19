@@ -1,6 +1,6 @@
 package com.hzgc.service.starepo;
 
-import com.hzgc.service.util.auth.config.EnableAuthSynchronize;
+import com.hzgc.common.service.auth.config.EnableAuthSynchronize;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;

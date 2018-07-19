@@ -1,7 +1,7 @@
 package com.hzgc.service.dynrepo.bean;
 
 import com.hzgc.common.faceattribute.bean.Attribute;
-import com.hzgc.service.util.api.bean.DeviceDTO;
+import com.hzgc.common.service.api.bean.DeviceDTO;
 
 import java.io.Serializable;
 import java.util.List;

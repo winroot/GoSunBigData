@@ -63,6 +63,11 @@
             <artifactId>common-facestarepo</artifactId>
             <version>${bigdata-common.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-facealarm</artifactId>
+            <version>${bigdata-common.version}</version>
+        </dependency>
         <!-- third pary -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -118,6 +123,11 @@
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
             <version>${es.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch-hadoop</artifactId>
+            <version>${es.spark.version}</version>
         </dependency>
     </dependencies>
 

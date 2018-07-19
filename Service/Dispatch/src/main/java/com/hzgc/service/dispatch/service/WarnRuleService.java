@@ -1,13 +1,13 @@
 package com.hzgc.service.dispatch.service;
 
+import com.hzgc.common.service.error.RestErrorCode;
+import com.hzgc.common.service.response.ResponseResult;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.dispatch.bean.Dispatch;
 import com.hzgc.service.dispatch.bean.IdsType;
 import com.hzgc.service.dispatch.bean.PageBean;
 import com.hzgc.service.dispatch.bean.Warn;
 import com.hzgc.service.dispatch.dao.HBaseDao;
-import com.hzgc.service.util.error.RestErrorCode;
-import com.hzgc.service.util.response.ResponseResult;
 
 import java.io.IOException;
 import java.util.List;

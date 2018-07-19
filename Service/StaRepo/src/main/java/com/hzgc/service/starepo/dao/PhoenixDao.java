@@ -2,8 +2,7 @@ package com.hzgc.service.starepo.dao;
 
 import com.hzgc.common.facestarepo.table.table.ObjectInfoTable;
 import com.hzgc.common.facestarepo.table.table.ObjectTypeTable;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.jni.PictureData;
+import com.hzgc.common.service.bean.PeopleManagerCount;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
@@ -12,7 +11,6 @@ import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectTypeParam;
 import com.hzgc.service.starepo.service.ParseByOption;
-import com.hzgc.service.util.bean.PeopleManagerCount;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -503,32 +501,6 @@ public class PhoenixDao implements Serializable {
         log.info("Start get object info, SQL is : " + sqlAndArgs.getSql());
         log.info("Start get object info, SQL args is : " + sqlAndArgs.getArgs().toString());
         return jdbcTemplate.queryForRowSet(sqlAndArgs.getSql(), sqlAndArgs.getArgs().toArray());
-    }
-
-    public PictureData getPictureData(String id) {
-        String sql = parseByOption.getPictureData();
-        log.info("Start get objectInfo PictureData, SQL is : " + sql);
-        PictureData pictureData = new PictureData();
-        List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql, id);
-        if (mapList != null && mapList.size() > 0) {
-            Map<String, Object> map = mapList.get(0);
-            if (!map.isEmpty()) {
-                byte[] photo = (byte[]) map.get(ObjectInfoTable.PHOTO);
-                pictureData.setImageData(photo);
-                Array featureArray = (Array) map.get(ObjectInfoTable.FEATURE);
-                try {
-                    float[] feature = (float[]) featureArray.getArray();
-                    if (photo != null && photo.length > 0) {
-                        FaceAttribute faceAttribute = new FaceAttribute();
-                        faceAttribute.setFeature(feature);
-                        pictureData.setFeature(faceAttribute);
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return pictureData;
     }
 
     /**

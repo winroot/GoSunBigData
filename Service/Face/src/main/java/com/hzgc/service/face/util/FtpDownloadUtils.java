@@ -30,7 +30,8 @@ public class FtpDownloadUtils {
             int ftpPort = Integer.parseInt(path.substring(0, path.indexOf("/")));
             String ftpFilePath = path.substring(path.indexOf("/"), path.lastIndexOf("/"));
             String ftpFileName = path.substring(path.lastIndexOf("/") + 1);
-
+            log.info("ftpAddress is{}, path is:{}, ftpPort is:{}, ftpFilePath is:{}, ftpFileName is{}",
+                    ftpAddress, path, ftpPort, ftpFilePath, ftpFileName);
             FTPClient ftpClient;
             InputStream in;
 

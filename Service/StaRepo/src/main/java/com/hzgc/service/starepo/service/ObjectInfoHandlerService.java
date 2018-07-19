@@ -2,6 +2,7 @@ package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.facestarepo.table.table.ObjectInfoTable;
 import com.hzgc.common.facestarepo.table.table.SearchResultTable;
+import com.hzgc.common.service.bean.PeopleManagerCount;
 import com.hzgc.jni.PictureData;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
@@ -13,7 +14,6 @@ import com.hzgc.service.starepo.bean.param.SearchRecordParam;
 import com.hzgc.service.starepo.dao.HBaseDao;
 import com.hzgc.service.starepo.dao.PhoenixDao;
 import com.hzgc.service.starepo.util.DocHandlerUtil;
-import com.hzgc.service.util.bean.PeopleManagerCount;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -487,14 +487,11 @@ public class ObjectInfoHandlerService {
      * @return PictureData
      */
     public PictureData getFeature(String id) {
-        PictureData pictureData = phoenixDao.getPictureData(id);
-        if (pictureData != null) {
-            byte[] photo = pictureData.getImageData();
-            float[] feature = pictureData.getFeature().getFeature();
+        PictureData pictureData = null;
+        byte[] photo = phoenixDao.getPhotoByObjectId(id);
+        if (photo != null) {
             pictureData = restTemplate.postForObject("http://face/extract_bytes", photo, PictureData.class);
-            if (pictureData != null) {
-                pictureData.getFeature().setFeature(feature);
-            }
+
         }
         log.info("Get object picture data successfully, picture data : " + JSONUtil.toJson(pictureData));
         return pictureData;

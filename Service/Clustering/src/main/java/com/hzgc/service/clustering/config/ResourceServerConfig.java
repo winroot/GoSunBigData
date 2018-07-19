@@ -1,6 +1,5 @@
 package com.hzgc.service.clustering.config;
 
-import com.hzgc.service.util.rest.BigDataPath;
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
