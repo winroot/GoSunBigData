@@ -1,6 +1,6 @@
 package com.hzgc.service.address.service;
 
-import com.hzgc.collect.zk.subscribe.SubscribeRegister;
+import com.hzgc.common.collect.facesub.SubscribeRegister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -70,6 +70,16 @@ public class ObjectInfoHandlerService {
     }
 
     /**
+     * 获取数据库中idCard
+     *
+     * @param objectInfo
+     * @return idCard
+     */
+    public String getObjectIdCard(ObjectInfoParam objectInfo) {
+        return phoenixDao.getObjectIdCard(objectInfo.getId());
+    }
+
+    /**
      * 身份证唯一性判断
      *
      * @param objectInfo
@@ -134,44 +144,11 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
     public Integer updateObjectInfo(ObjectInfoParam param) {
-        if (!StringUtils.isBlank(param.getIdcard())) {
-            // 判断身份证格式是否正确
-            if (!idCodeAuthentication(param.getIdcard())) {
-                log.info("Start update object info, but the id card format is error");
-                return 1;
-            }
-            // 身份证唯一性判断
-            List<String> idcards = phoenixDao.getAllObjectIdcard();
-            if (idcards.contains(param.getIdcard())) {
-                log.error("Start update object info, but the idcard already exists");
-                return 1;
-            }
-        }
-        // 判断ObjectTypeKey是否存在
-        List<String> objectTypeKeys = phoenixDao.getAllObjectTypeKeys();
-        if (!objectTypeKeys.contains(param.getObjectTypeKey())) {
-            log.error("Start update object info, but the object type key doesn't exists");
-            return 1;
-        }
-        // 查询更新对象当前状态值
-        String objectId = param.getId();
-        int status = phoenixDao.getObjectInfo_status(objectId);
-        //数据库更新操作(状态值暂时不更新)
         Integer i = phoenixDao.updateObjectInfo(param);
-        // 根据入参状态值与数据库中对象状态值比较，判断是否更新statustime（状态更新时间）字段
-        if (param.getStatus() != status) {
-            Integer ii = phoenixDao.updateObjectInfo_status(objectId, param.getStatus());
-            if (i == 0 && ii == 0) {
-                sendKafka(param, UPDATE);
-                return 0;
-            }
-        } else {
-            if (i == 0) {
-                sendKafka(param, UPDATE);
-                return 0;
-            }
+        if (i == 0){
+            sendKafka(param, UPDATE);
         }
-        return 1;
+        return i;
     }
 
     private void sendKafka(ObjectInfoParam param, String option) {
@@ -634,16 +611,12 @@ public class ObjectInfoHandlerService {
      * @return PictureData
      */
     public PictureData getFeature(String id) {
-        PictureData pictureData = phoenixDao.getPictureData(id);
-        if (pictureData != null) {
-            byte[] photo = pictureData.getImageData();
-            float[] feature = pictureData.getFeature().getFeature();
+        PictureData pictureData = null;
+        byte[] photo = phoenixDao.getPhotoByObjectId(id);
+        if (photo != null) {
             pictureData = restTemplate.postForObject("http://face/extract_bytes", photo, PictureData.class);
-            if (pictureData != null) {
-                pictureData.getFeature().setFeature(feature);
-            }
         }
-        log.info("Get object picture data successfull, picture data : " + JSONUtil.toJson(pictureData));
+        log.info("Get object picture data successfully, picture data : " + JSONUtil.toJson(pictureData));
         return pictureData;
     }
 

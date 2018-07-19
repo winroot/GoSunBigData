@@ -34,9 +34,19 @@
             <artifactId>util</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.hzgc.collect</groupId>
-            <artifactId>collect-zookeeper</artifactId>
+            <groupId>com.hzgc.common</groupId>
+            <artifactId>common-collect</artifactId>
             <version>1.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>netty-all</artifactId>
+                    <groupId>io.netty</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

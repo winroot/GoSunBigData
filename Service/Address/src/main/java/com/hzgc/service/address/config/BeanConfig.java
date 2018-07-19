@@ -1,7 +1,7 @@
 package com.hzgc.service.address.config;
 
-import com.hzgc.collect.zk.register.RegisterWatcher;
-import com.hzgc.collect.zk.subscribe.SubscribeRegister;
+import com.hzgc.common.collect.facedis.RegisterWatcher;
+import com.hzgc.common.collect.facesub.SubscribeRegister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
