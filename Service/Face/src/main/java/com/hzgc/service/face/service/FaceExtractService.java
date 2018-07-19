@@ -52,6 +52,7 @@ public class FaceExtractService {
 
     //ftp获取特征值
     public PictureData getFeatureExtractByFtp(String pictureUrl){
+        log.info("PictureUrl is :" + pictureUrl);
         PictureData pictureData;
         //FTP匿名账号Anonymous和密码
         byte[] bytes = FtpDownloadUtils.downloadftpFile2Bytes(pictureUrl,"anonymous",null);
