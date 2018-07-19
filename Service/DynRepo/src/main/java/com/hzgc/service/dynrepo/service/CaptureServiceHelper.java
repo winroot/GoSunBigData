@@ -2,11 +2,11 @@ package com.hzgc.service.dynrepo.service;
 
 import com.hzgc.common.collect.facedis.RegisterWatcher;
 import com.hzgc.common.facedynrepo.DynamicTable;
+import com.hzgc.common.service.api.bean.DeviceDTO;
+import com.hzgc.common.service.api.service.DeviceQueryService;
 import com.hzgc.jni.PictureData;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.service.dynrepo.bean.*;
-import com.hzgc.service.util.api.bean.DeviceDTO;
-import com.hzgc.service.util.api.service.DeviceQueryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;

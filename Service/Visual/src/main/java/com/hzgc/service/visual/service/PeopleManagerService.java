@@ -1,8 +1,7 @@
 package com.hzgc.service.visual.service;
 
-import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.service.util.bean.PeopleManagerCount;
-import com.hzgc.service.util.rest.BigDataPath;
+import com.hzgc.common.service.bean.PeopleManagerCount;
+import com.hzgc.common.service.rest.BigDataPath;
 import com.hzgc.service.visual.bean.PeopleManager;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;

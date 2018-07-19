@@ -1,16 +1,16 @@
 package com.hzgc.service.dynrepo.controller;
 
 import com.hzgc.common.faceattribute.service.AttributeService;
+import com.hzgc.common.service.error.RestErrorCode;
+import com.hzgc.common.service.response.ResponseResult;
+import com.hzgc.common.service.rest.BigDataPath;
+import com.hzgc.common.service.rest.BigDataPermission;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.service.dynrepo.bean.*;
 import com.hzgc.service.dynrepo.service.CaptureHistoryService;
 import com.hzgc.service.dynrepo.service.CaptureSearchService;
 import com.hzgc.service.dynrepo.service.CaptureServiceHelper;
-import com.hzgc.service.util.error.RestErrorCode;
-import com.hzgc.service.util.response.ResponseResult;
-import com.hzgc.service.util.rest.BigDataPath;
-import com.hzgc.service.util.rest.BigDataPermission;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;

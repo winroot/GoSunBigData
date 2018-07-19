@@ -40,6 +40,7 @@
         <jni.version>1.0</jni.version>
         <reflections.version>0.9.10</reflections.version>
         <bigdata-common.version>1.0</bigdata-common.version>
+        <es.spark.version>6.2.4</es.spark.version>
     </properties>
 
 

@@ -2,8 +2,7 @@ package com.hzgc.service.starepo.dao;
 
 import com.hzgc.common.facestarepo.table.table.ObjectInfoTable;
 import com.hzgc.common.facestarepo.table.table.ObjectTypeTable;
-import com.hzgc.jni.FaceAttribute;
-import com.hzgc.jni.PictureData;
+import com.hzgc.common.service.bean.PeopleManagerCount;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
@@ -12,7 +11,6 @@ import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectTypeParam;
 import com.hzgc.service.starepo.service.ParseByOption;
-import com.hzgc.service.util.bean.PeopleManagerCount;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -340,7 +338,7 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return 1;
         }
-        log.info("add object info successfull");
+        log.info("add object info successfully");
         return 0;
     }
 
@@ -351,7 +349,6 @@ public class PhoenixDao implements Serializable {
      * @return 返回值为0，表示删除成功，返回值为1，表示删除失败
      */
     public Integer deleteObjectInfo(List<String> rowkeys) {
-        // 获取table 对象，通过封装HBaseHelper 来获取
         String sql = parseByOption.deleteObjectInfo();
         log.info("Start delete object info, SQL is : " + sql);
         try {
@@ -364,7 +361,7 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return 1;
         }
-        log.info("delete object info successfull");
+        log.info("delete object info successfully");
         return 0;
     }
 
@@ -395,7 +392,7 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return 1;
         }
-        log.info("update object info successfull");
+        log.info("update object info successfully");
         return 0;
     }
 
@@ -426,7 +423,7 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return 1;
         }
-        log.info("update object status successfull");
+        log.info("update object status successfully");
         return 0;
     }
 
@@ -472,14 +469,14 @@ public class PhoenixDao implements Serializable {
             String objectTypeName = getObjectTypeNameById(objectTypeKey);
             objectInfo.setObjectTypeName(objectTypeName);
         }
-        log.info("get object info result : " + JSONUtil.toJson(objectInfo));
+        log.info("Get object info successfully, result : " + JSONUtil.toJson(objectInfo));
         return objectInfo;
     }
 
     private String getObjectTypeNameById(String objectTypeId) {
         String sql = parseByOption.getObjectTypeNameById();
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, objectTypeId);
-        String objectTypeName = "";
+        String objectTypeName = null;
         while (sqlRowSet.next()) {
             objectTypeName = sqlRowSet.getString(ObjectTypeTable.TYPE_NAME);
         }
@@ -506,32 +503,6 @@ public class PhoenixDao implements Serializable {
         return jdbcTemplate.queryForRowSet(sqlAndArgs.getSql(), sqlAndArgs.getArgs().toArray());
     }
 
-    public PictureData getPictureData(String id) {
-        String sql = parseByOption.getPictureData();
-        log.info("Start get objectInfo PictureData, SQL is : " + sql);
-        PictureData pictureData = new PictureData();
-        List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql, id);
-        if (mapList != null && mapList.size() > 0) {
-            Map<String, Object> map = mapList.get(0);
-            if (!map.isEmpty()) {
-                byte[] photo = (byte[]) map.get(ObjectInfoTable.PHOTO);
-                pictureData.setImageData(photo);
-                Array featureArray = (Array) map.get(ObjectInfoTable.FEATURE);
-                try {
-                    float[] feature = (float[]) featureArray.getArray();
-                    if (photo != null && photo.length > 0) {
-                        FaceAttribute faceAttribute = new FaceAttribute();
-                        faceAttribute.setFeature(feature);
-                        pictureData.setFeature(faceAttribute);
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return pictureData;
-    }
-
     /**
      * 根据rowkey 返回人员的照片
      *
@@ -545,6 +516,9 @@ public class PhoenixDao implements Serializable {
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, objectId);
         while (sqlRowSet.next()) {
             photo = (byte[]) sqlRowSet.getObject(ObjectInfoTable.PHOTO);
+        }
+        if (photo != null && photo.length > 0){
+            log.info("Start get object photo successfully");
         }
         return photo;
     }

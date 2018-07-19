@@ -1,9 +1,9 @@
 package com.hzgc.service.visual.service;
 
+import com.hzgc.common.service.api.bean.DeviceDTO;
+import com.hzgc.common.service.api.service.DeviceQueryService;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.service.util.api.bean.DeviceDTO;
-import com.hzgc.service.util.api.service.DeviceQueryService;
 import com.hzgc.service.visual.bean.*;
 import com.hzgc.service.visual.dao.ElasticSearchDao;
 import com.hzgc.service.visual.dao.EsSearchParam;

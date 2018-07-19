@@ -2,11 +2,11 @@ package com.hzgc.service.face.controller;
 
 import com.hzgc.common.faceattribute.bean.Attribute;
 import com.hzgc.common.faceattribute.service.AttributeService;
+import com.hzgc.common.service.error.RestErrorCode;
+import com.hzgc.common.service.response.ResponseResult;
+import com.hzgc.common.service.rest.BigDataPath;
 import com.hzgc.jni.PictureData;
 import com.hzgc.service.face.service.FaceExtractService;
-import com.hzgc.service.util.error.RestErrorCode;
-import com.hzgc.service.util.response.ResponseResult;
-import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

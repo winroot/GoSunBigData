@@ -12,7 +12,6 @@
     <artifactId>service</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>Util</module>
         <module>Clustering</module>
         <module>Alarm</module>
         <module>DynRepo</module>
@@ -136,9 +135,9 @@
                 <version>${bigdata-common.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.hzgc.service</groupId>
-                <artifactId>util</artifactId>
-                <version>${project.parent.version}</version>
+                <groupId>com.hzgc.common</groupId>
+                <artifactId>common-service</artifactId>
+                <version>${bigdata-common.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -300,14 +300,16 @@ public class ParseByOption {
         }
 
         // 关于性别的查询
-        int sex = param.getSex();
-        if (sex == 0 || sex == 1 || sex == 2) {
-            if (isChanged) {
-                whereQuery.append(" and ");
+        Integer sex = param.getSex();
+        if (sex != null){
+            if (sex == 0 || sex == 1 || sex == 2) {
+                if (isChanged) {
+                    whereQuery.append(" and ");
+                }
+                whereQuery.append(ObjectInfoTable.SEX).append(" = ?");
+                setArgsList.add(sex);
+                isChanged = true;
             }
-            whereQuery.append(ObjectInfoTable.SEX).append(" = ?");
-            setArgsList.add(sex);
-            isChanged = true;
         }
 
         // 关于人员类型列表的查询
@@ -365,25 +367,31 @@ public class ParseByOption {
         }
 
         //查询人员状态值
-        int status = param.getStatus();
-        if (status == 0 || status == 1){
-            if (isChanged) {
-                whereQuery.append(" and ");
+        Integer status = param.getStatus();
+        if (status != null){
+            if (status == 0 || status == 1){
+                if (isChanged) {
+                    whereQuery.append(" and ");
+                }
+                whereQuery.append(ObjectInfoTable.STATUS).append(" = ?");
+                setArgsList.add(status);
+                isChanged = true;
             }
-            whereQuery.append(ObjectInfoTable.STATUS).append(" = ?");
-            setArgsList.add(status);
-            isChanged = true;
         }
 
         // 关于是否是重点人员的查询
-        int followLevel = param.getFollowLevel();
-        if (followLevel == 1 || followLevel == 2) {
-            if (isChanged) {
-                whereQuery.append(" and ");
+        Integer followLevel = param.getFollowLevel();
+        if (followLevel != null){
+            if (followLevel == 1 || followLevel == 2) {
+                if (isChanged) {
+                    whereQuery.append(" and ");
+                }
+                whereQuery.append(ObjectInfoTable.IMPORTANT).append(" = ?");
+                setArgsList.add(followLevel);
+            }else {
+                whereQuery.append(" order by ").append(ObjectInfoTable.IMPORTANT).append(" desc");
             }
-            whereQuery.append(ObjectInfoTable.IMPORTANT).append(" = ?");
-            setArgsList.add(followLevel);
-        }else {
+        } else {
             whereQuery.append(" order by ").append(ObjectInfoTable.IMPORTANT).append(" desc");
         }
         return whereQuery;
@@ -423,8 +431,8 @@ public class ParseByOption {
             setValues.add(idcard);
         }
 
-        int sex = objectInfo.getSex();
-        if (sex != 0) {
+        Integer sex = objectInfo.getSex();
+        if (sex != null) {
             sql.append(", ");
             sql.append(ObjectInfoTable.SEX);
             setValues.add(sex);
@@ -450,8 +458,8 @@ public class ParseByOption {
             setValues.add(cphone);
         }
 
-        int important = objectInfo.getFollowLevel();
-        if (important != 0) {
+        Integer important = objectInfo.getFollowLevel();
+        if (important != null) {
             sql.append(", ");
             sql.append(ObjectInfoTable.IMPORTANT);
             setValues.add(important);
@@ -571,12 +579,6 @@ public class ParseByOption {
         return "select " + ObjectTypeTable.TYPE_NAME + " from "
                 + ObjectTypeTable.TABLE_NAME + " where "
                 + ObjectTypeTable.ROWKEY + " = ?";
-    }
-
-    public String getPictureData() {
-        return "select " + ObjectInfoTable.PHOTO + ","
-                + ObjectInfoTable.FEATURE
-                + " from " + ObjectInfoTable.TABLE_NAME + " where id = ?";
     }
 
     public String countStatus() {

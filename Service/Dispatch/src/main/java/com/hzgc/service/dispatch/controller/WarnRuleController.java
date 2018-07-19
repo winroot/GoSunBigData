@@ -1,15 +1,15 @@
 package com.hzgc.service.dispatch.controller;
 
+import com.hzgc.common.service.api.bean.DeviceDTO;
+import com.hzgc.common.service.api.service.DeviceQueryService;
+import com.hzgc.common.service.error.RestErrorCode;
+import com.hzgc.common.service.response.ResponseResult;
+import com.hzgc.common.service.rest.BigDataPath;
+import com.hzgc.common.service.rest.BigDataPermission;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.dispatch.bean.*;
 import com.hzgc.service.dispatch.service.WarnRuleService;
 import com.hzgc.service.dispatch.util.IpcIdsUtil;
-import com.hzgc.service.util.api.bean.DeviceDTO;
-import com.hzgc.service.util.api.service.DeviceQueryService;
-import com.hzgc.service.util.error.RestErrorCode;
-import com.hzgc.service.util.response.ResponseResult;
-import com.hzgc.service.util.rest.BigDataPath;
-import com.hzgc.service.util.rest.BigDataPermission;
 import io.swagger.annotations.*;
 
 import java.io.IOException;

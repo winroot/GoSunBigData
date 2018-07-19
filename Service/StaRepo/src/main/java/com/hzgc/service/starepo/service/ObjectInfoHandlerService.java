@@ -2,6 +2,7 @@ package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.facestarepo.table.table.ObjectInfoTable;
 import com.hzgc.common.facestarepo.table.table.SearchResultTable;
+import com.hzgc.common.service.bean.PeopleManagerCount;
 import com.hzgc.jni.PictureData;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
@@ -13,7 +14,6 @@ import com.hzgc.service.starepo.bean.param.SearchRecordParam;
 import com.hzgc.service.starepo.dao.HBaseDao;
 import com.hzgc.service.starepo.dao.PhoenixDao;
 import com.hzgc.service.starepo.util.DocHandlerUtil;
-import com.hzgc.service.util.bean.PeopleManagerCount;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -142,25 +142,11 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
     public Integer updateObjectInfo(ObjectInfoParam param) {
-        // 查询更新对象当前状态值
-        String objectId = param.getId();
-        int status = phoenixDao.getObjectInfo_status(objectId);
-        //数据库更新操作(状态值暂时不更新)
         Integer i = phoenixDao.updateObjectInfo(param);
-        // 根据入参状态值与数据库中对象状态值比较，判断是否更新statustime（状态更新时间）字段
-        if (param.getStatus() != status) {
-            Integer ii = phoenixDao.updateObjectInfo_status(objectId, param.getStatus());
-            if (i == 0 && ii == 0) {
-                sendKafka(param, UPDATE);
-                return 0;
-            }
-        } else {
-            if (i == 0) {
-                sendKafka(param, UPDATE);
-                return 0;
-            }
+        if (i == 0) {
+            sendKafka(param, UPDATE);
         }
-        return 1;
+        return i;
     }
 
     private void sendKafka(ObjectInfoParam param, String option) {
@@ -501,16 +487,13 @@ public class ObjectInfoHandlerService {
      * @return PictureData
      */
     public PictureData getFeature(String id) {
-        PictureData pictureData = phoenixDao.getPictureData(id);
-        if (pictureData != null) {
-            byte[] photo = pictureData.getImageData();
-            float[] feature = pictureData.getFeature().getFeature();
+        PictureData pictureData = null;
+        byte[] photo = phoenixDao.getPhotoByObjectId(id);
+        if (photo != null) {
             pictureData = restTemplate.postForObject("http://face/extract_bytes", photo, PictureData.class);
-            if (pictureData != null) {
-                pictureData.getFeature().setFeature(feature);
-            }
+
         }
-        log.info("Get object picture data successfull, picture data : " + JSONUtil.toJson(pictureData));
+        log.info("Get object picture data successfully, picture data : " + JSONUtil.toJson(pictureData));
         return pictureData;
     }
 

@@ -1,9 +1,9 @@
 package com.hzgc.service.alarm.service;
 
+import com.hzgc.common.service.response.ResponseResult;
 import com.hzgc.service.alarm.bean.AlarmBean;
 import com.hzgc.service.alarm.bean.UserAlarmMessage;
 import com.hzgc.service.alarm.dao.AlarmDao;
-import com.hzgc.service.util.response.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
