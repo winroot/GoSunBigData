@@ -2,6 +2,7 @@ package com.hzgc.service.address.service;
 
 import com.hzgc.common.collect.facedis.FtpRegisterClient;
 import com.hzgc.common.collect.facedis.FtpRegisterInfo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +23,10 @@ public class FtpAddressService implements Serializable {
      */
     public Map<String, String> getProperties() {
         Map<String, String> map = new HashMap<>();
-        for (FtpRegisterInfo registerInfo : register.getFtpRegisterInfoList()) {
-            map.put("ip", registerInfo.getFtpIPAddress());
-            map.put("port", registerInfo.getFtpPort());
+        FtpRegisterInfo registerInfo = register.getFtpRegisterInfoList().get(0);
+        if (registerInfo != null) {
+            map.put("ip", registerInfo.getProxyIP());
+            map.put("port", registerInfo.getProxyPort());
             map.put("username", registerInfo.getFtpAccountName());
             map.put("password", registerInfo.getFtpPassword());
             map.put("pathRule", registerInfo.getPathRule());
@@ -39,10 +41,8 @@ public class FtpAddressService implements Serializable {
      * @return IP地址
      */
     public String getIPAddress(String hostname) {
-        for (FtpRegisterInfo registerInfo : register.getFtpRegisterInfoList()) {
-            if (hostname.equals(registerInfo.getFtpHomeName())){
-                return registerInfo.getFtpIPAddress();
-            }
+        if (!StringUtils.isBlank(hostname)){
+            return register.getFtpIpMapping().get(hostname);
         }
         return null;
     }
