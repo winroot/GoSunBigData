@@ -67,15 +67,8 @@ public class WarnRuleController {
             log.info("Add rule , param is " + JSONUtil.toJson(dispatch));
             List<Long> list = IpcIdsUtil.toDeviceIdList(dispatch.getDevices());
             Map<String, DeviceDTO> map = deviceQueryService.getDeviceInfoByBatchId(list);
-            List<Device> deviceList = dispatch.getDevices();
             for (String s : map.keySet()) {
                 ipcIDs.add(map.get(s).getSerial());
-                for (Device device:deviceList){
-                    String id = device.getId();
-                    if (s.equals(id)){
-                        device.setName(map.get(s).getName());
-                    }
-                }
             }
             warnList = dispatch.getRule().getWarns();
             Map<String, Dispatch> dispatchMap = IpcIdsUtil.toDispatchMap(dispatch);
