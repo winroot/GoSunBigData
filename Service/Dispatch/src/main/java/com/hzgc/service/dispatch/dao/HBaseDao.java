@@ -5,11 +5,14 @@ import com.hzgc.common.hbase.HBaseHelper;
 import com.hzgc.common.table.dispatch.DispatchTable;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.dispatch.bean.*;
+import com.hzgc.service.dispatch.util.IpcIdsUtil;
 import com.hzgc.service.dispatch.util.JsonToMap;
 import com.hzgc.service.dispatch.bean.Device;
 import com.hzgc.service.dispatch.bean.IdsType;
 import com.hzgc.service.dispatch.bean.PageBean;
 import com.hzgc.service.dispatch.bean.Warn;
+import com.hzgc.service.util.api.bean.DeviceDTO;
+import com.hzgc.service.util.api.service.DeviceQueryService;
 import com.hzgc.service.util.error.RestErrorCode;
 import com.hzgc.service.util.response.ResponseResult;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -29,6 +32,9 @@ public class HBaseDao {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private DeviceQueryService deviceQueryService;
 
     public HBaseDao() {
         HBaseHelper.getHBaseConnection();
@@ -485,6 +491,19 @@ public class HBaseDao {
             String hbaseMapString = Bytes.toString(bytes);
             LinkedHashMap<String, Dispatch> map = JsonToMap.dispatchStringToMap(hbaseMapString);
             List<Device> deviceList = map.get(rule_id).getDevices();
+            //获取设备名称
+            List<Long> list = IpcIdsUtil.toDeviceIdList(deviceList);
+            Map<String, DeviceDTO> mapDTO = deviceQueryService.getDeviceInfoByBatchId(list);
+            for (String s :mapDTO.keySet()){
+                DeviceDTO deviceDTO = mapDTO.get(s);
+                String name = deviceDTO.getName();
+                for (Device device:deviceList){
+                    String id = device.getId();
+                    if (s.equals(id)){
+                        device.setName(name);
+                    }
+                }
+            }
             log.info("One ruleID all Devices is " + JSON.toJSONString(deviceList));
             return ResponseResult.init(deviceList);
         }
