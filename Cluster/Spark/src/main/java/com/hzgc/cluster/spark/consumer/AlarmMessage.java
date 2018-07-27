@@ -1,5 +1,7 @@
-package com.hzgc.cluster.spark.message;
+package com.hzgc.cluster.spark.consumer;
 
+
+import com.hzgc.cluster.spark.message.Item;
 
 import java.io.Serializable;
 
@@ -64,14 +66,9 @@ public class AlarmMessage implements Serializable {
      */
     private Integer confirm;
 
-    /**
-     * 静态信息库的比对结果数组
-     */
-    private Item[] items;
 
-    public AlarmMessage(Item[] items,String alarmType, String ipcID, String alarmTime, String hostName, String bigPictureURL, String smallPictureURL, String sim, String staticID, String objectType, Integer flag, Integer confirm) {
+    public AlarmMessage(String alarmType, String ipcID, String alarmTime, String hostName, String bigPictureURL, String smallPictureURL, String sim, String staticID, String objectType, Integer flag, Integer confirm) {
 
-        this.items = items;
         this.alarmType = alarmType;
         this.ipcID = ipcID;
         this.alarmTime = alarmTime;
@@ -86,14 +83,6 @@ public class AlarmMessage implements Serializable {
     }
 
     public AlarmMessage() {
-    }
-
-    public Item[] getItems() {
-        return items;
-    }
-
-    public void setItems(Item[] items) {
-        this.items = items;
     }
 
     public String getAlarmType() {

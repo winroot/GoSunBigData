@@ -5,9 +5,9 @@ import java.util
 import java.util.Date
 
 import com.google.gson.Gson
-import com.hzgc.cluster.spark.consumer.PutDataToEs
+import com.hzgc.cluster.spark.consumer.{AlarmMessage, PutDataToEs}
 import com.hzgc.common.facedispatch.DeviceUtilImpl
-import com.hzgc.cluster.spark.message.{Item, AlarmMessage}
+import com.hzgc.cluster.spark.message.{AddAlarmMessage, Item, RecognizeAlarmMessage}
 import com.hzgc.common.rocketmq.RocketMQProducer
 import com.hzgc.common.facestarepo.table.alarm.StaticRepoUtil
 import com.hzgc.cluster.spark.util.{FaceObjectUtil, PropertiesUtil}
@@ -38,13 +38,14 @@ object FaceAlarmJob {
     val nameServer = properties.getProperty("rocketmq.nameserver")
     val grouId = properties.getProperty("rocketmq.group.id")
     val itemNum = properties.getProperty("job.recognizeAlarm.items.num").toInt
-    val timeInterval = Durations.seconds(properties.getProperty("job.Alarm.timeInterval").toLong)
+    val timeInterval = Durations.seconds(properties.getProperty("job.alarm.timeInterval").toLong)
     val conf = new SparkConf()
       .setAppName(appName)
     val ssc = new StreamingContext(conf, timeInterval)
+    val switch = ssc.sparkContext.broadcast(properties.getProperty("alarm.store.switch"))
     val kafkaBootStrapBroadCast = ssc.sparkContext.broadcast(properties.getProperty("kafka.metadata.broker.list"))
     val jdbcUrlBroadCast = ssc.sparkContext.broadcast(properties.getProperty("phoenix.jdbc.url"))
-    val kafkaGroupId = properties.getProperty("kafka.FaceAlarmJob.group.id")
+    val kafkaGroupId = properties.getProperty("kafka.faceAlarmJob.group.id")
     val topics = Set(properties.getProperty("kafka.topic.name"))
     val brokers = properties.getProperty("kafka.metadata.broker.list")
     val kafkaParams = Map(
@@ -126,17 +127,20 @@ object FaceAlarmJob {
             if (!updateTimeList.isEmpty) {
               StaticRepoUtil.getInstance(kafkaBootStrapBroadCast.value, jdbcUrlBroadCast.value).updateObjectInfoTime(updateTimeList)
             }
+            val recognizeAlarmMessage = new RecognizeAlarmMessage()
             val AlarmMessage = new AlarmMessage()
             val dateStr = df.format(new Date())
-            val surl = result._1.getSurl
-            val burl = result._1.getBurl
+            val surl = result._1.getRelativePath
+            val burl = surl.substring(0, surl.length - 5) + "0.jpg"
+            val esSurl = result._1.getSurl
+            val esBurl = result._1.getBurl
             val staticId = result._4(0).staticID
             val sim = result._4(0).sim.toString
             val staticObjectType = result._4(0).staticObjectType
             AlarmMessage.setAlarmType(DispatchTable.IDENTIFY)
             AlarmMessage.setIpcID(result._2)
-            AlarmMessage.setSmallPictureURL(surl)
-            AlarmMessage.setBigPictureURL(burl)
+            AlarmMessage.setSmallPictureURL(esSurl)
+            AlarmMessage.setBigPictureURL(esBurl)
             AlarmMessage.setAlarmTime(dateStr)
             AlarmMessage.setHostName(result._1.getHostname)
             AlarmMessage.setStaticID(staticId)
@@ -144,28 +148,58 @@ object FaceAlarmJob {
             AlarmMessage.setObjectType(staticObjectType)
             AlarmMessage.setFlag(0)
             AlarmMessage.setConfirm(1)
-            val status = putDataToEs.putAlarmDataToEs(surl, AlarmMessage)
-            if (status != 1) {
-              LOG.error("Put data to es failed! And the failed ftpurl is " + surl)
+            recognizeAlarmMessage.setAlarmType(DispatchTable.IDENTIFY)
+            recognizeAlarmMessage.setSmallPictureURL(surl)
+            recognizeAlarmMessage.setBigPictureURL(burl)
+            recognizeAlarmMessage.setItems(itemsResult.toArray)
+            recognizeAlarmMessage.setHostName(result._1.getHostname)
+            recognizeAlarmMessage.setDynamicDeviceID(result._2)
+            recognizeAlarmMessage.setAlarmTime(dateStr)
+            if (switch.value.equals("true")) {
+              val status = putDataToEs.putAlarmDataToEs(surl, AlarmMessage)
+              if (status == 1) {
+                LOG.info("Put data to es succeed! And the ftpurl is " + surl)
+              }
             }
+            rocketMQProducer.send(result._3,
+              "alarm_" + DispatchTable.IDENTIFY,
+              surl,
+              gson.toJson(recognizeAlarmMessage).getBytes(),
+              null)
           }
           if (addItems.isEmpty) {
+            val addAlarmMessage = new AddAlarmMessage()
             val AlarmMessage = new AlarmMessage()
             val dateStr = df.format(new Date())
-            val surl = result._1.getSurl
-            val burl = result._1.getBurl
+            val surl = result._1.getRelativePath
+            val burl = surl.substring(0, surl.length - 5) + "0.jpg"
+            val esSurl = result._1.getSurl
+            val esBurl = result._1.getBurl
             AlarmMessage.setAlarmType(DispatchTable.ADDED)
             AlarmMessage.setIpcID(result._2)
-            AlarmMessage.setSmallPictureURL(surl)
-            AlarmMessage.setBigPictureURL(burl)
+            AlarmMessage.setSmallPictureURL(esSurl)
+            AlarmMessage.setBigPictureURL(esBurl)
             AlarmMessage.setAlarmTime(dateStr)
             AlarmMessage.setHostName(result._1.getHostname)
             AlarmMessage.setFlag(0)
             AlarmMessage.setConfirm(1)
-            val status = putDataToEs.putAlarmDataToEs(surl, AlarmMessage)
-            if (status != 1) {
-              LOG.error("Put data to es failed! And the failed ftpurl is " + surl)
+            addAlarmMessage.setAlarmTime(dateStr)
+            addAlarmMessage.setAlarmType(DispatchTable.ADDED)
+            addAlarmMessage.setSmallPictureURL(surl)
+            addAlarmMessage.setBigPictureURL(burl)
+            addAlarmMessage.setDynamicDeviceID(result._2)
+            addAlarmMessage.setHostName(result._1.getHostname)
+            if (switch.value.equals("true")) {
+              val status = putDataToEs.putAlarmDataToEs(surl, AlarmMessage)
+              if (status == 1) {
+                LOG.info("Put data to es succeed! And the ftpurl is " + surl)
+              }
             }
+            rocketMQProducer.send(result._3,
+              "alarm_" + DispatchTable.ADDED,
+              surl,
+              gson.toJson(addAlarmMessage).getBytes(),
+              null)
           }
         })
       })
