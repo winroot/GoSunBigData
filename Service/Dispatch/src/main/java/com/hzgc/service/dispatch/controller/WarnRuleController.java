@@ -113,45 +113,14 @@ public class WarnRuleController {
             List <Device> deviceList = dispatch.getDevices();
             List<Long> list = IpcIdsUtil.toDeviceIdList(deviceList);
             Map<String, DeviceDTO> map = deviceQueryService.getDeviceInfoByBatchId(list);
-            //同步设置ipcid
-            ArrayList <String> delIpcids = new ArrayList <>();
             for (String s : map.keySet()) {
-                DeviceDTO deviceDTO = map.get(s);
-                String ipcid = deviceDTO.getSerial();
-                if (null != ipcid){
-                    ipcIDs.add(ipcid);
-                    for (Device device:deviceList){
-                        String id = device.getId();
-                        if (id.equals(s)){
-                            device.setIpcId(ipcid);
-                        }
-                    }
-                }else {
-                    //删除没有ipcid的设备id
-                    Iterator <Device> iterator = deviceList.iterator();
-                    while (iterator.hasNext()){
-                        Device device = iterator.next();
-                        if (s.equals(device.getId())){
-                            String ipcId = device.getIpcId();
-                            //添加需要删除的ipcId
-                            delIpcids.add(ipcId);
-                            iterator.remove();
-                        }
-                    }
-                }
+                ipcIDs.add(map.get(s).getSerial());
             }
-            //调用大数据删除接口
-            if (delIpcids.size() > 0){
-                log.info("Bigdata param , ipcIDs is " + JSONUtil.toJson(delIpcids));
-                warnRuleService.deleteRules(delIpcids);
-            }
-            log.info("Origin ipcids is : " + ipcIDs.size());
             //参数封装
             warnList = dispatch.getRule().getWarns();
             ResponseResult<Boolean> responseResult = warnRuleService.updateRule(dispatch);
             //调用大数据接口
             ipcIDs.removeAll(Collections.singleton(null));
-            log.info("New ipcids is : " + ipcIDs.size());
             log.info("Bigdata param , ipcIDs is " + JSONUtil.toJson(ipcIDs) + " warn list is " + JSONUtil.toJson(warnList));
             if (ipcIDs.size() > 0 && null != warnList && warnList.size() > 0) {
                 warnRuleService.configRules(ipcIDs, warnList);
