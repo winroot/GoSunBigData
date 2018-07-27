@@ -1,6 +1,6 @@
 package com.hzgc.service.dynrepo.service;
 
-import com.hzgc.common.collect.facedis.RegisterWatcher;
+import com.hzgc.common.collect.facedis.FtpRegisterClient;
 import com.hzgc.common.table.dynrepo.DynamicTable;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.jni.PictureData;
@@ -38,7 +38,7 @@ public class CaptureServiceHelper {
 
     @Autowired
     @SuppressWarnings("unused")
-    private RegisterWatcher registerWatcher;
+    private FtpRegisterClient register;
 
     /**
      * 通过排序参数进行排序
@@ -251,7 +251,7 @@ public class CaptureServiceHelper {
     String getFtpUrl(String ftpUrl) {
 
         String hostName = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
-        String ftpServerIP = registerWatcher.getRegisterInfo().getHostNameMapping().get(hostName);
+        String ftpServerIP = register.getFtpIpMapping().get(hostName);
         if (IsEmpty.strIsRight(ftpServerIP)) {
             return ftpUrl.replace(hostName, ftpServerIP);
         }
