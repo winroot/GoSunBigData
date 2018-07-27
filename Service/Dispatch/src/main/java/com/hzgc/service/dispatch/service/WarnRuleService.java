@@ -94,4 +94,14 @@ public class WarnRuleService {
         return hBaseDao.getDeviceList(rule_id);
     }
 
+    //删除不存在的设备和ipcid
+    public void delDeviceAndIpcId(){
+        hBaseDao.deleteRules(null);
+    }
+
+    //同步最新的ipcid
+    public void updateIpcId(){
+
+    }
+
 }

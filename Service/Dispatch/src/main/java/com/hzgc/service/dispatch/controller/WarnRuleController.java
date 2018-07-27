@@ -13,10 +13,7 @@ import com.hzgc.service.util.rest.BigDataPermission;
 import io.swagger.annotations.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,11 +62,26 @@ public class WarnRuleController {
             List<String> ipcIDs = new ArrayList<>();
             List<Warn> warnList;
             log.info("Add rule , param is " + JSONUtil.toJson(dispatch));
-            List<Long> list = IpcIdsUtil.toDeviceIdList(dispatch.getDevices());
+            //通过设备id查找ipcid
+            List<Device> deviceList = dispatch.getDevices();
+            List<Long> list = IpcIdsUtil.toDeviceIdList(deviceList);
             Map<String, DeviceDTO> map = deviceQueryService.getDeviceInfoByBatchId(list);
+            //设置ipcid
             for (String s : map.keySet()) {
-                ipcIDs.add(map.get(s).getSerial());
+                DeviceDTO deviceDTO = map.get(s);
+                String ipcid = deviceDTO.getSerial();
+                if (null != ipcid){
+                    ipcIDs.add(ipcid);
+                    for (Device device:deviceList){
+                        String id = device.getId();
+                        if (id.equals(s)){
+                            device.setIpcId(ipcid);
+                        }
+                    }
+                }
             }
+            log.info("Origin ipcids is : " + ipcIDs.size());
+            //参数封装
             warnList = dispatch.getRule().getWarns();
             Map<String, Dispatch> dispatchMap = IpcIdsUtil.toDispatchMap(dispatch);
             ResponseResult<String> responseResult = warnRuleService.saveOriginData(dispatchMap);
@@ -79,6 +91,7 @@ public class WarnRuleController {
             }
             //调用大数据接口
             ipcIDs.removeAll(Collections.singleton(null));
+            log.info("New ipcids is : " + ipcIDs.size());
             log.info("Bigdata param , ipcIDs is " + JSONUtil.toJson(ipcIDs) + " warn list is " + JSONUtil.toJson(warnList));
             if (ipcIDs.size() > 0 && null != warnList && warnList.size() > 0) {
                 warnRuleService.configRules(ipcIDs, warnList);
@@ -97,15 +110,48 @@ public class WarnRuleController {
             List<String> ipcIDs = new ArrayList<>();
             List<Warn> warnList;
             log.info("Update rule , param is " + JSONUtil.toJson(dispatch));
-            List<Long> list = IpcIdsUtil.toDeviceIdList(dispatch.getDevices());
+            List <Device> deviceList = dispatch.getDevices();
+            List<Long> list = IpcIdsUtil.toDeviceIdList(deviceList);
             Map<String, DeviceDTO> map = deviceQueryService.getDeviceInfoByBatchId(list);
+            //同步设置ipcid
+            ArrayList <String> delIpcids = new ArrayList <>();
             for (String s : map.keySet()) {
-                ipcIDs.add(map.get(s).getSerial());
+                DeviceDTO deviceDTO = map.get(s);
+                String ipcid = deviceDTO.getSerial();
+                if (null != ipcid){
+                    ipcIDs.add(ipcid);
+                    for (Device device:deviceList){
+                        String id = device.getId();
+                        if (id.equals(s)){
+                            device.setIpcId(ipcid);
+                        }
+                    }
+                }else {
+                    //删除没有ipcid的设备id
+                    Iterator <Device> iterator = deviceList.iterator();
+                    while (iterator.hasNext()){
+                        Device device = iterator.next();
+                        if (s.equals(device.getId())){
+                            String ipcId = device.getIpcId();
+                            //添加需要删除的ipcId
+                            delIpcids.add(ipcId);
+                            iterator.remove();
+                        }
+                    }
+                }
             }
+            //调用大数据删除接口
+            if (delIpcids.size() > 0){
+                log.info("Bigdata param , ipcIDs is " + JSONUtil.toJson(delIpcids));
+                warnRuleService.deleteRules(delIpcids);
+            }
+            log.info("Origin ipcids is : " + ipcIDs.size());
+            //参数封装
             warnList = dispatch.getRule().getWarns();
             ResponseResult<Boolean> responseResult = warnRuleService.updateRule(dispatch);
             //调用大数据接口
             ipcIDs.removeAll(Collections.singleton(null));
+            log.info("New ipcids is : " + ipcIDs.size());
             log.info("Bigdata param , ipcIDs is " + JSONUtil.toJson(ipcIDs) + " warn list is " + JSONUtil.toJson(warnList));
             if (ipcIDs.size() > 0 && null != warnList && warnList.size() > 0) {
                 warnRuleService.configRules(ipcIDs, warnList);

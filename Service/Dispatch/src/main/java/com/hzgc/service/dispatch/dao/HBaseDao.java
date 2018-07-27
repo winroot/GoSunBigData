@@ -491,7 +491,7 @@ public class HBaseDao {
             String hbaseMapString = Bytes.toString(bytes);
             LinkedHashMap<String, Dispatch> map = JsonToMap.dispatchStringToMap(hbaseMapString);
             List<Device> deviceList = map.get(rule_id).getDevices();
-            //获取设备名称
+            //动态获取设备名称
             List<Long> list = IpcIdsUtil.toDeviceIdList(deviceList);
             Map<String, DeviceDTO> mapDTO = deviceQueryService.getDeviceInfoByBatchId(list);
             for (String s :mapDTO.keySet()){
