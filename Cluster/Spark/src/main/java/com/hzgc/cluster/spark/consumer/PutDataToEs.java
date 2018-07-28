@@ -1,6 +1,5 @@
 package com.hzgc.cluster.spark.consumer;
 
-import com.hzgc.cluster.spark.message.AlarmMessage;
 import com.hzgc.cluster.spark.util.PropertiesUtil;
 import com.hzgc.common.collect.bean.FaceObject;
 import com.hzgc.common.es.ElasticSearchHelper;

@@ -1,6 +1,6 @@
 package com.hzgc.service.dynrepo.config;
 
-import com.hzgc.common.collect.facedis.RegisterWatcher;
+import com.hzgc.common.collect.facedis.FtpRegisterClient;
 import com.hzgc.common.faceattribute.service.AttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +19,7 @@ public class BeanConfig {
     }
 
     @Bean
-    public RegisterWatcher registerWatcher() {
-        return new RegisterWatcher(environment.getProperty("zk.address"));
+    public FtpRegisterClient ftpRegisterClient() {
+        return new FtpRegisterClient(environment.getProperty("zk.address"));
     }
 }
