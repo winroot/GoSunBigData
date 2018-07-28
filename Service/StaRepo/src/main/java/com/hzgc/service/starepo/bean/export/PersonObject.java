@@ -1,17 +1,16 @@
 package com.hzgc.service.starepo.bean.export;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.ToString;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 /**
  * 静态库人员中每个人的信息
  */
 @ApiModel(value = "静态库人员中每个人的信息")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PersonObject implements Serializable{
 
     /**
@@ -66,7 +65,7 @@ public class PersonObject implements Serializable{
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间")
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 布控理由
@@ -195,11 +194,11 @@ public class PersonObject implements Serializable{
         return this;
     }
 
-    public Timestamp getCreateTime() {
+    public String  getCreateTime() {
         return createTime;
     }
 
-    public PersonObject setCreateTime(Timestamp createTime) {
+    public PersonObject setCreateTime(String createTime) {
         this.createTime = createTime;
         return this;
     }
