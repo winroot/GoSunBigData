@@ -533,10 +533,14 @@ public class HBaseDao {
                 }
             }
             //删除设备不存在和ipcid修改了的设备的ipcid
-            hBaseDao.deleteRules(delIpcs);
+            if (delIpcs.size() > 0){
+                log.info("Device ipcid change or delete");
+                hBaseDao.deleteRules(delIpcs);
+            }
             //同步设备表
             Put put = new Put(DispatchTable.RULE_ID);
             put.addColumn(DispatchTable.CF_DEVICE, DispatchTable.COLUMN_RULE, Bytes.toBytes(JSONUtil.toJson(map)));
+            log.info("===========================================" + JSONUtil.toJson(map));
             dispatchTable.put(put);
             //同步大数据
             hBaseDao.configRules(ipcids,warns);
@@ -548,6 +552,7 @@ public class HBaseDao {
                     String id = device.getId();
                     if (s.equals(id)){
                         device.setName(name);
+                        log.info("Now acquire device name");
                     }
                 }
             }
