@@ -329,10 +329,6 @@ public class ObjectInfoHandlerService {
                     .setFollowLevel(sqlRowSet.getInt(ObjectInfoTable.IMPORTANT))
                     .setSimilarity(sqlRowSet.getFloat(ObjectInfoTable.RELATED))
                     .setLocation(sqlRowSet.getString(ObjectInfoTable.LOCATION));
-            /*String reason = sqlRowSet.getString(ObjectInfoTable.REASON);
-            if (reason != null && !reason.equals("null")){
-                personObject.setReason(reason);
-            }*/
             personObjects.add(personObject);
         }
         // 封装最后需要返回的结果

@@ -55,10 +55,6 @@ public class ObjectInfoHandlerTool {
                         .setCreatorConractWay(resultSet.getString(ObjectInfoTable.CPHONE))
                         .setReason(resultSet.getString(ObjectInfoTable.REASON))
                         .setFollowLevel(resultSet.getInt(ObjectInfoTable.IMPORTANT));
-                /*String reason = resultSet.getString(ObjectInfoTable.REASON);
-                if (reason != null && !reason.equals("null")){
-                    personObject.setReason(reason);
-                }*/
                 if (searchByPics) {
                     personObject.setSimilarity(resultSet.getFloat(ObjectInfoTable.RELATED));
                 }
