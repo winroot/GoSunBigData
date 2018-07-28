@@ -1,11 +1,14 @@
 package com.hzgc.service.starepo.bean.export;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.hzgc.common.util.json.JSONUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
  * 对象信息部分字段（除了pictureData字段）
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class ObjectInfo {
     /* 根据id获取对象信息——后台返回封装 */
@@ -18,7 +21,7 @@ public class ObjectInfo {
     @ApiModelProperty(value = "性别")
     private Integer sex;                       // 性别 [0 = 未知（默认选项），1 = 男，2 = 女]
     @ApiModelProperty(value = "布控理由")
-    private String createdReason  ;            // 布控理由
+    private String createdReason;            // 布控理由
     @ApiModelProperty(value = "创建人")
     private String creator;                    // 创建人
     @ApiModelProperty(value = "布控人联系方式")
