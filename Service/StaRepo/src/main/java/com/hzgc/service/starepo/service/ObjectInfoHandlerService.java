@@ -279,6 +279,7 @@ public class ObjectInfoHandlerService {
 
     private ObjectSearchResult getObjectInfoNotOnePerson(SqlRowSet sqlRowSet, Map<String, PictureData> photosMap) {
         ObjectSearchResult objectSearchResult = new ObjectSearchResult();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String searchId = UuidUtil.getUuid();
         objectSearchResult.setSearchId(searchId);
         // 创建总结果list
@@ -298,15 +299,29 @@ public class ObjectInfoHandlerService {
                     lable++;
                 }
             }
+
+            String objectTypeKey = sqlRowSet.getString(ObjectInfoTable.PKEY);
+            String objectTypeName = "";
+            if (!StringUtils.isBlank(objectTypeKey)) {
+                objectTypeName = phoenixDao.getObjectTypeNameById(objectTypeKey);
+            }
+            Timestamp createTime = sqlRowSet.getTimestamp(ObjectInfoTable.CREATETIME);
+            String createTime_str = "";
+            if (createTime != null) {
+                java.util.Date createTime_data = new java.util.Date(createTime.getTime());
+                createTime_str = sdf.format(createTime_data);
+            }
+
             PersonObject personObject = PersonObject.builder()
                     .setObjectID(sqlRowSet.getString(ObjectInfoTable.ROWKEY))
-                    .setObjectTypeKey(sqlRowSet.getString(ObjectInfoTable.PKEY))
+                    .setObjectTypeKey(objectTypeKey)
+                    .setObjectTypeName(objectTypeName)
                     .setName(sqlRowSet.getString(ObjectInfoTable.NAME))
                     .setSex(sqlRowSet.getInt(ObjectInfoTable.SEX))
                     .setIdcard(sqlRowSet.getString(ObjectInfoTable.IDCARD))
                     .setCreator(sqlRowSet.getString(ObjectInfoTable.CREATOR))
                     .setCreatorConractWay(sqlRowSet.getString(ObjectInfoTable.CPHONE))
-                    .setCreateTime(sqlRowSet.getTimestamp(ObjectInfoTable.CREATETIME))
+                    .setCreateTime(createTime_str)
                     .setReason(sqlRowSet.getString(ObjectInfoTable.REASON))
                     .setFollowLevel(sqlRowSet.getInt(ObjectInfoTable.IMPORTANT))
                     .setSimilarity(sqlRowSet.getFloat(ObjectInfoTable.RELATED))
