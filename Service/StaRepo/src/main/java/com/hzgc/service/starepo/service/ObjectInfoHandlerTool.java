@@ -1,6 +1,7 @@
 package com.hzgc.service.starepo.service;
 
 import com.hzgc.common.table.starepo.ObjectInfoTable;
+import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.starepo.bean.*;
 import com.hzgc.service.starepo.bean.export.PersonObjectGroupByPkey;
 import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
@@ -8,12 +9,14 @@ import com.hzgc.service.starepo.bean.export.PersonObject;
 import com.hzgc.service.starepo.bean.export.PersonSingleResult;
 import com.hzgc.service.starepo.dao.PhoenixDao;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +30,7 @@ public class ObjectInfoHandlerTool {
 
     void getPersonSingleResult(PersonSingleResult personSingleResult, SqlRowSet resultSet, boolean searchByPics) {
         List<PersonObject> personObjects = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         List<String> personKey = new ArrayList<>();
         try {
             while (resultSet.next()) {
@@ -34,13 +38,21 @@ public class ObjectInfoHandlerTool {
                 personObject.setObjectID(resultSet.getString(ObjectInfoTable.ROWKEY));
                 String pkey = resultSet.getString(ObjectInfoTable.PKEY);
                 personObject.setObjectTypeKey(pkey);
-                personKey.add(pkey);
+                if (!personKey.contains(pkey)){
+                    personKey.add(pkey);
+                }
+                Timestamp createTime = resultSet.getTimestamp(ObjectInfoTable.CREATETIME);
+                String createTime_str = "";
+                if (createTime != null) {
+                    java.util.Date createTime_data = new java.util.Date(createTime.getTime());
+                    createTime_str = sdf.format(createTime_data);
+                }
+                personObject.setCreateTime(createTime_str);
                 personObject.setName(resultSet.getString(ObjectInfoTable.NAME))
                         .setSex(resultSet.getInt(ObjectInfoTable.SEX))
                         .setIdcard(resultSet.getString(ObjectInfoTable.IDCARD))
                         .setCreator(resultSet.getString(ObjectInfoTable.CREATOR))
                         .setCreatorConractWay(resultSet.getString(ObjectInfoTable.CPHONE))
-                        .setCreateTime(resultSet.getTimestamp(ObjectInfoTable.CREATETIME))
                         .setReason(resultSet.getString(ObjectInfoTable.REASON))
                         .setFollowLevel(resultSet.getInt(ObjectInfoTable.IMPORTANT));
                 if (searchByPics) {
@@ -144,15 +156,15 @@ public class ObjectInfoHandlerTool {
             }
             if (staticSortParams.contains(StaticSortParam.TIMEASC)) {
                 personObjects.sort((o1, o2) -> {
-                    Timestamp timestamp1 = o1.getCreateTime();
-                    Timestamp timestamp2 = o2.getCreateTime();
+                    Timestamp timestamp1 = Timestamp.valueOf(o1.getCreateTime());
+                    Timestamp timestamp2 = Timestamp.valueOf(o2.getCreateTime());
                     return Long.compare(timestamp1.getTime(), timestamp2.getTime());
                 });
             }
             if (staticSortParams.contains(StaticSortParam.TIMEDESC)) {
                 personObjects.sort((o1, o2) -> {
-                    Timestamp timestamp1 = o1.getCreateTime();
-                    Timestamp timestamp2 = o2.getCreateTime();
+                    Timestamp timestamp1 = Timestamp.valueOf(o1.getCreateTime());
+                    Timestamp timestamp2 = Timestamp.valueOf(o2.getCreateTime());
                     return Long.compare(timestamp2.getTime(), timestamp1.getTime());
                 });
             }
