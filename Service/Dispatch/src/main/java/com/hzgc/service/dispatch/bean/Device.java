@@ -19,4 +19,7 @@ public class Device implements Serializable{
     //设备名称
     @ApiModelProperty("设备名称")
     private String name;
+    //ipcid
+    @ApiModelProperty("序列号")
+    private String ipcId;
 }
