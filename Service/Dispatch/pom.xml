@@ -22,6 +22,7 @@
         <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-service</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>
