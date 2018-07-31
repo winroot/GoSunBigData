@@ -1,6 +1,6 @@
 package com.hzgc.service.address.service;
 
-import com.hzgc.common.collect.facesub.SubscribeRegister;
+import com.hzgc.common.collect.facesub.FtpSubscribeClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 public class FtpSubscriptionService {
 
     @Autowired
-    private SubscribeRegister subscribe;
+    private FtpSubscribeClient subscribe;
 
     public boolean openFtpSubscription(String sessionId, List<String> ipcIdList) {
         if (!sessionId.equals("") && !ipcIdList.isEmpty()) {

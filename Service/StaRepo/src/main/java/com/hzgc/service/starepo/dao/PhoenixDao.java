@@ -473,7 +473,7 @@ public class PhoenixDao implements Serializable {
         return objectInfo;
     }
 
-    private String getObjectTypeNameById(String objectTypeId) {
+    public String getObjectTypeNameById(String objectTypeId) {
         String sql = parseByOption.getObjectTypeNameById();
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, objectTypeId);
         String objectTypeName = null;
