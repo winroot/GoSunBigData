@@ -133,7 +133,7 @@ public class WarnRuleService {
                         }
                     }
                 }
-                log.info("Dispatch all info is " + dispatch.toString());
+                log.info("Dispatch all info is " + JSONUtil.toJson(dispatch));
                 return ResponseResult.init(dispatch);
             }
         }
