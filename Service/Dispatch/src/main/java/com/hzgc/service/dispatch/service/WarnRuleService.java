@@ -9,10 +9,7 @@ import com.hzgc.service.dispatch.bean.*;
 import com.hzgc.service.dispatch.dao.HBaseDao;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.hzgc.service.dispatch.util.IpcIdsUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -97,24 +94,30 @@ public class WarnRuleService {
                         //最新的ipcid
                         String serial = deviceDTO.getSerial();
                         //查看设备ipcid是否更改,如果更改了就删除原来的ipcid
-                        if (!ipcId.equals(serial)){
+                        if (null != serial && !serial.equals(ipcId)){
                             log.info("IpcId happen change , changed ipcid is : " + ipcId);
+                            ipcids.add(serial);
                             delIpcs.add(ipcId);
+                            //设置最新的ipcid
+                            device.setIpcId(serial);
                         }
-                        //设置最新的ipcid
-                        device.setIpcId(serial);
-                        ipcids.add(serial);
+                        if (null == serial){
+                            iterator.remove();
+                        }
                     }
                 }
                 //删除设备不存在和ipcid修改了的设备的ipcid
+                delIpcs.removeAll(Collections.singleton(null));
                 if (delIpcs.size() > 0){
                     log.info("Device ipcid change or delete");
                     hBaseDao.deleteRules(delIpcs);
-                    //同步设备表
-                    hBaseDao.updateRule(dispatch);
                     //同步大数据
-                    hBaseDao.configRules(ipcids,warnList);
+                    if (ipcids.size() > 0 && warnList.size() > 0){
+                        hBaseDao.configRules(ipcids,warnList);
+                    }
                 }
+                //同步设备表
+                hBaseDao.updateRule(dispatch);
                 //动态获取设置设备名称
                 for (String s :mapDTO.keySet()){
                     DeviceDTO deviceDTO = mapDTO.get(s);
@@ -127,7 +130,7 @@ public class WarnRuleService {
                         }
                     }
                 }
-                log.info("Dispatch all info is " + dispatch.toString());
+                log.info("Dispatch all info is " + JSONUtil.toJson(dispatch));
                 return ResponseResult.init(dispatch);
             }
         }
