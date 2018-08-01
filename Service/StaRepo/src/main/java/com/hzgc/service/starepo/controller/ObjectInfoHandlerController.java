@@ -73,7 +73,7 @@ public class ObjectInfoHandlerController {
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证格式错误，请检查！");
         }
         boolean isExists_idCode = objectInfoHandlerService.isExists_idCode(param);
-        if (!isExists_idCode){
+        if (isExists_idCode){
             log.error("Start add object info, but the idcard already exists");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证已存在，请检查！");
         }
@@ -144,7 +144,7 @@ public class ObjectInfoHandlerController {
         String idCade_DB = objectInfoHandlerService.getObjectIdCard(param);
         if (!StringUtils.isBlank(param.getIdcard()) && !param.getIdcard().equals(idCade_DB)){
             boolean isExists_idCode = objectInfoHandlerService.isExists_idCode(param);
-            if (!isExists_idCode){
+            if (isExists_idCode){
                 log.error("Start update object info, but the idcard already exists");
                 return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证已存在，请检查！");
             }
