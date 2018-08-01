@@ -78,9 +78,11 @@ public class WarnRuleController {
                             device.setIpcId(ipcid);
                         }
                     }
+                }else {
+                    return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,"设备" + deviceDTO.getName() +
+                            "未设置序列号,请配置序列号,重新添加");
                 }
             }
-            log.info("Origin ipcids is : " + ipcIDs.size());
             //参数封装
             warnList = dispatch.getRule().getWarns();
             Map<String, Dispatch> dispatchMap = IpcIdsUtil.toDispatchMap(dispatch);
@@ -91,8 +93,7 @@ public class WarnRuleController {
             }
             //调用大数据接口
             ipcIDs.removeAll(Collections.singleton(null));
-            log.info("New ipcids is : " + ipcIDs.size());
-            log.info("Bigdata param , ipcIDs is " + JSONUtil.toJson(ipcIDs) + " warn list is " + JSONUtil.toJson(warnList));
+            log.info("Bigdata param , ipcIDs is " + JSONUtil.toJson(ipcIDs) + " warnlist is " + JSONUtil.toJson(warnList));
             if (ipcIDs.size() > 0 && null != warnList && warnList.size() > 0) {
                 warnRuleService.configRules(ipcIDs, warnList);
             }
