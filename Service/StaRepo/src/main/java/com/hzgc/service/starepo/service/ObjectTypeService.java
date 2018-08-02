@@ -24,17 +24,19 @@ public class ObjectTypeService {
      */
     public boolean addObjectType(ObjectTypeParam param) {
         String name = param.getObjectTypeName();
-        // 对象类型名称唯一性判断
-        List<String> names = phoenixDao.getAllObjectTypeNames();
-        log.info("Start add object type, get all the object type names in the database first: "
-                + JSONUtil.toJson(names));
-        if (names.contains(name)){
-            log.error("Start add object type, but the object type name already exists");
-            return false;
-        }
         String creator = param.getCreator();
         String remark = param.getRemark();
         return phoenixDao.addObjectType(name, creator, remark);
+    }
+
+    public boolean isExists_objectTypeName(String name) {
+        List<String> names = phoenixDao.getAllObjectTypeNames();
+        log.info("Start add/update object type, get all the object type names in the database first: "
+                + JSONUtil.toJson(names));
+        if (names.contains(name)){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -56,14 +58,6 @@ public class ObjectTypeService {
     public boolean updateObjectType(ObjectTypeParam param) {
         String id = param.getObjectTypeKey();
         String name = param.getObjectTypeName();
-        // 对象类型名称唯一性判断
-        List<String> names = phoenixDao.getAllObjectTypeNames();
-        log.info("Start add object type, get all the object type names in the database first: "
-                + JSONUtil.toJson(names));
-        if (names.contains(name)){
-            log.error("Start add object type, but the object type name already exists");
-            return false;
-        }
         String creator = param.getCreator();
         String remark = param.getRemark();
         return phoenixDao.updateObjectType(id, name, creator, remark);
@@ -78,6 +72,13 @@ public class ObjectTypeService {
      */
     public List<ObjectTypeParam> searchObjectType(int start, int end) {
         return phoenixDao.searchObjectType(start, end);
+    }
+
+    public String getObjectTypeName(String objectTypeKey) {
+        List<String> list = new ArrayList<>();
+        list.add(objectTypeKey);
+        Map<String, String> map = searchObjectTypeNames(list);
+        return map.get(objectTypeKey);
     }
 
     /**

@@ -81,21 +81,21 @@ public class ObjectInfoHandlerService {
      * 身份证唯一性判断
      *
      * @param objectInfo
-     * @return true:不存在,false:存在
+     * @return true:存在  false:不存在
      */
     public boolean isExists_idCode(ObjectInfoParam objectInfo) {
         if (!StringUtils.isBlank(objectInfo.getIdcard())) {
             List<String> idcards = phoenixDao.getAllObjectIdcard();
-            return !idcards.contains(objectInfo.getIdcard());
+            return idcards.contains(objectInfo.getIdcard());
         }
-        return true;
+        return false;
     }
 
     /**
      * 判断ObjectTypeKey是否存在
      *
      * @param objectInfo
-     * @return true:存在,false:不存在
+     * @return true:存在  false:不存在
      */
     public boolean isExists_objectTypeKey(ObjectInfoParam objectInfo) {
         List<String> objectTypeKeys = phoenixDao.getAllObjectTypeKeys();
