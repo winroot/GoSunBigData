@@ -140,8 +140,7 @@ public class ParseByOption {
                     List<Object> whereParamList = new ArrayList<>();
                     String whereSql = sameWhereSql(param, whereParamList);
                     if (whereParamList.size() > 0){
-                        subSql.append(" where ")
-                                .append(whereSql);
+                        subSql.append(" where ").append(whereSql);
                     }
                     log.info("Where SQL :" + whereSql);
                     log.info("Where SQL param list :" + Arrays.toString(whereParamList.toArray()));
@@ -178,8 +177,17 @@ public class ParseByOption {
                 sql.append(" where ").append(whereSql);
             }
             Integer followLevel = param.getFollowLevel();
+            boolean bb = false;
             if (followLevel != 1  && followLevel != 2 ){
                 sql.append(" order by ").append(ObjectInfoTable.IMPORTANT).append(" desc");
+                bb = true;
+            }
+            if (params != null && params.size() > 1) {
+                if (bb){
+                    sql.append(sameSortSql(params, false));
+                }else {
+                    sql.append(" order by ").append(sameSortSql(params, false));
+                }
             }
         }
         // 进行分组
@@ -287,6 +295,7 @@ public class ParseByOption {
      * 封装共同的子where 查询
      *
      * @param param       传过来的搜索参数
+     * @param whereParamList 需要对sql设置的参数
      * @return 子where查询
      */
     private String sameWhereSql(GetObjectInfoParam param, List<Object> whereParamList) {
