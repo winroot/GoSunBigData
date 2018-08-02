@@ -70,7 +70,7 @@ public class WarnRuleController {
             for (String s : map.keySet()) {
                 DeviceDTO deviceDTO = map.get(s);
                 String ipcid = deviceDTO.getSerial();
-                if (null != ipcid){
+                if (null != ipcid && ipcid.length() > 0){
                     ipcIDs.add(ipcid);
                     for (Device device:deviceList){
                         String id = device.getId();
