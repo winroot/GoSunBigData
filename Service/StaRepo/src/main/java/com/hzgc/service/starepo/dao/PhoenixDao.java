@@ -74,7 +74,7 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return false;
         }
-        log.info("add object type successfull");
+        log.info("add object type successfully");
         return true;
     }
 
@@ -103,7 +103,7 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return false;
         }
-        log.info("delete object type list successfull");
+        log.info("delete object type list successfully");
         return true;
     }
 
@@ -137,7 +137,7 @@ public class PhoenixDao implements Serializable {
             e.printStackTrace();
             return false;
         }
-        log.info("update object type successfull");
+        log.info("update object type successfully");
         return true;
     }
 
@@ -497,7 +497,7 @@ public class PhoenixDao implements Serializable {
             log.warn("Start get object info, generate sql failed");
             return null;
         }
-        log.info("Start get object info, generate sql successfull");
+        log.info("Start get object info, generate sql successfully");
         log.info("Start get object info, SQL is : " + sqlAndArgs.getSql());
         log.info("Start get object info, SQL args is : " + sqlAndArgs.getArgs().toString());
         return jdbcTemplate.queryForRowSet(sqlAndArgs.getSql(), sqlAndArgs.getArgs().toArray());
