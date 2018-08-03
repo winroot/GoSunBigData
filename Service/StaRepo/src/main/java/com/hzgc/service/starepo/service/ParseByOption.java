@@ -399,7 +399,7 @@ public class ParseByOption {
                 if (isChanged) {
                     whereQuery.append(" and ");
                 }
-                whereQuery.append(ObjectInfoTable.CARE).append(" = ?");
+                whereQuery.append(ObjectInfoTable.CARE).append(" = ").append(care);
                 whereParamList.add(care);
                 isChanged = true;
             }
