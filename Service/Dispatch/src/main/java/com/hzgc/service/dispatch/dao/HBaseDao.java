@@ -36,6 +36,9 @@ public class HBaseDao {
     @Autowired
     private DeviceQueryService deviceQueryService;
 
+    @Autowired
+    private HBaseDao hBaseDao;
+
     public HBaseDao() {
         HBaseHelper.getHBaseConnection();
     }
@@ -489,11 +492,59 @@ public class HBaseDao {
         byte[] bytes = result.getValue(DispatchTable.CF_DEVICE, DispatchTable.COLUMN_RULE);
         if (null != bytes) {
             String hbaseMapString = Bytes.toString(bytes);
+            //获得总的map
             LinkedHashMap<String, Dispatch> map = JsonToMap.dispatchStringToMap(hbaseMapString);
-            List<Device> deviceList = map.get(rule_id).getDevices();
-            //获取设备名称
+            //获取对应的设备集合
+            Dispatch dispatch = map.get(rule_id);
+            List <Warn> warns = dispatch.getRule().getWarns();
+            List <Device> deviceList = dispatch.getDevices();
+            //查询ipcid
             List<Long> list = IpcIdsUtil.toDeviceIdList(deviceList);
             Map<String, DeviceDTO> mapDTO = deviceQueryService.getDeviceInfoByBatchId(list);
+            //动态获取需要删除的设备对应的ipcid
+            ArrayList <String> delIpcs = new ArrayList <>();
+            //需要更新的ipcid
+            ArrayList <String> ipcids = new ArrayList <>();
+            Iterator <Device> iterator = deviceList.iterator();
+            while (iterator.hasNext()){
+                Device device = iterator.next();
+                //数据库中的设备id
+                String id = device.getId();
+                //数据库中的ipcid
+                String ipcId = device.getIpcId();
+                //查看是否存在这个设备,不存在就删除
+                if (!mapDTO.containsKey(id)){
+                    delIpcs.add(ipcId);
+                    iterator.remove();
+                    log.info("Device is deleted , device id is : " + id);
+                }else {
+                    //设备存在动态同步最新的ipcid
+                    DeviceDTO deviceDTO = mapDTO.get(id);
+                    //最新的ipcid
+                    String serial = deviceDTO.getSerial();
+                    //查看设备ipcid是否更改,如果更改了就删除原来的ipcid
+                    if (!ipcId.equals(serial)){
+                        log.info("IpcId happen change , changed ipcid is : " + ipcId);
+                        delIpcs.add(ipcId);
+                    }
+                    //设置最新的ipcid
+                    device.setIpcId(serial);
+                    ipcids.add(serial);
+                }
+            }
+            //删除设备不存在和ipcid修改了的设备的ipcid
+            if (delIpcs.size() > 0){
+                log.info("Device ipcid change or delete");
+                hBaseDao.deleteRules(delIpcs);
+            }
+            //同步设备表
+            Put put = new Put(DispatchTable.RULE_ID);
+            put.addColumn(DispatchTable.CF_DEVICE, DispatchTable.COLUMN_RULE, Bytes.toBytes(JSONUtil.toJson(map)));
+            log.info("===========================================" + JSONUtil.toJson(map));
+            dispatchTable.put(put);
+            //同步大数据
+            hBaseDao.configRules(ipcids,warns);
+            //动态获取设置设备名称
             for (String s :mapDTO.keySet()){
                 DeviceDTO deviceDTO = mapDTO.get(s);
                 String name = deviceDTO.getName();
@@ -501,6 +552,7 @@ public class HBaseDao {
                     String id = device.getId();
                     if (s.equals(id)){
                         device.setName(name);
+                        log.info("Now acquire device name");
                     }
                 }
             }
