@@ -3,6 +3,7 @@ package com.hzgc.service.visual.controller;
 import com.hzgc.common.service.error.RestErrorCode;
 import com.hzgc.common.service.response.ResponseResult;
 import com.hzgc.common.service.rest.BigDataPath;
+import com.hzgc.common.service.rest.BigDataPermission;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.visual.bean.ObjectInfo;
 import com.hzgc.service.visual.bean.PeopleManager;
@@ -14,6 +15,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,6 +50,7 @@ public class PeopleManagerController {
      */
     @ApiOperation(value = "关爱人口离线查询", response = ResponseResult.class)
     @RequestMapping(value = BigDataPath.GET_CARE_PEOPLE, method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_VIEW + "')")
     public ResponseResult<List<ObjectInfo>> getCarePeople(
             @RequestBody @ApiParam(value = "关爱人口离线查询入参")PeopleParam param) {
         if (param == null) {
@@ -80,6 +83,7 @@ public class PeopleManagerController {
      */
     @ApiOperation(value = "常住人口查询", response = ResponseResult.class)
     @RequestMapping(value = BigDataPath.GET_STATUS_PEOPLE, method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_VIEW + "')")
     public ResponseResult<List<ObjectInfo>> getStatusPeople(
             @RequestBody @ApiParam(value = "常住人口查询入参")PeopleParam param) {
         if (param == null){
@@ -111,6 +115,7 @@ public class PeopleManagerController {
      */
     @ApiOperation(value = "重点人口查询", response = ResponseResult.class)
     @RequestMapping(value = BigDataPath.GET_IMPORTANT_PEOPLE, method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('" + BigDataPermission.OBJECT_VIEW + "')")
     public ResponseResult<List<ObjectInfo>> getImportantPeople(
             @RequestBody @ApiParam(value = "重点人口查询入参")PeopleParam param) {
         if (param == null){
@@ -133,9 +138,4 @@ public class PeopleManagerController {
         }
         return ResponseResult.error(RestErrorCode.RECORD_NOT_EXIST);
     }
-
-
-
-
-
 }
