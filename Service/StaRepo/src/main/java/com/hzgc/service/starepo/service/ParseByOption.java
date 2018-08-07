@@ -273,6 +273,8 @@ public class ParseByOption {
         sameFieldReturn.append(", ");
         sameFieldReturn.append(ObjectInfoTable.CREATOR);
         sameFieldReturn.append(", ");
+        sameFieldReturn.append(ObjectInfoTable.CARE);
+        sameFieldReturn.append(", ");
         sameFieldReturn.append(ObjectInfoTable.CPHONE);
         sameFieldReturn.append(", ");
         sameFieldReturn.append(ObjectInfoTable.CREATETIME);
@@ -390,6 +392,19 @@ public class ParseByOption {
             isChanged = true;
         }
 
+        // 关于关爱人口的查询
+        Integer care = param.getCare();
+        if (care  != null){
+            if (care == 0 || care == 1) {
+                if (isChanged) {
+                    whereQuery.append(" and ");
+                }
+                whereQuery.append(ObjectInfoTable.CARE).append(" = ").append(care);
+                whereParamList.add(care);
+                isChanged = true;
+            }
+        }
+
         //查询人员状态值
         Integer status = param.getStatus();
         if (status != null){
@@ -470,6 +485,13 @@ public class ParseByOption {
 
                     .append(ObjectInfoTable.CREATOR);
             setValues.add(creator);
+        }
+        Integer care = objectInfo.getCare();
+        if (care != null) {
+            sql.append(", ")
+
+                    .append(ObjectInfoTable.CARE);
+            setValues.add(care);
         }
         String cphone = objectInfo.getCreatorConractWay();
         if (cphone != null) {
@@ -563,8 +585,9 @@ public class ParseByOption {
                 + ObjectInfoTable.CREATETIME + ", "
                 + ObjectInfoTable.UPDATETIME + ", "
                 + ObjectInfoTable.IMPORTANT + ", "
+                + ObjectInfoTable.CARE + ", "
                 + ObjectInfoTable.STATUS
-                + ") values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + ") values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     }
 
     public String deleteObjectInfo() {
@@ -586,6 +609,7 @@ public class ParseByOption {
                 + ObjectInfoTable.SEX + ", "
                 + ObjectInfoTable.REASON + ", "
                 + ObjectInfoTable.CREATOR + ", "
+                + ObjectInfoTable.CARE + ", "
                 + ObjectInfoTable.CPHONE + ", "
                 + ObjectInfoTable.CREATETIME + ", "
                 + ObjectInfoTable.UPDATETIME + ", "
@@ -626,5 +650,100 @@ public class ParseByOption {
                 + ObjectInfoTable.STATUS + " = 1 and "
                 + ObjectInfoTable.STATUSTIME + " > ? AND "
                 + ObjectInfoTable.STATUSTIME + " < ?";
+    }
+
+    public String getCarePeople(int size) {
+        StringBuilder sql_where = new StringBuilder();
+        sql_where.append(" where ").append(ObjectInfoTable.PKEY).append(" in (");
+        int count = 0;
+        for (int i = 0 ; i < size; i++){
+            if (count < size - 1){
+                sql_where.append("?, ");
+                count ++;
+            }else {
+                sql_where.append("?) and ")
+                        .append(ObjectInfoTable.CARE).append(" = 1 and ")
+                        .append(ObjectInfoTable.UPDATETIME).append(" <= ?");
+            }
+        }
+        return "select "
+                +ObjectInfoTable.NAME+", "
+                +ObjectInfoTable.ROWKEY+", "
+                +ObjectInfoTable.PHOTO+", "
+                + ObjectInfoTable.PKEY + ", "
+                + ObjectInfoTable.IDCARD + ", "
+                + ObjectInfoTable.SEX + ", "
+                + ObjectInfoTable.REASON + ", "
+                + ObjectInfoTable.CREATOR + ", "
+                + ObjectInfoTable.CARE + ", "
+                + ObjectInfoTable.CPHONE + ", "
+                + ObjectInfoTable.CREATETIME + ", "
+                + ObjectInfoTable.UPDATETIME + ", "
+                + ObjectInfoTable.IMPORTANT + ", "
+                + ObjectInfoTable.STATUS  +" from "
+                + ObjectInfoTable.TABLE_NAME
+                + sql_where;
+    }
+
+    public String getStatusPeople(int size) {
+        StringBuilder sql_where = new StringBuilder();
+        sql_where.append(" where ").append(ObjectInfoTable.PKEY).append(" in (");
+        int count = 0;
+        for (int i = 0 ; i < size; i++){
+            if (count < size - 1){
+                sql_where.append("?, ");
+                count ++;
+            }else {
+                sql_where.append("?) and ").append(ObjectInfoTable.STATUS).append(" = 0");
+            }
+        }
+        return "select "
+                + ObjectInfoTable.NAME + ", "
+                +ObjectInfoTable.ROWKEY+", "
+                + ObjectInfoTable.PKEY + ", "
+                + ObjectInfoTable.IDCARD + ", "
+                + ObjectInfoTable.PHOTO + ", "
+                + ObjectInfoTable.SEX + ", "
+                + ObjectInfoTable.REASON + ", "
+                + ObjectInfoTable.CREATOR + ", "
+                + ObjectInfoTable.CARE + ", "
+                + ObjectInfoTable.CPHONE + ", "
+                + ObjectInfoTable.CREATETIME + ", "
+                + ObjectInfoTable.UPDATETIME + ", "
+                + ObjectInfoTable.IMPORTANT + ", "
+                + ObjectInfoTable.STATUS  + " from "
+                + ObjectInfoTable.TABLE_NAME
+                + sql_where;
+    }
+
+    public String getImportantPeople(int size) {
+        StringBuilder sql_where = new StringBuilder();
+        sql_where.append(" where ").append(ObjectInfoTable.PKEY).append(" in (");
+        int count = 0;
+        for (int i = 0 ; i < size; i++){
+            if (count < size - 1){
+                sql_where.append("?, ");
+                count ++;
+            }else {
+                sql_where.append("?) and ").append(ObjectInfoTable.IMPORTANT).append(" = 2");
+            }
+        }
+        return "select "
+                + ObjectInfoTable.NAME+", "
+                +ObjectInfoTable.ROWKEY+", "
+                + ObjectInfoTable.PHOTO+", "
+                + ObjectInfoTable.PKEY + ", "
+                + ObjectInfoTable.IDCARD + ", "
+                + ObjectInfoTable.SEX + ", "
+                + ObjectInfoTable.REASON + ", "
+                + ObjectInfoTable.CREATOR + ", "
+                + ObjectInfoTable.CARE + ", "
+                + ObjectInfoTable.CPHONE + ", "
+                + ObjectInfoTable.CREATETIME + ", "
+                + ObjectInfoTable.UPDATETIME + ", "
+                + ObjectInfoTable.IMPORTANT + ", "
+                + ObjectInfoTable.STATUS + " from "
+                + ObjectInfoTable.TABLE_NAME
+                + sql_where;
     }
 }

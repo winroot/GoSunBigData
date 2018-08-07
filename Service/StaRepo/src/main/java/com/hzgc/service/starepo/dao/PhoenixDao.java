@@ -312,6 +312,7 @@ public class PhoenixDao implements Serializable {
                         sqlArray,
                         objectInfo.getReason(),
                         objectInfo.getCreator(),
+                        objectInfo.getCare(),
                         objectInfo.getCreatorConractWay(),
                         createTime,
                         createTime,
@@ -328,6 +329,7 @@ public class PhoenixDao implements Serializable {
                         null,
                         objectInfo.getReason(),
                         objectInfo.getCreator(),
+                        objectInfo.getCare(),
                         objectInfo.getCreatorConractWay(),
                         createTime,
                         createTime,
@@ -448,6 +450,7 @@ public class PhoenixDao implements Serializable {
             objectInfo.setSex(sqlRowSet.getInt(ObjectInfoTable.SEX));
             objectInfo.setCreatedReason(sqlRowSet.getString(ObjectInfoTable.REASON));
             objectInfo.setCreator(sqlRowSet.getString(ObjectInfoTable.CREATOR));
+            objectInfo.setCare(sqlRowSet.getInt(ObjectInfoTable.CARE));
             objectInfo.setCreatorPhone(sqlRowSet.getString(ObjectInfoTable.CPHONE));
             createTime = (Timestamp) sqlRowSet.getObject(ObjectInfoTable.CREATETIME);
             updateTime = (Timestamp) sqlRowSet.getObject(ObjectInfoTable.UPDATETIME);
@@ -559,4 +562,88 @@ public class PhoenixDao implements Serializable {
         }
         return count;
     }
+    private List<ObjectInfo> setPeople(SqlRowSet sqlRowSet, List<String> objectTypeKeyList){
+        List<ObjectInfo> objectInfoList = new ArrayList<>();
+        Map<String, String> nameMap = searchTypeNames(objectTypeKeyList);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        while (sqlRowSet.next()) {
+            ObjectInfo objectInfo = new ObjectInfo();
+            objectInfo.setName(sqlRowSet.getString(ObjectInfoTable.NAME));
+            objectInfo.setId(sqlRowSet.getString(ObjectInfoTable.ROWKEY));
+            String objectTypeKey = sqlRowSet.getString(ObjectInfoTable.PKEY);
+            String objectTypeKeyName = nameMap.get(objectTypeKey);
+            objectInfo.setObjectTypeName(objectTypeKeyName);
+            objectInfo.setIdCardNumber(sqlRowSet.getString(ObjectInfoTable.IDCARD));
+            objectInfo.setSex(sqlRowSet.getInt(ObjectInfoTable.SEX));
+            objectInfo.setCreatedReason(sqlRowSet.getString(ObjectInfoTable.REASON));
+            objectInfo.setCreator(sqlRowSet.getString(ObjectInfoTable.CREATOR));
+            objectInfo.setCreatorPhone(sqlRowSet.getString(ObjectInfoTable.CPHONE));
+            Timestamp createTime = (Timestamp) sqlRowSet.getObject(ObjectInfoTable.CREATETIME);
+            if (createTime != null) {
+                java.util.Date createTime_data = new java.util.Date(createTime.getTime());
+                String createTime_str = sdf.format(createTime_data);
+                objectInfo.setCreateTime(createTime_str);
+            }
+            Timestamp updateTime = (Timestamp) sqlRowSet.getObject(ObjectInfoTable.UPDATETIME);
+            if (updateTime != null) {
+                java.util.Date updateTime_data = new java.util.Date(updateTime.getTime());
+                String updateTime_str = sdf.format(updateTime_data);
+                objectInfo.setUpdateTime(updateTime_str);
+            }
+            objectInfo.setCare(sqlRowSet.getInt(ObjectInfoTable.CARE));
+            objectInfo.setFollowLevel(sqlRowSet.getInt(ObjectInfoTable.IMPORTANT));
+            objectInfo.setStatus(sqlRowSet.getInt(ObjectInfoTable.STATUS));
+            objectInfoList.add(objectInfo);
+        }
+        log.info("Search result : " + JSONUtil.toJson(objectInfoList));
+        return objectInfoList;
+    }
+
+    /**
+     *
+     * @param objectTypeKeyList
+     * @param time
+     * @return list 关爱人员离线查询
+     */
+    public  List<ObjectInfo> getCarePeople(List<String> objectTypeKeyList, Timestamp time) {
+        String sql = parseByOption.getCarePeople(objectTypeKeyList.size());
+        log.info("Start search care people, SQL is : " + sql);
+        Object[] args = new Object[objectTypeKeyList.size() + 1];
+        int index = 0;
+        for (String objectTypeKey : objectTypeKeyList){
+            args[index] = objectTypeKey;
+            index ++;
+        }
+        args[index] = time;
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, args);
+        return setPeople(sqlRowSet, objectTypeKeyList);
+    }
+
+    public List<ObjectInfo> getStatusPeople(List<String> objectTypeKeyList) {
+        String sql = parseByOption.getStatusPeople(objectTypeKeyList.size());
+        log.info("Start search status people, SQL is : " + sql);
+        Object[] args = new Object[objectTypeKeyList.size()];
+        int index = 0;
+        for (String objectTypeKey : objectTypeKeyList){
+            args[index] = objectTypeKey;
+            index ++;
+        }
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, args);
+        return setPeople(sqlRowSet, objectTypeKeyList);
+    }
+
+    public List<ObjectInfo> getImportantPeople(List<String> objectTypeKeyList) {
+        String sql = parseByOption.getImportantPeople(objectTypeKeyList.size());
+        log.info("Start search important people, SQL is : " + sql);
+        Object[] args = new Object[objectTypeKeyList.size()];
+        int index = 0;
+        for (String objectTypeKey : objectTypeKeyList){
+            args[index] = objectTypeKey;
+            index ++;
+        }
+        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, args);
+        return setPeople(sqlRowSet, objectTypeKeyList);
+    }
+
+
 }

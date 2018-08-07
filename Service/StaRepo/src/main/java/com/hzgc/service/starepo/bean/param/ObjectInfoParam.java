@@ -43,6 +43,8 @@ public class ObjectInfoParam implements Serializable {
     private String createTime;                  // 创建时间
     @ApiModelProperty(value = "更新时间")
     private String updateTime;                  // 更新时间
+    @ApiModelProperty(value = "关爱人口")
+    private Integer  care;                  //关爱人口 [0 = 非关爱人员（默认选项），1 = 关爱人员]
     @ApiModelProperty(value = "关注等级")
     private Integer followLevel;                // 关注等级 关注等级 [1 = 非重点关注（默认选项），2 = 重点关注]
     @ApiModelProperty(value = "人员状态")
