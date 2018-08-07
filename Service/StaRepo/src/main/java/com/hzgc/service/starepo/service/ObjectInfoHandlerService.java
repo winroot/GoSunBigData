@@ -323,6 +323,7 @@ public class ObjectInfoHandlerService {
                     .setCreatorConractWay(sqlRowSet.getString(ObjectInfoTable.CPHONE))
                     .setCreateTime(createTime_str)
                     .setReason(sqlRowSet.getString(ObjectInfoTable.REASON))
+                    .setCare(sqlRowSet.getInt(ObjectInfoTable.CARE))
                     .setFollowLevel(sqlRowSet.getInt(ObjectInfoTable.IMPORTANT))
                     .setSimilarity(sqlRowSet.getFloat(ObjectInfoTable.RELATED))
                     .setLocation(sqlRowSet.getString(ObjectInfoTable.LOCATION));
@@ -599,6 +600,37 @@ public class ObjectInfoHandlerService {
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.MONTH, month - 1);             // 当前月份减1
         return cal.getActualMaximum(Calendar.DATE);
+    }
+
+    /**
+     * 关爱人口查询
+     * @param objectTypeKeyList  offtime
+     * @return Objectinfo
+     */
+    public List<ObjectInfo> getCarePeople(List<String> objectTypeKeyList, String offTime){
+        long time = System.currentTimeMillis() - Integer.valueOf(offTime) * 60 * 60 * 1000;
+        log.info("time :" + time);
+        Timestamp timestamp = new Timestamp(time);
+        return phoenixDao.getCarePeople(objectTypeKeyList, timestamp);
+    }
+
+    /**
+     * 常住人口查询
+     * @param objectTypeKeyList
+     * @return Objectinfo
+     */
+    public List<ObjectInfo> getStatusPeople(List<String> objectTypeKeyList) {
+        return phoenixDao.getStatusPeople(objectTypeKeyList);
+    }
+
+    /**
+     * 重点人口查询
+     * @param objectTypeKeyList
+     * @return Objectinfo
+     */
+
+    public List<ObjectInfo> getImportantPeople(List<String> objectTypeKeyList) {
+        return phoenixDao.getImportantPeople(objectTypeKeyList);
     }
 }
 

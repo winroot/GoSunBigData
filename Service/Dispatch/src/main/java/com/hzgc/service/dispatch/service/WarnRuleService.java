@@ -1,18 +1,17 @@
 package com.hzgc.service.dispatch.service;
 
+import com.hzgc.common.service.api.bean.DeviceDTO;
+import com.hzgc.common.service.api.service.DeviceQueryService;
 import com.hzgc.common.service.error.RestErrorCode;
 import com.hzgc.common.service.response.ResponseResult;
 import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.service.dispatch.bean.Dispatch;
-import com.hzgc.service.dispatch.bean.IdsType;
-import com.hzgc.service.dispatch.bean.PageBean;
-import com.hzgc.service.dispatch.bean.Warn;
+import com.hzgc.service.dispatch.bean.*;
 import com.hzgc.service.dispatch.dao.HBaseDao;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.hzgc.service.dispatch.util.IpcIdsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +23,9 @@ public class WarnRuleService {
     @Autowired
     @SuppressWarnings("unused")
     private HBaseDao hBaseDao;
+
+    @Autowired
+    private DeviceQueryService deviceQueryService;
 
     public void configRules(List<String> ipcIDs, List<Warn> warns) {
         hBaseDao.configRules(ipcIDs, warns);
@@ -50,6 +52,7 @@ public class WarnRuleService {
             if (ruleId.equals(id)) {
                 Dispatch dispatch = map.get(ruleId);
                 List<Warn> warnList = dispatch.getRule().getWarns();
+                List <Device> deviceList = dispatch.getDevices();
                 String[] strings = new String[warnList.size()];
                 for (int i = 0; i < warnList.size(); i++) {
                     strings[i] = (warnList.get(i)).getObjectType();
@@ -66,7 +69,68 @@ public class WarnRuleService {
                         }
                     }
                 }
-                log.info("Dispatch all info is " + dispatch.toString());
+                //查询ipcid
+                List<Long> list = IpcIdsUtil.toDeviceIdList(deviceList);
+                Map<String, DeviceDTO> mapDTO = deviceQueryService.getDeviceInfoByBatchId(list);
+                //动态获取需要删除的设备对应的ipcid
+                ArrayList<String> delIpcs = new ArrayList <>();
+                //需要更新的ipcid
+                ArrayList <String> ipcids = new ArrayList <>();
+                Iterator<Device> iterator = deviceList.iterator();
+                while (iterator.hasNext()){
+                    Device device = iterator.next();
+                    //数据库中的设备id
+                    String dataId = device.getId();
+                    //数据库中的ipcid
+                    String ipcId = device.getIpcId();
+                    //查看是否存在这个设备,不存在就删除
+                    if (!mapDTO.containsKey(dataId)){
+                        delIpcs.add(ipcId);
+                        iterator.remove();
+                        log.info("Device is deleted , device id is : " + dataId);
+                    }else {
+                        //设备存在动态同步最新的ipcid
+                        DeviceDTO deviceDTO = mapDTO.get(dataId);
+                        //最新的ipcid
+                        String serial = deviceDTO.getSerial();
+                        //查看设备ipcid是否更改,如果更改了就删除原来的ipcid
+                        if (null != serial && !serial.equals(ipcId)){
+                            log.info("IpcId happen change , changed ipcid is : " + ipcId);
+                            ipcids.add(serial);
+                            delIpcs.add(ipcId);
+                            //设置最新的ipcid
+                            device.setIpcId(serial);
+                        }
+                        if (null == serial){
+                            iterator.remove();
+                        }
+                    }
+                }
+                //删除设备不存在和ipcid修改了的设备的ipcid
+                delIpcs.removeAll(Collections.singleton(null));
+                if (delIpcs.size() > 0){
+                    log.info("Device ipcid change or delete");
+                    hBaseDao.deleteRules(delIpcs);
+                    //同步大数据
+                    if (ipcids.size() > 0 && warnList.size() > 0){
+                        hBaseDao.configRules(ipcids,warnList);
+                    }
+                }
+                //同步设备表
+                hBaseDao.updateRule(dispatch);
+                //动态获取设置设备名称
+                for (String s :mapDTO.keySet()){
+                    DeviceDTO deviceDTO = mapDTO.get(s);
+                    String name = deviceDTO.getName();
+                    for (Device device:deviceList){
+                        String dataid = device.getId();
+                        if (s.equals(dataid)){
+                            device.setName(name);
+                            log.info("Now acquire device name");
+                        }
+                    }
+                }
+                log.info("Dispatch all info is " + JSONUtil.toJson(dispatch));
                 return ResponseResult.init(dispatch);
             }
         }
