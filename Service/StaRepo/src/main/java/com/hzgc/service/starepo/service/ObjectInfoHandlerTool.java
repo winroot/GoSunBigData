@@ -28,7 +28,7 @@ public class ObjectInfoHandlerTool {
 
     void getPersonSingleResult(PersonSingleResult personSingleResult, SqlRowSet resultSet, boolean searchByPics) {
         List<PersonObject> personObjects = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<String> personKey = new ArrayList<>();
         try {
             while (resultSet.next()) {
