@@ -279,7 +279,7 @@ public class ObjectInfoHandlerService {
 
     private ObjectSearchResult getObjectInfoNotOnePerson(SqlRowSet sqlRowSet, Map<String, PictureData> photosMap) {
         ObjectSearchResult objectSearchResult = new ObjectSearchResult();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String searchId = UuidUtil.getUuid();
         objectSearchResult.setSearchId(searchId);
         // 创建总结果list
@@ -392,7 +392,7 @@ public class ObjectInfoHandlerService {
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put(ConfigConstants.PEOPLE_DATA_KEY, objectData);
             byte[] buff = DocHandlerUtil.createDoc(dataMap, File.separator + exportFile);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String data = sdf.format(new Date());
             //把文件插入HBase表中
             String rowkey = "file_" + data + "_" + UuidUtil.getUuid().substring(0, 4) + ".doc";
@@ -426,7 +426,7 @@ public class ObjectInfoHandlerService {
                 // 布控时间
                 map.put("time", "时间");
                 if (null != personObject.getCreateTime()) {
-                    map.put("timeData", new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(personObject.getCreateTime()));
+                    map.put("timeData", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(personObject.getCreateTime()));
                 } else {
                     map.put("timeData", "");
                 }
