@@ -13,6 +13,7 @@ import com.hzgc.service.starepo.bean.export.ObjectInfo;
 import com.hzgc.service.starepo.bean.export.ObjectSearchResult;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
+import com.hzgc.service.starepo.bean.param.PeopleParam;
 import com.hzgc.service.starepo.bean.param.SearchRecordParam;
 import com.hzgc.service.starepo.service.ObjectInfoHandlerService;
 import io.swagger.annotations.*;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -73,7 +75,7 @@ public class ObjectInfoHandlerController {
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证格式错误，请检查！");
         }
         boolean isExists_idCode = objectInfoHandlerService.isExists_idCode(param);
-        if (!isExists_idCode){
+        if (isExists_idCode){
             log.error("Start add object info, but the idcard already exists");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证已存在，请检查！");
         }
@@ -143,9 +145,9 @@ public class ObjectInfoHandlerController {
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证格式错误，请检查！");
         }
         String idCade_DB = objectInfoHandlerService.getObjectIdCard(param);
-        if (!StringUtils.isBlank(param.getIdcard()) && !idCade_DB.equals(param.getIdcard())){
+        if (!StringUtils.isBlank(param.getIdcard()) && !param.getIdcard().equals(idCade_DB)){
             boolean isExists_idCode = objectInfoHandlerService.isExists_idCode(param);
-            if (!isExists_idCode){
+            if (isExists_idCode){
                 log.error("Start update object info, but the idcard already exists");
                 return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证已存在，请检查！");
             }
@@ -368,5 +370,53 @@ public class ObjectInfoHandlerController {
     public List<PeopleManagerCount> emigrationCount(String start_time, String end_time) {
         log.info("Start count emigration population, param is : start_time = " + start_time + ", end_time = " + end_time);
         return objectInfoHandlerService.emigrationCount(start_time, end_time);
+    }
+
+    /**
+     * 关爱人员离线查询
+     *
+     * @param param
+     * @return List<ObjectInfo>
+     * @parm offTime  单位：小时
+     */
+    @ApiOperation(value = "关爱人员离线查询", response = ObjectInfo.class)
+    @RequestMapping(value = BigDataPath.OBJECTINFO_GET_CARE_PEOPLE, method = RequestMethod.POST)
+    public List<ObjectInfo> getCarePeople(@RequestBody PeopleParam param) {
+        if (param == null) {
+            log.error("Start search care people, but param is null");
+            return new ArrayList<>();
+        }
+        log.info("Start search care people, param is: " + JSONUtil.toJson(param));
+        return  objectInfoHandlerService.getCarePeople(param.getObjectTypeKeyList(), param.getOffTime());
+    }
+
+    /**
+     * 常住人口查询
+     */
+    @ApiOperation(value = "常住人口查询", response = ObjectInfo.class)
+    @RequestMapping(value = BigDataPath.OBJECTINFO_GET_STATUS_PEOPLE, method = RequestMethod.POST)
+    public List<ObjectInfo> getStatusPeople(
+            @RequestBody @ApiParam(value = "对象类型ID列表")PeopleParam param) {
+        if (param == null) {
+            log.error("Start search status people, but param is null");
+            return new ArrayList<>();
+        }
+        log.info("Start search status people, param is: " + JSONUtil.toJson(param));
+        return objectInfoHandlerService.getStatusPeople(param.getObjectTypeKeyList());
+    }
+
+    /**
+     * 重点人员查询
+     */
+    @ApiOperation(value = "重点人员查询", response = ObjectInfo.class)
+    @RequestMapping(value = BigDataPath.OBJECTINFO_GET_IMPORTANT_PEOPLE, method = RequestMethod.POST)
+    public List<ObjectInfo> getImportantPeople(
+            @RequestBody @ApiParam(value = "对象类型ID列表")PeopleParam param) {
+        if (param == null) {
+            log.error("Start search important people, but param is null");
+            return new ArrayList<>();
+        }
+        log.info("Start search important people, param is: " + JSONUtil.toJson(param));
+        return objectInfoHandlerService.getImportantPeople(param.getObjectTypeKeyList());
     }
 }

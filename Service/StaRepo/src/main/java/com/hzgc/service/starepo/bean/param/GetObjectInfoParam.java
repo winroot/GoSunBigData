@@ -40,6 +40,8 @@ public class GetObjectInfoParam implements Serializable{
     private List<StaticSortParam> sortParamList;  // 排序参数
     @ApiModelProperty(value = "人员状态")
     private Integer status;                       // 人员状态 [0 = 常住人口（默认选项），1 = 建议迁出]
+    @ApiModelProperty(value = "关爱人口")
+    private Integer care ;                        //关爱人口 [0 = 非关爱人员（默认选项），1 = 关爱人员]
     @ApiModelProperty(value = "关注等级")
     private Integer followLevel;                  // 关注等级 [1 = 非重点关注（默认选项），2 = 重点关注]
     @ApiModelProperty(value = "起始行数")

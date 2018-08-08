@@ -100,10 +100,13 @@ public class ParseByOption {
                 setValues.add(new String(featureString));
                 sql.append(") as sim from ")
                         .append(ObjectInfoTable.TABLE_NAME);
-                StringBuilder temp = sameWhereSql(param, setValues);
-                if (setValues.size() > 1) {
-                    sql.append(" where ").append(temp);
+                List<Object> whereParamList = new ArrayList<>();
+                String whereSql = sameWhereSql(param, whereParamList);
+                if (whereParamList.size() > 0) {
+                    sql.append(" where ").append(whereSql);
                 }
+                log.info("Where SQL :" + whereSql);
+                log.info("Where SQL param list :" + Arrays.toString(whereParamList.toArray()));
                 sql.append(")").append(" where sim >= ? ");
                 setValues.add(param.getSimilarity());
                 sql.append("order by ")
@@ -132,9 +135,14 @@ public class ParseByOption {
                             .append(", ?");
                     setValues.add(FaceFunction.floatArray2string(feature));
                     subSql.append(") as sim from ")
-                            .append(ObjectInfoTable.TABLE_NAME)
-                            .append(" where ")
-                            .append(sameWhereSql(param, setValues));
+                            .append(ObjectInfoTable.TABLE_NAME);
+                    List<Object> whereParamList = new ArrayList<>();
+                    String whereSql = sameWhereSql(param, whereParamList);
+                    if (whereParamList.size() > 0) {
+                        sql.append(" where ").append(whereSql);
+                    }
+                    log.info("Where SQL :" + whereSql);
+                    log.info("Where SQL param list :" + Arrays.toString(whereParamList.toArray()));
                     subSqls.add(subSql);
                 }
 
@@ -160,12 +168,25 @@ public class ParseByOption {
             sql.append(sameFieldNeedReturn())
                     .append(" from ")
                     .append(ObjectInfoTable.TABLE_NAME);
-            StringBuilder temp = sameWhereSql(param, setValues);
-            if (setValues.size() > 0) {
-                sql.append(" where ").append(temp);
+            List<Object> whereParamList = new ArrayList<>();
+            String whereSql = sameWhereSql(param, whereParamList);
+            log.info("Where SQL :" + whereSql);
+            log.info("Where SQL param list :" + Arrays.toString(whereParamList.toArray()));
+            if (whereParamList.size() > 0) {
+                sql.append(" where ").append(whereSql);
+            }
+            Integer followLevel = param.getFollowLevel();
+            boolean bb = false;
+            if (followLevel != 1  && followLevel != 2 ){
+                sql.append(" order by ").append(ObjectInfoTable.IMPORTANT).append(" desc");
+                bb = true;
             }
             if (params != null && params.size() > 1) {
-                sql.append(" order by ").append(sameSortSql(params, false));
+                if (bb){
+                    sql.append(sameSortSql(params, false));
+                }else {
+                    sql.append(" order by ").append(sameSortSql(params, false));
+                }
             }
         }
         // 进行分组
@@ -252,6 +273,8 @@ public class ParseByOption {
         sameFieldReturn.append(", ");
         sameFieldReturn.append(ObjectInfoTable.CREATOR);
         sameFieldReturn.append(", ");
+        sameFieldReturn.append(ObjectInfoTable.CARE);
+        sameFieldReturn.append(", ");
         sameFieldReturn.append(ObjectInfoTable.CPHONE);
         sameFieldReturn.append(", ");
         sameFieldReturn.append(ObjectInfoTable.CREATETIME);
@@ -273,10 +296,10 @@ public class ParseByOption {
      * 封装共同的子where 查询
      *
      * @param param       传过来的搜索参数
-     * @param setArgsList 需要对sql 设置的值
+     * @param whereParamList 需要对sql设置的参数
      * @return 子where查询
      */
-    private StringBuilder sameWhereSql(GetObjectInfoParam param, List<Object> setArgsList) {
+    private String sameWhereSql(GetObjectInfoParam param, List<Object> whereParamList) {
         StringBuilder whereQuery = new StringBuilder();
         boolean isChanged = false;
 
@@ -285,6 +308,7 @@ public class ParseByOption {
         if (!StringUtils.isBlank(objectName)) {
             whereQuery.append(ObjectInfoTable.NAME)
                     .append(" like '%").append(objectName).append("%'");
+            whereParamList.add(objectName);
             isChanged = true;
         }
 
@@ -296,6 +320,7 @@ public class ParseByOption {
             }
             whereQuery.append(ObjectInfoTable.IDCARD)
                     .append(" like '%").append(idcard).append("%'");
+            whereParamList.add(idcard);
             isChanged = true;
         }
 
@@ -306,8 +331,8 @@ public class ParseByOption {
                 if (isChanged) {
                     whereQuery.append(" and ");
                 }
-                whereQuery.append(ObjectInfoTable.SEX).append(" = ?");
-                setArgsList.add(sex);
+                whereQuery.append(ObjectInfoTable.SEX).append(" = ").append(sex);
+                whereParamList.add(sex);
                 isChanged = true;
             }
         }
@@ -318,12 +343,12 @@ public class ParseByOption {
             if (pkeys.size() == 1) {
                 if (isChanged) {
                     whereQuery.append(" and ").append(ObjectInfoTable.PKEY)
-                            .append(" = ? ");
-                    setArgsList.add(pkeys.get(0));
+                            .append(" = '").append(pkeys.get(0)).append("'");
+                    whereParamList.add(pkeys.get(0));
                 } else {
                     whereQuery.append(ObjectInfoTable.PKEY)
-                            .append(" = ? ");
-                    setArgsList.add(pkeys.get(0));
+                            .append(" = '").append(pkeys.get(0)).append("'");
+                    whereParamList.add(pkeys.get(0));
                     isChanged = true;
                 }
             } else {
@@ -334,13 +359,12 @@ public class ParseByOption {
                 whereQuery.append(ObjectInfoTable.PKEY).append(" in (");
                 for (int i = 0; i < pkeys.size(); i++) {
                     if (count < pkeys.size() - 1) {
-                        whereQuery.append("?, ");
-                        setArgsList.add(pkeys.get(i));
+                        whereQuery.append("'").append(pkeys.get(i)).append("', ");
                         count++;
                     } else {
-                        whereQuery.append("?)");
-                        setArgsList.add(pkeys.get(i));
+                        whereQuery.append("'").append(pkeys.get(i)).append("')");
                     }
+                    whereParamList.add(pkeys.get(i));
                 }
                 isChanged = true;
             }
@@ -353,6 +377,7 @@ public class ParseByOption {
                 whereQuery.append(" and ");
             }
             whereQuery.append(ObjectInfoTable.CREATOR).append(" like '%").append(creator).append("%'");
+            whereParamList.add(creator);
             isChanged = true;
         }
 
@@ -363,7 +388,21 @@ public class ParseByOption {
                 whereQuery.append(" and ");
             }
             whereQuery.append(ObjectInfoTable.CPHONE).append(" like '%").append(creatorConractWay).append("%'");
+            whereParamList.add(creatorConractWay);
             isChanged = true;
+        }
+
+        // 关于关爱人口的查询
+        Integer care = param.getCare();
+        if (care  != null){
+            if (care == 0 || care == 1) {
+                if (isChanged) {
+                    whereQuery.append(" and ");
+                }
+                whereQuery.append(ObjectInfoTable.CARE).append(" = ").append(care);
+                whereParamList.add(care);
+                isChanged = true;
+            }
         }
 
         //查询人员状态值
@@ -373,8 +412,8 @@ public class ParseByOption {
                 if (isChanged) {
                     whereQuery.append(" and ");
                 }
-                whereQuery.append(ObjectInfoTable.STATUS).append(" = ?");
-                setArgsList.add(status);
+                whereQuery.append(ObjectInfoTable.STATUS).append(" = ").append(status);
+                whereParamList.add(status);
                 isChanged = true;
             }
         }
@@ -386,15 +425,11 @@ public class ParseByOption {
                 if (isChanged) {
                     whereQuery.append(" and ");
                 }
-                whereQuery.append(ObjectInfoTable.IMPORTANT).append(" = ?");
-                setArgsList.add(followLevel);
-            }else {
-                whereQuery.append(" order by ").append(ObjectInfoTable.IMPORTANT).append(" desc");
+                whereQuery.append(ObjectInfoTable.IMPORTANT).append(" = ").append(followLevel);
+                whereParamList.add(followLevel);
             }
-        } else {
-            whereQuery.append(" order by ").append(ObjectInfoTable.IMPORTANT).append(" desc");
         }
-        return whereQuery;
+        return whereQuery.toString();
     }
 
     /**
@@ -450,6 +485,13 @@ public class ParseByOption {
 
                     .append(ObjectInfoTable.CREATOR);
             setValues.add(creator);
+        }
+        Integer care = objectInfo.getCare();
+        if (care != null) {
+            sql.append(", ")
+
+                    .append(ObjectInfoTable.CARE);
+            setValues.add(care);
         }
         String cphone = objectInfo.getCreatorConractWay();
         if (cphone != null) {
@@ -543,8 +585,9 @@ public class ParseByOption {
                 + ObjectInfoTable.CREATETIME + ", "
                 + ObjectInfoTable.UPDATETIME + ", "
                 + ObjectInfoTable.IMPORTANT + ", "
+                + ObjectInfoTable.CARE + ", "
                 + ObjectInfoTable.STATUS
-                + ") values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + ") values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     }
 
     public String deleteObjectInfo() {
@@ -566,6 +609,7 @@ public class ParseByOption {
                 + ObjectInfoTable.SEX + ", "
                 + ObjectInfoTable.REASON + ", "
                 + ObjectInfoTable.CREATOR + ", "
+                + ObjectInfoTable.CARE + ", "
                 + ObjectInfoTable.CPHONE + ", "
                 + ObjectInfoTable.CREATETIME + ", "
                 + ObjectInfoTable.UPDATETIME + ", "
@@ -606,5 +650,100 @@ public class ParseByOption {
                 + ObjectInfoTable.STATUS + " = 1 and "
                 + ObjectInfoTable.STATUSTIME + " > ? AND "
                 + ObjectInfoTable.STATUSTIME + " < ?";
+    }
+
+    public String getCarePeople(int size) {
+        StringBuilder sql_where = new StringBuilder();
+        sql_where.append(" where ").append(ObjectInfoTable.PKEY).append(" in (");
+        int count = 0;
+        for (int i = 0 ; i < size; i++){
+            if (count < size - 1){
+                sql_where.append("?, ");
+                count ++;
+            }else {
+                sql_where.append("?) and ")
+                        .append(ObjectInfoTable.CARE).append(" = 1 and ")
+                        .append(ObjectInfoTable.UPDATETIME).append(" <= ?");
+            }
+        }
+        return "select "
+                +ObjectInfoTable.NAME+", "
+                +ObjectInfoTable.ROWKEY+", "
+                +ObjectInfoTable.PHOTO+", "
+                + ObjectInfoTable.PKEY + ", "
+                + ObjectInfoTable.IDCARD + ", "
+                + ObjectInfoTable.SEX + ", "
+                + ObjectInfoTable.REASON + ", "
+                + ObjectInfoTable.CREATOR + ", "
+                + ObjectInfoTable.CARE + ", "
+                + ObjectInfoTable.CPHONE + ", "
+                + ObjectInfoTable.CREATETIME + ", "
+                + ObjectInfoTable.UPDATETIME + ", "
+                + ObjectInfoTable.IMPORTANT + ", "
+                + ObjectInfoTable.STATUS  +" from "
+                + ObjectInfoTable.TABLE_NAME
+                + sql_where;
+    }
+
+    public String getStatusPeople(int size) {
+        StringBuilder sql_where = new StringBuilder();
+        sql_where.append(" where ").append(ObjectInfoTable.PKEY).append(" in (");
+        int count = 0;
+        for (int i = 0 ; i < size; i++){
+            if (count < size - 1){
+                sql_where.append("?, ");
+                count ++;
+            }else {
+                sql_where.append("?) and ").append(ObjectInfoTable.STATUS).append(" = 0");
+            }
+        }
+        return "select "
+                + ObjectInfoTable.NAME + ", "
+                +ObjectInfoTable.ROWKEY+", "
+                + ObjectInfoTable.PKEY + ", "
+                + ObjectInfoTable.IDCARD + ", "
+                + ObjectInfoTable.PHOTO + ", "
+                + ObjectInfoTable.SEX + ", "
+                + ObjectInfoTable.REASON + ", "
+                + ObjectInfoTable.CREATOR + ", "
+                + ObjectInfoTable.CARE + ", "
+                + ObjectInfoTable.CPHONE + ", "
+                + ObjectInfoTable.CREATETIME + ", "
+                + ObjectInfoTable.UPDATETIME + ", "
+                + ObjectInfoTable.IMPORTANT + ", "
+                + ObjectInfoTable.STATUS  + " from "
+                + ObjectInfoTable.TABLE_NAME
+                + sql_where;
+    }
+
+    public String getImportantPeople(int size) {
+        StringBuilder sql_where = new StringBuilder();
+        sql_where.append(" where ").append(ObjectInfoTable.PKEY).append(" in (");
+        int count = 0;
+        for (int i = 0 ; i < size; i++){
+            if (count < size - 1){
+                sql_where.append("?, ");
+                count ++;
+            }else {
+                sql_where.append("?) and ").append(ObjectInfoTable.IMPORTANT).append(" = 2");
+            }
+        }
+        return "select "
+                + ObjectInfoTable.NAME+", "
+                +ObjectInfoTable.ROWKEY+", "
+                + ObjectInfoTable.PHOTO+", "
+                + ObjectInfoTable.PKEY + ", "
+                + ObjectInfoTable.IDCARD + ", "
+                + ObjectInfoTable.SEX + ", "
+                + ObjectInfoTable.REASON + ", "
+                + ObjectInfoTable.CREATOR + ", "
+                + ObjectInfoTable.CARE + ", "
+                + ObjectInfoTable.CPHONE + ", "
+                + ObjectInfoTable.CREATETIME + ", "
+                + ObjectInfoTable.UPDATETIME + ", "
+                + ObjectInfoTable.IMPORTANT + ", "
+                + ObjectInfoTable.STATUS + " from "
+                + ObjectInfoTable.TABLE_NAME
+                + sql_where;
     }
 }

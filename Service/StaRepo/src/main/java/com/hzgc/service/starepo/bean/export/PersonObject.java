@@ -56,9 +56,18 @@ public class PersonObject implements Serializable{
     private String creator;
 
     /**
+     * 关爱人口
+     */
+     @ApiModelProperty(value = "关爱人口")
+     private int care;
+
+
+
+    /**
      * 创建者手机号
      */
     @ApiModelProperty(value = "创建者手机号")
+
     private String creatorConractWay;
 
     /**
@@ -119,6 +128,15 @@ public class PersonObject implements Serializable{
 
     public PersonObject setSex(int sex) {
         this.sex = sex;
+        return this;
+    }
+
+    public int getCare() {
+        return care;
+    }
+
+    public PersonObject setCare(int care) {
+        this.care = care;
         return this;
     }
 

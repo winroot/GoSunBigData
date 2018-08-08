@@ -81,21 +81,21 @@ public class ObjectInfoHandlerService {
      * 身份证唯一性判断
      *
      * @param objectInfo
-     * @return true:不存在,false:存在
+     * @return true:存在  false:不存在
      */
     public boolean isExists_idCode(ObjectInfoParam objectInfo) {
         if (!StringUtils.isBlank(objectInfo.getIdcard())) {
             List<String> idcards = phoenixDao.getAllObjectIdcard();
-            return !idcards.contains(objectInfo.getIdcard());
+            return idcards.contains(objectInfo.getIdcard());
         }
-        return true;
+        return false;
     }
 
     /**
      * 判断ObjectTypeKey是否存在
      *
      * @param objectInfo
-     * @return true:存在,false:不存在
+     * @return true:存在  false:不存在
      */
     public boolean isExists_objectTypeKey(ObjectInfoParam objectInfo) {
         List<String> objectTypeKeys = phoenixDao.getAllObjectTypeKeys();
@@ -323,6 +323,7 @@ public class ObjectInfoHandlerService {
                     .setCreatorConractWay(sqlRowSet.getString(ObjectInfoTable.CPHONE))
                     .setCreateTime(createTime_str)
                     .setReason(sqlRowSet.getString(ObjectInfoTable.REASON))
+                    .setCare(sqlRowSet.getInt(ObjectInfoTable.CARE))
                     .setFollowLevel(sqlRowSet.getInt(ObjectInfoTable.IMPORTANT))
                     .setSimilarity(sqlRowSet.getFloat(ObjectInfoTable.RELATED))
                     .setLocation(sqlRowSet.getString(ObjectInfoTable.LOCATION));
@@ -599,6 +600,37 @@ public class ObjectInfoHandlerService {
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.MONTH, month - 1);             // 当前月份减1
         return cal.getActualMaximum(Calendar.DATE);
+    }
+
+    /**
+     * 关爱人口查询
+     * @param objectTypeKeyList  offtime
+     * @return Objectinfo
+     */
+    public List<ObjectInfo> getCarePeople(List<String> objectTypeKeyList, String offTime){
+        long time = System.currentTimeMillis() - Integer.valueOf(offTime) * 60 * 60 * 1000;
+        log.info("time :" + time);
+        Timestamp timestamp = new Timestamp(time);
+        return phoenixDao.getCarePeople(objectTypeKeyList, timestamp);
+    }
+
+    /**
+     * 常住人口查询
+     * @param objectTypeKeyList
+     * @return Objectinfo
+     */
+    public List<ObjectInfo> getStatusPeople(List<String> objectTypeKeyList) {
+        return phoenixDao.getStatusPeople(objectTypeKeyList);
+    }
+
+    /**
+     * 重点人口查询
+     * @param objectTypeKeyList
+     * @return Objectinfo
+     */
+
+    public List<ObjectInfo> getImportantPeople(List<String> objectTypeKeyList) {
+        return phoenixDao.getImportantPeople(objectTypeKeyList);
     }
 }
 
