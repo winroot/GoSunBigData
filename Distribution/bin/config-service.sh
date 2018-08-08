@@ -137,8 +137,7 @@ function distribute_service()
 	
 	 #####################KAFKA_HOST#########################
     #替换模块启动脚本中KAFKA_HOST：key=value(替换key字段的值value)
-    kafka=`echo ${kafkapro}| cut -d "," -f1`
-    sed -i "s#^KAFKA_HOST=.*#KAFKA_HOST=${kafka}#g" ${STAREPO_START_FILE}
+    sed -i "s#^KAFKA_HOST=.*#KAFKA_HOST=${kafkapro}#g" ${STAREPO_START_FILE}
     echo "start-starepo.sh脚本配置kafka完成......"
 
     #配置es.hosts:
