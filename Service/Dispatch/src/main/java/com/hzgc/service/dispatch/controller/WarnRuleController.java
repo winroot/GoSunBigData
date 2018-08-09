@@ -131,7 +131,7 @@ public class WarnRuleController {
                     }
                 }else {
                     return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,"设备" + deviceDTO.getName() +
-                            "未设置序列号,请配置序列号,重新添加");
+                            "未设置序列号,请配置序列号,重新修改");
                 }
             }
             warnList = dispatch.getRule().getWarns();
