@@ -18,6 +18,7 @@
         <module>Common</module>
         <module>Service</module>
         <module>Distribution</module>
+        <module>FaceCompare</module>
     </modules>
 
     <properties>
