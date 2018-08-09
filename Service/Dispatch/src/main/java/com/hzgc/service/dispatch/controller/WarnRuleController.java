@@ -114,10 +114,25 @@ public class WarnRuleController {
             List<String> ipcIDs = new ArrayList<>();
             List<Warn> warnList;
             log.info("Update rule , param is " + JSONUtil.toJson(dispatch));
-            List<Long> list = IpcIdsUtil.toDeviceIdList(dispatch.getDevices());
+            //通过设备id查找ipcid
+            List<Device> deviceList = dispatch.getDevices();
+            List<Long> list = IpcIdsUtil.toDeviceIdList(deviceList);
             Map<String, DeviceDTO> map = deviceQueryService.getDeviceInfoByBatchId(list);
             for (String s : map.keySet()) {
-                ipcIDs.add(map.get(s).getSerial());
+                DeviceDTO deviceDTO = map.get(s);
+                String ipcid = deviceDTO.getSerial();
+                if (null != ipcid && ipcid.length() > 0){
+                    ipcIDs.add(ipcid);
+                    for (Device device:deviceList){
+                        String id = device.getId();
+                        if (id.equals(s)){
+                            device.setIpcId(ipcid);
+                        }
+                    }
+                }else {
+                    return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,"设备" + deviceDTO.getName() +
+                            "未设置序列号,请配置序列号,重新添加");
+                }
             }
             warnList = dispatch.getRule().getWarns();
             ResponseResult<Boolean> responseResult = warnRuleService.updateRule(dispatch);
