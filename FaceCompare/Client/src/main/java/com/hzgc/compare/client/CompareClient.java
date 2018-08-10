@@ -2,6 +2,7 @@ package com.hzgc.compare.client;
 
 import com.hzgc.common.rpc.client.RpcClient;
 import com.hzgc.common.rpc.client.result.AllReturn;
+import com.hzgc.common.rpc.util.Constant;
 import com.hzgc.compare.worker.Service;
 import com.hzgc.compare.worker.common.CompareParam;
 import com.hzgc.compare.worker.common.SearchResult;
@@ -13,7 +14,8 @@ public class CompareClient {
     private Service service;
 
     public void createService(String serverAddress){
-        RpcClient rpcClient = new RpcClient(serverAddress);
+        Constant constant = new Constant("/compare", "worker");
+        RpcClient rpcClient = new RpcClient(serverAddress, constant);
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {

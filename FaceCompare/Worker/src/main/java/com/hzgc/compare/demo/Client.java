@@ -2,6 +2,7 @@ package com.hzgc.compare.demo;
 
 import com.hzgc.common.rpc.client.RpcClient;
 import com.hzgc.common.rpc.client.result.AllReturn;
+import com.hzgc.common.rpc.util.Constant;
 import com.hzgc.compare.worker.Service;
 import com.hzgc.compare.worker.common.CompareParam;
 import com.hzgc.compare.worker.common.FaceObject;
@@ -17,7 +18,8 @@ import java.util.Random;
 
 public class Client {
     public static void main(String[] args) throws InterruptedException, ParseException {
-        RpcClient rpcClient = new RpcClient("172.18.18.105:2181,172.18.18.106:2181,172.18.18.107:2181");
+        Constant constant = new Constant("/compare", "worker");
+        RpcClient rpcClient = new RpcClient("172.18.18.105:2181,172.18.18.106:2181,172.18.18.107:2181", constant);
         Thread.sleep(3000);
         Service service = rpcClient.createAll(Service.class);
 //        service.stopTheWorker();
