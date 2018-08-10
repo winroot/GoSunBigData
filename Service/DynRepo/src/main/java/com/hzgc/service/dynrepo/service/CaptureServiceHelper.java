@@ -315,11 +315,17 @@ public class CaptureServiceHelper {
      * @return 大图ftpUrl
      */
     String surlToBurl(String surl) {
-        StringBuilder burl = new StringBuilder();
-        String s1 = surl.substring(0, surl.lastIndexOf("_") + 1);
-        String s2 = surl.substring(surl.lastIndexOf("."));
-        burl.append(s1).append(0).append(s2);
-        return burl.toString();
+        if (surl.contains("IPC-HFW5238M-AS-I1") || surl.contains("IPC-HDBW5238R-AS")){
+            String frontStr = surl.substring(0, surl.lastIndexOf("[") + 1);
+            String backStr = surl.substring(surl.lastIndexOf("[") + 2, surl.length());
+            return frontStr + 0 + backStr;
+        } else {
+            StringBuilder burl = new StringBuilder();
+            String s1 = surl.substring(0, surl.lastIndexOf("_") + 1);
+            String s2 = surl.substring(surl.lastIndexOf("."));
+            burl.append(s1).append(0).append(s2);
+            return burl.toString();
+        }
     }
 }
 
