@@ -115,7 +115,9 @@ public class ObjectInfoHandlerService {
         //数据库操作
         Integer i = phoenixDao.addObjectInfo(objectInfo);
         //向告警中同步数据
-        sendKafka(objectInfo, ADD);
+        if (i == 0){
+            sendKafka(objectInfo, ADD);
+        }
         return i;
     }
 
@@ -426,7 +428,7 @@ public class ObjectInfoHandlerService {
                 // 布控时间
                 map.put("time", "时间");
                 if (null != personObject.getCreateTime()) {
-                    map.put("timeData", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(personObject.getCreateTime()));
+                    map.put("timeData", personObject.getCreateTime());
                 } else {
                     map.put("timeData", "");
                 }
