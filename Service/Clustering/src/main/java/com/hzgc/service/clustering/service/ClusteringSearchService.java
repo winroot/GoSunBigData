@@ -51,8 +51,8 @@ public class ClusteringSearchService {
             ListUtils.sort(listNotIgnore, sortParams.getSortNameArr(), sortParams.getIsAscArr());
             ListUtils.sort(listIgnore, sortParams.getSortNameArr(), sortParams.getIsAscArr());
         }
-        int totalYes = listNotIgnore.size();
-        int totalNo = listIgnore.size();
+        int totalYes = listNotIgnore == null? 0:listNotIgnore.size();
+        int totalNo = listIgnore == null? 0:listIgnore.size();
         int total = 0;
         ClusteringInfo clusteringInfo = new ClusteringInfo();
         //优先返回不忽略的聚类
@@ -96,7 +96,13 @@ public class ClusteringSearchService {
         List<Integer> alarmIdList = new ArrayList<>();
         if (results != null && results.length > 0) {
             for (SearchHit result : results) {
-                int alarmTime = Integer.parseInt((String) result.getSource().get(DynamicTable.ALARM_ID));
+                Object obj = result.getSource().get(DynamicTable.ALARM_ID);
+                int alarmTime;
+                if(obj instanceof Integer) {
+                    alarmTime = ((Integer) obj).intValue();
+                } else {
+                    alarmTime = Integer.parseInt((String)obj);
+                }
                 alarmIdList.add(alarmTime);
             }
         } else {
