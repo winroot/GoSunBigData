@@ -12,10 +12,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class Comsumer extends Thread{
     private static final Logger logger = LoggerFactory.getLogger(Comsumer.class);
@@ -45,7 +42,7 @@ public class Comsumer extends Thread{
      * 接收从kafka传来的数据
      */
     private void receiveAndSave(){
-        comsumer.subscribe(Arrays.asList(conf.getValue(Config.KAFKA_TOPIC)));
+        comsumer.subscribe(Collections.singletonList(conf.getValue(Config.KAFKA_TOPIC)));
         logger.info("Comsumer is started to accept kafka info.");
         while(true){
             ConsumerRecords<String, String> records =

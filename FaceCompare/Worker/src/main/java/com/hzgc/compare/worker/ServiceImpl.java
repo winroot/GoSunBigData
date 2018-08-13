@@ -21,8 +21,6 @@ import java.util.concurrent.Executors;
 
 public class ServiceImpl implements Service {
     private static final Logger logger = LoggerFactory.getLogger(ServiceImpl.class);
-    private int resultDefaultCount = 10;
-    private Config conf;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private ExecutorService pool;
     private int daysPerThread = 2; //分割成的时间段
@@ -30,7 +28,7 @@ public class ServiceImpl implements Service {
     private int excutors = 10;
 
     public ServiceImpl(){
-        this.conf = Config.getConf();
+        Config conf = Config.getConf();
         excutors = conf.getValue(Config.WORKER_EXECUTORS_TO_COMPARE, excutors);
         pool = Executors.newFixedThreadPool(excutors);
     }

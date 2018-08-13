@@ -22,7 +22,7 @@ public class CompareNotSamePerson2 implements Runnable{
     private CompareParam param;
     private String dateStart;
     private String dateEnd;
-    boolean isEnd = false;
+    private boolean isEnd = false;
     Map<String, SearchResult> searchResult;
 
     public Map<String, SearchResult> getSearchResult(){
@@ -58,13 +58,13 @@ public class CompareNotSamePerson2 implements Runnable{
         List<Pair<String, float[]>> dataFilterd =  comparators.filter(ipcIdList, null, dateStart, dateEnd);
         // 执行对比
         logger.info("To compare the result of filterd.");
-        resultTemp = comparators.compareSecondNotSamePerson(features, sim, dataFilterd, param.getSort());
+        resultTemp = comparators.compareSecondNotSamePerson(features, sim, dataFilterd);
         for(Map.Entry<String, SearchResult> searchResult : resultTemp.entrySet()){
             SearchResult res1 = searchResult.getValue();
             SearchResult res2 = res1;
 
             List<Integer> sorts = param.getSort();
-            if(sorts != null && (sorts.size() > 1 || (sorts.size() == 1 && sorts.get(0) != 5))){
+            if(sorts != null && (sorts.size() > 1 || (sorts.size() == 1 && sorts.get(0) != 4))){
                 res2 = res1.take(hbaseReadMax);
                 //从HBase读取数据
                 SearchResult res3 = client.readFromHBase2(res2);

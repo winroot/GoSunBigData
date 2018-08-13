@@ -1,10 +1,14 @@
 package com.hzgc.compare.worker.compare.task;
 
 import com.hzgc.compare.worker.common.SearchResult;
+import com.hzgc.compare.worker.conf.Config;
 
 public abstract class CompareTask implements Runnable{
     boolean isEnd = false;
     SearchResult searchResult;
+    int hbaseReadMax = 500;
+    int resultDefaultCount = 20;
+    protected Config conf;
 
 
     public abstract SearchResult compare();

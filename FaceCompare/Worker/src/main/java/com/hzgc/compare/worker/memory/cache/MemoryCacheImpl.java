@@ -34,7 +34,7 @@ public class MemoryCacheImpl<A1, A2, D> {
 
     private MemoryCacheImpl(Config conf){
         this.conf = conf;
-        init(conf);
+        init();
     }
 
     public static <A1, A2, D> MemoryCacheImpl<A1, A2, D> getInstance(Config conf){
@@ -52,8 +52,9 @@ public class MemoryCacheImpl<A1, A2, D> {
         return memoryCache;
     }
 
-    private void init(Config conf) {
+    private void init() {
         bufferSizeMax = conf.getValue(Config.WORKER_BUFFER_SIZE_MAX, bufferSizeMax);
+        flushProgram = conf.getValue(Config.WORKER_FLUSH_PROGRAM, flushProgram);
         faceObjects = new BatchBufferQueue<>();
         cacheRecords = new ConcurrentHashMap<>();//ConcurrentHashMap
         buffer = new DoubleBufferQueue<>();

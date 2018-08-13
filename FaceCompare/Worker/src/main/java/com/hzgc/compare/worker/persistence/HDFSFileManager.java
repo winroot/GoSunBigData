@@ -25,10 +25,6 @@ public class HDFSFileManager<A1, A2, D> implements FileManager<A1, A2, D> {
 
     }
 
-    public void createFile() {
-
-    }
-
     public void checkFile() {
 
     }

@@ -27,6 +27,8 @@ public class CaptureOption implements Serializable {
     //查询条数
     private int limit;
 
+
+
     public List<String> getDeviceIpcs() {
         return deviceIpcs;
     }

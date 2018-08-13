@@ -42,7 +42,7 @@ public class MemoryManager<A1,A2,D> {
      */
     public void startToCheck(){
         logger.info("Start to check memory.");
-        new Timer().schedule(new TimeToCheckMemory(this), checkTime, checkTime);
+        new Timer().schedule(new TimeToCheckMemory(this), 0, checkTime);
     }
 
     /**

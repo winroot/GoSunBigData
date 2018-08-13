@@ -170,10 +170,6 @@ public class LocalFileManager<A1, A2, D> implements FileManager<A1, A2, D> {
 
     }
 
-    public void createFile() {
-
-    }
-
     public void checkFile() {
         new Timer().schedule(new TimeToCheckFile(), timeToCheckFile, timeToCheckFile);
     }

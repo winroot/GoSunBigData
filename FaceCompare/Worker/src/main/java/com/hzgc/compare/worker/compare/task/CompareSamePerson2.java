@@ -4,7 +4,6 @@ import com.hzgc.compare.worker.common.CompareParam;
 import com.hzgc.compare.worker.common.Feature;
 import com.hzgc.compare.worker.common.SearchResult;
 import com.hzgc.compare.worker.compare.ComparatorsImpl2;
-import com.hzgc.compare.worker.conf.Config;
 import com.hzgc.compare.worker.persistence.HBaseClient;
 import javafx.util.Pair;
 import org.slf4j.Logger;
@@ -15,9 +14,6 @@ import java.util.List;
 
 public class CompareSamePerson2 extends CompareTask{
     private static final Logger logger = LoggerFactory.getLogger(CompareSamePerson2.class);
-    private int resultDefaultCount = 20;
-    private int hbaseReadMax = 500;
-    private Config conf;
     private CompareParam param;
     private String dateStart;
     private String dateEnd;
@@ -58,11 +54,11 @@ public class CompareSamePerson2 extends CompareTask{
         List<Pair<String, float[]>> dataFilterd =  comparators.filter(ipcIdList, null, dateStart, dateEnd);
         // 执行对比
         logger.info("To compare the result of filterd.");
-        result = comparators.compareSecondTheSamePerson(feature2List, sim, dataFilterd, param.getSort());
+        result = comparators.compareSecondTheSamePerson(feature2List, sim, dataFilterd);
         //取相似度最高的几个
         logger.info("Take the top " + resultCount);
         List<Integer> sorts = param.getSort();
-        if(sorts != null && (sorts.size() > 1 || (sorts.size() == 1 && sorts.get(0) != 5))){
+        if(sorts != null && (sorts.size() > 1 || (sorts.size() == 1 && sorts.get(0) != 4))){
             result = result.take(hbaseReadMax);
             logger.info("Read records from HBase.");
             result = client.readFromHBase2(result);

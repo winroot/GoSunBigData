@@ -27,7 +27,6 @@ public class ComparatorsImpl2 {
         if(arg1List == null || arg1List.size() == 0){
             while (iterator.hasNext()) {
                 Triplet<String, String, String> key = iterator.next();
-                String key1 = key.getFirst();
                 String key2 = key.getSecond();
                 String key3 = key.getThird();
                 if ((key2 == null || key2.equals(arg2)) &&
@@ -60,8 +59,7 @@ public class ComparatorsImpl2 {
     }
 
 
-    public SearchResult compareSecond(float[] feature, float sim, List<Pair<String, float[]>> datas,
-                                      List<Integer> sorts){
+    public SearchResult compareSecond(float[] feature, float sim, List<Pair<String, float[]>> datas){
         Long start = System.currentTimeMillis();
         float[][] diku = new float[datas.size()][512];
         int index = 0;
@@ -96,8 +94,7 @@ public class ComparatorsImpl2 {
         return result;
     }
 
-    public SearchResult compareSecondTheSamePerson(List<float[]> features, float sim,
-                                                   List<Pair<String, float[]>> datas, List<Integer> sorts){
+    public SearchResult compareSecondTheSamePerson(List<float[]> features, float sim, List<Pair<String, float[]>> datas){
         Long start = System.currentTimeMillis();
         float[][] diku = new float[datas.size()][512];
         int index = 0;
@@ -137,8 +134,7 @@ public class ComparatorsImpl2 {
     }
 
     public Map<String, SearchResult> compareSecondNotSamePerson(List<Feature> features,
-                                                                float sim, List<Pair<String, float[]>> datas,
-                                                                List<Integer> sorts){
+                                                                float sim, List<Pair<String, float[]>> datas){
         Long start = System.currentTimeMillis();
         Map<String, SearchResult> result = new HashMap<>();
         float[][] diku = new float[datas.size()][512];

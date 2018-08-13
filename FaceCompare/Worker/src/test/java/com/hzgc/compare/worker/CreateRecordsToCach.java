@@ -31,7 +31,7 @@ public class CreateRecordsToCach {
 
         ComparatorsImpl2 comparators = new ComparatorsImpl2();
         List<Pair<String, float[]>> dataFilterd =  comparators.filter(null, null, "2018-08-07", "2018-08-09");
-        SearchResult result = comparators.compareSecond(feature, 0.9f, dataFilterd, new ArrayList<>());
+        SearchResult result = comparators.compareSecond(feature, 0.9f, dataFilterd);
 
         result = result.take(10);
         System.out.println(result);

@@ -22,7 +22,6 @@ import java.util.concurrent.Executors;
 @RpcService(Service.class)
 public class ServiceImpl2 implements Service{
     private static final Logger logger = LoggerFactory.getLogger(ServiceImpl2.class);
-    private Config conf;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private ExecutorService pool;
     private int daysPerThread = 2; //分割成的时间段
@@ -30,7 +29,7 @@ public class ServiceImpl2 implements Service{
     private int excutors = 12;
 
     public ServiceImpl2(){
-        this.conf = Config.getConf();
+        Config conf = Config.getConf();
         excutors = conf.getValue(Config.WORKER_EXECUTORS_TO_COMPARE, excutors);
         pool = Executors.newFixedThreadPool(excutors);
     }

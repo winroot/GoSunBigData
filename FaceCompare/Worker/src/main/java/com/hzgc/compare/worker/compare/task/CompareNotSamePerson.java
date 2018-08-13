@@ -23,7 +23,7 @@ public class CompareNotSamePerson implements Runnable {
     private CompareParam param;
     private String dateStart;
     private String dateEnd;
-    boolean isEnd = false;
+    private boolean isEnd = false;
     private int hbaseReacMax = 500;
     Map<String, SearchResult> searchResult;
 

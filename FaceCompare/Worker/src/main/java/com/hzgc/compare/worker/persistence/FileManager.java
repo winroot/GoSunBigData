@@ -26,11 +26,6 @@ public interface FileManager<A1, A2, D> {
     void flush(List<Quintuple<A1, A2, String, String, D>> buffer);
 
     /**
-     * 若写出的数据不在当前时间段，则需要创建新的文件，建立新的输出流，并保存流
-     */
-    void createFile();
-
-    /**
      * 启动定期任务，检查文件是否存在过期，并删除过期文件，以及对应的HBase数据
      */
     void checkFile();

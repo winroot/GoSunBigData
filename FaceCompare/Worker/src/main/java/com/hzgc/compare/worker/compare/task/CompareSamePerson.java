@@ -6,7 +6,6 @@ import com.hzgc.compare.worker.common.Feature;
 import com.hzgc.compare.worker.common.SearchResult;
 import com.hzgc.compare.worker.compare.Comparators;
 import com.hzgc.compare.worker.compare.ComparatorsImpl;
-import com.hzgc.compare.worker.conf.Config;
 import com.hzgc.compare.worker.persistence.HBaseClient;
 import javafx.util.Pair;
 import org.slf4j.Logger;
@@ -17,9 +16,6 @@ import java.util.List;
 
 public class CompareSamePerson extends CompareTask {
     private static final Logger logger = LoggerFactory.getLogger(CompareSamePerson.class);
-    private int resultDefaultCount = 20;
-    private Config conf;
-    private int hbaseReacMax = 500;
     private CompareParam param;
     private String dateStart;
     private String dateEnd;
@@ -59,10 +55,10 @@ public class CompareSamePerson extends CompareTask {
         // 根据条件过滤
         logger.info("To filter the records from memory.");
         List<Pair<String, byte[]>> dataFilterd =  comparators.<byte[]>filter(ipcIdList, null, dateStart, dateEnd);
-        if(dataFilterd.size() > hbaseReacMax) {
+        if(dataFilterd.size() > hbaseReadMax) {
             // 若过滤结果太大，则需要第一次对比
             logger.info("The result of filter is too bigger , to compare it first.");
-            List<String> firstCompared = comparators.compareFirstTheSamePerson(feature1List, hbaseReacMax, dataFilterd);
+            List<String> firstCompared = comparators.compareFirstTheSamePerson(feature1List, hbaseReadMax, dataFilterd);
             //根据对比结果从HBase读取数据
             logger.info("Read records from HBase with result of first compared.");
             List<FaceObject> objs =  client.readFromHBase(firstCompared);

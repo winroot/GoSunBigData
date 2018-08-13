@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
  * 整合所有组件
  */
 public class Worker<A1, A2, D> {
-    private String workId;
     private static final Logger logger = LoggerFactory.getLogger(Worker.class);
     private Config conf;
     private Comsumer comsumer;
@@ -32,7 +31,7 @@ public class Worker<A1, A2, D> {
     private void init(){
         conf = Config.getConf();
         comsumer = new Comsumer();
-        workId = conf.getValue(Config.WORKER_ID);
+        String workId = conf.getValue(Config.WORKER_ID);
         logger.info("To start worker " + workId);
         logger.info("To init the memory module.");
         MemoryCacheImpl.<A1, A2, D>getInstance();
@@ -61,14 +60,7 @@ public class Worker<A1, A2, D> {
         hBaseClient.timeToWrite2();
         Thread thread = new Thread(new RPCRegistry());
         thread.start();
-//        Config conf = Config.getConf();
-//        ServiceRegistry registry = new ServiceRegistry(conf.getValue(Config.ZOOKEEPER_ADDRESS));
-//        RpcServer rpcServer = new RpcServer(conf.getValue(Config.WORKER_ADDRESS),
-//                conf.getValue(Config.WORKER_RPC_PORT, 4086), registry);
-//        rpcServer.start();
     }
-
-
 
     public static void main(String args[]){
         Worker worker = new Worker<String, String, float[]>();

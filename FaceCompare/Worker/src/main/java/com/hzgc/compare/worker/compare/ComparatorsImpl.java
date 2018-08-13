@@ -29,7 +29,6 @@ public class ComparatorsImpl implements Comparators{
         if(arg1List == null || arg1List.size() == 0){
             while (iterator.hasNext()) {
                 Triplet<String, String, String> key = iterator.next();
-                String key1 = key.getFirst();
                 String key2 = key.getSecond();
                 String key3 = key.getThird();
                 if ((key2 == null || key2.equals(arg2)) &&
@@ -89,7 +88,6 @@ public class ComparatorsImpl implements Comparators{
 
     public List<String> compareFirstNotSamePerson(List<Feature> features, int num, List<Pair<String, byte[]>> data){
         Long start = System.currentTimeMillis();
-        Map<Feature, List<String>> result = new HashMap<>();
         byte[][] diku = new byte[data.size()][64];
         int index = 0;
         for(Pair<String, byte[]> pair : data){

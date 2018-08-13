@@ -92,7 +92,8 @@ public class FileReader {
             return;
         }
         for(ReadFile readFile1: list){
-            readFile1.start();
+            pool.submit(readFile1);
+//            readFile1.start();
         }
 
         while (true){
@@ -222,7 +223,7 @@ public class FileReader {
     }
 }
 
-class ReadFile extends Thread{
+class ReadFile implements Runnable{
     private static final Logger logger = LoggerFactory.getLogger(ReadFile.class);
     private MemoryCacheImpl<String, String, float[]> memoryCacheImpl1 = MemoryCacheImpl.getInstance();
     private LocalStreamCache streamCache = LocalStreamCache.getInstance();

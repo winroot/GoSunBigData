@@ -1,5 +1,6 @@
 package com.hzgc.compare.worker.common;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -77,8 +78,15 @@ public class SearchResult {
                 return flug;
             }
         });
-
     }
+
+//    public static void main(String args[]){
+//        List<Integer> sorts = new ArrayList<>();
+//        sorts.add(1);
+//        sorts.add(2);
+//        List<SortParam> sortParams = sorts.stream().map(param -> SortParam.values()[param]).collect(Collectors.toList());
+//        System.out.println(sortParams);
+//    }
 
     /**
      * 将多个SearchResult的 records 合并，并根据Sim排序
@@ -114,35 +122,35 @@ public class SearchResult {
         }
     }
 
-    private void quickSort(Record[] records , int begin, int end){
-        int tbegin = begin;
-        int tend = end;
-        if(begin >= end)
-        {
-            return;
-        }
-        Record key = records[begin];
-        int i = begin;
-        int j = end;
-        while (i < j){
-            while (records[j].sim <= key.sim && i < j){
-                j --;
-            }
-            while (records[i].sim >= key.sim && i < j){
-                i ++;
-            }
-
-            if(i < j){
-                Record temp = records[i];
-                records[i] = records[j];
-                records[j] = temp;
-            }
-        }
-        records[begin] = records[i];
-        records[i] = key;
-        quickSort(records, begin, i-1);
-        quickSort(records, i + 1, end);
-    }
+//    private void quickSort(Record[] records , int begin, int end){
+//        int tbegin = begin;
+//        int tend = end;
+//        if(begin >= end)
+//        {
+//            return;
+//        }
+//        Record key = records[begin];
+//        int i = begin;
+//        int j = end;
+//        while (i < j){
+//            while (records[j].sim <= key.sim && i < j){
+//                j --;
+//            }
+//            while (records[i].sim >= key.sim && i < j){
+//                i ++;
+//            }
+//
+//            if(i < j){
+//                Record temp = records[i];
+//                records[i] = records[j];
+//                records[j] = temp;
+//            }
+//        }
+//        records[begin] = records[i];
+//        records[i] = key;
+//        quickSort(records, begin, i-1);
+//        quickSort(records, i + 1, end);
+//    }
 
     public Record[] getRecords(){
         return records;
