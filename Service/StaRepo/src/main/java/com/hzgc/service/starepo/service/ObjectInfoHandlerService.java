@@ -550,7 +550,7 @@ public class ObjectInfoHandlerService {
                 // 布控时间
                 map.put("time", "时间");
                 if (null != personObject.getCreateTime()) {
-                    map.put("timeData", new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(personObject.getCreateTime()));
+                    map.put("timeData", personObject.getCreateTime());
                 } else {
                     map.put("timeData", "");
                 }
