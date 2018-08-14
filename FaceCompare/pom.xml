@@ -7,9 +7,12 @@
         <groupId>com.hzgc</groupId>
         <version>2.3.0</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
+     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>face-compare</artifactId>
-    <version>1.0</version>
-
+    <packaging>pom</packaging>
+    <modules>
+        <module>Client</module>
+        <module>Worker</module>
+    </modules>
 </project>
