@@ -9,6 +9,8 @@ import lombok.Data;
 @Data
 public class ObjectInfo {
     /* 根据id获取对象信息——后台返回封装 */
+    @ApiModelProperty(value = "对象ID")
+    private String id;                         // 对象id
     @ApiModelProperty(value = "对象名字")
     private String name;                       // 对象名字
     @ApiModelProperty(value = "对象类型名字")
@@ -21,8 +23,6 @@ public class ObjectInfo {
     private String createdReason  ;            // 布控理由
     @ApiModelProperty(value = "创建人")
     private String creator;                    // 创建人
-    @ApiModelProperty(value = "对象ID")
-    private String id;                    // 对象id
     @ApiModelProperty(value = "布控人联系方式")
     private String creatorPhone;               // 布控人联系方式
     @ApiModelProperty(value = "创建时间")

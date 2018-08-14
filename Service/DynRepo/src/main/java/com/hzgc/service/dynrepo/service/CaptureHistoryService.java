@@ -1,6 +1,7 @@
 package com.hzgc.service.dynrepo.service;
 
 import com.hzgc.common.facedynrepo.DynamicTable;
+import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.dynrepo.bean.*;
 import com.hzgc.service.dynrepo.dao.ElasticSearchDao;
 import com.hzgc.service.dynrepo.dao.EsSearchParam;
@@ -118,6 +119,7 @@ public class CaptureHistoryService {
             singleResult.setPictures(capturedPictureList);
             results.add(singleResult);
         }
+        log.info("Capture history results:" + JSONUtil.toJson(results));
         return results;
     }
 

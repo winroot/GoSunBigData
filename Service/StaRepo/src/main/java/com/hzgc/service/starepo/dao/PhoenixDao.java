@@ -312,11 +312,11 @@ public class PhoenixDao implements Serializable {
                         sqlArray,
                         objectInfo.getReason(),
                         objectInfo.getCreator(),
-                        objectInfo.getCare(),
                         objectInfo.getCreatorConractWay(),
                         createTime,
                         createTime,
                         objectInfo.getFollowLevel(),
+                        objectInfo.getCare(),
                         objectInfo.getStatus());
             } else {
                 jdbcTemplate.update(sql,
@@ -329,11 +329,11 @@ public class PhoenixDao implements Serializable {
                         null,
                         objectInfo.getReason(),
                         objectInfo.getCreator(),
-                        objectInfo.getCare(),
                         objectInfo.getCreatorConractWay(),
                         createTime,
                         createTime,
                         objectInfo.getFollowLevel(),
+                        objectInfo.getCare(),
                         objectInfo.getStatus());
             }
         } catch (Exception e) {
@@ -383,6 +383,7 @@ public class PhoenixDao implements Serializable {
                 setValues = entry.getValue();
             }
             log.info("Start update object info, SQL is : " + sql);
+            log.info("Start update object info, SQL arg : " + JSONUtil.toJson(setValues));
             List<Object[]> batchArgs = new ArrayList<>();
             Object[] objects = new Object[setValues.size()];
             for (int i = 0; i < setValues.size(); i++) {
@@ -450,14 +451,14 @@ public class PhoenixDao implements Serializable {
             objectInfo.setSex(sqlRowSet.getInt(ObjectInfoTable.SEX));
             objectInfo.setCreatedReason(sqlRowSet.getString(ObjectInfoTable.REASON));
             objectInfo.setCreator(sqlRowSet.getString(ObjectInfoTable.CREATOR));
-            objectInfo.setCare(sqlRowSet.getInt(ObjectInfoTable.CARE));
             objectInfo.setCreatorPhone(sqlRowSet.getString(ObjectInfoTable.CPHONE));
             createTime = (Timestamp) sqlRowSet.getObject(ObjectInfoTable.CREATETIME);
             updateTime = (Timestamp) sqlRowSet.getObject(ObjectInfoTable.UPDATETIME);
+            objectInfo.setCare(sqlRowSet.getInt(ObjectInfoTable.CARE));
             objectInfo.setFollowLevel(sqlRowSet.getInt(ObjectInfoTable.IMPORTANT));
             objectInfo.setStatus(sqlRowSet.getInt(ObjectInfoTable.STATUS));
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (createTime != null) {
             java.util.Date createTime_data = new java.util.Date(createTime.getTime());
             String createTime_str = sdf.format(createTime_data);
@@ -565,7 +566,7 @@ public class PhoenixDao implements Serializable {
     private List<ObjectInfo> setPeople(SqlRowSet sqlRowSet, List<String> objectTypeKeyList){
         List<ObjectInfo> objectInfoList = new ArrayList<>();
         Map<String, String> nameMap = searchTypeNames(objectTypeKeyList);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         while (sqlRowSet.next()) {
             ObjectInfo objectInfo = new ObjectInfo();
             objectInfo.setName(sqlRowSet.getString(ObjectInfoTable.NAME));

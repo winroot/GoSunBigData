@@ -271,9 +271,9 @@ public class ParseByOption {
         sameFieldReturn.append(", ");
         sameFieldReturn.append(ObjectInfoTable.IDCARD);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.CREATOR);
+        sameFieldReturn.append(ObjectInfoTable.REASON);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.CARE);
+        sameFieldReturn.append(ObjectInfoTable.CREATOR);
         sameFieldReturn.append(", ");
         sameFieldReturn.append(ObjectInfoTable.CPHONE);
         sameFieldReturn.append(", ");
@@ -281,7 +281,7 @@ public class ParseByOption {
         sameFieldReturn.append(", ");
         sameFieldReturn.append(ObjectInfoTable.UPDATETIME);
         sameFieldReturn.append(", ");
-        sameFieldReturn.append(ObjectInfoTable.REASON);
+        sameFieldReturn.append(ObjectInfoTable.CARE);
         sameFieldReturn.append(", ");
         sameFieldReturn.append(ObjectInfoTable.IMPORTANT);
         sameFieldReturn.append(", ");
@@ -303,7 +303,7 @@ public class ParseByOption {
         StringBuilder whereQuery = new StringBuilder();
         boolean isChanged = false;
 
-        // 关于姓名的搜索\
+        // 关于姓名的搜索
         String objectName = param.getObjectName();
         if (!StringUtils.isBlank(objectName)) {
             whereQuery.append(ObjectInfoTable.NAME)
@@ -448,65 +448,59 @@ public class ParseByOption {
         setValues.add(objectInfo.getId());
 
         String name = objectInfo.getName();
-        if (name != null) {
+        if (name != null && !"".equals(name)) {
             sql.append(", ");
             sql.append(ObjectInfoTable.NAME);
             setValues.add(name);
         }
         String pkey = objectInfo.getObjectTypeKey();
-        if (pkey != null) {
+        if (pkey != null && !"".equals(pkey)) {
             sql.append(", ");
             sql.append(ObjectInfoTable.PKEY);
             setValues.add(pkey);
         }
         String idcard = objectInfo.getIdcard();
-        if (idcard != null) {
+        if (idcard != null && !"".equals(idcard)) {
             sql.append(", ");
             sql.append(ObjectInfoTable.IDCARD);
             setValues.add(idcard);
         }
-
         Integer sex = objectInfo.getSex();
         if (sex != null) {
             sql.append(", ");
             sql.append(ObjectInfoTable.SEX);
             setValues.add(sex);
         }
-
         String reason = objectInfo.getReason();
-        if (reason != null) {
+        if (reason != null && !"".equals(reason)) {
             sql.append(", ");
             sql.append(ObjectInfoTable.REASON);
             setValues.add(reason);
         }
         String creator = objectInfo.getCreator();
-        if (creator != null) {
-            sql.append(", ")
-
-                    .append(ObjectInfoTable.CREATOR);
+        if (creator != null && !"".equals(creator)) {
+            sql.append(", ");
+            sql.append(ObjectInfoTable.CREATOR);
             setValues.add(creator);
         }
-        Integer care = objectInfo.getCare();
-        if (care != null) {
-            sql.append(", ")
-
-                    .append(ObjectInfoTable.CARE);
-            setValues.add(care);
-        }
         String cphone = objectInfo.getCreatorConractWay();
-        if (cphone != null) {
+        if (cphone != null && !"".equals(cphone)) {
             sql.append(", ");
             sql.append(ObjectInfoTable.CPHONE);
             setValues.add(cphone);
         }
-
         Integer important = objectInfo.getFollowLevel();
         if (important != null) {
             sql.append(", ");
             sql.append(ObjectInfoTable.IMPORTANT);
             setValues.add(important);
         }
-
+        Integer care = objectInfo.getCare();
+        if (care != null) {
+            sql.append(", ");
+            sql.append(ObjectInfoTable.CARE);
+            setValues.add(care);
+        }
         sql.append(") values(?");
         StringBuilder tmp = new StringBuilder("");
         for (int i = 0; i <= setValues.size() - 2; i++) {
@@ -609,10 +603,10 @@ public class ParseByOption {
                 + ObjectInfoTable.SEX + ", "
                 + ObjectInfoTable.REASON + ", "
                 + ObjectInfoTable.CREATOR + ", "
-                + ObjectInfoTable.CARE + ", "
                 + ObjectInfoTable.CPHONE + ", "
                 + ObjectInfoTable.CREATETIME + ", "
                 + ObjectInfoTable.UPDATETIME + ", "
+                + ObjectInfoTable.CARE + ", "
                 + ObjectInfoTable.IMPORTANT + ", "
                 + ObjectInfoTable.STATUS + " from "
                 + ObjectInfoTable.TABLE_NAME + " where "
@@ -669,7 +663,6 @@ public class ParseByOption {
         return "select "
                 +ObjectInfoTable.NAME+", "
                 +ObjectInfoTable.ROWKEY+", "
-                +ObjectInfoTable.PHOTO+", "
                 + ObjectInfoTable.PKEY + ", "
                 + ObjectInfoTable.IDCARD + ", "
                 + ObjectInfoTable.SEX + ", "
@@ -702,7 +695,6 @@ public class ParseByOption {
                 +ObjectInfoTable.ROWKEY+", "
                 + ObjectInfoTable.PKEY + ", "
                 + ObjectInfoTable.IDCARD + ", "
-                + ObjectInfoTable.PHOTO + ", "
                 + ObjectInfoTable.SEX + ", "
                 + ObjectInfoTable.REASON + ", "
                 + ObjectInfoTable.CREATOR + ", "
@@ -731,7 +723,6 @@ public class ParseByOption {
         return "select "
                 + ObjectInfoTable.NAME+", "
                 +ObjectInfoTable.ROWKEY+", "
-                + ObjectInfoTable.PHOTO+", "
                 + ObjectInfoTable.PKEY + ", "
                 + ObjectInfoTable.IDCARD + ", "
                 + ObjectInfoTable.SEX + ", "
