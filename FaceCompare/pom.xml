@@ -10,7 +10,6 @@
     <version>1.0</version>
     <modelVersion>4.0.0</modelVersion>
 
-    <version>1.0</version>
     <artifactId>face-compare</artifactId>
     <packaging>pom</packaging>
     <modules>
