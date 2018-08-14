@@ -167,7 +167,7 @@ object FaceAlarmJob {
               gson.toJson(recognizeAlarmMessage).getBytes(),
               null)
           }
-          if (addItems.isEmpty) {
+          if (addWarnRule != null &&  addItems.isEmpty) {
             val addAlarmMessage = new AddAlarmMessage()
             val AlarmMessage = new AlarmMessage()
             val dateStr = df.format(new Date())
