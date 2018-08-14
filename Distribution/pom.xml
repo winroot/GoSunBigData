@@ -35,6 +35,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <finalName>RealTimeFaceCompare</finalName>
+        <finalName>GoSunBigData</finalName>
     </build>
 </project>

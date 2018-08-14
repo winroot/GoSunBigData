@@ -22,14 +22,14 @@
             <includes>
                 <include>project-conf.properties</include>
             </includes>
-            <outputDirectory>common/conf</outputDirectory>
+            <outputDirectory>Common/conf</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Distribution/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>common/bin</outputDirectory>
+            <outputDirectory>Common/bin</outputDirectory>
         </fileSet>
 
         <!--spark目录-->
@@ -38,7 +38,7 @@
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>cluster/spark</outputDirectory>
+            <outputDirectory>Cluster/spark</outputDirectory>
         </fileSet>
 
         <!--spark-udf目录-->
@@ -47,14 +47,14 @@
             <includes>
                 <include>spark-udf-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>cluster/spark/lib</outputDirectory>
+            <outputDirectory>Cluster/spark/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/Spark-udf/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>cluster/spark/bin</outputDirectory>
+            <outputDirectory>Cluster/spark/bin</outputDirectory>
         </fileSet>
 
         <!--phoenix-udf目录-->
@@ -63,21 +63,21 @@
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>cluster/phoenix/bin</outputDirectory>
+            <outputDirectory>Cluster/phoenix/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/Phoenix-udf/sql</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>cluster/phoenix/sql</outputDirectory>
+            <outputDirectory>Cluster/phoenix/sql</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/Phoenix-udf/target/</directory>
             <includes>
                 <include>phoenix-udf-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>cluster/phoenix/lib</outputDirectory>
+            <outputDirectory>Cluster/phoenix/lib</outputDirectory>
         </fileSet>
 
         <!--es目录-->
@@ -86,7 +86,7 @@
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>cluster/es/bin</outputDirectory>
+            <outputDirectory>Cluster/es/bin</outputDirectory>
         </fileSet>
 
         <!--hbase目录-->
@@ -95,14 +95,14 @@
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>cluster/hbase/bin</outputDirectory>
+            <outputDirectory>Cluster/hbase/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Cluster/HBase/sql</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>cluster/hbase/sql</outputDirectory>
+            <outputDirectory>Cluster/hbase/sql</outputDirectory>
         </fileSet>
 
         <!--azkaban-->
@@ -111,7 +111,7 @@
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>cluster/azkaban/bin</outputDirectory>
+            <outputDirectory>Cluster/azkaban/bin</outputDirectory>
         </fileSet>
 
         <!--Service目录-->
@@ -121,21 +121,21 @@
             <includes>
                 <include>address-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>service/address/lib</outputDirectory>
+            <outputDirectory>Service/address/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Address/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/address/conf</outputDirectory>
+            <outputDirectory>Service/address/conf</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Address/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/address/bin</outputDirectory>
+            <outputDirectory>Service/address/bin</outputDirectory>
         </fileSet>
         <!--Alarm目录-->
         <fileSet>
@@ -143,21 +143,21 @@
             <includes>
                 <include>alarm-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>service/alarm/lib</outputDirectory>
+            <outputDirectory>Service/alarm/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Alarm/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/alarm/bin</outputDirectory>
+            <outputDirectory>Service/alarm/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Alarm/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/alarm/conf</outputDirectory>
+            <outputDirectory>Service/alarm/conf</outputDirectory>
         </fileSet>
         <!--Clustering目录-->
         <fileSet>
@@ -165,21 +165,21 @@
             <includes>
                 <include>clustering-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>service/clustering/lib</outputDirectory>
+            <outputDirectory>Service/clustering/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Clustering/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/clustering/bin</outputDirectory>
+            <outputDirectory>Service/clustering/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Clustering/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/clustering/conf</outputDirectory>
+            <outputDirectory>Service/clustering/conf</outputDirectory>
         </fileSet>
         <!--Dispatch目录-->
         <fileSet>
@@ -187,21 +187,21 @@
             <includes>
                 <include>dispatch-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>service/dispatch/lib</outputDirectory>
+            <outputDirectory>Service/dispatch/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Dispatch/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/dispatch/bin</outputDirectory>
+            <outputDirectory>Service/dispatch/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Dispatch/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/dispatch/conf</outputDirectory>
+            <outputDirectory>Service/dispatch/conf</outputDirectory>
         </fileSet>
         <!--DynRepo目录-->
         <fileSet>
@@ -209,21 +209,21 @@
             <includes>
                 <include>dynrepo-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>service/dynRepo/lib</outputDirectory>
+            <outputDirectory>Service/dynRepo/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/DynRepo/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/dynRepo/bin</outputDirectory>
+            <outputDirectory>Service/dynRepo/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/DynRepo/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/dynRepo/conf</outputDirectory>
+            <outputDirectory>Service/dynRepo/conf</outputDirectory>
         </fileSet>
         <!--Face目录-->
         <fileSet>
@@ -231,21 +231,21 @@
             <includes>
                 <include>face-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>service/face/lib</outputDirectory>
+            <outputDirectory>Service/face/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Face/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/face/bin</outputDirectory>
+            <outputDirectory>Service/face/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Face/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/face/conf</outputDirectory>
+            <outputDirectory>Service/face/conf</outputDirectory>
         </fileSet>
         <!--StaRepo目录-->
         <fileSet>
@@ -253,21 +253,21 @@
             <includes>
                 <include>starepo-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>service/staRepo/lib</outputDirectory>
+            <outputDirectory>Service/staRepo/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/StaRepo/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/staRepo/bin</outputDirectory>
+            <outputDirectory>Service/staRepo/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/StaRepo/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/staRepo/conf</outputDirectory>
+            <outputDirectory>Service/staRepo/conf</outputDirectory>
         </fileSet>
         <!--Visual目录-->
         <fileSet>
@@ -275,21 +275,49 @@
             <includes>
                 <include>visual-${project.parent.version}.jar</include>
             </includes>
-            <outputDirectory>service/visual/lib</outputDirectory>
+            <outputDirectory>Service/visual/lib</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Visual/bin</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/visual/bin</outputDirectory>
+            <outputDirectory>Service/visual/bin</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Service/Visual/src/main/resources</directory>
             <includes>
                 <include>**</include>
             </includes>
-            <outputDirectory>service/visual/conf</outputDirectory>
+            <outputDirectory>Service/visual/conf</outputDirectory>
+        </fileSet>
+
+        <!--Collect相关配置-->
+        <fileSet>
+            <directory>../Ftp/bin</directory>
+            <fileMode>0755</fileMode>
+            <outputDirectory>bin</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Collect/target/collect-ftp-1.0/bin</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>Collect/bin</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Collect/target/collect-ftp-1.0/lib</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>Collect/lib</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../Collect/target/collect-ftp-1.0/conf</directory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <outputDirectory>Collect/conf</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>

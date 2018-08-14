@@ -16,6 +16,9 @@
     <modules>
         <module>Cluster</module>
         <module>Service</module>
+        <module>Collect</module>
+        <module>FaceCompare</module>
+        <module>StaRepoService</module>
         <module>Distribution</module>
     </modules>
 
