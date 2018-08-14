@@ -1,8 +1,6 @@
-package com.hzgc.compare.worker;
+package com.hzgc.compare;
 
-import com.hzgc.compare.worker.common.CompareParam;
 import com.hzgc.common.rpc.client.result.AllReturn;
-import com.hzgc.compare.worker.common.SearchResult;
 
 import java.util.Map;
 

@@ -334,7 +334,7 @@
             <outputDirectory>compare/bin</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../FaceCompare/Worker/target/worker-${project.parent.version}/lib</directory>
+            <directory>../FaceCompare/Worker/target/worker-1.0/lib</directory>
             <includes>
                 <include>**</include>
             </includes>

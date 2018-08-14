@@ -1,8 +1,8 @@
 package com.hzgc.compare.worker.compare;
 
-import com.hzgc.compare.worker.common.FaceObject;
-import com.hzgc.compare.worker.common.Feature;
-import com.hzgc.compare.worker.common.SearchResult;
+import com.hzgc.compare.FaceObject;
+import com.hzgc.compare.Feature;
+import com.hzgc.compare.SearchResult;
 import com.hzgc.compare.worker.common.tuple.Triplet;
 import com.hzgc.compare.worker.jni.CompareResult;
 import com.hzgc.compare.worker.jni.FaceFeatureInfo;

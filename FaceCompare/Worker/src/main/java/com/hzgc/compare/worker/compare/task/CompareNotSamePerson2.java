@@ -1,8 +1,8 @@
 package com.hzgc.compare.worker.compare.task;
 
-import com.hzgc.compare.worker.common.CompareParam;
-import com.hzgc.compare.worker.common.Feature;
-import com.hzgc.compare.worker.common.SearchResult;
+import com.hzgc.compare.CompareParam;
+import com.hzgc.compare.Feature;
+import com.hzgc.compare.SearchResult;
 import com.hzgc.compare.worker.compare.ComparatorsImpl2;
 import com.hzgc.compare.worker.conf.Config;
 import com.hzgc.compare.worker.persistence.HBaseClient;

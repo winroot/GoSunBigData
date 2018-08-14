@@ -1,6 +1,6 @@
 package com.hzgc.compare.worker.memory.cache;
 
-import com.hzgc.compare.worker.common.*;
+import com.hzgc.compare.FaceObject;
 import com.hzgc.compare.worker.common.collects.BatchBufferQueue;
 import com.hzgc.compare.worker.common.collects.CustomizeArrayList;
 import com.hzgc.compare.worker.common.collects.DoubleBufferQueue;

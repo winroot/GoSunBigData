@@ -1,8 +1,9 @@
 package com.hzgc.compare.worker;
 
-import com.hzgc.compare.worker.common.CompareParam;
+import com.hzgc.compare.Service;
+import com.hzgc.compare.CompareParam;
 import com.hzgc.common.rpc.client.result.AllReturn;
-import com.hzgc.compare.worker.common.SearchResult;
+import com.hzgc.compare.SearchResult;
 import com.hzgc.compare.worker.compare.task.CompareNotSamePerson;
 import com.hzgc.compare.worker.compare.task.CompareOnePerson;
 import com.hzgc.compare.worker.compare.task.CompareSamePerson;

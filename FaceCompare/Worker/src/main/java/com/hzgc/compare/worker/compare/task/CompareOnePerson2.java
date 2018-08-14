@@ -1,7 +1,7 @@
 package com.hzgc.compare.worker.compare.task;
 
-import com.hzgc.compare.worker.common.CompareParam;
-import com.hzgc.compare.worker.common.SearchResult;
+import com.hzgc.compare.CompareParam;
+import com.hzgc.compare.SearchResult;
 import com.hzgc.compare.worker.compare.ComparatorsImpl2;
 import com.hzgc.compare.worker.persistence.HBaseClient;
 import javafx.util.Pair;

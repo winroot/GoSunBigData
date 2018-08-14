@@ -1,6 +1,6 @@
 package com.hzgc.compare.worker;
 
-import com.hzgc.compare.worker.common.FaceObject;
+import com.hzgc.compare.FaceObject;
 import com.hzgc.compare.worker.common.tuple.Quintuple;
 import com.hzgc.compare.worker.memory.cache.MemoryCacheImpl;
 import com.hzgc.compare.worker.util.FaceObjectUtil;

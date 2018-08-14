@@ -182,7 +182,7 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.hzgc.face-compare</groupId>
+            <groupId>face-compare</groupId>
             <artifactId>client</artifactId>
             <version>1.0</version>
             <exclusions>

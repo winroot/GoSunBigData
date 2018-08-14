@@ -1,4 +1,5 @@
-package com.hzgc.compare.worker.common;
+package com.hzgc.compare;
+
 
 import java.util.List;
 
