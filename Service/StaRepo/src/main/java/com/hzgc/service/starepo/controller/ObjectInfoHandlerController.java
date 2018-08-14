@@ -61,7 +61,7 @@ public class ObjectInfoHandlerController {
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "添加对象类型为空，请检查！");
         }
         boolean isExists_objectTypeKey = objectInfoHandlerService.isExists_objectTypeKey(param);
-        if (!isExists_objectTypeKey){
+        if (!isExists_objectTypeKey) {
             log.error("Start add object info, but the object type key doesn't exists");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "添加对象类型不存在，请检查！");
         }
@@ -70,12 +70,12 @@ public class ObjectInfoHandlerController {
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "添加对象照片数据为空，请检查！");
         }
         boolean authentication_idCode = objectInfoHandlerService.authentication_idCode(param);
-        if (!authentication_idCode){
+        if (!authentication_idCode) {
             log.error("Start add object info, but the idcard format is error");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证格式错误，请检查！");
         }
         boolean isExists_idCode = objectInfoHandlerService.isExists_idCode(param);
-        if (isExists_idCode){
+        if (isExists_idCode) {
             log.error("Start add object info, but the idcard already exists");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证已存在，请检查！");
         }
@@ -135,19 +135,19 @@ public class ObjectInfoHandlerController {
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "修改对象类型为空，请检查！");
         }
         boolean isExists_objectTypeKey = objectInfoHandlerService.isExists_objectTypeKey(param);
-        if (!isExists_objectTypeKey){
+        if (!isExists_objectTypeKey) {
             log.error("Start update object info, but the object type key doesn't exists");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "修改对象类型不存在，请检查！");
         }
         boolean authentication_idCode = objectInfoHandlerService.authentication_idCode(param);
-        if (!authentication_idCode){
+        if (!authentication_idCode) {
             log.error("Start update object info, but the idcard format is error");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证格式错误，请检查！");
         }
         String idCade_DB = objectInfoHandlerService.getObjectIdCard(param);
-        if (!StringUtils.isBlank(param.getIdcard()) && !param.getIdcard().equals(idCade_DB)){
+        if (!StringUtils.isBlank(param.getIdcard()) && !param.getIdcard().equals(idCade_DB)) {
             boolean isExists_idCode = objectInfoHandlerService.isExists_idCode(param);
-            if (isExists_idCode){
+            if (isExists_idCode) {
                 log.error("Start update object info, but the idcard already exists");
                 return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "身份证已存在，请检查！");
             }
@@ -386,8 +386,26 @@ public class ObjectInfoHandlerController {
             log.error("Start search care people, but param is null");
             return new ArrayList<>();
         }
+        List<String> objectTypeKeyList = param.getObjectTypeKeyList();
+        if (objectTypeKeyList == null || objectTypeKeyList.size() == 0) {
+            log.error("Start search care people, but param: objectTypeKeyList is null");
+            return new ArrayList<>();
+        }
+        String offTime = param.getOffTime();
+        if (offTime == null || "".equals(offTime)) {
+            log.error("Start search care people, but param: offTime is null");
+            return new ArrayList<>();
+        }
+        int start = param.getStart();
+        if (start <= 0) {
+            start = 0;
+        }
+        int limit = param.getLimit();
+        if (limit <= 0) {
+            limit = 20;
+        }
         log.info("Start search care people, param is: " + JSONUtil.toJson(param));
-        return  objectInfoHandlerService.getCarePeople(param.getObjectTypeKeyList(), param.getOffTime());
+        return objectInfoHandlerService.getCarePeople(objectTypeKeyList, offTime, start, limit);
     }
 
     /**
@@ -396,13 +414,26 @@ public class ObjectInfoHandlerController {
     @ApiOperation(value = "常住人口查询", response = ObjectInfo.class)
     @RequestMapping(value = BigDataPath.OBJECTINFO_GET_STATUS_PEOPLE, method = RequestMethod.POST)
     public List<ObjectInfo> getStatusPeople(
-            @RequestBody @ApiParam(value = "对象类型ID列表")PeopleParam param) {
+            @RequestBody @ApiParam(value = "对象类型ID列表") PeopleParam param) {
         if (param == null) {
             log.error("Start search status people, but param is null");
             return new ArrayList<>();
         }
+        List<String> objectTypeKeyList = param.getObjectTypeKeyList();
+        if (objectTypeKeyList == null || objectTypeKeyList.size() == 0) {
+            log.error("Start search status people, but param: objectTypeKeyList is null");
+            return new ArrayList<>();
+        }
+        int start = param.getStart();
+        if (start <= 0) {
+            start = 0;
+        }
+        int limit = param.getLimit();
+        if (limit <= 0) {
+            limit = 20;
+        }
         log.info("Start search status people, param is: " + JSONUtil.toJson(param));
-        return objectInfoHandlerService.getStatusPeople(param.getObjectTypeKeyList());
+        return objectInfoHandlerService.getStatusPeople(objectTypeKeyList, start, limit);
     }
 
     /**
@@ -411,12 +442,25 @@ public class ObjectInfoHandlerController {
     @ApiOperation(value = "重点人员查询", response = ObjectInfo.class)
     @RequestMapping(value = BigDataPath.OBJECTINFO_GET_IMPORTANT_PEOPLE, method = RequestMethod.POST)
     public List<ObjectInfo> getImportantPeople(
-            @RequestBody @ApiParam(value = "对象类型ID列表")PeopleParam param) {
+            @RequestBody @ApiParam(value = "对象类型ID列表") PeopleParam param) {
         if (param == null) {
             log.error("Start search important people, but param is null");
             return new ArrayList<>();
         }
+        List<String> objectTypeKeyList = param.getObjectTypeKeyList();
+        if (objectTypeKeyList == null || objectTypeKeyList.size() == 0) {
+            log.error("Start search status people, but param: objectTypeKeyList is null");
+            return new ArrayList<>();
+        }
+        int start = param.getStart();
+        if (start <= 0) {
+            start = 0;
+        }
+        int limit = param.getLimit();
+        if (limit <= 0) {
+            limit = 20;
+        }
         log.info("Start search important people, param is: " + JSONUtil.toJson(param));
-        return objectInfoHandlerService.getImportantPeople(param.getObjectTypeKeyList());
+        return objectInfoHandlerService.getImportantPeople(objectTypeKeyList, start, limit);
     }
 }

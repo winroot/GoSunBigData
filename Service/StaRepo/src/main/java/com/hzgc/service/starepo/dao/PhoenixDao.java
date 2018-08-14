@@ -606,43 +606,94 @@ public class PhoenixDao implements Serializable {
      * @param time
      * @return list 关爱人员离线查询
      */
-    public  List<ObjectInfo> getCarePeople(List<String> objectTypeKeyList, Timestamp time) {
+    public  List<ObjectInfo> getCarePeople(List<String> objectTypeKeyList, Timestamp time, int start, int limit) {
         String sql = parseByOption.getCarePeople(objectTypeKeyList.size());
         log.info("Start search care people, SQL is : " + sql);
-        Object[] args = new Object[objectTypeKeyList.size() + 1];
+        SqlRowSet sqlRowSet;
+        if (start == 0){
+            Object[] args = assemblySQLArgs_getCarePeople(objectTypeKeyList, time, "0", limit);
+            sqlRowSet = jdbcTemplate.queryForRowSet(sql, args);
+        } else {
+            Object[] args_1 = assemblySQLArgs_getCarePeople(objectTypeKeyList, time, "0", start);
+            sqlRowSet = jdbcTemplate.queryForRowSet(sql, args_1);
+            String lastRowKey = null;
+            try {
+                lastRowKey = getLastRowkey(sqlRowSet);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            Object[] args_2 = assemblySQLArgs_getCarePeople(objectTypeKeyList, time, lastRowKey, limit);
+            sqlRowSet = jdbcTemplate.queryForRowSet(sql, args_2);
+        }
+        return setPeople(sqlRowSet, objectTypeKeyList);
+    }
+
+    private Object[] assemblySQLArgs_getCarePeople(List<String> objectTypeKeyList, Timestamp time, String start, int limit){
+        Object[] args = new Object[objectTypeKeyList.size() + 3];
         int index = 0;
         for (String objectTypeKey : objectTypeKeyList){
             args[index] = objectTypeKey;
             index ++;
         }
         args[index] = time;
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, args);
-        return setPeople(sqlRowSet, objectTypeKeyList);
+        args[index + 1] = start;
+        args[index + 2] = limit;
+        return args;
     }
 
-    public List<ObjectInfo> getStatusPeople(List<String> objectTypeKeyList) {
+    private Object[] assemblySQLArgs(List<String> objectTypeKeyList, String start, int end){
+        Object[] args = new Object[objectTypeKeyList.size() + 2];
+        int index = 0;
+        for (String objectTypeKey : objectTypeKeyList){
+            args[index] = objectTypeKey;
+            index ++;
+        }
+        args[index] = start;
+        args[index + 1] = end;
+        return args;
+    }
+
+    public List<ObjectInfo> getStatusPeople(List<String> objectTypeKeyList, int start, int end) {
         String sql = parseByOption.getStatusPeople(objectTypeKeyList.size());
         log.info("Start search status people, SQL is : " + sql);
-        Object[] args = new Object[objectTypeKeyList.size()];
-        int index = 0;
-        for (String objectTypeKey : objectTypeKeyList){
-            args[index] = objectTypeKey;
-            index ++;
+        SqlRowSet sqlRowSet;
+        if (start == 0){
+            Object[] args = assemblySQLArgs(objectTypeKeyList, "0", end);
+            sqlRowSet = jdbcTemplate.queryForRowSet(sql, args);
+        } else {
+            Object[] args_1 = assemblySQLArgs(objectTypeKeyList, "0", start);
+            SqlRowSet sqlRowSet_1 = jdbcTemplate.queryForRowSet(sql, args_1);
+            String lastRowKey = null;
+            try {
+                lastRowKey = getLastRowkey(sqlRowSet_1);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            Object[] args_2 = assemblySQLArgs(objectTypeKeyList, lastRowKey, end);
+            sqlRowSet = jdbcTemplate.queryForRowSet(sql, args_2);
         }
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, args);
         return setPeople(sqlRowSet, objectTypeKeyList);
     }
 
-    public List<ObjectInfo> getImportantPeople(List<String> objectTypeKeyList) {
+    public List<ObjectInfo> getImportantPeople(List<String> objectTypeKeyList, int start, int end) {
         String sql = parseByOption.getImportantPeople(objectTypeKeyList.size());
         log.info("Start search important people, SQL is : " + sql);
-        Object[] args = new Object[objectTypeKeyList.size()];
-        int index = 0;
-        for (String objectTypeKey : objectTypeKeyList){
-            args[index] = objectTypeKey;
-            index ++;
+        SqlRowSet sqlRowSet;
+        if (start == 0){
+            Object[] args = assemblySQLArgs(objectTypeKeyList, "0", end);
+            sqlRowSet = jdbcTemplate.queryForRowSet(sql, args);
+        } else {
+            Object[] args_1 = assemblySQLArgs(objectTypeKeyList, "0", start);
+            SqlRowSet sqlRowSet_1 = jdbcTemplate.queryForRowSet(sql, args_1);
+            String lastRowKey = null;
+            try {
+                lastRowKey = getLastRowkey(sqlRowSet_1);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            Object[] args_2 = assemblySQLArgs(objectTypeKeyList, lastRowKey, end);
+            sqlRowSet = jdbcTemplate.queryForRowSet(sql, args_2);
         }
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(sql, args);
         return setPeople(sqlRowSet, objectTypeKeyList);
     }
 
