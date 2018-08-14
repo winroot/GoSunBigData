@@ -1,22 +1,20 @@
 package com.hzgc.service.dynrepo.controller;
 
-import com.hzgc.common.attribute.service.AttributeService;
+import com.hzgc.common.faceattribute.service.AttributeService;
+import com.hzgc.common.service.error.RestErrorCode;
+import com.hzgc.common.service.response.ResponseResult;
+import com.hzgc.common.service.rest.BigDataPath;
+import com.hzgc.common.service.rest.BigDataPermission;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.service.dynrepo.bean.*;
 import com.hzgc.service.dynrepo.service.CaptureHistoryService;
 import com.hzgc.service.dynrepo.service.CaptureSearchService;
 import com.hzgc.service.dynrepo.service.CaptureServiceHelper;
-import com.hzgc.service.util.error.RestErrorCode;
-import com.hzgc.service.util.response.ResponseResult;
-import com.hzgc.service.util.rest.BigDataPath;
-import com.hzgc.service.util.rest.BigDataPermission;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -186,7 +184,9 @@ public class CaptureSearchController {
     @ApiImplicitParam(name = "searchOption", value = "抓拍历史查询参数", paramType = "body")
     @RequestMapping(value = BigDataPath.DYNREPO_HISTORY, method = RequestMethod.POST)
     @SuppressWarnings("unused")
-    @PreAuthorize("hasAuthority('" + BigDataPermission.HISTORY_FACE_SEARCH + "')")
+    @PreAuthorize("hasAuthority('" + BigDataPermission.HISTORY_FACE_SEARCH + "') OR " +
+            "hasAuthority('" + BigDataPermission.FACE_CTRL + "') OR " +
+            "hasAuthority('" + BigDataPermission.FEATURE_SEARCH + "')")
     public ResponseResult<List<SingleCaptureResult>> getCaptureHistory(
             @RequestBody @ApiParam(value = "以图搜图入参") CaptureOption captureOption) {
         if (captureOption == null) {
@@ -205,5 +205,23 @@ public class CaptureSearchController {
         List<SingleCaptureResult> searchResultList =
                 captureHistoryService.getCaptureHistory(captureOption);
         return ResponseResult.init(searchResultList);
+    }
+
+    /**
+     * 查询设备最后一次抓拍时间
+     *
+     * @param deviceId 设备ID
+     * @return 最后抓拍时间
+     */
+    @ApiOperation(value = "查询设备最后一次抓拍时间", response = String.class)
+    @ApiImplicitParam(name = "deviceId", value = "设备ID", paramType = "query")
+    @RequestMapping(value = BigDataPath.DYNREPO_CAPTURE_LASTTIME, method = RequestMethod.GET)
+    public ResponseResult<String> getLastCaptureTime(@RequestParam("deviceId") String deviceId) {
+        if (StringUtils.isBlank(deviceId)) {
+            log.error("Start query last capture time, deviceId option is null");
+        }
+        log.info("Start query last capture time, deviceId option is:" + deviceId);
+        String time = captureSearchService.getLastCaptureTime(deviceId);
+        return ResponseResult.init(time);
     }
 }

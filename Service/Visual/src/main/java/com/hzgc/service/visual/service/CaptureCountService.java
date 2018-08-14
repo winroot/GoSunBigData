@@ -1,12 +1,10 @@
 package com.hzgc.service.visual.service;
 
+import com.hzgc.common.service.api.bean.DeviceDTO;
+import com.hzgc.common.service.api.service.DeviceQueryService;
 import com.hzgc.common.util.empty.IsEmpty;
-import com.hzgc.service.util.api.bean.DeviceDTO;
-import com.hzgc.service.util.api.service.DeviceQueryService;
-import com.hzgc.service.visual.bean.CaptureCountBean;
-import com.hzgc.service.visual.bean.FaceDayStatistic;
-import com.hzgc.service.visual.bean.StatisticsBean;
-import com.hzgc.service.visual.bean.TimeSlotNumber;
+import com.hzgc.common.util.json.JSONUtil;
+import com.hzgc.service.visual.bean.*;
 import com.hzgc.service.visual.dao.ElasticSearchDao;
 import com.hzgc.service.visual.dao.EsSearchParam;
 import com.hzgc.service.visual.util.DateUtils;
@@ -28,6 +26,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * 这个方法是为了大数据可视化而指定的，继承于CaptureCountService，主要包含三个方法：
@@ -44,12 +43,13 @@ public class CaptureCountService {
     private static final Integer OFFSET_DAY_ONE = 1;
     private static final String FTP_NAME = "admin";
     private static final String FTP_PASSWORD = "123456";
-    private CaptureCountBean saveCaptureCount = new CaptureCountBean(0, 0);
 
     private DeviceQueryService deviceQueryService;
 
     @SuppressWarnings("unused")
     private ElasticSearchDao elasticSearchDao;
+
+    private ExecutorService executor = Executors.newFixedThreadPool(100);
 
     @Autowired
     public CaptureCountService(DeviceQueryService deviceQueryService, ElasticSearchDao elasticSearchDao) {
@@ -61,29 +61,26 @@ public class CaptureCountService {
      * 抓拍统计与今日抓拍统计
      * 查询es的动态库，返回总抓拍数量和今日抓拍数量
      *
-     * @param deviceIdList 设备ID：deviceIdList 可不填
-     * @return 返回总抓拍数量和今日抓拍数量
+     * @param areaId 区域ID
+     * @param level 区域等级
+     * @return 总抓拍数量和今日抓拍数量
      */
-    public CaptureCountBean dynamicNumberService(List<Long> deviceIdList) {
-        //将deviceIdList转换为ipcIdList
-        List<String> ipcIdList = new ArrayList<>();
-        if (deviceIdList != null && deviceIdList.size() > 0) {
-            Map<String, DeviceDTO> deviceDTOMap = deviceQueryService.getDeviceInfoByBatchId(deviceIdList);
-            for (Map.Entry<String, DeviceDTO> entry : deviceDTOMap.entrySet()) {
-                ipcIdList.add(entry.getValue().getSerial());
-            }
-        }
-
+    public CaptureCountBean dynamicNumberService(Long areaId, String level) {
+        // 根据区域ID与区域等级获取ipcId列表
+        List<String> ipcIdList = getIpcIds(areaId, level);
+        log.info("Start count capture total and today capture count, get ipcIdList is:" + JSONUtil.toJson(ipcIdList));
         SearchResponse[] responsesArray = elasticSearchDao.dynamicNumberService(ipcIdList);
+        // 总抓拍数量
         SearchResponse searchResponse0 = responsesArray[0];
         SearchHits searchHits0 = searchResponse0.getHits();
         int totalNumber = (int) searchHits0.getTotalHits();
+        // 今日抓拍数量
         SearchResponse searchResponse1 = responsesArray[1];
         SearchHits searchHits1 = searchResponse1.getHits();
         int todaytotalNumber = (int) searchHits1.getTotalHits();
-        CaptureCountBean bean = new CaptureCountBean(todaytotalNumber, totalNumber);
-        saveCaptureCount.save(bean);
-        return saveCaptureCount;
+        CaptureCountBean countBean = new CaptureCountBean(todaytotalNumber, totalNumber);
+        log.info("Start count capture total and today capture count, result is:" + JSONUtil.toJson(countBean));
+        return countBean;
     }
 
     /**
@@ -167,6 +164,75 @@ public class CaptureCountService {
             }
         }
         return slotNumber;
+    }
+
+    public List<CaptureCountSixHour> captureCountSixHour(String startData, String endData, Long areaId, String level) {
+        List<CaptureCountSixHour> countList = new ArrayList<>();
+        startData = DateUtils.checkTime(startData);
+        endData = DateUtils.checkEndTime(endData);
+        List<String> times = getSixHourTime(startData, endData);
+        List<String> ipcIds = getIpcIds(areaId, level);
+        /* 性能比较代码
+        for (String str : times) {
+            String[] time = str.split("/");
+            SearchResponse response = elasticSearchDao.CaptureCountSixHour(ipcIds, time[0], time[1]);
+            int count = Math.toIntExact(response.getHits().getTotalHits());
+            CaptureCountSixHour countSixHour = new CaptureCountSixHour(time[0] + "/"+time[1], count);
+            countList.add(countSixHour);
+        }*/
+        List<Future<CaptureCountSixHour>> futureList = new ArrayList<>();
+        for (String str : times) {
+            String[] time = str.split("/");
+            futureList.add(executor.submit(new CountSixHour(ipcIds, time[0], time[1])));
+        }
+        for (Future<CaptureCountSixHour> future : futureList) {
+            try {
+                if (future.get() != null) {
+                    countList.add(future.get());
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        log.info("Count result : " + JSONUtil.toJson(countList));
+        return countList;
+    }
+
+    private List<String> getIpcIds(Long areaId, String level) {
+        List<Long> deviceIdList = deviceQueryService.query_device_id(areaId, level);
+        List<String> ipcIdList = new ArrayList<>();
+        if (!deviceIdList.isEmpty()) {
+            Map<String, DeviceDTO> deviceDTOMap = deviceQueryService.getDeviceInfoByBatchId(deviceIdList);
+            for (Map.Entry<String, DeviceDTO> entry : deviceDTOMap.entrySet()) {
+                String ipcId = entry.getValue().getSerial();
+                if (!StringUtils.isBlank(ipcId)){
+                    ipcIdList.add(ipcId);
+                }
+            }
+        }
+        return ipcIdList;
+    }
+
+    class CountSixHour implements Callable<CaptureCountSixHour> {
+        private List<String> ipcIds;
+        private String startTime;
+        private String endTime;
+
+        CountSixHour(List<String> ipcIds, String startTime, String endTime) {
+            this.ipcIds = ipcIds;
+            this.startTime = startTime;
+            this.endTime = endTime;
+        }
+
+        @Override
+        public CaptureCountSixHour call() throws Exception {
+            SearchResponse response = elasticSearchDao.CaptureCountSixHour(ipcIds, startTime, endTime);
+            int count = Math.toIntExact(response.getHits().getTotalHits());
+            String data = startTime.substring(0, 10);
+            String timeSolt_start = startTime.substring(11, 19);
+            String timeSolt_end = endTime.substring(11, 19);
+            return new CaptureCountSixHour(data,timeSolt_start + "/" + timeSolt_end, count);
+        }
     }
 
     /**
@@ -289,6 +355,35 @@ public class CaptureCountService {
                 String timee = df.format(everyTime);
                 timeList.add(timee);
                 time += onehour;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return timeList;
+    }
+
+    /**
+     * 通过起始日期和截止日期，返回这段日期内的每六个小时的时间段
+     *
+     * @param startData 开始日期
+     * @param endData   截止日期
+     * @return 返回这段时间内的每六个小时的时间段
+     */
+    private static List<String> getSixHourTime(String startData, String endData) {
+        List<String> timeList = new ArrayList<>();
+        DateFormat dateFormat = new SimpleDateFormat(EsSearchParam.TIMEFORMAT_YMDHMS);
+        try {
+            Long startTimeL = dateFormat.parse(startData).getTime();
+            Long endTimeL = dateFormat.parse(endData).getTime();
+            Long sixHour = EsSearchParam.LONG_SIXHOUR;
+
+            while (startTimeL <= endTimeL) {
+                Date startTime = new Date(startTimeL);
+                String startTimeStr = dateFormat.format(startTime);
+                Date startTime_sixHour = new Date(startTimeL + sixHour);
+                String startTime_sixHourStr = dateFormat.format(startTime_sixHour);
+                timeList.add(startTimeStr + "/" + startTime_sixHourStr);
+                startTimeL += sixHour;
             }
         } catch (ParseException e) {
             e.printStackTrace();

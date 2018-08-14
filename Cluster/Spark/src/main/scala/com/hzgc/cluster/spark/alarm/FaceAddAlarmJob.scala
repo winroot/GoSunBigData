@@ -4,13 +4,13 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import com.google.gson.Gson
-import com.hzgc.cluster.spark.dispatch.DeviceUtilImpl
 import com.hzgc.cluster.spark.message.AddAlarmMessage
-import com.hzgc.cluster.spark.rocmq.RocketMQProducer
-import com.hzgc.cluster.spark.starepo.StaticRepoUtil
 import com.hzgc.cluster.spark.util.{FaceObjectUtil, PropertiesUtil}
-import com.hzgc.common.table.dispatch.DispatchTable
+import com.hzgc.common.facedispatch.DeviceUtilImpl
+import com.hzgc.common.facedispatch.table.DispatchTable
+import com.hzgc.common.facestarepo.table.alarm.StaticRepoUtil
 import com.hzgc.jni.FaceFunction
+import com.hzgc.common.rocketmq.RocketMQProducer
 import kafka.serializer.StringDecoder
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka.KafkaUtils
@@ -36,6 +36,8 @@ object FaceAddAlarmJob {
     val conf = new SparkConf()
       .setAppName(appName)
     val ssc = new StreamingContext(conf, timeInterval)
+    val kafkaBootStrapBroadCast = ssc.sparkContext.broadcast(properties.getProperty("kafka.metadata.broker.list"))
+    val jdbcUrlBroadCast = ssc.sparkContext.broadcast(properties.getProperty("phoenix.jdbc.url"))
     val kafkaGroupId = properties.getProperty("kafka.FaceAddAlarmJob.group.id")
     val topics = Set(properties.getProperty("kafka.topic.name"))
     val mqTopic = properties.getProperty("rocketmq.topic.name")
@@ -53,8 +55,10 @@ object FaceAddAlarmJob {
     val jsonResult = kafkaDynamicPhoto.map(data => (data._1, FaceObjectUtil.jsonToObject(data._2)))
       .filter(obj => obj._2.getAttribute.getFeature != null && obj._2.getAttribute.getFeature.length == 512)
       .map(obj => {
-        val totalList = JavaConverters.
-          asScalaBufferConverter(StaticRepoUtil.getInstance().getTotalList).asScala
+        val totalList = JavaConverters
+          .asScalaBufferConverter(StaticRepoUtil.getInstance(kafkaBootStrapBroadCast.value, jdbcUrlBroadCast.value)
+            .getTotalList)
+          .asScala
         val faceObj = obj._2
         val ipcID = faceObj.getIpcId
         val alarmRule = deviceUtilI.isWarnTypeBinding(ipcID)
@@ -95,14 +99,14 @@ object FaceAddAlarmJob {
             val surl = result._1.getRelativePath
             val burl = surl.substring(0, surl.length - 5) + "0.jpg"
             addAlarmMessage.setAlarmTime(dateStr)
-            addAlarmMessage.setAlarmType(DispatchTable.ADDED.toString)
+            addAlarmMessage.setAlarmType(DispatchTable.ADDED)
 
             addAlarmMessage.setSmallPictureURL(surl)
             addAlarmMessage.setBigPictureURL(burl)
             addAlarmMessage.setDynamicDeviceID(result._2)
             addAlarmMessage.setHostName(result._1.getHostname)
             rocketMQProducer.send(result._3,
-              "alarm_" + DispatchTable.ADDED.toString,
+              "alarm_" + DispatchTable.ADDED,
               surl,
               gson.toJson(addAlarmMessage).getBytes(),
               null)

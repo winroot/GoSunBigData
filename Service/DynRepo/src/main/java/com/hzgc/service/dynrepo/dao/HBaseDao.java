@@ -1,14 +1,13 @@
 package com.hzgc.service.dynrepo.dao;
 
+import com.hzgc.common.facedynrepo.SearchResultTable;
 import com.hzgc.common.hbase.HBaseHelper;
-import com.hzgc.common.table.dynrepo.DynamicTable;
-import com.hzgc.common.table.seachres.SearchResultTable;
 import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.common.util.object.ObjectUtil;
 import com.hzgc.service.dynrepo.bean.SearchCollection;
 import com.hzgc.service.dynrepo.bean.SearchHisotry;
 import com.hzgc.service.dynrepo.bean.SearchResult;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.client.*;
@@ -52,21 +51,26 @@ public class HBaseDao {
                     SearchResultTable.SEARCHRES_COLUM_SEARCHTIME, Bytes.toBytes(searchTime));
             putList.add(put);
             for (int i = 0; i < collection.getSearchOption().getImages().size(); i++) {
-                Put putimage = new Put(Bytes.toBytes(collection.getSearchOption().getImages().get(i).getImageID()));
-                putimage.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY,
-                        SearchResultTable.SEARCHRES_COLUM_PICTURE,
-                        collection.getSearchOption().getImages().get(i).getImageData());
-                putList.add(putimage);
+                String imageID = collection.getSearchOption().getImages().get(i).getImageID();
+                byte[] imageData = collection.getSearchOption().getImages().get(i).getImageData();
+                if (!StringUtils.isBlank(imageID)){
+                    Put putimage = new Put(Bytes.toBytes(imageID));
+                    putimage.addColumn(SearchResultTable.SEARCHRES_COLUMNFAMILY,
+                            SearchResultTable.SEARCHRES_COLUM_PICTURE, imageData);
+                    putList.add(putimage);
+                } else {
+                    log.warn("Save search image failed, imageID is null");
+                }
             }
             if (searchRes != null) {
                 searchRes.put(putList);
-                log.info("Save search result successfull, time is:" + (System.currentTimeMillis() - start));
+                log.info("Save search result successfully, time is:" + (System.currentTimeMillis() - start));
                 return true;
             } else {
                 return false;
             }
         } catch (Exception e) {
-            log.info(e.getMessage());
+            e.printStackTrace();
             log.warn("Save search result failed");
         } finally {
             HBaseHelper.closeTable(searchRes);
@@ -97,14 +101,19 @@ public class HBaseDao {
                         result.getValue(SearchResultTable.SEARCHRES_COLUMNFAMILY,
                                 SearchResultTable.SEARCHRES_COLUMN_SEARCHMESSAGE);
                 String jsonCollection = Bytes.toString(searchMessage);
-                searchCollection = JSONUtil.toObject(jsonCollection, SearchCollection.class);
-                searchResult = searchCollection.getSearchResult();
-                if (searchResult != null) {
-                    searchResult.setSearchId(searchId);
+                if (!StringUtils.isBlank(jsonCollection)){
+                    searchCollection = JSONUtil.toObject(jsonCollection, SearchCollection.class);
+                    searchResult = searchCollection.getSearchResult();
+                    if (searchResult != null) {
+                        searchResult.setSearchId(searchId);
+                    }
+                } else {
+                    log.info("Get searchResult is null from table_searchRes, search id is:" + searchId);
+                    return null;
                 }
                 return searchResult;
             } else {
-                log.info("Get searchResult null from table_searchRes, search id is:" + searchId);
+                log.info("Get table_searchRes Result is null, search id is:" + searchId);
                 return null;
             }
         } catch (IOException e) {

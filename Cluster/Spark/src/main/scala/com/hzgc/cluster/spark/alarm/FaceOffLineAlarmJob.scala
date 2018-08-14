@@ -1,82 +1,57 @@
 package com.hzgc.cluster.spark.alarm
 
 import java.text.SimpleDateFormat
-import java.util.Date
 
 import com.google.gson.Gson
-import com.hzgc.cluster.spark.dispatch.DeviceUtilImpl
-import com.hzgc.cluster.spark.message.OffLineAlarmMessage
-import com.hzgc.cluster.spark.rocmq.RocketMQProducer
-import com.hzgc.cluster.spark.starepo.StaticRepoUtil
 import com.hzgc.cluster.spark.util.PropertiesUtil
-import com.hzgc.common.table.dispatch.DispatchTable
+import com.hzgc.common.facestarepo.table.alarm.StarepoServiceUtil
+import com.hzgc.common.facestarepo.table.alarm.StarepoServiceUtil.ObjectInfo
 import org.apache.spark.{SparkConf, SparkContext}
+import org.elasticsearch.spark.rdd.EsSpark
 
-import scala.collection.JavaConverters
 
 /**
-  * 人脸识别离线告警任务（刘善彬）
-  *
+  * 从Phoenix获取离线告警数据存放入ES的off_alarm类型中
   */
 object FaceOffLineAlarmJob {
 
+  case class OffAlarmJson(alarm_time:String, alarm_type:Int, check_use:String, confirm:Int, flag:Int,
+                          last_appearance_time:String, object_type:String, similarity:String, static_id:String, suggestion:String)
+
   def main(args: Array[String]): Unit = {
-    val offLineAlarmMessage = new OffLineAlarmMessage()
+
     val properties = PropertiesUtil.getProperties
     val appName = properties.getProperty("job.offLine.appName")
-    val mqTopic = properties.getProperty("rocketmq.topic.name")
-    val nameServer = properties.getProperty("rocketmq.nameserver")
-    val grouId = properties.getProperty("rocketmq.group.id")
+    val jdbcPhoenixUrl = properties.getProperty("job.offLine.jdbcUrl")
+    val esNodes = properties.getProperty("job.offLine.esNodes")
+    val esPort = properties.getProperty("job.offLine.esPort")
+    //允许离线告警时长，单位为毫秒(ms)
+    val updateTimeInterval = properties.getProperty("job.offLine.timeInterval").toInt
     val conf = new SparkConf().setAppName(appName)
+      .set("es.index.auto.create","true")
+      .set("es.nodes",esNodes)
+      .set("es.port",esPort)
+
     val sc = new SparkContext(conf)
-    val deviceUtilImpl = new DeviceUtilImpl()
-    val offLineAlarmRule = deviceUtilImpl.getThreshold
-    val separator = "ZHONGXIAN"
-    if (offLineAlarmRule != null && !offLineAlarmRule.isEmpty) {
-      println("Start offline alarm task data processing ...")
-      val objTypeList = PropertiesUtil.getOffLineArarmObjType(offLineAlarmRule)
-      val returnResult = StaticRepoUtil.getInstance().searchByPkeysUpdateTime(objTypeList)
-      if (returnResult != null && !returnResult.isEmpty) {
-        val totalData = sc.parallelize(JavaConverters.asScalaBufferConverter(returnResult).asScala)
-        val splitResult = totalData.map(totailDataElem => (totailDataElem.split(separator)(0), totailDataElem.split(separator)(1), totailDataElem.split(separator)(2)))
-        val getDays = splitResult.map(splitResultElem => {
-          val objRole = offLineAlarmRule.get(splitResultElem._2)
-          if (objRole == null && objRole.isEmpty) {
-            (splitResultElem._1, splitResultElem._2, splitResultElem._3, null)
-          } else {
-            val days = PropertiesUtil.getSimilarity(objRole)
-            (splitResultElem._1, splitResultElem._2, splitResultElem._3, days)
-          }
-        }).filter(_._4 != null)
-        val filterResult = getDays.filter(getFilter => getFilter._3 != null && getFilter._3.length != 0).
-          map(getDaysElem => (getDaysElem._1, getDaysElem._2, getDaysElem._3, PropertiesUtil.timeTransition(getDaysElem._3), getDaysElem._4)).
-          filter(ff => ff._4 != null && ff._4.length != 0).
-          filter(filter => filter._4 > filter._5.toString)
-        //将离线告警信息推送到MQ()
-        filterResult.foreach(filterResultElem => {
-          val df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-          val dateStr = df.format(new Date())
-          val rocketMQProducer = RocketMQProducer.getInstance(nameServer, mqTopic, grouId)
-          val offLineAlarmMessage = new OffLineAlarmMessage()
-          val gson = new Gson()
-          offLineAlarmMessage.setAlarmType(DispatchTable.OFFLINE.toString)
-          offLineAlarmMessage.setStaticID(filterResultElem._1)
-          offLineAlarmMessage.setUpdateTime(filterResultElem._3)
-          offLineAlarmMessage.setAlarmTime(dateStr)
-          val alarmStr = gson.toJson(offLineAlarmMessage)
-          //离线告警信息推送的时候，平台id为对象类型字符串的前4个字节。
-          //          val platID = filterResultElem._2.substring(0, 4)
-          //由于平台那边取消了平台ID的概念,以后默认为0001
-          rocketMQProducer.send("0001", "alarm_" + DispatchTable.OFFLINE.toString, filterResultElem._1 + dateStr, alarmStr.getBytes(), null);
-        })
-      } else {
-        println("No data was received from the static repository,the task is not running！")
-      }
-    } else {
-      println("No object type alarm dispatched offline,the task is not running")
-    }
+
+    val starepoServiceUtil = new StarepoServiceUtil()
+
+    import scala.collection.JavaConverters._
+    val phoenixData: List[ObjectInfo] = starepoServiceUtil.getOfflineAlarm(jdbcPhoenixUrl, updateTimeInterval).asScala.toList
+
+    val rddData = sc.parallelize(phoenixData).map(object2json(_))
+
+    EsSpark.saveJsonToEs(rddData, "alarm1/off_alarm")
+
     sc.stop()
   }
 
+  def object2json(data:ObjectInfo): String = {
+    val alarm_time: String = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())
+    val offAlarmJson = OffAlarmJson(alarm_time,102,"",1,0,data.getUpdatetime.toString,data.getPkey,"",data.getId,"")
+    val gson = new Gson()
+    val json = gson.toJson(offAlarmJson)
+    json
+  }
 
 }

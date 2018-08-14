@@ -15,8 +15,10 @@
     <version>2.3.0</version>
     <modules>
         <module>Cluster</module>
-        <module>Common</module>
         <module>Service</module>
+        <module>Collect</module>
+        <module>FaceCompare</module>
+        <module>StaRepoService</module>
         <module>Distribution</module>
         <module>FaceCompare</module>
     </modules>
@@ -30,9 +32,9 @@
         <es.version>5.5.0</es.version>
         <junit.version>4.12</junit.version>
         <kafka.version>1.0.0</kafka.version>
-        <mina.version>2.0.16</mina.version>
-        <ftplet.version>1.1.1</ftplet.version>
         <spark.version>2.2.0</spark.version>
+        <mysql.version>5.1.38</mysql.version>
+        <spark-indexedrdd.version>0.4.0</spark-indexedrdd.version>
         <spark_kafka.verson>2.2.0</spark_kafka.verson>
         <zookeeper.version>3.4.10</zookeeper.version>
         <rocketmq.version>4.2.0</rocketmq.version>
@@ -41,6 +43,8 @@
         <hive.version>2.3.0</hive.version>
         <jni.version>1.0</jni.version>
         <reflections.version>0.9.10</reflections.version>
+        <bigdata-common.version>1.0</bigdata-common.version>
+        <es.spark.version>6.2.4</es.spark.version>
     </properties>
 
 

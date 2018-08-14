@@ -1,8 +1,8 @@
 package com.hzgc.service.dynrepo.service;
 
 import com.hzgc.common.util.json.JSONUtil;
-import com.hzgc.jni.PictureData;
 import com.hzgc.service.dynrepo.bean.*;
+import com.hzgc.service.dynrepo.dao.ElasticSearchDao;
 import com.hzgc.service.dynrepo.dao.HBaseDao;
 import com.hzgc.service.dynrepo.dao.SparkJDBCDao;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,9 @@ public class CaptureSearchService {
     @Autowired
     @SuppressWarnings("unused")
     private HBaseDao hBaseDao;
+    @Autowired
+    @SuppressWarnings("unused")
+    private ElasticSearchDao esDao;
     @Autowired
     @SuppressWarnings("unused")
     private CaptureServiceHelper captureServiceHelper;
@@ -115,10 +118,11 @@ public class CaptureSearchService {
                                     capturedPicture.setBurl(captureServiceHelper.getFtpUrl(capturedPicture.getBurl()));
                                 }
                             }
-                        }
-                        for (CapturedPicture capturedPicture : singleSearchResult.getPictures()) {
-                            capturedPicture.setSurl(captureServiceHelper.getFtpUrl(capturedPicture.getSurl()));
-                            capturedPicture.setBurl(captureServiceHelper.getFtpUrl(capturedPicture.getBurl()));
+                        } else {
+                            for (CapturedPicture capturedPicture : singleSearchResult.getPictures()) {
+                                capturedPicture.setSurl(captureServiceHelper.getFtpUrl(capturedPicture.getSurl()));
+                                capturedPicture.setBurl(captureServiceHelper.getFtpUrl(capturedPicture.getBurl()));
+                            }
                         }
                     }
                 } else {
@@ -157,6 +161,24 @@ public class CaptureSearchService {
             log.info("SearchId is null");
         }
         return searchResult;
+    }
+
+    /**
+     * 查询设备最后一次抓拍时间
+     *
+     * @param deviceId 设备ID
+     * @return 最后抓拍时间
+     */
+    public String getLastCaptureTime(String deviceId) {
+        String ipcId = captureServiceHelper.deviceIdToIpcId(deviceId);
+        log.info("Start query last capture time, get ipcId is:" + ipcId);
+        if (!StringUtils.isBlank(ipcId)) {
+            String time = esDao.getLastCaptureTime(ipcId);
+            log.info("Get query last capture time successful, time is:" + time);
+            return time;
+        }
+        log.info("Get query last capture time failure, ipcId is null");
+        return null;
     }
 
 }

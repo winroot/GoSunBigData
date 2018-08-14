@@ -1,6 +1,6 @@
 package com.hzgc.service.starepo.config;
 
-import com.hzgc.service.util.rest.BigDataPath;
+import com.hzgc.common.service.rest.BigDataPath;
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,7 +25,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(BigDataPath.TYPE_SEARCH_NAMES + "/**",
                         BigDataPath.STAREPO_COUNT_EMIGRATION + "/**",
-                        BigDataPath.OBJECTINFO_GET_PHOTOBYKEY + "/**").permitAll()
+                        BigDataPath.OBJECTINFO_GET_PHOTOBYKEY + "/**",
+                        BigDataPath.OBJECTINFO_GET_CARE_PEOPLE + "/**",
+                        BigDataPath.OBJECTINFO_GET_STATUS_PEOPLE + "/**",
+                        BigDataPath.OBJECTINFO_GET_IMPORTANT_PEOPLE+ "/**",
+                        BigDataPath.STAREPO_EXPORT_WORD + "/**").permitAll()
                 .antMatchers("**").authenticated()
                 .and()
                 .httpBasic();

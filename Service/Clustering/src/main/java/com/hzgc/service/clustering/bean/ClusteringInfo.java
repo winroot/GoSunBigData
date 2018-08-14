@@ -1,6 +1,6 @@
 package com.hzgc.service.clustering.bean;
 
-import com.hzgc.common.clustering.ClusteringAttribute;
+import com.hzgc.common.faceclustering.ClusteringAttribute;
 import lombok.Data;
 
 import java.io.Serializable;

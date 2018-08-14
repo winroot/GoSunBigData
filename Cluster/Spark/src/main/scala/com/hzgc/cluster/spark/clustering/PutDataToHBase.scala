@@ -3,9 +3,9 @@ package com.hzgc.cluster.spark.clustering
 import java.util
 import java.util.List
 
-import com.hzgc.common.clustering.{AlarmInfo, ClusteringAttribute}
+import com.hzgc.common.faceclustering.table.ClusteringTable
+import com.hzgc.common.faceclustering.{AlarmInfo, ClusteringAttribute}
 import com.hzgc.common.hbase.HBaseHelper
-import com.hzgc.common.table.clustering.ClusteringTable
 import com.hzgc.common.util.`object`.ObjectUtil
 import org.apache.hadoop.hbase.client.{Put, Table}
 import org.apache.hadoop.hbase.util.Bytes

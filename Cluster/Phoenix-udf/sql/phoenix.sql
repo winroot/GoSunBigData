@@ -6,6 +6,7 @@ create table objectinfo(
       pkey varchar,
       idcard varchar,
       sex integer,
+      care integer,
       photo varbinary,
       feature float[],
       reason varchar,

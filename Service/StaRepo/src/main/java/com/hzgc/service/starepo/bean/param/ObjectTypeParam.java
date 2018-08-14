@@ -1,6 +1,6 @@
 package com.hzgc.service.starepo.bean.param;
 
-import com.hzgc.common.util.empty.IsEmpty;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -14,6 +14,7 @@ import java.io.Serializable;
 @ApiModel(value = "对象类型封装类")
 @Data
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ObjectTypeParam implements Serializable {
 
     @ApiModelProperty(value = "对象类型ID")

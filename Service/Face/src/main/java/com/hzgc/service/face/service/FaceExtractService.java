@@ -1,12 +1,11 @@
 package com.hzgc.service.face.service;
 
-import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.jni.FaceAttribute;
 import com.hzgc.jni.FaceFunction;
 import com.hzgc.jni.NativeFunction;
 import com.hzgc.jni.PictureData;
+import com.hzgc.common.util.uuid.UuidUtil;
 import com.hzgc.service.face.util.FtpDownloadUtils;
-import com.hzgc.service.util.response.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +51,7 @@ public class FaceExtractService {
 
     //ftp获取特征值
     public PictureData getFeatureExtractByFtp(String pictureUrl){
+        log.info("PictureUrl is :" + pictureUrl);
         PictureData pictureData;
         //FTP匿名账号Anonymous和密码
         byte[] bytes = FtpDownloadUtils.downloadftpFile2Bytes(pictureUrl,"anonymous",null);

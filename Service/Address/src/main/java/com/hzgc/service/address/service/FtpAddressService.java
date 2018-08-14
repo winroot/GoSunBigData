@@ -1,6 +1,8 @@
 package com.hzgc.service.address.service;
 
-import com.hzgc.collect.zk.register.RegisterWatcher;
+import com.hzgc.common.collect.facedis.FtpRegisterClient;
+import com.hzgc.common.collect.facedis.FtpRegisterInfo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,7 @@ import java.util.Map;
 public class FtpAddressService implements Serializable {
     @Autowired
     @SuppressWarnings("unused")
-    RegisterWatcher registerWatcher;
+    FtpRegisterClient register;
 
     /**
      * 获取Ftp相关配置参数
@@ -21,13 +23,14 @@ public class FtpAddressService implements Serializable {
      */
     public Map<String, String> getProperties() {
         Map<String, String> map = new HashMap<>();
-        for (String key : registerWatcher.getRegisterInfo().getProxyInfo().keySet()) {
-            map.put("ip", key);
-            map.put("port", registerWatcher.getRegisterInfo().getProxyInfo().get(key));
+        FtpRegisterInfo registerInfo = register.getFtpRegisterInfoList().get(0);
+        if (registerInfo != null) {
+            map.put("ip", registerInfo.getProxyIP());
+            map.put("port", registerInfo.getProxyPort());
+            map.put("username", registerInfo.getFtpAccountName());
+            map.put("password", registerInfo.getFtpPassword());
+            map.put("pathRule", registerInfo.getPathRule());
         }
-        map.put("username", registerWatcher.getRegisterInfo().getFtpAccountName());
-        map.put("password", registerWatcher.getRegisterInfo().getFtpPassword());
-        map.put("pathRule", registerWatcher.getRegisterInfo().getPathRule());
         return map;
     }
 
@@ -38,7 +41,10 @@ public class FtpAddressService implements Serializable {
      * @return IP地址
      */
     public String getIPAddress(String hostname) {
-        return registerWatcher.getRegisterInfo().getHostNameMapping().get(hostname);
+        if (!StringUtils.isBlank(hostname)){
+            return register.getFtpIpMapping().get(hostname);
+        }
+        return null;
     }
 }
 

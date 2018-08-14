@@ -1,8 +1,10 @@
 package com.hzgc.service.dispatch.dao;
 
 import com.alibaba.fastjson.JSON;
+import com.hzgc.common.facedispatch.table.DispatchTable;
 import com.hzgc.common.hbase.HBaseHelper;
-import com.hzgc.common.table.dispatch.DispatchTable;
+import com.hzgc.common.service.error.RestErrorCode;
+import com.hzgc.common.service.response.ResponseResult;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.dispatch.bean.*;
 import com.hzgc.service.dispatch.util.JsonToMap;
@@ -10,9 +12,6 @@ import com.hzgc.service.dispatch.bean.Device;
 import com.hzgc.service.dispatch.bean.IdsType;
 import com.hzgc.service.dispatch.bean.PageBean;
 import com.hzgc.service.dispatch.bean.Warn;
-import com.hzgc.service.util.error.RestErrorCode;
-import com.hzgc.service.util.response.ResponseResult;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -54,7 +53,9 @@ public class HBaseDao {
             //对于每一条规则
             for (Warn rule : rules) {
                 //解析离线告警：在离线告警offlineMap中添加相应的对象类型、ipcID和规则中的离线天数阈值DayThreshold
-                parseOfflineWarn(rule, ipcID, offlineMap);
+                if ("102".equals(rule.getAlarmType())) {
+                    parseOfflineWarn(rule, ipcID, offlineMap);
+                }
             }
         }
         try {
@@ -164,7 +165,7 @@ public class HBaseDao {
                     }
                 }
                 Put offlinePut = new Put(DispatchTable.OFFLINERK);
-                offlineString = JSONUtil.toJson(offlineMap);
+                offlineString = JSONUtil.toJson(tempMap);
                 offlinePut.addColumn(DispatchTable.CF_DEVICE, DispatchTable.OFFLINECOL, Bytes.toBytes(offlineString));
                 deviceTable.put(offlinePut);
             } else {
@@ -261,16 +262,24 @@ public class HBaseDao {
         if (null != dispatchObj) {
             String hbaseMapString = Bytes.toString(dispatchObj);
             LinkedHashMap<String, Dispatch> hbaseMap = JsonToMap.dispatchStringToMap(hbaseMapString);
+
             //进行id对比是否存在新添加的id
             for (String newRuleId : originMap.keySet()) {
                 //拿到新添加的设备集合
                 List<Device> newDeviceList = originMap.get(newRuleId).getDevices();
+                String newName = originMap.get(newRuleId).getRule().getName();
                 for (Device newDevice : newDeviceList) {
                     //拿到新添加的Id
                     originId = newDevice.getId();
                     for (String oldRuleId : hbaseMap.keySet()) {
                         //拿到数据库中的设备集合
                         List<Device> oldDeviceList = hbaseMap.get(oldRuleId).getDevices();
+                        //拿到数据库中的规则名称
+                        String oldName = hbaseMap.get(oldRuleId).getRule().getName();
+                        if (newName.equals(oldName)){
+                            log.info("This ruleID is already exists");
+                            return ResponseResult.error(RestErrorCode.DB_DUPLICAET_KEY,"规则名称" + newName + "已经存在");
+                        }
                         for (Device oldDevice : oldDeviceList) {
                             //拿到旧的ipcId
                             oldId = oldDevice.getId();

@@ -1,21 +1,19 @@
 package com.hzgc.service.starepo.service;
 
-import com.hzgc.common.table.seachres.SearchResultTable;
-import com.hzgc.common.table.starepo.ObjectInfoTable;
+import com.hzgc.common.facestarepo.table.table.ObjectInfoTable;
+import com.hzgc.common.facestarepo.table.table.SearchResultTable;
+import com.hzgc.common.service.bean.PeopleManagerCount;
+import com.hzgc.jni.PictureData;
 import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.common.util.uuid.UuidUtil;
-import com.hzgc.jni.PictureData;
-import com.hzgc.service.starepo.bean.StaticSortParam;
 import com.hzgc.service.starepo.bean.export.*;
 import com.hzgc.service.starepo.bean.param.GetObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.ObjectInfoParam;
 import com.hzgc.service.starepo.bean.param.SearchRecordParam;
-import com.hzgc.service.starepo.bean.param.SubQueryParam;
 import com.hzgc.service.starepo.dao.HBaseDao;
 import com.hzgc.service.starepo.dao.PhoenixDao;
 import com.hzgc.service.starepo.util.DocHandlerUtil;
-import com.hzgc.service.util.bean.PeopleManagerCount;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -57,26 +55,69 @@ public class ObjectInfoHandlerService {
     }
 
     /**
+     * 判断身份证格式是否正确
+     *
+     * @param objectInfo
+     * @return true:正确,false:不正确
+     */
+    public boolean authentication_idCode(ObjectInfoParam objectInfo) {
+        if (!StringUtils.isBlank(objectInfo.getIdcard())) {
+            return idCodeAuthentication(objectInfo.getIdcard());
+        }
+        return true;
+    }
+
+    /**
+     * 获取数据库中idCard
+     *
+     * @param objectInfo
+     * @return idCard
+     */
+    public String getObjectIdCard(ObjectInfoParam objectInfo) {
+        return phoenixDao.getObjectIdCard(objectInfo.getId());
+    }
+
+    /**
+     * 身份证唯一性判断
+     *
+     * @param objectInfo
+     * @return true:存在  false:不存在
+     */
+    public boolean isExists_idCode(ObjectInfoParam objectInfo) {
+        if (!StringUtils.isBlank(objectInfo.getIdcard())) {
+            List<String> idcards = phoenixDao.getAllObjectIdcard();
+            return idcards.contains(objectInfo.getIdcard());
+        }
+        return false;
+    }
+
+    /**
+     * 判断ObjectTypeKey是否存在
+     *
+     * @param objectInfo
+     * @return true:存在  false:不存在
+     */
+    public boolean isExists_objectTypeKey(ObjectInfoParam objectInfo) {
+        List<String> objectTypeKeys = phoenixDao.getAllObjectTypeKeys();
+        return objectTypeKeys.contains(objectInfo.getObjectTypeKey());
+    }
+
+
+    /**
      * Add objectInfo
      *
      * @param objectInfo 添加对象信息
      * @return 返回值为0，表示插入成功，返回值为1，表示插入失败
      */
     public Integer addObjectInfo(ObjectInfoParam objectInfo) {
-        //判断身份证格式是否正确
-        if (!StringUtils.isBlank(objectInfo.getIdcard())) {
-            if (!idCodeAuthentication(objectInfo.getIdcard())) {
-                // 身份证格式不正确。
-                log.info("Start add object info, but the id card format is error");
-                return 1;
-            }
-        }
         objectInfo.setId(UuidUtil.getUuid());
         log.info("Start add object info, object id is:" + objectInfo.getId());
         //数据库操作
         Integer i = phoenixDao.addObjectInfo(objectInfo);
         //向告警中同步数据
-        sendKafka(objectInfo, ADD);
+        if (i == 0){
+            sendKafka(objectInfo, ADD);
+        }
         return i;
     }
 
@@ -103,37 +144,14 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
     public Integer updateObjectInfo(ObjectInfoParam param) {
-        Integer a = 1;
-        //判断身份证格式是否正确
-        if (!StringUtils.isBlank(param.getIdcard())) {
-            if (!idCodeAuthentication(param.getIdcard())) {
-                // 身份证格式不正确。
-                log.info("Start update object info, but the id card format is error");
-                return 1;
-            }
-        }
-        // 查询更新对象当前状态值
-        String objectId = param.getId();
-        int status = phoenixDao.getObjectInfo_status(objectId);
-        //数据库更新操作(状态值暂时不更新)
         Integer i = phoenixDao.updateObjectInfo(param);
-        // 根据入参状态值与更新前对象状态值比较，判断是否更新statustime（状态更新时间）字段
-        if (param.getStatus() != status) {
-            Integer ii = phoenixDao.updateObjectInfo_status(objectId, param.getStatus());
-            if (i == 0 && ii == 0){
-                sendKafka(param, UPDATE);
-                a = 0;
-            }
-        }else {
-            if (i == 0){
-                sendKafka(param, UPDATE);
-                a = 0;
-            }
+        if (i == 0) {
+            sendKafka(param, UPDATE);
         }
-        return a;
+        return i;
     }
 
-    private void sendKafka(ObjectInfoParam param, String option){
+    private void sendKafka(ObjectInfoParam param, String option) {
         StaticRepoObject object = new StaticRepoObject();
         if (param.getPictureDatas() != null && param.getPictureDatas().getFeature() != null) {
             object.setFeature(param.getPictureDatas().getFeature().getFeature());
@@ -151,7 +169,7 @@ public class ObjectInfoHandlerService {
      * @return false 身份证不正确 true 身份证正确
      */
     private boolean idCodeAuthentication(String idCode) {
-        if (idCode == null || idCode.isEmpty()) {
+        if (idCode == null || idCode.isEmpty() || idCode.length() != 18) {
             return false;
         }
         String regEX = "^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$";
@@ -168,6 +186,13 @@ public class ObjectInfoHandlerService {
      * @return 返回值为0，表示更新成功，返回值为1，表示更新失败
      */
     public int updateObjectInfo_status(String objectId, int status) {
+        // 查询更新对象当前状态值
+        int info_status = phoenixDao.getObjectInfo_status(objectId);
+        if (info_status == status) {
+            log.error("Start update object status, but object status is the same as in the database, " +
+                    "so doesn't need to be updated");
+            return 1;
+        }
         //数据库更新操作
         return phoenixDao.updateObjectInfo_status(objectId, status);
     }
@@ -189,7 +214,6 @@ public class ObjectInfoHandlerService {
      * @return 返回搜索所需要的结果封装成的对象，包含搜索id，成功与否标志，记录数，记录信息，照片id
      */
     public ObjectSearchResult searchObjectInfo(GetObjectInfoParam param) {
-        // setSearchTotalId
         ObjectSearchResult objectSearchResult;
         SqlRowSet sqlRowSet = phoenixDao.searchObjectInfo(param);
         if (sqlRowSet == null) {
@@ -257,6 +281,7 @@ public class ObjectInfoHandlerService {
 
     private ObjectSearchResult getObjectInfoNotOnePerson(SqlRowSet sqlRowSet, Map<String, PictureData> photosMap) {
         ObjectSearchResult objectSearchResult = new ObjectSearchResult();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String searchId = UuidUtil.getUuid();
         objectSearchResult.setSearchId(searchId);
         // 创建总结果list
@@ -276,16 +301,31 @@ public class ObjectInfoHandlerService {
                     lable++;
                 }
             }
+
+            String objectTypeKey = sqlRowSet.getString(ObjectInfoTable.PKEY);
+            String objectTypeName = "";
+            if (!StringUtils.isBlank(objectTypeKey)) {
+                objectTypeName = phoenixDao.getObjectTypeNameById(objectTypeKey);
+            }
+            Timestamp createTime = sqlRowSet.getTimestamp(ObjectInfoTable.CREATETIME);
+            String createTime_str = "";
+            if (createTime != null) {
+                java.util.Date createTime_data = new java.util.Date(createTime.getTime());
+                createTime_str = sdf.format(createTime_data);
+            }
+
             PersonObject personObject = PersonObject.builder()
                     .setObjectID(sqlRowSet.getString(ObjectInfoTable.ROWKEY))
-                    .setObjectTypeKey(sqlRowSet.getString(ObjectInfoTable.PKEY))
+                    .setObjectTypeKey(objectTypeKey)
+                    .setObjectTypeName(objectTypeName)
                     .setName(sqlRowSet.getString(ObjectInfoTable.NAME))
                     .setSex(sqlRowSet.getInt(ObjectInfoTable.SEX))
                     .setIdcard(sqlRowSet.getString(ObjectInfoTable.IDCARD))
                     .setCreator(sqlRowSet.getString(ObjectInfoTable.CREATOR))
                     .setCreatorConractWay(sqlRowSet.getString(ObjectInfoTable.CPHONE))
-                    .setCreateTime(sqlRowSet.getTimestamp(ObjectInfoTable.CREATETIME))
+                    .setCreateTime(createTime_str)
                     .setReason(sqlRowSet.getString(ObjectInfoTable.REASON))
+                    .setCare(sqlRowSet.getInt(ObjectInfoTable.CARE))
                     .setFollowLevel(sqlRowSet.getInt(ObjectInfoTable.IMPORTANT))
                     .setSimilarity(sqlRowSet.getFloat(ObjectInfoTable.RELATED))
                     .setLocation(sqlRowSet.getString(ObjectInfoTable.LOCATION));
@@ -317,90 +357,6 @@ public class ObjectInfoHandlerService {
      */
     public byte[] getPhotoByKey(String objectId) {
         return phoenixDao.getPhotoByObjectId(objectId);
-    }
-
-    /**
-     * 根据传过来的搜索rowkey 返回搜索记录 （外） （李第亮）
-     *
-     * @param searchRecordParam 历史查询参数
-     * @return 返回一个ObjectSearchResult 对象，
-     * @author 李第亮
-     * 里面包含了本次查询ID，查询成功标识，
-     * 查询照片ID（无照片，此参数为空），结果数，人员信息列表
-     */
-    public ObjectSearchResult getRocordOfObjectInfo(SearchRecordParam searchRecordParam) {
-        log.info("searchRecordParam: " + searchRecordParam);
-        // 传过来的参数中为空，或者子查询为空，或者子查询大小为0，都返回查询错误。
-        if (searchRecordParam == null) {
-            log.info("SearchRecordParam 为空，请确认参数是否正确.");
-            return null;
-        }
-        // 总的searchId
-        List<SubQueryParam> subQueryParamList = searchRecordParam.getSubQueryParamList();
-        if (subQueryParamList == null || subQueryParamList.size() == 0) {
-            log.info("子查询列表为空，请确认参数是否正确.");
-            return null;
-        }
-
-        SubQueryParam subQueryParam = subQueryParamList.get(0);
-        if (subQueryParam == null) {
-            log.info("子查询对象SubQueryOpts 对象为空，请确认参数是否正确.");
-            return null;
-        }
-
-        // 子查询Id
-        String subQueryId = subQueryParam.getQueryId();
-        if (subQueryId == null) {
-            log.info("子查询Id 为空");
-            return null;
-        }
-        PersonSingleResult personSingleResult = phoenixDao.getRocordOfObjectInfo(subQueryId);
-        // 需要分组的pkeys
-        List<String> pkeys = subQueryParamList.get(0).getObjectTypekeyList();
-        // 排序参数
-        List<StaticSortParam> staticSortParams = searchRecordParam.getStaticSortParams();
-        ObjectSearchResult finnalObjectSearchResult = new ObjectSearchResult();
-        List<PersonSingleResult> personSingleResults = new ArrayList<>();
-        if (personSingleResult != null) {
-            List<PersonObject> personObjects = personSingleResult.getObjectInfoBeans();
-            List<PersonObjectGroupByPkey> personObjectGroupByPkeyList = new ArrayList<>();
-            if (personObjects != null && staticSortParams != null && staticSortParams.contains(StaticSortParam.PEKEY)) {
-                Map<String, List<PersonObject>> groupingByPkeys = personObjects.stream()
-                        .collect(Collectors.groupingBy(PersonObject::getObjectTypeKey));
-                for (Map.Entry<String, List<PersonObject>> entry : groupingByPkeys.entrySet()) {
-                    PersonObjectGroupByPkey personObjectGroupByPkey = new PersonObjectGroupByPkey();
-                    String pkey = entry.getKey();
-                    personObjectGroupByPkey.setObjectTypeKey(pkey);
-                    personObjectGroupByPkey.setObjectTypeName(entry.getValue().get(0).getObjectTypeName());
-                    List<PersonObject> personObjectList = entry.getValue();
-                    // 对结果进行排序
-                    objectInfoHandlerTool.sortPersonObject(personObjectList, staticSortParams);
-
-                    // 如果指定了需要返回的Pkey
-                    if (pkeys != null && pkeys.size() > 0 && pkeys.contains(pkey)) {
-                        personObjectGroupByPkey.setPersonObjectList(personObjectList);
-                        personObjectGroupByPkeyList.add(personObjectGroupByPkey);
-                        continue;
-                    }
-                    if (pkeys == null || pkeys.size() == 0) {
-                        personObjectGroupByPkey.setPersonObjectList(personObjectList);
-                        personObjectGroupByPkeyList.add(personObjectGroupByPkey);
-                    }
-                }
-                personSingleResult.setSingleObjKeyResults(personObjectGroupByPkeyList);
-                personSingleResult.setObjectInfoBeans(null);
-            } else if (personObjects != null && staticSortParams != null && !staticSortParams.contains(StaticSortParam.PEKEY)) {
-                personSingleResult.setSingleObjKeyResults(null);
-                objectInfoHandlerTool.sortPersonObject(personObjects, staticSortParams);
-                personSingleResult.setObjectInfoBeans(personObjects);
-            }
-        }
-        personSingleResults.add(personSingleResult);
-        finnalObjectSearchResult.setSingleSearchResults(personSingleResults);
-        int pageSize = searchRecordParam.getSize();
-        int start = searchRecordParam.getStart();
-        objectInfoHandlerTool.formatTheObjectSearchResult(finnalObjectSearchResult, start, pageSize);
-        return finnalObjectSearchResult;
     }
 
     /**
@@ -438,7 +394,7 @@ public class ObjectInfoHandlerService {
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put(ConfigConstants.PEOPLE_DATA_KEY, objectData);
             byte[] buff = DocHandlerUtil.createDoc(dataMap, File.separator + exportFile);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String data = sdf.format(new Date());
             //把文件插入HBase表中
             String rowkey = "file_" + data + "_" + UuidUtil.getUuid().substring(0, 4) + ".doc";
@@ -449,44 +405,6 @@ public class ObjectInfoHandlerService {
         }
         log.info("create emphasis personnel word failed");
         return null;
-    }
-
-    /**
-     * 根据传过来的搜索rowkey 返回一个子查询
-     *
-     * @param opts 历史查询参数
-     * @return 返回一个PersonSingleResult 对象
-     * @author 李第亮
-     * 里面包含了本次查询ID，查询成功标识，
-     * 查询照片ID（无照片，此参数为空），结果数，人员信息列表
-     */
-    private PersonSingleResult getSearchResult(SearchRecordParam opts) {
-        log.info("searchRecordOpts: " + opts);
-        // 传过来的参数中为空，或者子查询为空，或者子查询大小为0，都返回查询错误。
-        if (opts == null) {
-            log.info("SearchRecordParam 为空，请确认参数是否正确.");
-            return null;
-        }
-        // 总的searchId
-        List<SubQueryParam> subQueryParamList = opts.getSubQueryParamList();
-        if (subQueryParamList == null || subQueryParamList.size() == 0) {
-            log.info("子查询列表为空，请确认参数是否正确.");
-            return null;
-        }
-
-        SubQueryParam subQueryParam = subQueryParamList.get(0);
-        if (subQueryParam == null) {
-            log.info("子查询对象SubQueryOpts 对象为空，请确认参数是否正确.");
-            return null;
-        }
-
-        // 子查询Id
-        String subQueryId = subQueryParam.getQueryId();
-        if (subQueryId == null) {
-            log.info("子查询Id 为空");
-            return null;
-        }
-        return phoenixDao.getRocordOfObjectInfo(subQueryId);
     }
 
     /**
@@ -510,7 +428,7 @@ public class ObjectInfoHandlerService {
                 // 布控时间
                 map.put("time", "时间");
                 if (null != personObject.getCreateTime()) {
-                    map.put("timeData", new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(personObject.getCreateTime()));
+                    map.put("timeData", personObject.getCreateTime());
                 } else {
                     map.put("timeData", "");
                 }
@@ -587,16 +505,13 @@ public class ObjectInfoHandlerService {
      * @return PictureData
      */
     public PictureData getFeature(String id) {
-        PictureData pictureData = phoenixDao.getPictureData(id);
-        if (pictureData != null) {
-            byte[] photo = pictureData.getImageData();
-            float[] feature = pictureData.getFeature().getFeature();
+        PictureData pictureData = null;
+        byte[] photo = phoenixDao.getPhotoByObjectId(id);
+        if (photo != null) {
             pictureData = restTemplate.postForObject("http://face/extract_bytes", photo, PictureData.class);
-            if (pictureData != null) {
-                pictureData.getFeature().setFeature(feature);
-            }
+
         }
-        log.info("Get object picture data successfull, picture data : " + JSONUtil.toJson(pictureData));
+        log.info("Get object picture data successfully, picture data : " + JSONUtil.toJson(pictureData));
         return pictureData;
     }
 
@@ -687,6 +602,37 @@ public class ObjectInfoHandlerService {
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.MONTH, month - 1);             // 当前月份减1
         return cal.getActualMaximum(Calendar.DATE);
+    }
+
+    /**
+     * 关爱人口查询
+     * @param objectTypeKeyList  offtime
+     * @return Objectinfo
+     */
+    public List<ObjectInfo> getCarePeople(List<String> objectTypeKeyList, String offTime){
+        long time = System.currentTimeMillis() - Integer.valueOf(offTime) * 60 * 60 * 1000;
+        log.info("time :" + time);
+        Timestamp timestamp = new Timestamp(time);
+        return phoenixDao.getCarePeople(objectTypeKeyList, timestamp);
+    }
+
+    /**
+     * 常住人口查询
+     * @param objectTypeKeyList
+     * @return Objectinfo
+     */
+    public List<ObjectInfo> getStatusPeople(List<String> objectTypeKeyList) {
+        return phoenixDao.getStatusPeople(objectTypeKeyList);
+    }
+
+    /**
+     * 重点人口查询
+     * @param objectTypeKeyList
+     * @return Objectinfo
+     */
+
+    public List<ObjectInfo> getImportantPeople(List<String> objectTypeKeyList) {
+        return phoenixDao.getImportantPeople(objectTypeKeyList);
     }
 }
 

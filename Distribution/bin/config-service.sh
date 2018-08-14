@@ -76,6 +76,12 @@ VISUAL_BIN_DIR=$VISUAL_DIR/bin                           ##visual模块脚本存
 VISUAL_START_FILE=$VISUAL_BIN_DIR/start-visual.sh       ##visual模块启动脚本
 VISUAL_CONF_DIR=$VISUAL_DIR/conf                       ##visual模块conf目录
 VISUAL_PRO_FILE=$VISUAL_CONF_DIR/application-pro.properties   ##visual模块配置文件
+##alarm模块
+ALARM_DIR=$SERVICE_DIR/alarm                           ##alarm模块目录
+ALARM_BIN_DIR=$ALARM_DIR/bin                           ##alarm模块脚本存放目录
+ALARM_START_FILE=$ALARM_BIN_DIR/start-alarm.sh       ##alarm模块启动脚本
+ALARM_CONF_DIR=$ALARM_DIR/conf                       ##alarm模块conf目录
+ALARM_PRO_FILE=$ALARM_CONF_DIR/application-pro.properties   ##alarm模块配置文件
 
 # 创建日志目录
 mkdir -p $LOG_DIR
@@ -131,7 +137,13 @@ function distribute_service()
 
     #替换pro文件中的值：
     sed -i "s#^kafka.bootstrap.servers=.*#kafka.bootstrap.servers=${kafkapro}#g" ${STAREPO_PRO_FILE}
+    sed -i "s#^kafka.bootstrap.servers=.*#kafka.bootstrap.servers=${kafka_arr[0]:9092}#g" ${STAREPO_START_FILE}
     echo "静态库application-pro文件配置完成......"
+	
+	#####################KAFKA_HOST#########################
+    #替换模块启动脚本中KAFKA_HOST：key=value(替换key字段的值value)
+    sed -i "s#^KAFKA_HOST=.*#KAFKA_HOST=${kafkapro}#g" ${STAREPO_START_FILE}
+    echo "start-starepo.sh脚本配置kafka完成......"
 
     #配置es.hosts:
     #从project-conf.properties中读取es所需配置IP
@@ -162,6 +174,10 @@ function distribute_service()
     sed -i "s#^ES_HOST=.*#ES_HOST=${espro}#g" ${VISUAL_START_FILE}
     echo "start-visual.sh脚本配置es完成......"
 
+        #替换模块启动脚本中：key=value(替换key字段的值value)
+    sed -i "s#^ES_HOST=.*#ES_HOST=${espro}#g" ${ALARM_START_FILE}
+    echo "start-alarm.sh脚本配置es完成......"
+
 
     #配置zookeeper：
     #从project-conf.properties中读取zookeeper所需配置IP
@@ -180,12 +196,16 @@ function distribute_service()
     echo "start-dynrepo.sh脚本配置zookeeper完成......"
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
-    sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${STAREPO_START_FILE}
+    sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zk_arr[0]}#g" ${STAREPO_START_FILE}
     echo "start-starepo.sh脚本配置zookeeper完成......"
 
     #替换模块启动脚本中：key=value(替换key字段的值value)
     sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${VISUAL_START_FILE}
     echo "start-visual.sh脚本配置zookeeper完成......"
+
+    #替换模块启动脚本中：key=value(替换key字段的值value)
+    sed -i "s#^ZOOKEEPER_HOST=.*#ZOOKEEPER_HOST=${zkpro}#g" ${ALARM_START_FILE}
+    echo "start-alarm.sh脚本配置zookeeper完成......"
 
 
     #配置eureka_node:
@@ -228,6 +248,9 @@ function distribute_service()
     sed -i "s#^EUREKA_IP=.*#EUREKA_IP=${enpro}#g" ${VISUAL_START_FILE}
     echo "start-visual.sh脚本配置eureka_node完成......."
 
+    #替换模块启动脚本中：key=value(替换key字段的值value)
+    sed -i "s#^EUREKA_IP=.*#EUREKA_IP=${enpro}#g" ${ALARM_START_FILE}
+    echo "start-alarm.sh脚本配置eureka_node完成......."
 
     #配置eureka_port:
     #从project-conf.properties中读取eureka_port所需配置port
@@ -262,6 +285,9 @@ function distribute_service()
     sed -i "s#^EUREKA_PORT=.*#EUREKA_PORT=${EUREKA_PORT}#g" ${VISUAL_START_FILE}
     echo "start-visual.sh脚本配置eureka_port完成......."
 
+    #替换模块启动脚本中：key=value(替换key字段的值value)
+    sed -i "s#^EUREKA_PORT=.*#EUREKA_PORT=${EUREKA_PORT}#g" ${ALARM_START_FILE}
+    echo "start-alarm.sh脚本配置eureka_port完成......."
 }
 
 #####################################################################

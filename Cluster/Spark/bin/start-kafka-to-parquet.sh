@@ -6,7 +6,7 @@
 ## Author:      chenke
 ## Created:     2017-11-09
 ################################################################################
-#set -x  ## 用于调试使用，不用的时候可以注释掉
+set -x  ## 用于调试使用，不用的时候可以注释掉
 
 #---------------------------------------------------------------------#
 #                              定义变量                               #
@@ -35,19 +35,20 @@ SPARK_CLASS_PARAM=com.hzgc.cluster.spark.consumer.KafkaToParquet
 ## bigdata cluster path
 BIGDATA_CLUSTER_PATH=/opt/hzgc/bigdata
 ##deploy-mode
-DEPLOY_MODE=client
+DEPLOY_MODE=cluster
 #---------------------------------------------------------------------#
 #                              jar版本控制                            #
 #---------------------------------------------------------------------#
 
 ## module version(模块)
 SPARK_API_VERSION=`ls ${SPARK_LIB_DIR} | grep ^spark-[0-9].[0-9].[0-9].jar$`
-JNI_VERSION=`ls ${SPARK_LIB_DIR}| grep ^jni-[0-9].[0-9].jar$`
-ADDRESS_VERSION=`ls /opt/RealTimeFaceCompare/service/address | grep ^address-[0-9].[0-9].[0-9].jar$`
-ALARM_VERSION=`ls /opt/RealTimeFaceCompare/service/alarm | grep ^alarm-[0-9].[0-9].[0-9].jar$`
-CLUSTERING_VERSION=`ls /opt/RealTimeFaceCompare/service/clustering | grep ^clustering-[0-9].[0-9].[0-9].jar$`
-COMMON_UTIL_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-util-[0-9].[0-9].[0-9].jar$`
-COMMON_ES_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-es-[0-9].[0-9].[0-9].jar$`
+JNI_VERSION=`ls ${SPARK_LIB_DIR}| grep ^common-jni-[0-9].[0-9].jar$`
+ADDRESS_VERSION=`ls /opt/RealTimeFaceCompare/service/address/lib | grep ^address-[0-9].[0-9].[0-9].jar$`
+ALARM_VERSION=`ls /opt/RealTimeFaceCompare/service/alarm/lib | grep ^alarm-[0-9].[0-9].[0-9].jar$`
+CLUSTERING_VERSION=`ls /opt/RealTimeFaceCompare/service/clustering/lib | grep ^clustering-[0-9].[0-9].[0-9].jar$`
+COMMON_UTIL_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-util-[0-9].[0-9].jar$`
+COMMON_ES_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-es-[0-9].[0-9].jar$`
+COMMON_COLLECT_VERSION=`ls ${SPARK_LIB_DIR} | grep ^common-collect-[0-9].[0-9].jar$`
 
 ## quote version(引用)
 TRANSPORT_VERSION=transport-5.5.0.jar
@@ -69,7 +70,7 @@ LUCENE_SPATIAL_VERSION=lucene-spatial-6.6.0.jar
 LUCENE_SPATIAL_EXTARS_VERSION=lucene-spatial-extras-6.6.0.jar
 LUCENE_SUGGEST_VERSION=lucene-suggest-6.6.0.jar
 GSON_VERSION=gson-2.8.0.jar
-JACKSON_CORE_VERSION=jackson-core-2.8.6.jar
+JACKSON_CORE_VERSION=jackson-core-2.8.10.jar
 SPARK_STREAMING_KAFKA_VERSION=spark-streaming-kafka-0-8_2.11-2.2.0.jar
 HBASE_SERVER_VERSION=hbase-server-1.3.2.jar
 HBASE_CLIENT_VERSION=hbase-client-1.3.2.jar
@@ -80,7 +81,7 @@ ELASTICSEARCH_VERSION=elasticsearch-5.5.0.jar
 ROCKETMQ_CLIENT_VERSION=rocketmq-client-4.2.0.jar
 ROCKETMQ_COMMON_VERSION=rocketmq-common-4.2.0.jar
 ROCKETMQ_REMOTING_VERSION=rocketmq-remoting-4.2.0.jar
-FASTJSON_VERSION=fastjson-1.2.29.jar
+FASTJSON_VERSION=fastjson-1.2.47.jar
 KAFKA_CLIENTS_VERSION=kafka-clients-1.0.0.jar
 METRICS_CORE_VERSION=metrics-core-2.2.0.jar
 ZKCLIENT_VERSION=zkclient-0.3.jar
@@ -122,83 +123,87 @@ else
 fi
 
 ################# 判断是否存在jar ###################
-if [ ! -e ${SPARK_LIB_DIR}/${COMMMON_UTIL_VERSION} ];then
-    echo "${SPARK_LIB_DIR}/${COMMMON_UTIL_VERSION} does not exit!"
+if [ ! -f ${SPARK_LIB_DIR}/${COMMON_UTIL_VERSION} ];then
+    echo "${SPARK_LIB_DIR}/${COMMON_UTIL_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${JNI_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${COMMON_ES_VERSION=} ];then
+    echo "${SPARK_LIB_DIR}/${COMMON_ES_VERSION=} does not exit!"
+    exit 0
+fi
+
+if [ ! -f ${SPARK_LIB_DIR}/${JNI_VERSION} ];then
     echo "${SPARK_LIB_DIR}/${JNI_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${SPARK_API_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${SPARK_API_VERSION} ];then
     echo "${SPARK_LIB_DIR}/${SPARK_API_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${HBASE_CLIENT_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${HBASE_CLIENT_VERSION} ];then
     echo "${SPARK_LIB_DIR}/${HBASE_CLIENT_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${HBASE_COMMON_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${HBASE_COMMON_VERSION} ];then
     echo "${SPARK_LIB_DIR}/${HBASE_COMMON_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${GSON_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${GSON_VERSION} ];then
     echo "${SPARK_LIB_DIR}/${GSON_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${JACKSON_CORE_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${JACKSON_CORE_VERSION} ];then
     echo "${SPARK_LIB_DIR}/${JACKSON_CORE_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${SPARK_STREAMING_KAFKA_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${SPARK_STREAMING_KAFKA_VERSION} ];then
     echo "${SPARK_LIB_DIR}/${SPARK_STREAMING_KAFKA_VERSION} does not exit!"
     exit 0
 fi
+:'
+if false
 if [ ! -e ${SPARK_LIB_DIR}/${SERVICE_VERSION} ];then
     echo "${SPARK_LIB_DIR}/${SERVICE_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${HBASE_SERVER_VERSION} ];then
+'
+if [ ! -f ${SPARK_LIB_DIR}/${HBASE_SERVER_VERSION} ];then
     echo "${SPARK_LIB_DIR}/${HBASE_SERVER_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${HBASE_PROTOCOL_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${HBASE_PROTOCOL_VERSION} ];then
     echo "${SPARK_LIB_DIR}/${HBASE_PROTOCOL_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${JNI_VERSION} ];then
-    echo "${SPARK_LIB_DIR}/${JNI_VERSION} does not exit!"
-    exit 0
-fi
-if [ ! -e ${SPARK_LIB_DIR}/${KAFKA_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${KAFKA_VERSION} ];then
     echo "${SPARK_LIB_DIR}/${KAFKA_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${ELASTICSEARCH_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${ELASTICSEARCH_VERSION} ];then
     echo "${SPARK_LIB_DIR}/${ELASTICSEARCH_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${ROCKETMQ_CLIENT_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${ROCKETMQ_CLIENT_VERSION} ];then
      echo "${SPARK_LIB_DIR}/${ROCKETMQ_CLIENT_VERSION} does not exit!"
      exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${ROCKETMQ_COMMON_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${ROCKETMQ_COMMON_VERSION} ];then
      echo "${SPARK_LIB_DIR}/${ROCKETMQ_COMMON_VERSION} does not exit!"
      exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${ROCKETMQ_REMOTING_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${ROCKETMQ_REMOTING_VERSION} ];then
      echo "${SPARK_LIB_DIR}/${ROCKETMQ_REMOTING_VERSION} does not exit!"
      exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${FASTJSON_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${FASTJSON_VERSION} ];then
      echo "${SPARK_LIB_DIR}/${FASTJSON_VERSION} does not exit!"
      exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${KAFKA_CLIENTS_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${KAFKA_CLIENTS_VERSION} ];then
     echo "${SPARK_LIB_DIR}/${KAFKA_CLIENTS_VERSION} does not exit!"
     exit 0
 fi
-if [ ! -e ${SPARK_LIB_DIR}/${METRICS_CORE_VERSION} ];then
+if [ ! -f ${SPARK_LIB_DIR}/${METRICS_CORE_VERSION} ];then
     echo "${SPARK_LIB_DIR}/${METRICS_CORE_VERSION} does not exit!"
     exit 0
 fi
@@ -259,6 +264,7 @@ ${SPARK_LIB_DIR}/${ROCKETMQ_COMMON_VERSION},\
 ${SPARK_LIB_DIR}/${ROCKETMQ_REMOTING_VERSION},\
 ${SPARK_LIB_DIR}/${FASTJSON_VERSION},\
 ${SPARK_LIB_DIR}/${KAFKA_CLIENTS_VERSION},\
+${SPARK_LIB_DIR}/${COMMON_COLLECT_VERSION},\
 ${SPARK_LIB_DIR}/${METRICS_CORE_VERSION} \
 --conf "spark.driver.extraJavaOptions=-Dlog4j.configuration=file:${SPARK_CONF_DIR}/log4j.properties" \
 --files ${SPARK_CONF_DIR}/sparkJob.properties,\

@@ -1,13 +1,16 @@
 package com.hzgc.service.starepo.service;
 
+import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.starepo.bean.param.ObjectTypeParam;
 import com.hzgc.service.starepo.dao.PhoenixDao;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@Slf4j
 public class ObjectTypeService {
 
     @Autowired
@@ -24,6 +27,16 @@ public class ObjectTypeService {
         String creator = param.getCreator();
         String remark = param.getRemark();
         return phoenixDao.addObjectType(name, creator, remark);
+    }
+
+    public boolean isExists_objectTypeName(String name) {
+        List<String> names = phoenixDao.getAllObjectTypeNames();
+        log.info("Start add/update object type, get all the object type names in the database first: "
+                + JSONUtil.toJson(names));
+        if (names.contains(name)){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -53,12 +66,28 @@ public class ObjectTypeService {
     /**
      * 查询objectType
      *
-     * @param pageIndex 页码
-     * @param pageSize  每页行数
+     * @param start 查询起始位置
+     * @param end  查询结束位置
      * @return List<ObjectTypeParam>
      */
-    public List<ObjectTypeParam> searchObjectType(int pageIndex, int pageSize) {
-        return phoenixDao.searchObjectType(pageIndex, pageSize);
+    public List<ObjectTypeParam> searchObjectType(int start, int end) {
+        return phoenixDao.searchObjectType(start, end);
+    }
+
+    public String getObjectTypeName(String objectTypeKey) {
+        List<String> list = new ArrayList<>();
+        list.add(objectTypeKey);
+        Map<String, String> map = searchObjectTypeNames(list);
+        return map.get(objectTypeKey);
+    }
+
+    /**
+     * 统计对象类型数量
+     *
+     * @return 对象类型数量
+     */
+    public int countObjectType() {
+        return phoenixDao.countObjectType();
     }
 
     /**

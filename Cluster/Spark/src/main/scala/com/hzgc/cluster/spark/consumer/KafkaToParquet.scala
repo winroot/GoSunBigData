@@ -133,7 +133,7 @@ object KafkaToParquet {
     offsetsRanges.foreach(offsetRange => LOG.debug(s"Using $offsetRange"))
     val offsetsRangesStr = offsetsRanges.map(offsetRange => s"${offsetRange.partition}:${offsetRange.fromOffset}")
       .mkString(",")
-    LOG.info("chandan Writing offsets to Zookeeper zkClient=" + zkClient + " zkHosts=" + zkHosts + "zkPath=" + zkPath + " offsetsRangesStr:" + offsetsRangesStr)
+    LOG.info("Writing offsets to Zookeeper zkClient=" + zkClient + " zkHosts=" + zkHosts + "zkPath=" + zkPath + " offsetsRangesStr:" + offsetsRangesStr)
     ZkUtils.updatePersistentPath(zkClient, zkPath, offsetsRangesStr)
     LOG.info("Done updating offsets in Zookeeper. Took " + stopwatch)
     LOG.info("==================================================================")

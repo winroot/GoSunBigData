@@ -1,15 +1,15 @@
 package com.hzgc.service.dispatch.controller;
 
+import com.hzgc.common.service.api.bean.DeviceDTO;
+import com.hzgc.common.service.api.service.DeviceQueryService;
+import com.hzgc.common.service.error.RestErrorCode;
+import com.hzgc.common.service.response.ResponseResult;
+import com.hzgc.common.service.rest.BigDataPath;
+import com.hzgc.common.service.rest.BigDataPermission;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.dispatch.bean.*;
 import com.hzgc.service.dispatch.service.WarnRuleService;
 import com.hzgc.service.dispatch.util.IpcIdsUtil;
-import com.hzgc.service.util.api.bean.DeviceDTO;
-import com.hzgc.service.util.api.service.DeviceQueryService;
-import com.hzgc.service.util.error.RestErrorCode;
-import com.hzgc.service.util.response.ResponseResult;
-import com.hzgc.service.util.rest.BigDataPath;
-import com.hzgc.service.util.rest.BigDataPermission;
 import io.swagger.annotations.*;
 
 import java.io.IOException;
@@ -65,14 +65,35 @@ public class WarnRuleController {
             List<String> ipcIDs = new ArrayList<>();
             List<Warn> warnList;
             log.info("Add rule , param is " + JSONUtil.toJson(dispatch));
-            List<Long> list = IpcIdsUtil.toDeviceIdList(dispatch.getDevices());
+            //通过设备id查找ipcid
+            List<Device> deviceList = dispatch.getDevices();
+            List<Long> list = IpcIdsUtil.toDeviceIdList(deviceList);
             Map<String, DeviceDTO> map = deviceQueryService.getDeviceInfoByBatchId(list);
+            //设置ipcid
             for (String s : map.keySet()) {
-                ipcIDs.add(map.get(s).getSerial());
+                DeviceDTO deviceDTO = map.get(s);
+                String ipcid = deviceDTO.getSerial();
+                if (null != ipcid && ipcid.length() > 0){
+                    ipcIDs.add(ipcid);
+                    for (Device device:deviceList){
+                        String id = device.getId();
+                        if (id.equals(s)){
+                            device.setIpcId(ipcid);
+                        }
+                    }
+                }else {
+                    return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,"设备" + deviceDTO.getName() +
+                            "未设置序列号,请配置序列号,重新添加");
+                }
             }
+            //参数封装
             warnList = dispatch.getRule().getWarns();
             Map<String, Dispatch> dispatchMap = IpcIdsUtil.toDispatchMap(dispatch);
             ResponseResult<String> responseResult = warnRuleService.saveOriginData(dispatchMap);
+            if (responseResult.getHead().getErrorCode() == RestErrorCode.DB_DUPLICAET_KEY ||
+                    responseResult.getHead().getErrorCode() == RestErrorCode.ERR_DEVICE_ALREADY_BIND_RULE) {
+                return responseResult;
+            }
             //调用大数据接口
             ipcIDs.removeAll(Collections.singleton(null));
             log.info("Bigdata param , ipcIDs is " + JSONUtil.toJson(ipcIDs) + " warn list is " + JSONUtil.toJson(warnList));
@@ -93,10 +114,25 @@ public class WarnRuleController {
             List<String> ipcIDs = new ArrayList<>();
             List<Warn> warnList;
             log.info("Update rule , param is " + JSONUtil.toJson(dispatch));
-            List<Long> list = IpcIdsUtil.toDeviceIdList(dispatch.getDevices());
+            //通过设备id查找ipcid
+            List<Device> deviceList = dispatch.getDevices();
+            List<Long> list = IpcIdsUtil.toDeviceIdList(deviceList);
             Map<String, DeviceDTO> map = deviceQueryService.getDeviceInfoByBatchId(list);
             for (String s : map.keySet()) {
-                ipcIDs.add(map.get(s).getSerial());
+                DeviceDTO deviceDTO = map.get(s);
+                String ipcid = deviceDTO.getSerial();
+                if (null != ipcid && ipcid.length() > 0){
+                    ipcIDs.add(ipcid);
+                    for (Device device:deviceList){
+                        String id = device.getId();
+                        if (id.equals(s)){
+                            device.setIpcId(ipcid);
+                        }
+                    }
+                }else {
+                    return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT,"设备" + deviceDTO.getName() +
+                            "未设置序列号,请配置序列号,重新修改");
+                }
             }
             warnList = dispatch.getRule().getWarns();
             ResponseResult<Boolean> responseResult = warnRuleService.updateRule(dispatch);

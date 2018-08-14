@@ -1,12 +1,12 @@
 package com.hzgc.service.dynrepo.service;
 
-import com.hzgc.collect.zk.register.RegisterWatcher;
-import com.hzgc.common.table.dynrepo.DynamicTable;
-import com.hzgc.common.util.empty.IsEmpty;
+import com.hzgc.common.collect.facedis.FtpRegisterClient;
+import com.hzgc.common.facedynrepo.DynamicTable;
+import com.hzgc.common.service.api.bean.DeviceDTO;
+import com.hzgc.common.service.api.service.DeviceQueryService;
 import com.hzgc.jni.PictureData;
+import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.service.dynrepo.bean.*;
-import com.hzgc.service.util.api.bean.DeviceDTO;
-import com.hzgc.service.util.api.service.DeviceQueryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -38,7 +38,7 @@ public class CaptureServiceHelper {
 
     @Autowired
     @SuppressWarnings("unused")
-    private RegisterWatcher registerWatcher;
+    private FtpRegisterClient register;
 
     /**
      * 通过排序参数进行排序
@@ -251,7 +251,7 @@ public class CaptureServiceHelper {
     String getFtpUrl(String ftpUrl) {
 
         String hostName = ftpUrl.substring(ftpUrl.indexOf("/") + 2, ftpUrl.lastIndexOf(":"));
-        String ftpServerIP = registerWatcher.getRegisterInfo().getHostNameMapping().get(hostName);
+        String ftpServerIP = register.getFtpIpMapping().get(hostName);
         if (IsEmpty.strIsRight(ftpServerIP)) {
             return ftpUrl.replace(hostName, ftpServerIP);
         }
@@ -291,17 +291,41 @@ public class CaptureServiceHelper {
     }
 
     /**
+     * 设备id转ipcId
+     *
+     * @param deviceId 设备id
+     * @return ipcId
+     */
+    public String deviceIdToIpcId(String deviceId) {
+        List<Long> devices = new ArrayList<>();
+        devices.add(Long.valueOf(deviceId));
+        Map<String, DeviceDTO> result = queryService.getDeviceInfoByBatchId(devices);
+        if (!result.values().isEmpty() && result.values().size() > 0) {
+            return result.get(deviceId).getSerial();
+        } else {
+            log.error("Failed to find device id");
+        }
+        return null;
+    }
+
+    /**
      * 小图ftpUrl转大图ftpUrl
      *
      * @param surl 小图ftpUrl
      * @return 大图ftpUrl
      */
     String surlToBurl(String surl) {
-        StringBuilder burl = new StringBuilder();
-        String s1 = surl.substring(0, surl.lastIndexOf("_") + 1);
-        String s2 = surl.substring(surl.lastIndexOf("."));
-        burl.append(s1).append(0).append(s2);
-        return burl.toString();
+        if (surl.contains("IPC-HFW5238M-AS-I1") || surl.contains("IPC-HDBW5238R-AS")){
+            String frontStr = surl.substring(0, surl.lastIndexOf("[") + 1);
+            String backStr = surl.substring(surl.lastIndexOf("[") + 2, surl.length());
+            return frontStr + 0 + backStr;
+        } else {
+            StringBuilder burl = new StringBuilder();
+            String s1 = surl.substring(0, surl.lastIndexOf("_") + 1);
+            String s2 = surl.substring(surl.lastIndexOf("."));
+            burl.append(s1).append(0).append(s2);
+            return burl.toString();
+        }
     }
 }
 

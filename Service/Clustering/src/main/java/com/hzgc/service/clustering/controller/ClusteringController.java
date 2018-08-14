@@ -1,14 +1,14 @@
 package com.hzgc.service.clustering.controller;
 
+import com.hzgc.common.service.bean.PeopleManagerCount;
+import com.hzgc.common.service.error.RestErrorCode;
+import com.hzgc.common.service.response.ResponseResult;
+import com.hzgc.common.service.rest.BigDataPath;
 import com.hzgc.common.util.json.JSONUtil;
 import com.hzgc.service.clustering.bean.ClusteringInfo;
 import com.hzgc.service.clustering.bean.ClusteringSaveParam;
 import com.hzgc.service.clustering.bean.ClusteringSearchParam;
 import com.hzgc.service.clustering.service.ClusteringSearchService;
-import com.hzgc.service.util.bean.PeopleManagerCount;
-import com.hzgc.service.util.error.RestErrorCode;
-import com.hzgc.service.util.response.ResponseResult;
-import com.hzgc.service.util.rest.BigDataPath;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;

@@ -1,6 +1,5 @@
 package com.hzgc.service.starepo.bean.param;
 
-import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.jni.PictureData;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,13 +24,13 @@ public class ObjectInfoParam implements Serializable {
 
     /* 添加、修改对象信息——前端入参 */
     @ApiModelProperty(value = "对象名字")
-    private String name;          // 对象名字
+    private String name;                        // 对象名字
     @ApiModelProperty(value = "对象类型key")
     private String objectTypeKey;               // 对象类型key          必填选项（add、update）
     @ApiModelProperty(value = "身份证")
     private String idcard;                      // 身份证
     @ApiModelProperty(value = "性别")
-    private int sex;                            // 性别 [ 1:男，2:女 默认为0：未知]
+    private Integer sex;                        // 性别 [0 = 未知（默认选项），1 = 男，2 = 女]
     @ApiModelProperty(value = "照片数据")
     private PictureData pictureDatas;           // 照片数据             必填选项（add）
     @ApiModelProperty(value = "布控理由")
@@ -44,10 +43,12 @@ public class ObjectInfoParam implements Serializable {
     private String createTime;                  // 创建时间
     @ApiModelProperty(value = "更新时间")
     private String updateTime;                  // 更新时间
+    @ApiModelProperty(value = "关爱人口")
+    private Integer  care;                  //关爱人口 [0 = 非关爱人员（默认选项），1 = 关爱人员]
     @ApiModelProperty(value = "关注等级")
-    private int followLevel;                    // 关注等级 [ 0:非重点关注，1:重点关注，默认为0]     必填选项（add、update）
+    private Integer followLevel;                // 关注等级 关注等级 [1 = 非重点关注（默认选项），2 = 重点关注]
     @ApiModelProperty(value = "人员状态")
-    private int status;                         // 人员状态 [ 0:常住人口，1:建议迁出，默认为0]
+    private Integer status;                     // 人员状态 [0 = 常住人口（默认选项），1 = 建议迁出]
     @ApiModelProperty(value = "地址")
     private String location;                    // 地址
 }

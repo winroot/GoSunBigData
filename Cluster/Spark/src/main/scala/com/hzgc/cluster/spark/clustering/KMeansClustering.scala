@@ -7,7 +7,7 @@ import java.util.{Calendar, Date, Properties, UUID}
 
 import com.hzgc.cluster.spark.consumer.PutDataToEs
 import com.hzgc.cluster.spark.util.{FtpDownloadUtils, PropertiesUtil}
-import com.hzgc.common.clustering.ClusteringAttribute
+import com.hzgc.common.faceclustering.ClusteringAttribute
 import edu.berkeley.cs.amplab.spark.indexedrdd.IndexedRDD
 import edu.berkeley.cs.amplab.spark.indexedrdd.IndexedRDD._
 import org.apache.log4j.Logger
@@ -40,7 +40,8 @@ object KMeansClustering {
     val appearCount = properties.getProperty("job.clustering.appear.count").toInt
     val iteratorNum = properties.getProperty("job.clustering.iterator.number")
     val appName = properties.getProperty("job.clustering.appName")
-    val url = properties.getProperty("job.clustering.mysql.url")
+    val alarmUrl = properties.getProperty("job.clustering.mysql.alarm.url")
+    val deviceUrl = properties.getProperty("job.clustering.mysql.device.url")
     val alarmTableName = properties.getProperty("job.clustering.mysql.alarm.record.table")
     val alarmExtraTableName = properties.getProperty("job.clustering.mysql.alarm.record.extra.table")
     val timeField = properties.getProperty("job.clustering.mysql.field.time")
@@ -78,7 +79,7 @@ object KMeansClustering {
     //get alarm data from mysql
     val preSql = "(select T1.id, T2.host_name, T2.big_picture_url, T2.small_picture_url, T1.alarm_time from  " + alarmTableName + "  as T1 inner join " + alarmExtraTableName + "  as T2 on T1.id=T2.record_id " + "where T2.static_id IS NULL " + "and DATE_FORMAT(T1.alarm_time,'%Y-%m') like " + currentYearMon + ") as alarm_record"
     sqlProper.setProperty("driver", driverClass)
-    val dataSource = spark.read.jdbc(url, preSql, sqlProper)
+    val dataSource = spark.read.jdbc(alarmUrl, preSql, sqlProper)
     val mysqlDataCount = dataSource.count()
     LOG.info("mysql data count :" + mysqlDataCount)
 
@@ -89,7 +90,7 @@ object KMeansClustering {
 
       //get the region and ipcIdList
       val region_Ipc_sql = "(select T1.region_id,GROUP_CONCAT(T2.serial_number) " + "as serial_numbers from t_region_department as T1 inner join " + "(select concat(dep.parent_ids,',',dep.id) as path ,T3.serial_number from " + "t_device as dev left join t_department as dep on dev.department_id = dep.id inner join " + "t_device_extra as T3 on dev.id = T3.device_id ) as T2 on T2.path " + "like concat('%',T1.department_id,'%') group by T1.region_id " + "order by T1.region_id,T2.serial_number ) as test"
-      val region_Ipc_data = spark.read.jdbc(url, region_Ipc_sql, sqlProper).collect()
+      val region_Ipc_data = spark.read.jdbc(deviceUrl, region_Ipc_sql, sqlProper).collect()
       val region_IpcMap = mutable.HashMap[Int, String]()
       region_Ipc_data.foreach(data => region_IpcMap.put(data.getAs[Int](0), data.getAs[String](1)))
 

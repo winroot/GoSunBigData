@@ -1,7 +1,7 @@
 package com.hzgc.service.clustering.dao;
 
 import com.hzgc.common.es.ElasticSearchHelper;
-import com.hzgc.common.table.dynrepo.DynamicTable;
+import com.hzgc.common.facedynrepo.DynamicTable;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.client.transport.TransportClient;

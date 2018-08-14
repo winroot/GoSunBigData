@@ -1,6 +1,6 @@
 package com.hzgc.service.dynrepo.config;
 
-import com.hzgc.service.util.rest.BigDataPath;
+import com.hzgc.common.service.rest.BigDataPath;
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

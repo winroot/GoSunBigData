@@ -1,7 +1,7 @@
 package com.hzgc.service.visual.dao;
 
 import com.hzgc.common.es.ElasticSearchHelper;
-import com.hzgc.common.table.dynrepo.DynamicTable;
+import com.hzgc.common.facedynrepo.DynamicTable;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
@@ -26,20 +26,31 @@ public class ElasticSearchDao {
         this.esClient = ElasticSearchHelper.getEsClient(clusterName, esHost, Integer.parseInt(esPort));
     }
 
-    public synchronized SearchResponse[] dynamicNumberService(List<String> ipcId) {
+    public synchronized SearchResponse[] dynamicNumberService(List<String> ipcIds) {
+        BoolQueryBuilder ipcIdBQ = QueryBuilders.boolQuery();
+        if (ipcIds != null && ipcIds.size() > 0) {
+            for (String ipcId : ipcIds) {
+                ipcIdBQ.should(QueryBuilders.matchPhraseQuery(DynamicTable.IPCID, ipcId).analyzer("standard"));
+            }
+        }
         String index = DynamicTable.DYNAMIC_INDEX;
         String type = DynamicTable.PERSON_INDEX_TYPE;
         SearchResponse[] responsesArray = new SearchResponse[2];
         // 统计所有抓拍总数
         SearchResponse responseV1 = esClient.prepareSearch(index).setTypes(type)
-                .setQuery(QueryBuilders.matchAllQuery()).setSize(1).get();
+                .setQuery(QueryBuilders.boolQuery()
+                        .must(ipcIdBQ))
+                .setSize(1)
+                .get();
 
         // 查询今天抓拍的数量
         SimpleDateFormat format = new SimpleDateFormat(EsSearchParam.TIMEFORMAT_YMDHMS);
         String endTime = format.format(System.currentTimeMillis());
-        SearchResponse responseV2 = esClient.prepareSearch(index).setQuery(QueryBuilders
-                .matchPhraseQuery(DynamicTable.DATE,
-                        endTime.substring(0, endTime.indexOf(" "))))
+        SearchResponse responseV2 = esClient.prepareSearch(index)
+                .setQuery(QueryBuilders.boolQuery()
+                        .must(ipcIdBQ)
+                        .must(QueryBuilders.matchPhraseQuery(
+                                DynamicTable.DATE, endTime.substring(0, endTime.indexOf(" ")))))
                 .setSize(1)
                 .get();
         responsesArray[0] = responseV1;
@@ -51,6 +62,24 @@ public class ElasticSearchDao {
         SearchRequestBuilder searchRequestBuilder = esClient.prepareSearch(DynamicTable.DYNAMIC_INDEX)
                 .setTypes(DynamicTable.PERSON_INDEX_TYPE)
                 .setQuery(QueryBuilders.rangeQuery(DynamicTable.TIMESTAMP).gte(startTime).lte(endTime)).setSize(0);
+        TermsAggregationBuilder teamAgg = AggregationBuilders.terms("ipc_count").field(DynamicTable.IPCID_KEYWORD);
+        searchRequestBuilder.addAggregation(teamAgg);
+        return searchRequestBuilder.execute().actionGet();
+    }
+
+    public SearchResponse CaptureCountSixHour(List<String> ipcIds, String startTime, String endTime) {
+        BoolQueryBuilder ipcIdBQ = QueryBuilders.boolQuery();
+        if (ipcIds != null && ipcIds.size() > 0) {
+            for (String ipcId : ipcIds) {
+                ipcIdBQ.should(QueryBuilders.matchQuery(DynamicTable.IPCID, ipcId).analyzer("standard"));
+            }
+        }
+        SearchRequestBuilder searchRequestBuilder = esClient.prepareSearch(DynamicTable.DYNAMIC_INDEX)
+                .setTypes(DynamicTable.PERSON_INDEX_TYPE)
+                .setQuery(QueryBuilders.boolQuery()
+                        .must(ipcIdBQ)
+                        .must(QueryBuilders.rangeQuery(DynamicTable.TIMESTAMP).gte(startTime).lte(endTime)))
+                .setSize(0);
         TermsAggregationBuilder teamAgg = AggregationBuilders.terms("ipc_count").field(DynamicTable.IPCID_KEYWORD);
         searchRequestBuilder.addAggregation(teamAgg);
         return searchRequestBuilder.execute().actionGet();

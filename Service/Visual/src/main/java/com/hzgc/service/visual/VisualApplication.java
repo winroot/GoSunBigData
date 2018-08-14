@@ -1,6 +1,6 @@
 package com.hzgc.service.visual;
 
-import com.hzgc.service.util.api.config.EnableDeviceQueryService;
+import com.hzgc.common.service.api.config.EnableDeviceQueryService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;

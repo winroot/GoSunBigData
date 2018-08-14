@@ -1,6 +1,5 @@
 package com.hzgc.service.starepo.bean.param;
 
-import com.hzgc.common.util.empty.IsEmpty;
 import com.hzgc.jni.PictureData;
 import com.hzgc.service.starepo.bean.StaticSortParam;
 import io.swagger.annotations.ApiModel;
@@ -28,7 +27,7 @@ public class GetObjectInfoParam implements Serializable{
     @ApiModelProperty(value = "身份证")
     private String idcard;                        // 身份证
     @ApiModelProperty(value = "性别")
-    private int sex;                              // 性别 [ 1:男，2:女 默认为0：未知]
+    private Integer sex;                          // 性别 [0 = 未知（默认选项），1 = 男，2 = 女]
     @ApiModelProperty(value = "创建人")
     private String creator;                       // 创建人
     @ApiModelProperty(value = "布控人联系方式")
@@ -40,13 +39,15 @@ public class GetObjectInfoParam implements Serializable{
     @ApiModelProperty(value = "排序参数")
     private List<StaticSortParam> sortParamList;  // 排序参数
     @ApiModelProperty(value = "人员状态")
-    private int status;                           // 人员状态 [ 0:常住人口，1:建议迁出，默认为0]
+    private Integer status;                       // 人员状态 [0 = 常住人口（默认选项），1 = 建议迁出]
+    @ApiModelProperty(value = "关爱人口")
+    private Integer care ;                        //关爱人口 [0 = 非关爱人员（默认选项），1 = 关爱人员]
     @ApiModelProperty(value = "关注等级")
-    private int followLevel;                      // 关注等级 [ 1:非重点关注,2:重点关注,不选或者都可以为0]
+    private Integer followLevel;                  // 关注等级 [1 = 非重点关注（默认选项），2 = 重点关注]
     @ApiModelProperty(value = "起始行数")
-    private int start;                            // 起始行数
+    private Integer start;                        // 起始行数
     @ApiModelProperty(value = "分页行数")
-    private int limit;                            // 分页行数
+    private Integer limit;                        // 分页行数
     @ApiModelProperty(value = "地址")
     private String location;                      // 地址
 }

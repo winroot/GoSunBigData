@@ -1,7 +1,7 @@
 package com.hzgc.cluster.spark.util;
 
 import com.google.gson.Gson;
-import com.hzgc.cluster.spark.consumer.FaceObject;
+import com.hzgc.common.collect.bean.FaceObject;
 
 public class FaceObjectUtil {
     private static Gson gson;
