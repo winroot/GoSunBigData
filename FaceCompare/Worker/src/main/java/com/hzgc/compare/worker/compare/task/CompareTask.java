@@ -1,6 +1,6 @@
 package com.hzgc.compare.worker.compare.task;
 
-import com.hzgc.compare.worker.common.SearchResult;
+import com.hzgc.compare.SearchResult;
 import com.hzgc.compare.worker.conf.Config;
 
 public abstract class CompareTask implements Runnable{

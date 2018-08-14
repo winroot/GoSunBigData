@@ -3,9 +3,9 @@ package com.hzgc.compare.client;
 import com.hzgc.common.rpc.client.RpcClient;
 import com.hzgc.common.rpc.client.result.AllReturn;
 import com.hzgc.common.rpc.util.Constant;
-import com.hzgc.compare.worker.Service;
-import com.hzgc.compare.worker.common.CompareParam;
-import com.hzgc.compare.worker.common.SearchResult;
+import com.hzgc.compare.Service;
+import com.hzgc.compare.CompareParam;
+import com.hzgc.compare.SearchResult;
 
 import java.util.List;
 import java.util.Map;

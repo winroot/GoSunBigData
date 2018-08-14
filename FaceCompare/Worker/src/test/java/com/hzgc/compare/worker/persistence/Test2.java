@@ -1,9 +1,8 @@
 package com.hzgc.compare.worker.persistence;
 
 import com.hzgc.compare.worker.common.FaceInfoTable;
-import com.hzgc.compare.worker.common.FaceObject;
+import com.hzgc.compare.FaceObject;
 import com.hzgc.compare.worker.memory.cache.MemoryCacheImpl;
-import com.hzgc.compare.worker.memory.manager.MemoryManager;
 import com.hzgc.compare.worker.util.FaceObjectUtil;
 import com.hzgc.compare.worker.util.HBaseHelper;
 import javafx.beans.NamedArg;

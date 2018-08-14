@@ -1,9 +1,9 @@
 package com.hzgc.compare.worker.persistence;
 
-import com.hzgc.compare.worker.common.Feature;
+import com.hzgc.compare.Feature;
 import com.hzgc.compare.worker.common.FaceInfoTable;
-import com.hzgc.compare.worker.common.FaceObject;
-import com.hzgc.compare.worker.common.SearchResult;
+import com.hzgc.compare.FaceObject;
+import com.hzgc.compare.SearchResult;
 import com.hzgc.compare.worker.persistence.task.TimeToWrite;
 import com.hzgc.compare.worker.persistence.task.TimeToWrite2;
 import com.hzgc.compare.worker.util.FaceObjectUtil;

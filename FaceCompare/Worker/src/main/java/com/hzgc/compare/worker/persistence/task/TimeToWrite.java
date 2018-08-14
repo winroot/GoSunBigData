@@ -1,7 +1,7 @@
 package com.hzgc.compare.worker.persistence.task;
 
 import com.hzgc.compare.worker.common.FaceInfoTable;
-import com.hzgc.compare.worker.common.FaceObject;
+import com.hzgc.compare.FaceObject;
 import com.hzgc.compare.worker.common.tuple.Quintuple;
 import com.hzgc.compare.worker.conf.Config;
 import com.hzgc.compare.worker.memory.cache.MemoryCacheImpl;

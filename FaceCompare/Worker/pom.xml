@@ -21,8 +21,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.hzgc.compare</groupId>
-            <artifactId>facecompare-api</artifactId>
+            <groupId>com.hzgc.face-compare</groupId>
+            <artifactId>api</artifactId>
             <version>1.0</version>
             <optional>true</optional>
         </dependency>
