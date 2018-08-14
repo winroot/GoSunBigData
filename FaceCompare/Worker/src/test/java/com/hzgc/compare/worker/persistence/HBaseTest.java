@@ -4,7 +4,7 @@ package com.hzgc.compare.worker.persistence;
 
 import com.hzgc.compare.worker.CreateRecordToFaceObjects;
 import com.hzgc.compare.worker.common.FaceInfoTable;
-import com.hzgc.compare.worker.common.FaceObject;
+import com.hzgc.compare.FaceObject;
 import com.hzgc.compare.worker.common.tuple.Quintuple;
 import com.hzgc.compare.worker.common.taskhandle.TaskToHandleQueue;
 
@@ -21,7 +21,6 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Before;
-import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package com.hzgc.compare.worker.jni;
 
-import com.hzgc.compare.worker.common.SearchResult;
+import com.hzgc.compare.SearchResult;
 import javafx.util.Pair;
 
 import java.math.BigDecimal;

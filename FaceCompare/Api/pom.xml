@@ -10,24 +10,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.hzgc.face-compare</groupId>
-    <artifactId>client</artifactId>
+    <artifactId>api</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>com.hzgc.face-compare</groupId>
-            <artifactId>api</artifactId>
-            <version>1.0</version>
-        </dependency>
         <dependency>
             <groupId>com.hzgc.common</groupId>
             <artifactId>common-rpc</artifactId>
             <version>1.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.hzgc.face-compare</groupId>
-            <artifactId>worker</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
     </dependencies>
+
 
 </project>
