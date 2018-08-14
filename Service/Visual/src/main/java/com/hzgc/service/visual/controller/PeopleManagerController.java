@@ -63,10 +63,6 @@ public class PeopleManagerController {
             log.error("Start search care people, but object type key or offerTime is nul");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "查询参数为空，请检查！");
         }
-        if (objectTypeKeyList.get(0) == null || "".equals(objectTypeKeyList.get(0)) || "".equals(offTime)){
-            log.error("Start search care people , but object type key list is error");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "查询参数错误，请检查！");
-        }
         log.info("Start search care people, param is " + JSONUtil.toJson(param));
         List<ObjectInfo> result = peopleManagerService.getCarePeople(param);
         if (result != null) {
@@ -95,10 +91,6 @@ public class PeopleManagerController {
             log.error("Start search status people, but object type key list is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "查询参数为空，请检查！");
         }
-        if (objectTypeKeyList.get(0) == null || "".equals(objectTypeKeyList.get(0))){
-            log.error("Start search status people, but object type key list is error");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "查询参数错误，请检查！");
-        }
         log.info("Start search status people, param object type key list = " + JSONUtil.toJson(param));
         List<ObjectInfo> result = peopleManagerService.getStatusPeople(param);
         if (result != null) {
@@ -126,10 +118,6 @@ public class PeopleManagerController {
         if (objectTypeKeyList == null || objectTypeKeyList.size() == 0) {
             log.error("Start search important people, but object type key list is null");
             return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "查询参数为空，请检查！");
-        }
-        if (objectTypeKeyList.get(0) == null || "".equals(objectTypeKeyList.get(0))){
-            log.error("Start search important people, but object type key list is error");
-            return ResponseResult.error(RestErrorCode.ILLEGAL_ARGUMENT, "查询参数错误，请检查！");
         }
         log.info("Start search status people, param object type key list = " + JSONUtil.toJson(param));
         List<ObjectInfo> result = peopleManagerService.getImportantPeople(param);

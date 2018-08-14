@@ -657,7 +657,8 @@ public class ParseByOption {
             }else {
                 sql_where.append("?) and ")
                         .append(ObjectInfoTable.CARE).append(" = 1 and ")
-                        .append(ObjectInfoTable.UPDATETIME).append(" <= ?");
+                        .append(ObjectInfoTable.UPDATETIME).append(" <= ? and ")
+                        .append(ObjectInfoTable.ROWKEY).append(" > ? limit ?");
             }
         }
         return "select "
@@ -687,7 +688,9 @@ public class ParseByOption {
                 sql_where.append("?, ");
                 count ++;
             }else {
-                sql_where.append("?) and ").append(ObjectInfoTable.STATUS).append(" = 0");
+                sql_where.append("?) and ")
+                        .append(ObjectInfoTable.STATUS).append(" = 0 and ")
+                        .append(ObjectInfoTable.ROWKEY).append(" > ? limit ?");
             }
         }
         return "select "
@@ -717,7 +720,9 @@ public class ParseByOption {
                 sql_where.append("?, ");
                 count ++;
             }else {
-                sql_where.append("?) and ").append(ObjectInfoTable.IMPORTANT).append(" = 2");
+                sql_where.append("?) and ")
+                        .append(ObjectInfoTable.IMPORTANT).append(" = 2 and ")
+                        .append(ObjectInfoTable.ROWKEY).append(" > ? limit ?");
             }
         }
         return "select "

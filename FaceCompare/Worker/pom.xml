@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.hzgc.face-compare</groupId>
+    <groupId>face-compare</groupId>
     <artifactId>worker</artifactId>
 
     <properties>
@@ -21,8 +21,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.hzgc.compare</groupId>
-            <artifactId>facecompare-api</artifactId>
+            <groupId>face-compare</groupId>
+            <artifactId>api</artifactId>
             <version>1.0</version>
             <optional>true</optional>
         </dependency>

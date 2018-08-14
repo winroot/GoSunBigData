@@ -609,11 +609,11 @@ public class ObjectInfoHandlerService {
      * @param objectTypeKeyList  offtime
      * @return Objectinfo
      */
-    public List<ObjectInfo> getCarePeople(List<String> objectTypeKeyList, String offTime){
+    public List<ObjectInfo> getCarePeople(List<String> objectTypeKeyList, String offTime, int start, int limit){
         long time = System.currentTimeMillis() - Integer.valueOf(offTime) * 60 * 60 * 1000;
         log.info("time :" + time);
         Timestamp timestamp = new Timestamp(time);
-        return phoenixDao.getCarePeople(objectTypeKeyList, timestamp);
+        return phoenixDao.getCarePeople(objectTypeKeyList, timestamp, start, limit);
     }
 
     /**
@@ -621,8 +621,8 @@ public class ObjectInfoHandlerService {
      * @param objectTypeKeyList
      * @return Objectinfo
      */
-    public List<ObjectInfo> getStatusPeople(List<String> objectTypeKeyList) {
-        return phoenixDao.getStatusPeople(objectTypeKeyList);
+    public List<ObjectInfo> getStatusPeople(List<String> objectTypeKeyList, int start, int limit) {
+        return phoenixDao.getStatusPeople(objectTypeKeyList, start, limit);
     }
 
     /**
@@ -631,8 +631,8 @@ public class ObjectInfoHandlerService {
      * @return Objectinfo
      */
 
-    public List<ObjectInfo> getImportantPeople(List<String> objectTypeKeyList) {
-        return phoenixDao.getImportantPeople(objectTypeKeyList);
+    public List<ObjectInfo> getImportantPeople(List<String> objectTypeKeyList, int start, int limit) {
+        return phoenixDao.getImportantPeople(objectTypeKeyList, start, limit);
     }
 }
 
