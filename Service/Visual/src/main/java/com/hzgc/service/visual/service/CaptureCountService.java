@@ -69,6 +69,10 @@ public class CaptureCountService {
         // 根据区域ID与区域等级获取ipcId列表
         List<String> ipcIdList = getIpcIds(areaId, level);
         log.info("Start count capture total and today capture count, get ipcIdList is:" + JSONUtil.toJson(ipcIdList));
+        if (ipcIdList == null || ipcIdList.size() == 0){
+            log.info("Start count capture total and today capture count, but ipcIdList is null ,return: taday=0, total=0");
+            return new CaptureCountBean(0,0);
+        }
         SearchResponse[] responsesArray = elasticSearchDao.dynamicNumberService(ipcIdList);
         // 总抓拍数量
         SearchResponse searchResponse0 = responsesArray[0];
@@ -226,8 +230,13 @@ public class CaptureCountService {
 
         @Override
         public CaptureCountSixHour call() throws Exception {
-            SearchResponse response = elasticSearchDao.CaptureCountSixHour(ipcIds, startTime, endTime);
-            int count = Math.toIntExact(response.getHits().getTotalHits());
+            int count;
+            if (ipcIds != null && ipcIds.size() > 0){
+                SearchResponse response = elasticSearchDao.CaptureCountSixHour(ipcIds, startTime, endTime);
+                count = Math.toIntExact(response.getHits().getTotalHits());
+            } else {
+                count = 0;
+            }
             String data = startTime.substring(0, 10);
             String timeSolt_start = startTime.substring(11, 19);
             String timeSolt_end = endTime.substring(11, 19);
