@@ -19,7 +19,6 @@
         <module>Collect</module>
         <module>StaRepoService</module>
         <module>FaceCompare</module>
-        <module>Deployment</module>
         <module>Distribution</module>
     </modules>
 
