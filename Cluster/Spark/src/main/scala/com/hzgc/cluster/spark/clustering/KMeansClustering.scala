@@ -221,7 +221,7 @@ object KMeansClustering {
           val clusterId = region + "-" + data._1.toString + "-" + uuidString
           val smallPic = FtpDownloadUtils.downloadftpFile2Bytes(data._2.head._2.getAs[String]("spic"), ftpAccount, ftpPassrod)
           val bigPic = FtpDownloadUtils.downloadftpFile2Bytes(data._2.head._2.getAs[String]("bpic"), ftpAccount, ftpPassrod)
-          val insertDataSql = "insert into " + capture_data_table + "(id,upate_time,small_picture,big_picture) values (?,?,?,?)"
+          val insertDataSql = "insert into " + capture_data_table + "(id,update_time,small_picture,big_picture) values (?,?,?,?)"
           try {
             pst = conn.prepareStatement(insertDataSql)
             pst.setString(1, clusterId)
@@ -266,7 +266,7 @@ object KMeansClustering {
             val rowKey = yearMon + "-" + region + "-" + data._1 + "-" + uuidString
             val clusterId = rowKey + "-" + data._1 + "-" + uuidString
             LOG.info("the current clusterId is:" + clusterId)
-            val insertSql = "insert into " + capture_track_table + "(id,upate_time) values (?,?)"
+            val insertSql = "insert into " + capture_track_table + "(id,update_time) values (?,?)"
             pst = conn.prepareStatement(insertSql)
             data._2.foreach(p => {
               val date = new Date(p._2.getAs[Timestamp]("time").getTime)
