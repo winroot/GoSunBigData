@@ -131,7 +131,7 @@ object FaceAlarmJob {
             val AlarmMessage = new AlarmMessage()
             val dateStr = df.format(new Date())
             val surl = result._1.getRelativePath
-            val burl = surl.substring(0, surl.length - 5) + "0.jpg"
+            val burl = result._1.getBurl.substring(result._1.getBurl.indexOf(":2121")+5)
             val esSurl = result._1.getSurl
             val esBurl = result._1.getBurl
             val staticId = result._4(0).staticID
@@ -172,7 +172,7 @@ object FaceAlarmJob {
             val AlarmMessage = new AlarmMessage()
             val dateStr = df.format(new Date())
             val surl = result._1.getRelativePath
-            val burl = surl.substring(0, surl.length - 5) + "0.jpg"
+            val burl = result._1.getBurl.substring(result._1.getBurl.indexOf(":2121")+5)
             val esSurl = result._1.getSurl
             val esBurl = result._1.getBurl
             AlarmMessage.setAlarmType(DispatchTable.ADDED)
