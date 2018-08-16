@@ -82,7 +82,12 @@ public interface ObjectInfoMapper {
      *
      * @return 对象信息列表
      */
-    List<ObjectInfo> selectObject();
+    List<ObjectInfo> selectAllObject();
 
-
+    /**
+     * 查询对象库全部身份证信息
+     *
+     * @return 对象信息列表
+     */
+    List<String> selectAllObjectIdCard();
 }
