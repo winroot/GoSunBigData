@@ -47,7 +47,11 @@
     </select>
 
     <select id="selectObject" resultMap="ResultMapWithBLOBs">
-        select <include refid="Base_Column_List"/> , <include refid="Blob_Column_List"/> from t_starepo
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from t_starepo
     </select>
 
     <select id="checkExists" resultMap="BaseResultMap" parameterType="com.hzgc.service.starepo.model.ObjectInfo">
@@ -58,7 +62,7 @@
     </delete>
     <delete id="deleteObjectByIdBatch" parameterType="java.util.List">
         delete from t_starepo where id in
-        <foreach collection="list" item= "model" open="(" close=")" separator=",">
+        <foreach collection="list" item="model" open="(" close=")" separator=",">
             #{model.id}
         </foreach>
     </delete>
