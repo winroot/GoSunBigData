@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hzgc.service.starepo.dao.ObjectInfoMapper">
+    <resultMap id="BaseResultMap" type="com.hzgc.service.starepo.model.ObjectInfo">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="typeid" property="typeid" jdbcType="VARCHAR"/>
+        <result column="idcard" property="idcard" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="INTEGER"/>
+        <result column="feature" property="feature" jdbcType="VARCHAR"/>
+        <result column="bitfea" property="bitfea" jdbcType="VARCHAR"/>
+        <result column="reason" property="reason" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="createphone" property="createphone" jdbcType="VARCHAR"/>
+        <result column="createtime" property="createtime" jdbcType="TIMESTAMP"/>
+        <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.hzgc.service.starepo.model.ObjectInfo" extends="BaseResultMap">
+        <result column="picture" property="picture" jdbcType="LONGVARBINARY"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, name, typeid, idcard, sex, feature, bitfea, reason, creator, createphone, createtime,
+        updatetime
+    </sql>
+    <sql id="Blob_Column_List">
+        picture
+    </sql>
+    <select id="selectObjectById" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from t_starepo
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectObjectByIdBatch" resultMap="ResultMapWithBLOBs" parameterType="java.util.List">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from t_starepo
+        where id in
+        <foreach collection="list" item="model" open="(" close=")" separator=",">
+            #{model.id}
+        </foreach>
+    </select>
+
+    <select id="selectObject" resultMap="ResultMapWithBLOBs">
+        select <include refid="Base_Column_List"/> , <include refid="Blob_Column_List"/> from t_starepo
+    </select>
+
+    <select id="checkExists" resultMap="BaseResultMap" parameterType="com.hzgc.service.starepo.model.ObjectInfo">
+        select id, idcard from t_starepo where id = #{id,jdbcType=VARCHAR} or idcard = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteObjectById" parameterType="java.lang.String">
+        delete from t_starepo where id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteObjectByIdBatch" parameterType="java.util.List">
+        delete from t_starepo where id in
+        <foreach collection="list" item= "model" open="(" close=")" separator=",">
+            #{model.id}
+        </foreach>
+    </delete>
+    <insert id="addObject" parameterType="com.hzgc.service.starepo.model.ObjectInfo">
+        insert into t_starepo (id, name, typeid, idcard, sex, feature, bitfea, reason, creator,
+        createphone, createtime, updatetime, picture)
+        values
+        (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{typeid,jdbcType=VARCHAR},
+        #{idcard,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{feature,jdbcType=VARCHAR},
+        #{bitfea,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR},
+        #{createphone,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP},
+        #{picture,jdbcType=LONGVARBINARY})
+    </insert>
+    <insert id="addObjectByBatch" parameterType="java.util.List">
+        insert into t_starepo (id, name, typeid, idcard, sex, feature, bitfea, reason, creator,
+        createphone, createtime, updatetime, picture)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{typeid,jdbcType=VARCHAR},
+            #{idcard,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{feature,jdbcType=VARCHAR},
+            #{bitfea,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR},
+            #{createphone,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP},
+            #{picture,jdbcType=LONGVARBINARY})
+        </foreach>
+    </insert>
+    <insert id="addObjectSelective" parameterType="com.hzgc.service.starepo.model.ObjectInfo">
+        insert into t_starepo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="typeid != null">
+                typeid,
+            </if>
+            <if test="idcard != null">
+                idcard,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="feature != null">
+                feature,
+            </if>
+            <if test="bitfea != null">
+                bitfea,
+            </if>
+            <if test="reason != null">
+                reason,
+            </if>
+            <if test="creator != null">
+                creator,
+            </if>
+            <if test="createphone != null">
+                createphone,
+            </if>
+            <if test="createtime != null">
+                createtime,
+            </if>
+            <if test="updatetime != null">
+                updatetime,
+            </if>
+            <if test="picture != null">
+                picture,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="typeid != null">
+                #{typeid,jdbcType=VARCHAR},
+            </if>
+            <if test="idcard != null">
+                #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="feature != null">
+                #{feature,jdbcType=VARCHAR},
+            </if>
+            <if test="bitfea != null">
+                #{bitfea,jdbcType=VARCHAR},
+            </if>
+            <if test="reason != null">
+                #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="createphone != null">
+                #{createphone,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null">
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatetime != null">
+                #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="picture != null">
+                #{picture,jdbcType=LONGVARBINARY},
+            </if>
+        </trim>
+    </insert>
+    <insert id="addObjectSelective" parameterType="com.hzgc.service.starepo.model.ObjectInfo">
+        insert into t_starepo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="typeid != null">
+                typeid,
+            </if>
+            <if test="idcard != null">
+                idcard,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="feature != null">
+                feature,
+            </if>
+            <if test="bitfea != null">
+                bitfea,
+            </if>
+            <if test="reason != null">
+                reason,
+            </if>
+            <if test="creator != null">
+                creator,
+            </if>
+            <if test="createphone != null">
+                createphone,
+            </if>
+            <if test="createtime != null">
+                createtime,
+            </if>
+            <if test="updatetime != null">
+                updatetime,
+            </if>
+            <if test="picture != null">
+                picture,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="typeid != null">
+                #{typeid,jdbcType=VARCHAR},
+            </if>
+            <if test="idcard != null">
+                #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="feature != null">
+                #{feature,jdbcType=VARCHAR},
+            </if>
+            <if test="bitfea != null">
+                #{bitfea,jdbcType=VARCHAR},
+            </if>
+            <if test="reason != null">
+                #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="createphone != null">
+                #{createphone,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null">
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatetime != null">
+                #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="picture != null">
+                #{picture,jdbcType=LONGVARBINARY},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateObjectSelective" parameterType="com.hzgc.service.starepo.model.ObjectInfo">
+        update t_starepo
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="typeid != null">
+                typeid = #{typeid,jdbcType=VARCHAR},
+            </if>
+            <if test="idcard != null">
+                idcard = #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="feature != null">
+                feature = #{feature,jdbcType=VARCHAR},
+            </if>
+            <if test="bitfea != null">
+                bitfea = #{bitfea,jdbcType=VARCHAR},
+            </if>
+            <if test="reason != null">
+                reason = #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                creator = #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="createphone != null">
+                createphone = #{createphone,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null">
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatetime != null">
+                updatetime = #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="picture != null">
+                picture = #{picture,jdbcType=LONGVARBINARY},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+</mapper>

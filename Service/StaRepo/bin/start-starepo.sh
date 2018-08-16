@@ -25,6 +25,7 @@ EUREKA_PORT=9000
 ES_HOST=172.18.18.100
 KAFKA_HOST=172.18.18.100:9092
 ZOOKEEPER_HOST=172.18.18.100:2181
+MYSQL_HOST=172.18.18.105
 
 
 #---------------------------------------------------------------------#
@@ -49,6 +50,7 @@ function start_springCloud()
        --eureka.port=${EUREKA_PORT} \
        --es.host=${ES_HOST} \
        --kafka.host=${KAFKA_HOST} \
+       --mysql.host=${MYSQL_HOST} \
        --spring.cloud.config.enabled=false \
        --zookeeper.host=${ZOOKEEPER_HOST} 2>&1 &
    fi
